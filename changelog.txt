@@ -1,0 +1,12 @@
+Enno was here
+
+4.3.2
+
+- BENUTZE <anzahl>
+- Waffenloser Kampf
+
+4.2.1
+
+- kleinere Speicherfehler mit valgrind behoben [enno]
+- Bugfix: SORT AFTER, not SORT BEHIND [enno]
+
