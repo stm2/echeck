@@ -1,8 +1,6 @@
 CC = gcc
-# CC = gcc-3.0
-CFLAGS = -O2 -fomit-frame-pointer -Wall
-# CFLAGS = -O3 -fomit-frame-pointer -march=athlon
-# CFLAGS =  -fomit-frame-pointer -g
+CFLAGS = -g -Wall
+# CFLAGS = -O2 -fomit-frame-pointer -Wall
 LFLAGS = -s
 BINDIR = /usr/local/bin
 LIBDIR = /usr/local/lib/echeck

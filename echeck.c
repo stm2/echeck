@@ -2253,8 +2253,11 @@ char *
 printkeyword(int key) {
   t_keyword *k;
   key=MAXKEYWORDS-key-1;  /* Die Befehle liegen down->top in der Liste */
-  for (k=keywords; key>0; k=k->next, key--);
-  return k->name;
+  for (k=keywords; key>0 && k; k=k->next, key--);
+  if (k) {
+    return k->name;
+  }
+  return NULL;
 }
 
 
@@ -5085,17 +5088,6 @@ process_order_file(int *faction_count, int *unit_count) {
     switch (igetparam(order_buf)) {
       case P_LOCALE:
         x=getstr();
-        if (!*x)
-          anerror("Fehlende Sprache / Missing locale");
-        else
-          if (strcasecmp(x, echeck_locale)!=0) {
-            anerror(errtxt[CANTCHANGELOCALE]);
-            return;
-          }
-        if (echo_it) {
-          fputs(order_buf, OUT);
-          putc('\n', OUT);
-        }
         get_order();
         break;
 
