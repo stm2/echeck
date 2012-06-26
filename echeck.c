@@ -1880,9 +1880,9 @@ porder(void) {
 char *
 wrap(char *s) {
   int i, j, k, m, o=0;
-
+  static char buf[BUFSIZE];
   m=MARGIN;
-  strcpy(message_buf, s);
+  strcpy(buf, s);
 
   /* i zählt die Länge des Strings s ab. j zählt die Länge der Zeile ab.
      Ist der Rand erreicht, wird k auf i gesetzt, und rückwärts eine
@@ -1893,11 +1893,11 @@ wrap(char *s) {
       for (k=i; !a_isspace(s[k]) && k>0; k--);
         /* findet man eine Leerstelle, wird sie durch '\n' ersetzt: */
       if (k>0) {
-        message_buf[k+o]='\n';
+        buf[k+o]='\n';
         o++;
-        memmove(message_buf+k+o+1, message_buf+k+o, strlen(message_buf));
+        memmove(buf+k+o+1, buf+k+o, strlen(buf));
           /* ein Zeichen weiterschieben damit das TAB da reinpaßt */
-        message_buf[k+o]='\t';
+        buf[k+o]='\t';
         j=i-k+8;
         if (m==MARGIN) m-=8;
       }
@@ -1907,17 +1907,17 @@ wrap(char *s) {
          (das hat man ja schon einmal gemacht) */
 
       if (j>m && a_isspace(s[i])) { {
-        message_buf[i+o]='\n';
+        buf[i+o]='\n';
         o++;
-        memmove(message_buf+i+o+1, message_buf+i+o, strlen(message_buf));
+        memmove(buf+i+o+1, buf+i+o, strlen(buf));
           /* ein Zeichen weiterschieben damit das TAB da reinpaßt */
-        message_buf[i+o]='\t';
+        buf[i+o]='\t';
       }
       j=8;
       if (m==MARGIN) m-=8;
     }
   }
-  return message_buf;
+  return buf;
 }
 
 
@@ -2771,11 +2771,13 @@ orders_for_temp_unit(unit *u) {
   }
   u->line_no=line_no;
   u->lives=1;
-  if (u->order)
+  if (u->order) {
     free(u->order);
+  }
   u->order=strdup(order_buf);
-  if (u->start_of_orders)
+  if (u->start_of_orders) {
     free(u->start_of_orders);
+  }
   u->start_of_orders=strdup(order_buf);
   u->start_of_orders_line=line_no;
   mother_unit=order_unit;
@@ -4460,12 +4462,12 @@ checkanorder(char *Orders) {
       scat(" \"");
       u=newunit(-1, 0);
       copy_unit(order_unit, u);
-      if (order_unit->start_of_orders)
-        free(order_unit->start_of_orders);
-      if (order_unit->long_order)
-        free(order_unit->long_order);
-      if (order_unit->order)
-        free(order_unit->order);
+      free(order_unit->start_of_orders);
+      order_unit->start_of_orders=0;
+      free(order_unit->long_order);
+      order_unit->long_order=0;
+      free(order_unit->order);
+      order_unit->order=0;
       order_unit->long_order_line=0;
       order_unit->start_of_orders_line=0;
       order_unit->temp=0;
@@ -5174,12 +5176,9 @@ process_order_file(int *faction_count, int *unit_count) {
         }
         while (units) {
           u=units->next;
-          if (units->start_of_orders)
-            free(units->start_of_orders);
-          if (units->long_order)
-            free(units->long_order);
-          if (units->order)
-            free(units->order);
+          free(units->start_of_orders);
+          free(units->long_order);
+          free(units->order);
           free(units);
           units=u;
         }
@@ -5351,7 +5350,7 @@ main(int argc, char *argv[]) {
     fprintf(ERR, errtxt[ECHECK], echeck_version, __DATE__);
 
   if (filesread!=HAS_ALL) {
-    sprintf(checked_buf, errtxt[MISSINGFILES]);
+    strcpy(checked_buf, errtxt[MISSINGFILES]);
     if (!(filesread & HAS_PARAM))
       { Scat(errtxt[MISSFILEPARAM]); }
     if (!(filesread & HAS_ITEM))
