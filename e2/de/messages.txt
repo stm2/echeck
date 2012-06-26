@@ -38,8 +38,10 @@ CANTMAKETHAT, Sowas kann man nicht machen
 CANTREADFILE, Kann Datei '%s' nicht lesen\n
 CANTRENAMEOBJECT, Objekt kann nicht umbenannt werden
 CHECKYOURORDERS, \nBitte überprüfe, ob Du die Befehle korrekt eingesandt hast.\nBeachte dabei besonders, daß die Befehle nicht als HTML, Word-Dokument\noder als Attachment (Anlage) eingeschickt werden dürfen.\n
+CLAIMWHAT, BEANSPRUCHE was?
 COMBATSPELLSET, Kampfzauber gesetzt
 DELIVERYTO, ; Zustellung an 
+DESTROYNOSTREET, nur ZERSTOERE oder ZERSTOERE STRASSE sind erlaubt
 DIRECTION, <richtung>
 DISCOVERED, ~entdeckt.\n
 DOESNTCARRY, Einheit %s fährt mit Einheit %s, diese transportiert aber nicht
@@ -83,6 +85,8 @@ MISSFILEITEM, Gegenstände
 MISSFILESKILL, Talente
 MISSFILEDIR, Richtungen
 MISSFILEMSG, Meldungen
+MISSINGALLIANCENUMBER, Keine Allianznummer
+MISSINGALLIANCEPARAMETER, Fehlende Allianzaktion
 MISSINGQUOTES, Fehlende "
 MISSINGDISGUISEPARAMETERS, TARNE ohne Parameter
 MISSINGEND, TEMP-Einheit %s wird nicht durch ENDE abgeschlossen
@@ -107,7 +111,7 @@ NOTEXECUTED, Wird von keiner Einheit ausgeführt
 NOTEXT, Kein Text
 NOTFOUND, nicht gefunden
 NTOOBIG, Zahl zu groß
-NUMBER0SENSELESS, Anzahl 0 macht keinen Sinn
+NUMBER0SENSELESS, Anzahl 0 ergibt keinen Sinn
 NUMBERNOTPOSSIBLE, Anzahl hier nicht möglich
 NUMCASTLEMISSING, Nummer der Burg fehlt
 NUMLUXURIESMISSING, Anzahl Luxusgüter fehlt
@@ -121,6 +125,8 @@ PASSWORDCLEARED, Passwort gelöscht
 PASSWORDMSG1, Nicht das korrekte Passwort eingesetzt
 PASSWORDMSG2, \n\n  ****  A C H T U N G !  ****\n\n  ****  Passwort fehlt!  ****\n\n
 PASSWORDMSG3, ~** FEHLER!! ** 
+PAYNOTNOT, BEZAHLE ohne NICHT ergibt keinen Sinn
+PLANTPARAMETER, PFLANZE was?
 POST, Post-
 PRE, Prä-
 PROCESSINGFILE, Verarbeite Datei '%s'.
@@ -128,7 +134,7 @@ QUITMSG, Achtung! STIRB gegeben! Die Partei wird aufgelöst!
 RECRUITCOSTSSET, Rekrutierungskosten auf %d Silber gesetzt, 
 REGIONMISSSILVER, Das Silber in %s (%d,%d) reicht evtl. nicht zum Leben; es fehlen %d Silber.
 RESEARCHHERBSONLY, Es gibt nur FORSCHE KRÄUTER
-RESERVE0SENSELESS, RESERVIERE 0 xxx macht keinen Sinn
+RESERVE0SENSELESS, RESERVIERE 0 xxx ergibt keinen Sinn
 RESERVEDTOOMUCH, In %s (%d,%d) wurde mehr Silber reserviert (%d) als vorhanden (%d).
 RESERVEWHAT, RESERVIERE was?
 RESTARTMSG, NEUSTART befohlen!
@@ -146,6 +152,7 @@ TEMPHASNTPERSONS, Einheit TEMP %s hat nicht rekrutiert und keine Personen bekomm
 TEMPNOTTEMP, Einheit TEMP %s wurde nicht mit MACHE TEMP generiert
 TEMPUNITSCANTRESERVE, TEMP-Einheiten können nichts reservieren! Bitte GIB benutzen
 TEXTTOOLONG, Text zu lang (max. %d)
+TOOMANYPARAMETERS, Zu viele Argumente
 THERE, Es 
 UNIT0NOTPOSSIBLE, Einheit 0 bzw. Bauern geht hier nicht
 UNIT0USED, Einheit 0 verwendet
@@ -183,6 +190,7 @@ UNRECOGNIZEDSKILL, Talent nicht erkannt
 UNRECOGNIZEDSPELL, Zauberspruch nicht erkannt
 USED1, Stattdessen 1 benutzt
 USEEMAIL, eMail bitte mit EMAIL setzen
+USEWHAT, Benutze was?
 USINGUNITINSTEAD, Benutze stattdessen Einheit 
 WARNINGS, ~%d Warnungen
 WARNINGLEVEL, Warning Level %d.\n

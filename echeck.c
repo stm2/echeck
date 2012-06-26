@@ -25,7 +25,7 @@
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.3.2-7";
+static const char * echeck_version = "4.3.3-0";
 
 #define DEFAULT_PATH "."
 
@@ -112,6 +112,8 @@ static int compact = 0;
 #define SPACE               ' '
 #define ESCAPE_CHAR         '\\'
 #define COMMENT_CHAR        ';'
+#define SINGLEQUOTE         '\''
+#define DOUBLEQUOTE         '"'
 #define MARGIN              78
 #define RECRUIT_COST        50
 
@@ -125,38 +127,49 @@ static int compact = 0;
 #define DESCRIBESIZE 4095
 #define NAMESIZE 127
 
-FILE *ERR, *OUT = 0;
+FILE *ERR, *OUT=0;
 
-int line_no,                    /* count line number */
- filesread = 0;
+int line_no,              /* count line number */
+ filesread=0;
 
-char echo_it = 0,               /* option: echo input lines */
-  no_comment = -3,              /* Keine Infos in [] hinter EINHEIT */
-  show_warnings = 4,            /* option: print warnings (levels) */
-  warnings_cl = 0,              /* -w auf der Kommandozeile gegeben */
-  warn_off = 0,                 /* ECHECK NOWARN */
-  use_stderr = 0,               /* option: use stderr for errors etc */
-  brief = 0,                    /* option: don't list errors */
-  ignore_NameMe = 0,            /* option: ignoriere NameMe-Kommentare ;; */
-  piping = 0,                   /* option: wird output als pipe-input  benutzt? */
-  lohn = 10,                    /* Lohn für Arbeit - je Region zu setzen */
-  silberpool = 1,               /* option: Silberpool-Verwaltung */
-  line_start = 0,               /* option: Beginn der Zeilenzählung */
-  noship = 0, noroute = 0, nolost = 0, has_version = 0, at_cmd = 0, attack_warning = 0, compile = 0;    /* option: compiler-/magellan-style  warnings */
-int error_count = 0,            /* counter: errors */
-  warning_count = 0;            /* counter: warnings */
-char order_buf[BUFSIZE],        /* current order line */
- checked_buf[BUFSIZE],          /* checked order line */
- message_buf[BUFSIZE],          /* messages are composed here */
- warn_buf[BUFSIZE],             /* warnings are composed here */
- indent, next_indent,           /* indent index */
- does_default = 0,              /* Ist DEFAULT aktiv? */
-  befehle_ende,                 /* EOF der Befehlsdatei */
-  *echeck_locale = "de", *echeck_rules = 0, *filename;
-int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
-  Rx, Ry;                       /* Koordinaten der aktuellen Region */
+char echo_it=0,           /* option: echo input lines */
+ no_comment=-3,           /* Keine Infos in [] hinter EINHEIT */
+ show_warnings=4,         /* option: print warnings (levels) */
+ warnings_cl=0,           /* -w auf der Kommandozeile gegeben */
+ warn_off=0,              /* ECHECK NOWARN */
+ use_stderr=0,            /* option: use stderr for errors etc */
+ brief=0,                 /* option: don't list errors */
+ ignore_NameMe=0,         /* option: ignoriere NameMe-Kommentare ;; */
+ piping=0,                /* option: wird output als pipe-input benutzt? */
+ lohn=10,                 /* Lohn für Arbeit - je Region zu setzen */
+ silberpool=1,            /* option: Silberpool-Verwaltung */
+ line_start=0,            /* option: Beginn der Zeilenzählung */
+ noship=0,
+ noroute=0,
+ nolost=0,
+ has_version=0,
+ at_cmd=0,
+ attack_warning=0,
+ compile=0;               /* option: compiler-/magellan-style warnings */
+int error_count=0,        /* counter: errors */
+ warning_count=0;         /* counter: warnings */
+char order_buf[BUFSIZE],  /* current order line */
+ checked_buf[BUFSIZE],    /* checked order line */
+ message_buf[BUFSIZE],    /* messages are composed here */
+ warn_buf[BUFSIZE],       /* warnings are composed here */
+ indent, next_indent,     /* indent index */
+ does_default=0,          /* Ist DEFAULT aktiv? */
+ befehle_ende,            /* EOF der Befehlsdatei */
+ *echeck_locale="de",
+ *echeck_rules="e2",
+ *filename;
+int rec_cost=RECRUIT_COST,
+ this_command,
+ this_unit,               /* wird von getaunit gesetzt */
+ Rx, Ry;                  /* Koordinaten der aktuellen Region */
 char *path;
 FILE *F;
+
 
 enum {
   OUT_NORMAL,
@@ -230,6 +243,7 @@ enum {
   K_SORT,
   K_PREFIX,
   K_PROMOTION,
+  K_CLAIM,
   MAXKEYWORDS
 };
 
@@ -294,6 +308,7 @@ static char *Keywords[MAXKEYWORDS] = {
   "SORT",
   "PREFIX",
   "PROMOTION",
+  "CLAIM",
 };
 
 typedef struct _keyword {
@@ -348,7 +363,15 @@ enum {
   P_AGGRESSIVE,
   P_DEFENSIVE,
   P_NUMBER,
+  P_SEED,
+  P_MALLORNSEED,
   P_LOCALE,
+  P_ALLIANCE,
+  P_KICK,
+  P_LEAVE,
+  P_NEW,
+  P_INVITE,
+  P_JOIN,
   P_BEFORE,
   P_AFTER,
   MAXPARAMS
@@ -388,7 +411,15 @@ static const char *Params[MAXPARAMS] = {
   "AGGRESSIVE",
   "DEFENSIVE",
   "NUMBER",
+  "SEED",
+  "MALLORNSEED",
   "LOCALE",
+  "ALLIANCE",
+  "KICK",
+  "LEAVE",
+  "NEW",
+  "INVITE",
+  "JOIN",
   "BEFORE",
   "AFTER"
 };
@@ -488,8 +519,10 @@ enum {
   CANTREADFILE,
   CANTRENAMEOBJECT,
   CHECKYOURORDERS,
+  CLAIMWHAT,
   COMBATSPELLSET,
   DELIVERYTO,
+  DESTROYNOSTREET,
   DIRECTION,
   DISCOVERED,
   DOESNTCARRY,
@@ -533,6 +566,8 @@ enum {
   MISSFILESKILL,
   MISSFILEDIR,
   MISSFILEMSG,
+  MISSINGALLIANCENUMBER,
+  MISSINGALLIANCEPARAMETER,
   MISSINGQUOTES,
   MISSINGDISGUISEPARAMETERS,
   MISSINGEND,
@@ -571,6 +606,8 @@ enum {
   PASSWORDMSG1,
   PASSWORDMSG2,
   PASSWORDMSG3,
+  PAYNOTNOT,
+  PLANTPARAMETER,
   POST,
   PRE,
   PROCESSINGFILE,
@@ -596,6 +633,7 @@ enum {
   TEMPNOTTEMP,
   TEMPUNITSCANTRESERVE,
   TEXTTOOLONG,
+  TOOMANYPARAMETERS,
   THERE,
   UNIT0NOTPOSSIBLE,
   UNIT0USED,
@@ -633,6 +671,7 @@ enum {
   UNRECOGNIZEDSPELL,
   USED1,
   USEEMAIL,
+  USEWHAT,
   USINGUNITINSTEAD,
   WARNINGS,
   WARNINGLEVEL,
@@ -677,8 +716,10 @@ static char *Errors[MAX_ERRORS] = {
   "CANTREADFILE",
   "CANTRENAMEOBJECT",
   "CHECKYOURORDERS",
+  "CLAIMWHAT",
   "COMBATSPELLSET",
   "DELIVERYTO",
+  "DESTROYNOSTREET",
   "DIRECTION",
   "DISCOVERED",
   "DOESNTCARRY",
@@ -722,6 +763,8 @@ static char *Errors[MAX_ERRORS] = {
   "MISSFILESKILL",
   "MISSFILEDIR",
   "MISSFILEMSG",
+  "MISSINGALLIANCENUMBER",
+  "MISSINGALLIANCEPARAMETER",
   "MISSINGQUOTES",
   "MISSINGDISGUISEPARAMETERS",
   "MISSINGEND",
@@ -760,6 +803,8 @@ static char *Errors[MAX_ERRORS] = {
   "PASSWORDMSG1",
   "PASSWORDMSG2",
   "PASSWORDMSG3",
+  "PAYNOTNOT",
+  "PLANTPARAMETER",
   "POST",
   "PRE",
   "PROCESSINGFILE",
@@ -785,6 +830,7 @@ static char *Errors[MAX_ERRORS] = {
   "TEMPNOTTEMP",
   "TEMPUNITSCANTRESERVE",
   "TEXTTOOLONG",
+  "TOOMANYPARAMETERS",
   "THERE",
   "UNIT0NOTPOSSIBLE",
   "UNIT0USED",
@@ -822,6 +868,7 @@ static char *Errors[MAX_ERRORS] = {
   "UNRECOGNIZEDSPELL",
   "USED1",
   "USEEMAIL",
+  "USEWHAT",
   "USINGUNITINSTEAD",
   "WARNINGS",
   "WARNINGLEVEL",
@@ -1680,9 +1727,10 @@ void readafile(const char *fn, int typ)
     return;
   for (line = 1;; line++) {
     do {
-      s = fgets(order_buf, MAXLINE, F);
-    }
-    while (!feof(F) && s && (*s == '#' || *s == '\n')); /* Leer- und  Kommentarzeilen   überlesen */
+      s=fgets(order_buf, MAXLINE, F);
+      /* FIXME (stm-06-2012) should this be
+       s = fgetbuffer(order_buf, MAXLINE, F); */
+    } while (!feof(F) && s && (*s=='#' || *s=='\n')); /* Leer- und Kommentarzeilen überlesen */
     if (feof(F) || !s) {
       fclose(F);
       return;
@@ -2097,8 +2145,8 @@ char *igetstr(char *s1)
   while (*s == SPACE)
     s++;
 
-  for (i = 0; *s && *s != SPACE && i < (int)sizeof(buf); i++, s++) {
-    buf[i] = *s;
+  for (i=0; *s && *s!=SPACE && i<(int)sizeof(buf); i++, s++) {
+    buf[i]=*s;
 
     if (*s == SPACE_REPLACEMENT) {
       if (i > 0 && buf[i - 1] == ESCAPE_CHAR)
@@ -2282,19 +2330,90 @@ int finddirection(char *s)
 
 #define findkeyword(s)  findtoken(s, UT_KEYWORD)
 
-char *getbuf(void)
-{
+void
+mask_quoted(char *buf) {
+  bool comment = false;
+  bool mismatch = false;
+  bool eatwhite = true;
+  bool start = true;
+  char quote1 = 0, quote2 = 0;
+  char * bp = buf;
+  char * cp = buf;
+
+
+  while (cp!=buf+MAXLINE && bp!=buf+MAXLINE && *bp) {
+    if (isspace(*bp)) {
+      if (eatwhite) {
+        do { ++bp; } while (bp!=buf+MAXLINE && isspace(*bp));
+        if (!quote2 && !quote1 && !start) *(cp++)=' ';
+      } else {
+        do {
+          *(cp++)=SPACE_REPLACEMENT;
+          ++bp;
+        } while (cp!=buf+MAXLINE && bp!=buf+MAXLINE && isspace(*bp));
+      }
+    } else if ((*bp==SINGLEQUOTE || *bp==DOUBLEQUOTE) && !comment) {
+      if (quote2) {
+        if (quote2 != *bp) {
+          mismatch = true;
+        } else {
+          *(cp++)=SINGLEQUOTE;
+        }
+
+        quote2 = 0;
+      } else {
+        if (quote1) {
+          if (quote1 == *bp) {
+            quote1 = 0;
+          } else {
+            quote2 = *bp;
+            *(cp++)=SINGLEQUOTE;
+          }
+        } else {
+          quote1 = *bp;
+        }
+      }
+      bp++;
+      eatwhite = true;
+    } else if (!quote1 && (*bp==COMMENT_CHAR ||
+      (start && *bp=='/' && *(bp+1)=='/' && *(bp+2)==' '))) {
+      comment=true;
+      *(cp++)=*(bp++);
+    } else {
+#if !defined(AMIGA) && !defined(UMLAUTE)
+      if (!iscntrl(*bp)) {
+#else
+      if ((unsigned char)(*bp)>32) {
+#endif
+
+        *(cp++) = *bp;
+        eatwhite = (quote1 == 0);
+#if !defined(AMIGA) && !defined(UMLAUTE)
+      }
+#else
+      }
+#endif
+      ++bp;
+    }
+    start=false;
+  }
+  *cp = 0;
+
+  if (quote1 || quote2 || mismatch )
+    Error(errtxt[MISSINGQUOTES], line_no, buf);
+}
+
+
+char *
+getbuf(void) {
   char lbuf[MAXLINE];
   bool cont = false;
-  bool quote = false;
   bool report = false;
   char *cp = warn_buf;
 
   lbuf[MAXLINE - 1] = '@';
 
   do {
-    bool eatwhite = true;
-    bool start = true;
     char *end;
     char *bp = fgetbuffer(lbuf, MAXLINE, F);
 
@@ -2306,50 +2425,40 @@ char *getbuf(void)
       line_no++;
       *(--end) = 0;
     } else {
-      /*
-       * wenn die Zeile länger als erlaubt war, wird der Rest
-       * weggeworfen: 
-       */
-      while (bp && !lbuf[MAXLINE - 1] && lbuf[MAXLINE - 2] != '\n')
-        bp = fgetbuffer(warn_buf, 1024, F);
+      /* wenn die Zeile länger als erlaubt war, wird der Rest weggeworfen: */
+      while (bp && !lbuf[MAXLINE-1] && lbuf[MAXLINE-2]!='\n')
+        bp=fgetbuffer(warn_buf, 1024, F);
       sprintf(warn_buf, "%.30s", lbuf);
       Error(errtxt[LINETOOLONG], line_no, warn_buf);
       bp = lbuf;
     }
-    cont = false;
-    while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE && *bp) {
+    cont=false;
+    while (cp!=warn_buf+MAXLINE && bp!=lbuf+MAXLINE && *bp) {
       if (isspace(*bp)) {
-        if (eatwhite) {
-          do {
-            ++bp;
-          }
-          while (bp != lbuf + MAXLINE && isspace(*bp));
-          if (!quote && !start)
-            *(cp++) = ' ';
-        } else {
-          do {
-            *(cp++) = SPACE_REPLACEMENT;
-            ++bp;
-          }
-          while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE
-            && isspace(*bp));
-        }
+        do {
+          *(cp++) = *bp;
+          ++bp;
+        } while (cp!=warn_buf+MAXLINE && bp!=lbuf+MAXLINE && isspace(*bp));
       } else {
-        cont = false;
-        if (*bp == '"') {
-          quote = (bool) ! quote;
-          eatwhite = true;
-        } else {
-          if (*bp == '\\')
-            cont = true;
-          else if (!iscntrl(*bp)) {
-            *(cp++) = *bp;
-            eatwhite = (bool) ! quote;
-          }
+        cont=false;
+        {
+          if (*bp=='\\') cont=true;
+          else
+#if !defined(AMIGA) && !defined(UMLAUTE)
+            if (!iscntrl(*bp)) {
+#else
+              if ((unsigned char)(*bp)>32) {
+#endif
+
+                *(cp++) = *bp;
+#if !defined(AMIGA) && !defined(UMLAUTE)
+              }
+#else
+            }
+#endif
         }
         ++bp;
       }
-      start = false;
     }
     if (cp == warn_buf + MAXLINE) {
       --cp;
@@ -2363,8 +2472,7 @@ char *getbuf(void)
   }
   while (cont || cp == warn_buf);
 
-  if (quote)
-    Error(errtxt[MISSINGQUOTES], line_no, lbuf);
+  mask_quoted(warn_buf);
 
   return warn_buf;
 }
@@ -2537,7 +2645,7 @@ void checkemail(void)
     return;
   }
   scat(errtxt[DELIVERYTO]);
-  scat(addr);
+  Scat(addr);
 }
 
 /*
@@ -2740,36 +2848,46 @@ void checknaming(void)
 {
   int i;
   char *s;
+  bool foreign = false;
 
   scat(printkeyword(K_NAME));
-  i = findparam(getstr());
-  s = getstr();
-  if (i == P_FOREIGN) {
-    if (i == P_REGION) {
+  i=findparam(getstr());
+  s=getstr();
+  if (i==P_FOREIGN) {
+    foreign = true;
+    i=findparam(s);
+    if (i==P_REGION) {
       sprintf(warn_buf, errtxt[ERRORNAMEFOREIGN], printparam(i));
       anerror(warn_buf);
     } else
       Scat(printparam(P_FOREIGN));
-    i = findparam(s);
-    s = getstr();
+    s=getstr();
   }
-  if (strchr(s, '('))
-    awarning(errtxt[NAMECONTAINSBRACKETS], 1);
 
   switch (i) {
-  case -1:
-    anerror(errtxt[UNRECOGNIZEDOBJECT]);
-    break;
+    case -1:
+      anerror(errtxt[UNRECOGNIZEDOBJECT]);
+      break;
 
-  case P_UNIT:
-  case P_FACTION:
-  case P_BUILDING:
-  case P_CASTLE:
-  case P_SHIP:
-  case P_REGION:
-    Scat(printparam(i));
-    checkstring(s, NAMESIZE, NECESSARY);
-    break;
+    case P_UNIT:
+    case P_FACTION:
+    case P_BUILDING:
+    case P_CASTLE:
+    case P_SHIP:
+    case P_REGION:
+    case P_ALLIANCE:
+      Scat(printparam(i));
+      if (foreign) {
+        if (i==P_ALLIANCE)
+          anerror(errtxt[CANTRENAMEOBJECT]);
+        i=btoi(s);
+        s = getstr();
+      }
+
+      if (strchr(s, '('))
+        awarning(errtxt[NAMECONTAINSBRACKETS], 1);
+      checkstring(s, NAMESIZE, NECESSARY);
+      break;
 
   default:
     anerror(errtxt[CANTRENAMEOBJECT]);
@@ -2868,14 +2986,15 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
 {
   t_spell *sp;
   int p;
+  int not = 0;
 
   if (*s == '[' || *s == '<') {
     anerror(errtxt[ERRORSPELLSYNTAX]);
     return 0;
   }
   if (findparam(s) == P_REGION) {
-    scat(printparam(P_REGION));
-    s = getstr();
+    Scat(printparam(P_REGION));
+    s=getstr();
     if (*s) {
       p = atoi(s);
       icat(p);
@@ -2894,9 +3013,9 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
     s = getstr();
   }
   if (findparam(s) == P_LEVEL) {
-    scat(printparam(P_LEVEL));
-    s = getstr();
-    if (!*s || atoi(s) < 1) {
+    Scat(printparam(P_LEVEL));
+    s=getstr();
+    if (!*s || atoi(s)<1) {
       anerror(errtxt[ERRORLEVELPARAMETERS]);
       return 0;
     }
@@ -2916,13 +3035,29 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
     return 0;
   }
   qcat(sp->name);
+
+  s=getstr();
+  while (*s) {
+    if (sp->typ & SP_BATTLE) {
+      if (not)
+        anerror(errtxt[TOOMANYPARAMETERS]);
+      else {
+        not = findparam(s);
+        if (not!=P_NOT)
+          anerror(errtxt[TOOMANYPARAMETERS]);
+      }
+    }
+    Scat(s);
+    s=getstr();
+  } /* restliche Parameter ohne Check ausgeben */
+
   if (!(sp->typ & spell_typ)) {
     sprintf(warn_buf, errtxt[ISCOMBATSPELL], sp->name,
       (sp->typ & SP_ZAUBER) ? errtxt[ISNOTCOMBATSPELL] : "");
     if (show_warnings > 0)      /* nicht bei -w0 */
       anerror(warn_buf);
   } else {
-    if (u && (sp->typ & SP_BATTLE) && (u->spell & sp->typ)) {
+    if (u && (sp->typ & SP_BATTLE) && (u->spell & sp->typ) && (not!=P_NOT)) {
       sprintf(warn_buf, errtxt[UNITALREADYHAS], uid(u));
       switch (sp->typ) {
       case SP_POST:
@@ -2943,12 +3078,6 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
       u->reserviert -= sp->kosten;
     }
   }
-  do {
-    s = getstr();
-    if (*s)
-      Scat(s);
-  }
-  while (*s);                   /* restliche Parameter ohne Check ausgeben  */
   return 1;
 }
 
@@ -2968,13 +3097,13 @@ void checkgiving(int key)
       if (findparam(s) == P_ALLES) {    /* GIB xx ALLES wasauchimmer */
         n = -1;
         Scat(printparam(P_ALLES));
-      } else if (findparam(s) == P_EACH) {
-        s = getstr();
-        n = atoi(s);
-        n *= order_unit->people;
-        if (n < 1) {
+      } else if (findparam(s)==P_EACH) {
+        s=getstr();
+        n=atoi(s);
+        n*=order_unit->people;
+        if (n<1) {
           anerror(errtxt[NUMMISSING]);
-          n = 1;
+          n=1;
         }
       } else {
         anerror(errtxt[NUMMISSING]);
@@ -3109,7 +3238,7 @@ void getluxuries(int cmd)
         anerror(errtxt[BUYALLNOTPOSSIBLE]);
         return;
       } else
-        scat(printparam(P_ALLES));
+        Scat(printparam(P_ALLES));
     } else {
       anerror(errtxt[NUMLUXURIESMISSING]);
     }
@@ -3370,30 +3499,27 @@ void check_sabotage(void)
 void checkmail(void)
 {
   char *s;
+  int i;
 
   scat(printkeyword(K_MESSAGE));
   s = getstr();
   if (stricmp(s, "an") == 0 || stricmp(s, "to") == 0)
     s = getstr();
 
-  switch (findparam(s)) {
-  case P_FACTION:
-    Scat(printparam(P_FACTION));
-    break;
+  i = findparam(s);
+  switch (i) {
+    case P_REGION:
+      Scat(printparam(P_REGION));
+      break;
 
-  case P_REGION:
-    Scat(printparam(P_REGION));
-    break;
-
-  case P_UNIT:
-    Scat(printparam(P_UNIT));
-    bcat(getb());
-    break;
-
-  case P_SHIP:
-    Scat(printparam(P_SHIP));
-    bcat(getb());
-    break;
+    case P_FACTION:
+    case P_UNIT:
+    case P_SHIP:
+    case P_BUILDING:
+    case P_CASTLE:
+      Scat(printparam(i));
+      bcat(getb());
+      break;
 
   default:
     anerror(errtxt[MSGTO]);
@@ -3414,27 +3540,27 @@ void reserve(void)
     anerror(errtxt[TEMPUNITSCANTRESERVE]);
     return;
   }
-
-  s = getstr();
-  n = atoi(s);
-  if (n < 1) {
-    if (findparam(s) == P_EACH) {
-      s = getstr();
-      n = atoi(s);
-      n *= order_unit->people;
-      if (n < 1) {
+  
+  s=getstr();
+  n=atoi(s);
+  if (n<1) {
+    if (findparam(s)==P_EACH) {
+      Scat(printparam(P_EACH));
+      s=getstr();
+      n=atoi(s);
+      n*=order_unit->people;
+      if (n<1) {
         anerror(errtxt[NUMMISSING]);
-        n = 1;
+        n=1;
       }
     } else {
       anerror(errtxt[NUMMISSING]);
-      n = 1;
+      n=1;
     }
   }
-  if (n > 0)
-    icat(n);
+  if (n>0) icat(n);
 
-  s = getstr();
+  s=getstr();
 
   if (!(*s)) {
     anerror(errtxt[RESERVEWHAT]);
@@ -3495,6 +3621,8 @@ void check_ally(void)
   s = getstr();
   if (findparam(s) == P_NOT) {
     Scat(printparam(P_NOT));
+  } else if (*s) {
+    anerror(errtxt[TOOMANYPARAMETERS]);
   }
 }
 
@@ -3525,8 +3653,113 @@ int studycost(t_skills * talent)
   return talent->kosten;
 }
 
-void check_comment(void)
-{
+
+
+void
+check_claim(void) {
+  char *s;
+  int n = 1;
+
+  scat(printkeyword(K_CLAIM));
+  s=getstr();
+
+  if (isdigit(*s)) { /* BEANSPRUCHE anzahl "Gegenstand" */
+    n=atoi(s);
+    if (n==0)
+      awarning(errtxt[NUMBER0SENSELESS], 2);
+    icat(n);
+    s=getstr();
+  }
+  if (*s) {
+    int i;
+    i=findparam(s);
+    switch (i) {
+    case P_SILVER:
+      Scat(printparam(i));
+      break;
+
+    default:
+      i=finditem(s);
+      if (i<0) {
+        i=findherb(s);
+        if (i<0) {
+          i=findpotion(s);
+          if (i>=0) {
+            if (piping) {
+              strcpy(warn_buf, printliste(i, potionnames));
+              s=strchr(warn_buf, ' ');
+              if (s) *s=0;
+              Scat(warn_buf);
+            } else {
+              qcat(printliste(i, potionnames));
+            }
+          } else {
+            awarning(errtxt[UNRECOGNIZEDOBJECT], 1);
+          }
+        } else {
+          if (piping) {
+            strcpy(warn_buf, printliste(i, herbdata));
+            s=strchr(warn_buf, ' ');
+            if (s) *s=0;
+            Scat(warn_buf);
+          } else {
+            qcat(printliste(i, herbdata));
+          }
+        }
+      } else {
+        if (piping) {
+          strcpy(warn_buf, ItemName(i, n!=1));
+          s=strchr(warn_buf, ' ');
+          if (s) *s=0;
+          Scat(warn_buf);
+        } else {
+          qcat(ItemName(i, n!=1));
+        }
+      }
+      return;
+    }
+  } else {
+    anerror(errtxt[CLAIMWHAT]);
+  }
+}
+
+void
+check_destroy(void) {
+  char *s;
+  int n;
+
+  scat(printkeyword(K_DESTROY));
+  s=getstr();
+
+  if (isdigit(*s)) { /* ZERSTOERE anzahl ...*/
+    n=atoi(s);
+    if (n==0)
+      awarning(errtxt[NUMBER0SENSELESS], 2);
+    icat(n);
+    s=getstr();
+  }
+  if (*s) {
+    int i;
+    i=findparam(s);
+    switch (i) {
+    case P_ROAD:
+      Scat(printparam(i));
+      i=getdirection();
+      if (i == -2 || i == D_PAUSE) {
+        anerror(errtxt[UNRECOGNIZEDDIRECTION]);
+      } else {
+        Scat(printdirection(i));
+      }
+      return;
+    default:
+      anerror(errtxt[DESTROYNOSTREET]);
+      break;
+    }
+  }
+}
+
+void
+check_comment(void) {
   char *s;
   int m;
 
@@ -3543,9 +3776,13 @@ void check_comment(void)
     warn_off = 2;
     return;
   }
-  if (strnicmp(s, "LOHN", 4) == 0 || strnicmp(s, "WAGE", 4) == 0) {     /* LOHN   für   Arbeit  */
-    m = geti();
-    lohn = (char)MAX(10, m);
+  if (strnicmp(s, "WARN", 4)==0) {  /* Warnungen wieder an */
+    warn_off=0;
+    return;
+  }
+  if (strnicmp(s, "LOHN", 4)==0 || strnicmp(s, "WAGE", 4)==0) { /* LOHN für Arbeit */
+    m=geti();
+    lohn=(char)MAX(10, m);
     return;
   }
   if (strnicmp(s, "ROUT", 4) == 0) {    /* ROUTe */
@@ -3884,12 +4121,21 @@ void check_teachings(void)
   }
 }
 
-void checkanorder(char *Orders)
-{
+void
+noadditional() {
+  char *s = getstr();
+  if (s && s[0]) {
+    anerror(errtxt[TOOMANYPARAMETERS]);
+  }
+}
+
+void
+checkanorder(char *Orders) {
   int i, x;
   char *s;
   t_skills *sk;
   unit *u;
+  int old_errors = error_count;
 
   s = strchr(Orders, ';');
   if (s)
@@ -3923,48 +4169,56 @@ void checkanorder(char *Orders)
       anerror(errtxt[WRONGNUMBER]);
     break;
 
-  case K_BANNER:
-    scat(printkeyword(K_BANNER));
-    checkstring(getstr(), DESCRIBESIZE, NECESSARY);
-    break;
+    case K_BANNER:
+      scat(printkeyword(K_BANNER));
+      checkstring(getstr(), DESCRIBESIZE, NECESSARY);
+      break;
 
-  case K_EMAIL:
-    checkemail();
-    break;
+    case K_EMAIL:
+      checkemail();
+      break;
 
-  case K_ORIGIN:
-    scat(printkeyword(K_ORIGIN));
-    s = getstr();
-    if (*s) {
-      x = atoi(s);
-      icat(x);
-      s = getstr();
+    case K_ORIGIN:
+      scat(printkeyword(K_ORIGIN));
+      s=getstr();
       if (*s) {
-        x = atoi(s);
+        x=atoi(s);
         icat(x);
-      } else
+        s=getstr();
+        if (*s) {
+          x=atoi(s);
+          icat(x);
+        } else
+          anerror(errtxt[NEEDBOTHCOORDINATES]);
+      } else {
         anerror(errtxt[NEEDBOTHCOORDINATES]);
-    }
-    break;
+      }
+      break;
 
   case K_USE:
     scat(printkeyword(K_USE));
     s = getstr();
 
-    if (isdigit(*s)) {          /* BENUTZE anzahl "Trank" */
-      i = atoi(s);
-      if (i == 0)
-        awarning(errtxt[NUMBER0SENSELESS], 2);
-      s = getstr();
-    }
+      if (isdigit(*s)) { /* BENUTZE anzahl "Trank" */
+        i=atoi(s);
+        icat(i);
+        if (i==0)
+          awarning(errtxt[NUMBER0SENSELESS], 2);
+        s=getstr();
+      }
 
-    i = findpotion(s);
-    if (i < 0)
-      anerror(errtxt[UNRECOGNIZEDPOTION]);
-    else {
-      Scat(printliste(i, potionnames));
-    }
-    break;
+      if (*s) {
+        i=findpotion(s);
+        if (i<0)
+          anerror(errtxt[UNRECOGNIZEDPOTION]);
+        else {
+          Scat(printliste(i, potionnames));
+        }
+      } else {
+        Scat(s);
+        anerror(errtxt[USEWHAT]);
+      }
+      break;
 
   case K_MESSAGE:
     checkmail();
@@ -4008,15 +4262,21 @@ void checkanorder(char *Orders)
     checknaming();
     break;
 
-  case K_BREED:
-    scat(printkeyword(K_BREED));
-    i = getparam();
-    if (i == P_HERBS || i == P_HORSE)
-      scat(printparam(i));
-    else
-      anerror(errtxt[BREEDHORSESORHERBS]);
-    long_order();
-    break;
+    case K_BREED:
+      scat(printkeyword(K_BREED));
+      s = getstr();
+      i = atoip(s);
+      if (i>0) {
+        icat(i);
+        s= getstr();
+      }
+      i=findparam(s);
+      if (i==P_HERBS || i==P_HORSE) {
+        Scat(printparam(i));
+      } else
+        anerror(errtxt[BREEDHORSESORHERBS]);
+      long_order();
+      break;
 
   case K_STEAL:
     scat(printkeyword(K_STEAL));
@@ -4028,25 +4288,15 @@ void checkanorder(char *Orders)
     checkdisplay();
     break;
 
-  case K_GUARD:
-    scat(printkeyword(K_GUARD));
-    s = getstr();
-    if (findparam(s) == P_NOT) {
-      Scat(printparam(P_NOT));
-    }
-    break;
-
-  case K_PAY:
-    scat(printkeyword(K_PAY));
-    s = getstr();
-    if (findparam(s) == P_NOT) {
-      Scat(printparam(P_NOT));
-    }
-    break;
-
-  case K_ALLIANCE:
-    Scat(order_buf);
-    break;
+    case K_GUARD:
+      scat(printkeyword(K_GUARD));
+      s=getstr();
+      if (findparam(s)==P_NOT) {
+        Scat(printparam(P_NOT));
+      } else if (*s) {
+        anerror(errtxt[WRONGPARAMETER]);
+      }
+      break;
 
   case K_END:
     if (from_temp_unit_no == 0)
@@ -4061,51 +4311,52 @@ void checkanorder(char *Orders)
     }
     break;
 
-  case K_RESEARCH:
-    scat(printkeyword(K_RESEARCH));
-    i = getparam();
-    if (i == P_HERBS) {
-      scat(printparam(P_HERBS));        /* momentan nur FORSCHE KRÄUTER */
-    } else
-      anerror(errtxt[RESEARCHHERBSONLY]);
-    long_order();
-    break;
-
-  case K_SETSTEALTH:
-    scat(printkeyword(K_SETSTEALTH));
-    s = getstr();
-    i = findtoken(s, UT_RACE);
-    if (i >= 0) {
-      Scat(printliste(i, Rassen));
+    case K_RESEARCH:
+      scat(printkeyword(K_RESEARCH));
+      i=getparam();
+      if (i==P_HERBS) {
+        Scat(printparam(P_HERBS));  /* momentan nur FORSCHE KRÄUTER */
+      } else
+        anerror(errtxt[RESEARCHHERBSONLY]);
+      long_order();
       break;
-    }
-    i = findparam(s);
-    if (i == P_FACTION) {
-      Scat(printparam(i));
-      s = getstr();
-      if (*s) {
-        if (findparam(s) == P_NOT) {
-          Scat(printparam(P_NOT));
-        } else if (findparam(s) == P_NUMBER) {
-          Scat(printparam(P_NUMBER));
-          i = getb();
+
+    case K_SETSTEALTH:
+      scat(printkeyword(K_SETSTEALTH));
+      s=getstr();
+      i=findtoken(s, UT_RACE);
+      if (*s && i >= 0) {
+        Scat(printliste(i, Rassen));
+        break;
+      }
+      i=findparam(s);
+      if (i==P_FACTION) {
+        Scat(printparam(i));
+        s=getstr();
+        if (*s) {
+          if (findparam(s)==P_NOT) {
+            Scat(printparam(P_NOT));
+          } else if (findparam(s)==P_NUMBER) {
+            Scat(printparam(P_NUMBER));
+            i=getb();
 /** siehe http://eressea.upb.de/mantis/view.php?id=887
             if (!i)
               anerror(errtxt[WRONGFACTIONNUMBER]);
             else */
-          icat(i);
-        } else
-          anerror(errtxt[WRONGPARAMETER]);
+            icat(i);
+          } else
+            anerror(errtxt[WRONGPARAMETER]);
+        }
+        break;
       }
+      if (isdigit(s[0])) {
+        i=atoip(s);
+        icat(i);
+        break;
+      }
+      if (*s)
+        anerror(errtxt[MISSINGDISGUISEPARAMETERS]);
       break;
-    }
-    if (isdigit(s[0])) {
-      i = atoip(s);
-      icat(i);
-      break;
-    }
-    awarning(errtxt[MISSINGDISGUISEPARAMETERS], 5);
-    break;
 
   case K_GIVE:
     checkgiving(i);
@@ -4115,37 +4366,40 @@ void checkanorder(char *Orders)
     check_ally();
     break;
 
-  case K_FIGHT:
-    scat(printkeyword(K_FIGHT));
-    s = getstr();
-    i = findparam(s);
-    switch (i) {
-    case P_AGGRESSIVE:
-    case P_DEFENSIVE:
-    case P_NOT:
-    case P_REAR:
-    case P_FLEE:
-    case P_FRONT:
-      Scat(printparam(i));
-      break;
-    default:
-      if (*s) {
-        if (findkeyword(s) == K_HELP) {
-          Scat(printkeyword(K_HELP));
-          s = getstr();
+    case K_FIGHT:
+      scat(printkeyword(K_FIGHT));
+      s=getstr();
+      i=findparam(s);
+      switch (i) {
+        case P_AGGRESSIVE:
+        case P_DEFENSIVE:
+        case P_NOT:
+        case P_REAR:
+        case P_FLEE:
+        case P_FRONT:
+          Scat(printparam(i));
+          break;
+        default:
           if (*s) {
-            if (findparam(s) == P_NOT) {
-              Scat(printparam(P_NOT));
-            } else
+            if (findkeyword(s)==K_HELP) {
+              Scat(printkeyword(K_HELP));
+              s=getstr();
+              if (*s) {
+                if (findparam(s)==P_NOT) {
+                  Scat(printparam(P_NOT));
+                } else
+                  anerror(errtxt[WRONGFIGHTSTATE]);
+              }
+            } else {
+              Scat(s);
               anerror(errtxt[WRONGFIGHTSTATE]);
+            }
+          } else {
+            Scat(printparam(P_FRONT));
           }
-        } else
-          anerror(errtxt[WRONGFIGHTSTATE]);
-        Scat(s);
-      } else
-        Scat(printparam(P_FRONT));
-    }
-    break;
+          break;
+      }
+      break;
 
   case K_COMBATMAGIC:
     scat(printkeyword(K_COMBATMAGIC));
@@ -4182,38 +4436,40 @@ void checkanorder(char *Orders)
     long_order();
     break;
 
-  case K_FORGET:
-    scat(printkeyword(K_FORGET));
-    sk = getskill();
-    if (!sk)
-      anerror(errtxt[UNRECOGNIZEDSKILL]);
-    else {
-      Scat(sk->name);
-    }
-    break;
-
-  case K_STUDY:
-    scat(printkeyword(K_STUDY));
-    sk = getskill();
-    if (!sk)
-      anerror(errtxt[UNRECOGNIZEDSKILL]);
-    else {
-      Scat(sk->name);
-      if (unicode_utf8_strcasecmp(sk->name, errtxt[MAGIC]) == 0)
-        if (order_unit->people > 1)
-          anerror(errtxt[ONEPERSONPERMAGEUNIT]);
-    }
-    if (sk && !does_default) {
-      x = studycost(sk) * order_unit->people;
-      if (x) {
-        order_unit->money -= x;
-        order_unit->reserviert -= x;
+    case K_FORGET:
+      scat(printkeyword(K_FORGET));
+      s = getstr();
+      sk = findskill(s);
+      if (!*s || !sk)
+        anerror(errtxt[UNRECOGNIZEDSKILL]);
+      else {
+        Scat(sk->name);
       }
-      addteach(NULL, order_unit);
-      order_unit->lernt = 1;
-    }
-    long_order();
-    break;
+      break;
+
+    case K_STUDY:
+      scat(printkeyword(K_STUDY));
+      s = getstr();
+      sk = findskill(s);
+      if (!*s || !sk)
+        anerror(errtxt[UNRECOGNIZEDSKILL]);
+      else {
+        Scat(sk->name);
+        if (strcasecmp(sk->name, errtxt[MAGIC])==0)
+          if (order_unit->people>1)
+            anerror(errtxt[ONEPERSONPERMAGEUNIT]);
+      }
+      if (sk && !does_default) {
+        x=studycost(sk)*order_unit->people;
+        if (x) {
+          order_unit->money-=x;
+          order_unit->reserviert-=x;
+        }
+        addteach(NULL, order_unit);
+        order_unit->lernt=1;
+      }
+      long_order();
+      break;
 
   case K_MAKE:
     checkmake();
@@ -4234,67 +4490,78 @@ void checkanorder(char *Orders)
       checkstring(s, NAMESIZE, POSSIBLE);
     break;
 
-  case K_RECRUIT:
-    scat(printkeyword(K_RECRUIT));
-    i = geti();
-    if (i) {
-      icat(i);
-      if (from_temp_unit_no)
-        u = newunit(from_temp_unit_no, 1);
+    case K_RECRUIT:
+      scat(printkeyword(K_RECRUIT));
+      i=geti();
+      if (i) {
+        icat(i);
+        if (from_temp_unit_no)
+          u=newunit(from_temp_unit_no, 1);
+        else
+          u=order_unit;
+        if (does_default)
+          break;
+        u->money-=i*rec_cost;
+        u->reserviert-=i*rec_cost;
+        u->people+=i;
+        addregion(Rx, Ry, i);
+      } else
+        anerror(errtxt[MISSINGNUMRECRUITS]);
+      break;
+
+    case K_QUIT:
+      scat(printkeyword(K_QUIT));
+      s=getstr();
+      if (!s[0])
+        anerror(errtxt[MISSINGPASSWORD]);
       else
-        u = order_unit;
-      if (does_default)
-        break;
-      u->money -= i * rec_cost;
-      u->reserviert -= i * rec_cost;
-      u->people += i;
-      addregion(Rx, Ry, i);
-    } else
-      anerror(errtxt[MISSINGNUMRECRUITS]);
-    break;
+        checkstring(s, NAMESIZE, POSSIBLE);
+      awarning(errtxt[QUITMSG], 0);
+      break;
 
-  case K_QUIT:
-    scat(printkeyword(K_QUIT));
-    s = getstr();
-    if (!s[0])
-      anerror(errtxt[MISSINGPASSWORD]);
-    else
-      checkstring(s, NAMESIZE, POSSIBLE);
-    awarning(errtxt[QUITMSG], 0);
-    break;
-
-  case K_TAX:
-    scat(printkeyword(K_TAX));
-    i = geti();
-    if (i)
-      icat(i);
-    else
-      i = 20 * order_unit->people;
-    while (*igetstr(NULL)) ;
-    long_order();
-    if (!does_default)
-      order_unit->money += i;
-    break;
-
-  case K_ENTERTAIN:
-    scat(printkeyword(K_ENTERTAIN));
-    i = geti();
-    if (!does_default) {
+    case K_TAX:
+      scat(printkeyword(K_TAX));
+      s=getstr();
+      i=atoi(s);
+      if (*s) {
+        if (i)
+          icat(i);
+        else
+          anerror(errtxt[NUMBER0SENSELESS]);
+      }
       if (!i)
-        i = 20 * order_unit->people;
-      order_unit->money += i;
-    }
-    long_order();
-    break;
+        i=20*order_unit->people;
+      long_order();
+      if (!does_default)
+        order_unit->money+=i;
+      break;
+
+    case K_ENTERTAIN:
+      scat(printkeyword(K_ENTERTAIN));
+      s=getstr();
+      i=atoi(s);
+      if (*s) {
+        if (i)
+          icat(i);
+        else
+          anerror(errtxt[NUMBER0SENSELESS]);
+      }
+      if (!does_default) {
+        if (!i)
+          i=20*order_unit->people;
+        order_unit->money+=i;
+      }
+      long_order();
+      break;
 
   case K_ENTER:
     checkenter();
     break;
 
-  case K_LEAVE:
-    scat(printkeyword(K_LEAVE));
-    check_leave();
-    break;
+    case K_LEAVE:
+      scat(printkeyword(K_LEAVE));
+      check_leave();
+      break;
 
   case K_ROUTE:
   case K_MOVE:
@@ -4302,46 +4569,46 @@ void checkanorder(char *Orders)
     long_order();
     break;
 
-  case K_FOLLOW:
-    scat(printkeyword(K_FOLLOW));
-    s = getstr();
-    if (s) {
-      i = findparam(s);
-      if (i == P_UNIT) {
-        Scat(printparam(i));
-        getaunit(NECESSARY);
-      } else if (i == P_SHIP) {
-        Scat(printparam(i));
-        s = getstr();
-        x = btoi(s);
-        Scat(s);
-        long_order();
-      } else
-        anerror(errtxt[FOLLOW]);
-    }
-    break;
-
-  case K_REPORT:
-    scat(printkeyword(K_REPORT));
-    s = getstr();
-    i = findreport(s);
-    if (i == -1) {
-      if (unicode_utf8_strncasecmp(s, printkeyword(K_SHOW), strlen(s)))
-        anerror(errtxt[UNRECOGNIZEDREPORTOPTION]);
-      else {
-        Scat(printkeyword(K_SHOW));
+    case K_FOLLOW:
+      scat(printkeyword(K_FOLLOW));
+      s=getstr();
+      if (s) {
+        i=findparam(s);
+        if (i==P_UNIT) {
+          Scat(printparam(i));
+          getaunit(NECESSARY);
+        } else if (i==P_SHIP) {
+          Scat(printparam(i));
+          s=getstr();
+          x=btoi(s);
+          Scat(s);
+          long_order();
+        } else
+          anerror(errtxt[FOLLOW]);
       }
       break;
-    }
-    Scat(reports[i]);
-    s = getstr();
-    i = findstr(message_levels, s, ML_MAX);
-    if (i == -1) {
-      anerror(errtxt[WRONGOUTPUTLEVEL]);
+
+    case K_REPORT:
+      scat(printkeyword(K_REPORT));
+      s=getstr();
+      i=findreport(s);
+      if (i==-1) {
+        if (unicode_utf8_strncasecmp(s, printkeyword(K_SHOW), strlen(s)))
+          anerror(errtxt[UNRECOGNIZEDREPORTOPTION]);
+        else {
+          Scat(printkeyword(K_SHOW));
+        }
+        break;
+      }
+      Scat(reports[i]);
+      s=getstr();
+      i=findstr(message_levels, s, ML_MAX);
+      if (i==-1) {
+        anerror(errtxt[WRONGOUTPUTLEVEL]);
+        break;
+      }
+      Scat(message_levels[i]);
       break;
-    }
-    Scat(message_levels[i]);
-    break;
 
   case K_OPTION:
     scat(printkeyword(K_OPTION));
@@ -4361,12 +4628,12 @@ void checkanorder(char *Orders)
     }
     break;
 
-  case K_CAST:
-    scat(printkeyword(K_CAST));
-    s = getstr();
-    getaspell(s, SP_ZAUBER, order_unit, 1);
-    long_order();
-    break;
+    case K_CAST:
+      scat(printkeyword(K_CAST));
+      s=getstr();
+      getaspell(s, SP_ZAUBER, order_unit, 1);
+      long_order();
+      break;
 
   case K_SHOW:
     scat(printkeyword(K_SHOW));
@@ -4378,14 +4645,14 @@ void checkanorder(char *Orders)
     scat(printkeyword(K_DESTROY));
     break;
 
-  case K_RIDE:
-    scat(printkeyword(K_RIDE));
-    if (getaunit(NECESSARY) == 2)
-      anerror(errtxt[UNIT0NOTPOSSIBLE]);
-    else if (!does_default)
-      order_unit->drive = this_unit;
-    long_order();
-    break;
+    case K_RIDE:
+      scat(printkeyword(K_RIDE));
+      if (getaunit(NECESSARY)==2)
+        anerror(errtxt[UNIT0NOTPOSSIBLE]);
+      else if (!does_default)
+        order_unit->drive=this_unit;
+      long_order();
+      break;
 
   case K_CARRY:
     scat(printkeyword(K_CARRY));
@@ -4401,83 +4668,88 @@ void checkanorder(char *Orders)
       anerror(errtxt[ONECARRYPERUNIT]);
     break;
 
-  case K_PIRACY:
-    getmoreunits(true);
-    long_order();
-    break;
-
-  case K_SCHOOL:               /* Magiegebiet */
-    s = getstr();
-    i = findstr(magiegebiet, s, 5);
-    if (i < 0) {
-      sprintf(warn_buf, errtxt[UNRECOGNIZEDSCHOOL], s);
-      anerror(warn_buf);
-    } else {
-      scat(printkeyword(K_SCHOOL));
-      Scat(magiegebiet[i]);
-    }
-    break;
-
-  case K_DEFAULT:
-    scat(printkeyword(K_DEFAULT));
-    scat(" \"");
-    u = newunit(-1, 0);
-    copy_unit(order_unit, u);
-    free(order_unit->start_of_orders);
-    order_unit->start_of_orders = 0;
-    free(order_unit->long_order);
-    order_unit->long_order = 0;
-    free(order_unit->order);
-    order_unit->order = 0;
-    order_unit->long_order_line = 0;
-    order_unit->start_of_orders_line = 0;
-    order_unit->temp = 0;
-    /*
-     * der DEFAULT gilt ja erst nächste Runde! 
-     */
-    s = getstr();
-    does_default = 1;
-    porder();
-    checkanorder(s);
-    does_default = 2;
-    while (getstr()[0]) ;
-    copy_unit(u, order_unit);
-    u->no = -1;
-    u->long_order_line = 0;
-    u->start_of_orders_line = 0;
-    u->temp = 0;
-    break;
-
-  case K_COMMENT:
-    check_comment();
-    scat(Orders);
-    break;
-
-  case K_RESERVE:
-    reserve();
-    break;
-
-  case K_RESTART:
-    i = findtoken(getstr(), UT_RACE);
-    if (i < 0) {
-      anerror(errtxt[UNRECOGNIZEDRACE]);
+    case K_PIRACY:
+      scat(printkeyword(K_PIRACY));
+      getmoreunits(true);
+      long_order();
       break;
-    } else
-      Scat(printliste(i, Rassen));
-    s = getstr();
-    if (!*s) {
-      anerror(errtxt[MISSINGPASSWORD]);
-      break;
-    } else
-      qcat(s);
-    awarning(errtxt[RESTARTMSG], 0);
-    break;
 
-  case K_GROUP:
-    s = getstr();
-    if (*s)
-      Scat(s);
-    break;
+    case K_SCHOOL:    /* Magiegebiet */
+      s=getstr();
+      i=findstr(magiegebiet, s, 5);
+      if (i<0) {
+        sprintf(warn_buf, errtxt[UNRECOGNIZEDSCHOOL], s);
+        anerror(warn_buf);
+      } else {
+        scat(printkeyword(K_SCHOOL));
+        Scat(magiegebiet[i]);
+      }
+      break;
+
+    case K_DEFAULT:
+      scat(printkeyword(K_DEFAULT));
+      scat(" \"");
+      u=newunit(-1, 0);
+      copy_unit(order_unit, u);
+      free(order_unit->start_of_orders);
+      order_unit->start_of_orders=0;
+      free(order_unit->long_order);
+      order_unit->long_order=0;
+      free(order_unit->order);
+      order_unit->order=0;
+      order_unit->long_order_line=0;
+      order_unit->start_of_orders_line=0;
+      order_unit->temp=0;
+        /* der DEFAULT gilt ja erst nächste Runde! */
+      s=getstr();
+      mask_quoted(s);
+      does_default=1;
+      porder();
+      checkanorder(s);
+      does_default=2;
+      while (getstr()[0]);
+      copy_unit(u, order_unit);
+      u->no=-1;
+      u->long_order_line=0;
+      u->start_of_orders_line=0;
+      u->temp=0;
+      break;
+
+    case K_COMMENT:
+      check_comment();
+      scat(Orders);
+      do {
+        s = getstr();
+      } while (*s);
+      break;
+
+    case K_RESERVE:
+      reserve();
+      break;
+
+    case K_RESTART:
+      scat(printkeyword(K_RESTART));
+      i=findtoken(getstr(), UT_RACE);
+      if (i<0) {
+        anerror(errtxt[UNRECOGNIZEDRACE]);
+        break;
+      } else
+        Scat(printliste(i, Rassen));
+      s=getstr();
+      if (!*s) {
+        anerror(errtxt[MISSINGPASSWORD]);
+        break;
+      } else
+        qcat(s);
+      awarning(errtxt[RESTARTMSG], 0);
+      break;
+
+    case K_GROUP:
+      scat(printkeyword(K_GROUP));
+      s=getstr();
+      if (*s)
+        Scat(s);
+      break;
 
   case K_SORT:
     scat(printkeyword(K_SORT));
@@ -4494,19 +4766,84 @@ void checkanorder(char *Orders)
     anerror(errtxt[SORT]);
     break;
 
-  case K_PLANT:
-  case K_PREFIX:
-    scat(printkeyword(i));
-    s = getstr();
-    if (*s)
-      Scat(s);
+    case K_PLANT:
+      scat(printkeyword(K_PLANT));
+      s=getstr();
+
+      if (isdigit(*s)) { /* PFLANZE anzahl "Kraeuter/Samen/Mallornsamen" */
+        i=atoi(s);
+        if (i==0)
+          awarning(errtxt[NUMBER0SENSELESS], 2);
+        icat(i);
+        s=getstr();
+      }
+
+      i=findparam(s);
+      if (i==P_SEED || i==P_MALLORNSEED || i==P_HERBS) {
+         Scat(printparam(i));
+      } else
+         anerror(errtxt[PLANTPARAMETER]);
+      long_order();
+      break;
+    case K_PREFIX:
+      scat(printkeyword(i));
+      s = getstr();
+      if (*s)
+        Scat(s);
+      break;
+    case K_PROMOTION:
+      scat(printkeyword(K_PROMOTION));
+      break;
+    case K_CLAIM:
+      check_claim();
+      break;
+    case K_PAY:
+      scat(printkeyword(K_PAY));
+      s=getstr();
+      if (findparam(s)==P_NOT) {
+        Scat(printparam(P_NOT));
+      } else {
+        anerror(errtxt[PAYNOTNOT]);
+        break;
+      }
+      break;
+    case K_ALLIANCE: {
+      int a;
+      scat(printkeyword(K_ALLIANCE));
+      a=getparam();
+      switch (a) {
+      case P_LEAVE:
+      case P_NEW:
+        Scat(printparam(a));
+        break;
+      case P_KICK:
+      case P_CONTROL:
+      case P_INVITE:
+      case P_JOIN:
+        Scat(printparam(a));
+        s = getstr();
+        i=btoi(s);
+        if (!*s || !i) {
+          if (i==P_JOIN)
+            anerror(errtxt[MISSINGALLIANCENUMBER]);
+          else
+            anerror(errtxt[MISSINGFACTIONNUMBER]);
+        } else {
+          Scat(s);
+        }
+        break;
+      default:
+        anerror(errtxt[MISSINGALLIANCEPARAMETER]);
+      }
+    }
     break;
-  case K_PROMOTION:
-    scat(printkeyword(K_PROMOTION));
-    break;
-  default:
-    anerror(errtxt[UNRECOGNIZEDORDER]);
+    default:
+      anerror(errtxt[UNRECOGNIZEDORDER]);
+      break;
   }
+  if (error_count == old_errors)
+    noadditional();
+
   if (does_default != 1) {
     porder();
     does_default = 0;
@@ -4614,11 +4951,18 @@ void help_keys(char key)
       fprintf(ERR, "%s\n", Keys[i]);
     break;
 
-  case 'p':                    /* Parameter */
-    fprintf(ERR, "Parameter / parameters:\n\n");
-    for (i = 0; i < MAXPARAMS; i++)
-      fprintf(ERR, "%s\n", Params[i]);
-    break;
+    case 'b':   /* Befehle */
+    case 'c':   /* Commands */
+      fprintf(ERR, "Befehle / commands:\n\n");
+      for (i=0; i<MAXKEYWORDS; i++)
+        fprintf(ERR, "%s\n", Keywords[i]);
+      break;
+
+    case 'p':   /* Parameter */
+      fprintf(ERR, "Parameter / parameters:\n\n");
+      for (i=0; i<MAXPARAMS; i++)
+        fprintf(ERR, "%s\n", Params[i]);
+      break;
 
   case 'r':                    /* Richtungen */
   case 'd':                    /* Directions */
@@ -4679,7 +5023,7 @@ void printhelp(int argc, char *argv[], int index)
       help_keys(*argv[index + 1]);
   }
 
-  fprintf(ERR, help_path, echeck_locale);
+  fprintf(ERR, help_path, echeck_rules, echeck_locale);
   putc('\n', ERR);
   recurseprinthelp(help);
   exit(1);
@@ -5210,15 +5554,13 @@ void addtoken(tnode * root, const char *str, int id)
     root->id = id;
     root->leaf = 1;
   } else {
-    char c = (char)tolower(*str);
-    int lindex = ((unsigned char)c) % 32;
-    int i = 0;
-    tnode *tk = root->next[lindex];
-
-    if (root->id < 0)
-      root->id = id;
-    while (tk && tk->c != c)
-      tk = tk->nexthash;
+    char c=(char)tolower(*str);
+    int lindex=((unsigned char)c) % 32;
+    int i=0;
+    tnode *tk=root->next[lindex];
+    /* FIXME (stm-06-2012) why? */
+    if (root->id<0) root->id=id;
+    while (tk && tk->c != c) tk=tk->nexthash;
     if (!tk) {
       tk = calloc(1, sizeof(tnode));
       tk->id = -1;

@@ -1,0 +1,641 @@
+ECheck (Version 4.3.3-0, Jun 26 2012), Zug-Checker für Eressea - Freeware!
+
+Verarbeite Datei 'test/orders.test.txt'.
+Befehle für Partei 1 gefunden.
+Rekrutierungskosten auf 80 Silber gesetzt, Warning Level 99.
+Silberpool aktiviert.
+
+Fehler in Zeile 11: BEZAHLE ohne NICHT ergibt keinen Sinn.
+  `BEZAHLEN '
+Fehler in Zeile 12: BEZAHLE ohne NICHT ergibt keinen Sinn.
+  `BEZAHLEN foo '
+Fehler in Zeile 13: Zu viele Argumente.
+  `BEZAHLEN NICHT viel '
+Warnung zur Zeile 9: Einheit bez hat keinen langen Befehl bekommen.
+  `EINHEIT bez; Weltenforscher [1,160$]'
+Fehler in Zeile 17: BEANSPRUCHE was?.
+  `BEANSPRUCHE 1 '
+Warnung zur Zeile 18: Objekt nicht erkannt.
+  `BEANSPRUCHE 1 Foo '
+Fehler in Zeile 19: BEANSPRUCHE was?.
+  `BEANSPRUCHE '
+Warnung zur Zeile 20: Objekt nicht erkannt.
+  `BEANSPRUCHE viel Zeugs '
+Fehler in Zeile 20: Zu viele Argumente.
+  `BEANSPRUCHE viel Zeugs '
+Warnung zur Zeile 14: Einheit clai hat keinen langen Befehl bekommen.
+  `EINHEIT clai; Weltenforscher [1,160$]'
+Fehler in Zeile 23: Zu viele Argumente.
+  `BEF 1 '
+Warnung zur Zeile 21: Einheit bef hat keinen langen Befehl bekommen.
+  `EINHEIT bef; Weltenforscher [1,160$]'
+Fehler in Zeile 27: Zu viele Argumente.
+  `PRAEFIX kein blau'
+Warnung zur Zeile 24: Einheit pref hat keinen langen Befehl bekommen.
+  `EINHEIT pref; Weltenforscher [1,160$]'
+Fehler in Zeile 32: PFLANZE was?.
+  `PFLANZEN '
+Warnung zur Zeile 32: Einheit pfl2 hat schon einen langen Befehl in Zeile
+	31 ("PFLANZEN 3 Mallornsamen").
+  `PFLANZEN '
+Fehler in Zeile 33: PFLANZE was?.
+  `PFLAN 4 '
+Warnung zur Zeile 33: Einheit pfl2 hat schon einen langen Befehl in Zeile
+	31 ("PFLANZEN 3 Mallornsamen").
+  `PFLAN 4 '
+Warnung zur Zeile 34: Einheit pfl2 hat schon einen langen Befehl in Zeile
+	31 ("PFLANZEN 3 Mallornsamen").
+  `PFLAN Samen oder so '
+Fehler in Zeile 34: Zu viele Argumente.
+  `PFLAN Samen oder so '
+Fehler in Zeile 38: Einheit fehlt.
+  `SORTIERE VOR '
+Fehler in Zeile 38: SORTIERE VOR oder HINTER <einheit>.
+  `SORTIERE VOR '
+Fehler in Zeile 39: Einheit fehlt.
+  `SORTIERE HINTER '
+Fehler in Zeile 39: SORTIERE VOR oder HINTER <einheit>.
+  `SORTIERE HINTER '
+Fehler in Zeile 40: SORTIERE VOR oder HINTER <einheit>.
+  `SORTIERE '
+Fehler in Zeile 41: SORTIERE VOR oder HINTER <einheit>.
+  `SORTIERE bla '
+Fehler in Zeile 42: SORTIERE VOR oder HINTER <einheit>.
+  `SORT bla blub '
+Fehler in Zeile 43: Zu viele Argumente.
+  `SORT VOR blub foo'
+Warnung zur Zeile 35: Einheit sort hat keinen langen Befehl bekommen.
+  `EINHEIT sort; Weltenforscher [1,160$]'
+Fehler in Zeile 47: Zu viele Argumente.
+  `GRUPPE Bla bla'
+Warnung zur Zeile 44: Einheit grou hat keinen langen Befehl bekommen.
+  `EINHEIT grou; Weltenforscher [1,160$]'
+Warnung zur Zeile 49: NEUSTART befohlen!.
+  `NEUSTART Goblins foo'
+Fehler in Zeile 50: Kein Passwort angeben.
+  `NEUSTART '
+Fehler in Zeile 51: Kein Passwort angeben.
+  `NEUSTART Goblins '
+Warnung zur Zeile 52: NEUSTART befohlen!.
+  `NEUSTART Goblins foo bar'
+Fehler in Zeile 52: Zu viele Argumente.
+  `NEUSTART Goblins foo bar'
+Warnung zur Zeile 48: Einheit neu hat keinen langen Befehl bekommen.
+  `EINHEIT neu; Weltenforscher [1,160$]'
+Fehler in Zeile 56: Anzahl Gegenstände/Personen/Silber fehlt.
+  `RESERVIEREN ALLES Holz'
+Fehler in Zeile 57: Anzahl Gegenstände/Personen/Silber fehlt.
+  `RESERVIEREN'
+Fehler in Zeile 57: RESERVIERE was?.
+  `RESERVIEREN'
+Fehler in Zeile 58: Anzahl Gegenstände/Personen/Silber fehlt.
+  `RESERVIEREN JE Holz'
+Fehler in Zeile 58: RESERVIERE was?.
+  `RESERVIEREN JE Holz'
+Fehler in Zeile 59: Anzahl Gegenstände/Personen/Silber fehlt.
+  `RESER ALLES'
+Fehler in Zeile 59: RESERVIERE was?.
+  `RESER ALLES'
+Fehler in Zeile 60: RESERVIERE was?.
+  `RESER 4'
+Fehler in Zeile 61: Anzahl Gegenstände/Personen/Silber fehlt.
+  `RESER Silber'
+Fehler in Zeile 61: RESERVIERE was?.
+  `RESER Silber'
+Fehler in Zeile 62: Zu viele Argumente.
+  `RESER 4 Silber und Gold'
+Warnung zur Zeile 53: Einheit res hat keinen langen Befehl bekommen.
+  `EINHEIT res; Weltenforscher [1,160$]'
+Fehler in Zeile 66: Befehl nicht erkannt.
+  `//abc '
+// ECHECK VERSION
+Warnung zur Zeile 76: ROUTE ist kein Kreis; (0,0) -> (0,2).
+  `ROUTE no no'
+Fehler in Zeile 82: Zu viele Argumente.
+  `MACHEN 1 Rostiges Kettenhemd'
+Warnung zur Zeile 77: Einheit def hat keinen langen Befehl bekommen.
+  `EINHEIT def; Weltenforscher [1,160$]'
+Fehler in Zeile 84: Befehl nicht erkannt.
+  `SCHULE Gwyrrd'
+Fehler in Zeile 85: Befehl nicht erkannt.
+  `SCHULE '
+Fehler in Zeile 86: Befehl nicht erkannt.
+  `SCHULE Foo '
+Fehler in Zeile 87: Befehl nicht erkannt.
+  `SCHULE a b c'
+Warnung zur Zeile 83: Einheit schu hat keinen langen Befehl bekommen.
+  `EINHEIT schu; Weltenforscher [1,160$]'
+Fehler in Zeile 93: Zahl zu groß: `Silber'. Stattdessen 1 benutzt.
+  `PIRAT Silber '
+Fehler in Zeile 96: Einheit fehlt.
+  `TRANSPORTIERE '
+Warnung zur Zeile 96: Kann zu transportierende Einheit nicht ermitteln.
+  `TRANSPORTIERE '
+Fehler in Zeile 97: Pro Einheit muß ein TRANSPORTIERE-Befehl gegeben
+	werden.
+  `TRANSPORTIERE 1 2 '
+Warnung zur Zeile 94: Einheit carr hat keinen langen Befehl bekommen.
+  `EINHEIT carr; Weltenforscher [1,160$]'
+Fehler in Zeile 101: Einheit fehlt.
+  `FAHREN '
+Fehler in Zeile 103: Zu viele Argumente.
+  `FAHREN 1 2 3 '
+Fehler in Zeile 109: Richtung nicht erkannt.
+  `ZERST 15 STRASSE PAUSE '
+Fehler in Zeile 110: nur ZERSTOERE oder ZERSTOERE STRASSE sind erlaubt.
+  `ZERST Burg '
+Fehler in Zeile 111: nur ZERSTOERE oder ZERSTOERE STRASSE sind erlaubt.
+  `ZERST 15 Burg '
+Warnung zur Zeile 104: Einheit dest hat keinen langen Befehl bekommen.
+  `EINHEIT dest; Weltenforscher [1,160$]'
+Fehler in Zeile 114: Zu viele Argumente.
+  `ZEIGEN 2 Schild '
+Warnung zur Zeile 112: Einheit show hat keinen langen Befehl bekommen.
+  `EINHEIT show; Weltenforscher [1,160$]'
+Fehler in Zeile 122: Zauberspruch nicht erkannt.
+  `ZAUBERE '
+Fehler in Zeile 123: "Blitzlicht" ist ein Kampfzauber.
+  `ZAUBERE Blitzlicht '
+Fehler in Zeile 124: Zauberspruch nicht erkannt.
+  `ZAUBERE STUFE 2 REGION 1 1 Sonnenschein '
+Fehler in Zeile 130: Option unbekannt.
+  `OPTION Almosen '
+Fehler in Zeile 131: Option unbekannt.
+  `OPTION '
+Fehler in Zeile 132: Option unbekannt.
+  `OPTION Auswertung Computer '
+Fehler in Zeile 133: Zu viele Argumente.
+  `OPTION Punkte NICHT mehr '
+Warnung zur Zeile 125: Einheit opt hat keinen langen Befehl bekommen.
+  `EINHEIT opt; Weltenforscher [1,160$]'
+Warnung zur Zeile 134: Einheit repo hat keinen langen Befehl bekommen.
+  `EINHEIT repo; Weltenforscher [1,160$]'
+Fehler in Zeile 139: FOLGE EINHEIT xx, FOLGE SCHIFF xx oder FOLGE.
+  `FOLGEN '
+Fehler in Zeile 140: Einheit fehlt.
+  `FOLGEN EINHEIT '
+Warnung zur Zeile 141: Einheit foll hat schon einen langen Befehl in Zeile
+	138 ("FOLGEN SCHIFF 123").
+  `FOLGEN SCHIFF '
+Fehler in Zeile 142: FOLGE EINHEIT xx, FOLGE SCHIFF xx oder FOLGE.
+  `FOLGEN 123 '
+Fehler in Zeile 143: FOLGE EINHEIT xx, FOLGE SCHIFF xx oder FOLGE.
+  `FOLGEN 123 123 '
+Fehler in Zeile 144: Zu viele Argumente.
+  `FOLGEN EINHEIT 123 foo '
+Warnung zur Zeile 150: Einheit rou2 bewegt sich evtl. zu weit.
+  `NACH o no nw w sw so '
+Warnung zur Zeile 154: Einheit rou4 bewegt sich evtl. zu weit.
+  `NACH o no nw w sw so PAUSE '
+Fehler in Zeile 154: NACH geht nicht mit PAUSE.
+  `NACH o no nw w sw so PAUSE '
+Warnung zur Zeile 155: ROUTE beginnt mit PAUSE.
+  `ROUTE PAUSE'
+Warnung zur Zeile 155: Einheit rou4 hat schon einen langen Befehl in Zeile
+	154 ("NACH o no nw w sw so PAUSE ").
+  `ROUTE PAUSE'
+Fehler in Zeile 156: Richtung nicht erkannt.
+  `NACH '
+Fehler in Zeile 156: Einheit rou4 hat sich schon bewegt.
+  `NACH '
+Warnung zur Zeile 156: Einheit rou4 hat schon einen langen Befehl in Zeile
+	154 ("NACH o no nw w sw so PAUSE ").
+  `NACH '
+Fehler in Zeile 157: Richtung nicht erkannt.
+  `ROUTE '
+Fehler in Zeile 157: Einheit rou4 hat sich schon bewegt.
+  `ROUTE '
+Warnung zur Zeile 157: Einheit rou4 hat schon einen langen Befehl in Zeile
+	154 ("NACH o no nw w sw so PAUSE ").
+  `ROUTE '
+Fehler in Zeile 160: Zu viele Argumente.
+  `VERLASSEN 1 '
+Warnung zur Zeile 158: Einheit verl hat keinen langen Befehl bekommen.
+  `EINHEIT verl; Weltenforscher [1,160$]'
+Fehler in Zeile 165: Nummer des Objektes fehlt.
+  `BETRETEN BURG '
+Fehler in Zeile 166: Nummer des Objektes fehlt.
+  `BETRETEN SCHIFF '
+Fehler in Zeile 167: Zahl zu groß: `schiff'. Stattdessen 1 benutzt.
+  `BETRETEN burg schiff '
+Fehler in Zeile 168: Zu viele Argumente.
+  `BETRETEN BURG 123 foo '
+Warnung zur Zeile 161: Einheit betr hat keinen langen Befehl bekommen.
+  `EINHEIT betr; Weltenforscher [1,160$]'
+Fehler in Zeile 174: Anzahl 0 ergibt keinen Sinn.
+  `UNTERHALTE Silber '
+Warnung zur Zeile 175: Einheit unt3 hat schon einen langen Befehl in Zeile
+	174 ("UNTERHALTE Silber ").
+  `UNTERHALTE 15 Silber '
+Fehler in Zeile 175: Zu viele Argumente.
+  `UNTERHALTE 15 Silber '
+Fehler in Zeile 181: Anzahl 0 ergibt keinen Sinn.
+  `TREIBE Silber '
+Warnung zur Zeile 182: Einheit tax3 hat schon einen langen Befehl in Zeile
+	181 ("TREIBE Silber ").
+  `TREIBE 15 Silber '
+Fehler in Zeile 182: Zu viele Argumente.
+  `TREIBE 15 Silber '
+Warnung zur Zeile 183: Einheit tax3 hat schon einen langen Befehl in Zeile
+	181 ("TREIBE Silber ").
+  `TREIBE 15 16 '
+Fehler in Zeile 183: Zu viele Argumente.
+  `TREIBE 15 16 '
+Warnung zur Zeile 185: Achtung! STIRB gegeben! Die Partei wird aufgelöst!.
+  `STIRB pw'
+Warnung zur Zeile 186: Achtung! STIRB gegeben! Die Partei wird aufgelöst!.
+  `STIRB pw'
+Fehler in Zeile 187: Kein Passwort angeben.
+  `STIRB '
+Warnung zur Zeile 187: Achtung! STIRB gegeben! Die Partei wird aufgelöst!.
+  `STIRB '
+Warnung zur Zeile 188: Achtung! STIRB gegeben! Die Partei wird aufgelöst!.
+  `STIRB 1 2 3 '
+Fehler in Zeile 188: Zu viele Argumente.
+  `STIRB 1 2 3 '
+Warnung zur Zeile 184: Einheit quit hat keinen langen Befehl bekommen.
+  `EINHEIT quit; Weltenforscher [1,160$]'
+Fehler in Zeile 191: Anzahl Rekruten fehlt.
+  `REKRUT '
+Fehler in Zeile 192: Zu viele Argumente.
+  `REKRUT 1 2 '
+Warnung zur Zeile 189: Einheit rec hat keinen langen Befehl bekommen.
+  `EINHEIT rec; Weltenforscher [1,160$]'
+Warnung zur Zeile 194: Passwort gelöscht.
+  `PASSWORT '
+Fehler in Zeile 196: Zu viele Argumente.
+  `PASSWORT 1 2 3 '
+Warnung zur Zeile 197: Text zu lang (max. 127).
+  `PASSWORT 1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...'
+Warnung zur Zeile 193: Einheit pw hat keinen langen Befehl bekommen.
+  `EINHEIT pw; Weltenforscher [1,160$]'
+Fehler in Zeile 201: Zu viele Argumente.
+  `SABOTIERE SCHIFF 1 '
+Fehler in Zeile 202: Bislang gibt es nur SABOTIERE SCHIFF.
+  `SABOTIERE '
+Warnung zur Zeile 202: Einheit sab1 hat schon einen langen Befehl in Zeile
+	201 ("SABOTIERE SCHIFF 1 ").
+  `SABOTIERE '
+Fehler in Zeile 203: Bislang gibt es nur SABOTIERE SCHIFF.
+  `SABOTIERE 1 '
+Warnung zur Zeile 203: Einheit sab1 hat schon einen langen Befehl in Zeile
+	201 ("SABOTIERE SCHIFF 1 ").
+  `SABOTIERE 1 '
+Fehler in Zeile 219: Zu viele Argumente.
+  `MACHEN STRASSE no no '
+Fehler in Zeile 221: Sowas kann man nicht machen.
+  `MACHEN 1 Foo '
+Warnung zur Zeile 222: Einheit mak8 hat schon einen langen Befehl in Zeile
+	221 ("MACHEN 1 Foo ").
+  `MACHEN 1 Holz foo '
+Fehler in Zeile 222: Zu viele Argumente.
+  `MACHEN 1 Holz foo '
+Fehler in Zeile 223: Sowas kann man nicht machen.
+  `MACHEN 3 4 Holz '
+Warnung zur Zeile 223: Einheit mak8 hat schon einen langen Befehl in Zeile
+	221 ("MACHEN 1 Foo ").
+  `MACHEN 3 4 Holz '
+Warnung zur Zeile 224: Einheit mak8 hat schon einen langen Befehl in Zeile
+	221 ("MACHEN 1 Foo ").
+  `MACHEN STRASSE PAUSE '
+Fehler in Zeile 228: Zu viele Argumente.
+  `LERNEN Taktik 50 '
+Fehler in Zeile 230: Talent nicht erkannt.
+  `LERNEN '
+Fehler in Zeile 231: Talent nicht erkannt.
+  `LERNEN foo '
+Warnung zur Zeile 231: Einheit stu3 hat schon einen langen Befehl in Zeile
+	230 ("LERNEN ").
+  `LERNEN foo '
+Fehler in Zeile 232: Talent nicht erkannt.
+  `LERNEN 5 Hiebwaffen '
+Warnung zur Zeile 232: Einheit stu3 hat schon einen langen Befehl in Zeile
+	230 ("LERNEN ").
+  `LERNEN 5 Hiebwaffen '
+Warnung zur Zeile 233: Einheit stu3 hat schon einen langen Befehl in Zeile
+	230 ("LERNEN ").
+  `LERNEN Hiebwaffen 5 '
+Fehler in Zeile 233: Zu viele Argumente.
+  `LERNEN Hiebwaffen 5 '
+Fehler in Zeile 236: Talent nicht erkannt.
+  `VERGESSEN '
+Fehler in Zeile 237: Zu viele Argumente.
+  `VERGESSEN Hiebwaffen 5 '
+Fehler in Zeile 238: Talent nicht erkannt.
+  `VERGE 5 Hiebwaffen '
+Warnung zur Zeile 234: Einheit verg hat keinen langen Befehl bekommen.
+  `EINHEIT verg; Weltenforscher [1,160$]'
+Fehler in Zeile 244: Wen lehren?.
+  `LEHRE '
+Fehler in Zeile 245: Zahl zu groß: `Hiebwaffen'. Stattdessen 1 benutzt.
+  `LEHRE Hiebwaffen '
+Warnung zur Zeile 245: Einheit tea3 hat schon einen langen Befehl in Zeile
+	244 ("LEHRE ").
+  `LEHRE Hiebwaffen '
+Fehler in Zeile 249: Zu viele Argumente.
+  `SPIONIEREN 123 456 '
+Fehler in Zeile 250: Einheit fehlt.
+  `SPIONIEREN '
+Warnung zur Zeile 250: Einheit spy2 hat schon einen langen Befehl in Zeile
+	249 ("SPIONIEREN 123 456 ").
+  `SPIONIEREN '
+Fehler in Zeile 253: Einheit fehlt.
+  `KONTAKTIEREN '
+Fehler in Zeile 254: Zu viele Argumente.
+  `KONTAKTIEREN 123 456 '
+Warnung zur Zeile 251: Einheit cont hat keinen langen Befehl bekommen.
+  `EINHEIT cont; Weltenforscher [1,160$]'
+Fehler in Zeile 264: KAUFE geht nicht mit ALLES.
+  `KAUFEN ALLES Öl '
+Fehler in Zeile 266: Anzahl Luxusgüter fehlt.
+  `KAUFE '
+Fehler in Zeile 267: Anzahl Luxusgüter fehlt.
+  `VERKAUFE '
+Fehler in Zeile 268: Anzahl Luxusgüter fehlt.
+  `VERKAUFE Balsam Öl '
+Fehler in Zeile 269: Anzahl Luxusgüter fehlt.
+  `VERKAUFE Balsam '
+Fehler in Zeile 270: Anzahl Luxusgüter fehlt.
+  `KAUFE Balsam '
+Warnung zur Zeile 275: Einheit mag1 hat schon einen Post-Kampfzauber gesetzt.
+  `KAMPFZAUBER STUFE 2 Magisches~Lametta'
+Fehler in Zeile 276: Zauberspruch nicht erkannt.
+  `KAMPFZAUBER '
+Fehler in Zeile 277: Zauberspruch nicht erkannt.
+  `KAMPFZAUBER Foo '
+Warnung zur Zeile 278: Einheit mag1 hat schon einen Kampfzauber gesetzt.
+  `KAMPFZAUBER Blitzlicht '
+Fehler in Zeile 279: Zu viele Argumente.
+  `KAMPFZAUBER Blitzlicht Blitzlicht '
+Warnung zur Zeile 279: Einheit mag1 hat schon einen Kampfzauber gesetzt.
+  `KAMPFZAUBER Blitzlicht Blitzlicht '
+Fehler in Zeile 280: Zu viele Argumente.
+  `KAMPFZAUBER Blitzlicht NICHT Blitzlicht '
+Fehler in Zeile 281: Zauberspruch nicht erkannt.
+  `KAMPFZAUBER NICHT '
+Warnung zur Zeile 271: Einheit mag1 hat keinen langen Befehl bekommen.
+  `EINHEIT mag1; Weltenforscher [1,160$]'
+Fehler in Zeile 291: Falscher Kampfstatus.
+  `KAEMPFE HELFE VORNE '
+Fehler in Zeile 292: Falscher Kampfstatus.
+  `KAEMPFE Bla '
+Fehler in Zeile 293: Zu viele Argumente.
+  `KAEMPFE HINTEN NICHT '
+Warnung zur Zeile 282: Einheit comb hat keinen langen Befehl bekommen.
+  `EINHEIT comb; Weltenforscher [1,160$]'
+Fehler in Zeile 302: Zahl zu groß: `ALLES'. Stattdessen 1 benutzt.
+  `HELFE ALLES '
+Fehler in Zeile 302: Helfe-Status falsch.
+  `HELFE ALLES '
+Fehler in Zeile 303: Zahl zu groß: `ALLES'. Stattdessen 1 benutzt.
+  `HELFE ALLES ALLES '
+Fehler in Zeile 304: Zu viele Argumente.
+  `HELFE 1 ALLES 2 '
+Fehler in Zeile 305: Helfe-Status falsch.
+  `HELFE 1 '
+Fehler in Zeile 306: Partei fehlt.
+  `HELFE '
+Fehler in Zeile 306: Helfe-Status falsch.
+  `HELFE '
+Warnung zur Zeile 294: Einheit help hat keinen langen Befehl bekommen.
+  `EINHEIT help; Weltenforscher [1,160$]'
+Warnung zur Zeile 312: Einheit give hat evtl. zu wenig Silber.
+  `GIB TEMP a JE 1 Silber'
+Warnung zur Zeile 313: Einheit give hat evtl. zu wenig Silber.
+  `GIB 2 JE 1 Silber'
+Warnung zur Zeile 317: Einheit give hat evtl. zu wenig Personen.
+  `GIB 6 5 PERSONEN'
+Fehler in Zeile 321: Anzahl Gegenstände/Personen/Silber fehlt.
+  `GIB 2 JE ALLES Silber '
+Warnung zur Zeile 321: Einheit give hat evtl. zu wenig Silber.
+  `GIB 2 JE ALLES Silber '
+Fehler in Zeile 322: Anzahl Gegenstände/Personen/Silber fehlt.
+  `GIB 2 JE '
+Fehler in Zeile 322: Was übergeben?.
+  `GIB 2 JE '
+Fehler in Zeile 323: Anzahl Gegenstände/Personen/Silber fehlt.
+  `GIB 2 JE Silber '
+Fehler in Zeile 323: Was übergeben?.
+  `GIB 2 JE Silber '
+Fehler in Zeile 324: Zu viele Argumente.
+  `GIB 3 KOMMANDO NICHT '
+Warnung zur Zeile 325: Objekt nicht erkannt.
+  `GIB 3 1 KOMMANDO '
+Warnung zur Zeile 326: Einheit give hat evtl. zu wenig Silber.
+  `GIB 1 1 Silber nicht '
+Fehler in Zeile 326: Zu viele Argumente.
+  `GIB 1 1 Silber nicht '
+Fehler in Zeile 335: Zu viele Argumente.
+  `TARNE 1 2'
+Fehler in Zeile 336: TARNE ohne Parameter.
+  `TARNE foo '
+Warnung zur Zeile 327: Einheit stel hat keinen langen Befehl bekommen.
+  `EINHEIT stel; Weltenforscher [1,160$]'
+Warnung zur Zeile 337: Einheit res hat schon in Zeile 53 Befehle bekommen.
+	Benutze stattdessen Einheit ret.
+  `EINHEIT res; Weltenforscher [1,160$]'
+Fehler in Zeile 340: Es gibt nur FORSCHE KRÄUTER.
+  `FORSCHE '
+Fehler in Zeile 342: Es gibt nur FORSCHE KRÄUTER.
+  `FORSCHE Foo '
+Warnung zur Zeile 343: Einheit res3 hat schon einen langen Befehl in Zeile
+	342 ("FORSCHE Foo ").
+  `FORSCHE Kraeuter NICHT '
+Fehler in Zeile 343: Zu viele Argumente.
+  `FORSCHE Kraeuter NICHT '
+Warnung zur Zeile 348: ENDE ohne MACHE TEMP.
+  `ENDE '
+Warnung zur Zeile 344: Einheit tem hat keinen langen Befehl bekommen.
+  `EINHEIT tem; Weltenforscher [1,160$]'
+Warnung zur Zeile 344: Einheit tem hat keinen langen Befehl bekommen.
+  `EINHEIT tem; Weltenforscher [1,160$]'
+Fehler in Zeile 352: TEMP-Einheiten können nichts reservieren! Bitte GIB
+	benutzen.
+  `RESERVIERE 1 Silber '
+Warnung zur Zeile 349: Einheit tem2 hat keinen langen Befehl bekommen.
+  `EINHEIT tem2; Weltenforscher [1,160$]'
+Fehler in Zeile 357: Falscher Parameter.
+  `BEWACHE 1 '
+Warnung zur Zeile 354: Einheit guar hat keinen langen Befehl bekommen.
+  `EINHEIT guar; Weltenforscher [1,160$]'
+Fehler in Zeile 365: Zu viele Argumente.
+  `BESCHREIBEN EINHEIT abc 123 '
+Warnung zur Zeile 358: Einheit desc hat keinen langen Befehl bekommen.
+  `EINHEIT desc; Weltenforscher [1,160$]'
+Warnung zur Zeile 376: Kein Text.
+  `BENENNEN EINHEIT  '
+Warnung zur Zeile 377: Kein Text.
+  `BENENNEN EINHEIT '
+Fehler in Zeile 378: Zu viele Argumente.
+  `BENENNEN EINHEIT abc 123 '
+Fehler in Zeile 379: BENENNE FREMD nicht mit Region.
+  `BENENNEN FREMDES REGION 1 abc '
+Warnung zur Zeile 381: Kein Text.
+  `BENENNEN FREMDE EINHEIT abc '
+Fehler in Zeile 382: Objekt nicht erkannt.
+  `BENENNEN FREMDE abc '
+Fehler in Zeile 383: Objekt kann nicht umbenannt werden.
+  `BENENNEN FREMDE ALLIANZ abc abc'
+Warnung zur Zeile 384: Kein Text.
+  `BENENNEN ALLIANZ '
+Warnung zur Zeile 366: Einheit name hat keinen langen Befehl bekommen.
+  `EINHEIT name; Weltenforscher [1,160$]'
+Fehler in Zeile 388: Zu viele Argumente.
+  `BEKLAUEN 1 2 '
+Fehler in Zeile 389: Einheit fehlt.
+  `BEKLAUEN '
+Warnung zur Zeile 389: Einheit thi2 hat schon einen langen Befehl in Zeile
+	388 ("BEKLAUEN 1 2 ").
+  `BEKLAUEN '
+Warnung zur Zeile 390: Einheit thi2 hat schon einen langen Befehl in Zeile
+	388 ("BEKLAUEN 1 2 ").
+  `BEKLAUEN 1 2 3 '
+Fehler in Zeile 390: Zu viele Argumente.
+  `BEKLAUEN 1 2 3 '
+Warnung zur Zeile 391: Einheit thi2 hat schon einen langen Befehl in Zeile
+	388 ("BEKLAUEN 1 2 ").
+  `BEKLAUEN 1 Silber '
+Fehler in Zeile 391: Zu viele Argumente.
+  `BEKLAUEN 1 Silber '
+Fehler in Zeile 401: ZÜCHTE PFERDE oder ZÜCHTE KRÄUTER.
+  `ZU '
+Warnung zur Zeile 402: Einheit bre5 hat schon einen langen Befehl in Zeile
+	401 ("ZU ").
+  `ZU 5 Pferde bla '
+Fehler in Zeile 402: Zu viele Argumente.
+  `ZU 5 Pferde bla '
+Fehler in Zeile 403: ZÜCHTE PFERDE oder ZÜCHTE KRÄUTER.
+  `ZU 5 Silber '
+Warnung zur Zeile 403: Einheit bre5 hat schon einen langen Befehl in Zeile
+	401 ("ZU ").
+  `ZU 5 Silber '
+Fehler in Zeile 407: Nummer der Burg fehlt.
+  `BELAGERE '
+Warnung zur Zeile 408: Einheit sie2 hat schon einen langen Befehl in Zeile
+	407 ("BELAGERE ").
+  `BELAGERE 123 4 '
+Fehler in Zeile 408: Zu viele Argumente.
+  `BELAGERE 123 4 '
+Warnung zur Zeile 409: Einheit sie2 hat schon einen langen Befehl in Zeile
+	407 ("BELAGERE ").
+  `BELAGERE BURG 123 '
+Fehler in Zeile 409: Zu viele Argumente.
+  `BELAGERE BURG 123 '
+Fehler in Zeile 410: Zahl zu groß: `REGION'. Stattdessen 1 benutzt.
+  `BELAGERE REGION '
+Warnung zur Zeile 410: Einheit sie2 hat schon einen langen Befehl in Zeile
+	407 ("BELAGERE ").
+  `BELAGERE REGION '
+Warnung zur Zeile 412: Längere Kämpfe schließen den langen Befehl aus.
+  `ATTACKIEREN 123'
+Fehler in Zeile 414: Einheit fehlt.
+  `ATTACKIEREN '
+Fehler in Zeile 415: Pro Einheit muß ein ATTACKIERE-Befehl gegeben werden.
+  `ATTACKIEREN 123 456 '
+Fehler in Zeile 416: Zahl zu groß: `ALLES'. Stattdessen 1 benutzt.
+  `ATTACKIEREN ALLES '
+Fehler in Zeile 417: TEMP-Einheiten kann man nicht ATTACKIEREn.
+  `ATTACKIEREN TEMP 123 '
+Warnung zur Zeile 411: Einheit att hat keinen langen Befehl bekommen.
+  `EINHEIT att; Weltenforscher [1,160$]'
+Fehler in Zeile 421: Zu viele Argumente.
+  `ARBEITEN 10 '
+Fehler in Zeile 429: Zu viele Argumente.
+  `BOTSCHAFT REGION 1 1 Hallo '
+Fehler in Zeile 430: Zahl zu groß: `Hallo'. Stattdessen 1 benutzt.
+  `BOTSCHAFT SCHIFF Hallo '
+Warnung zur Zeile 430: Kein Text.
+  `BOTSCHAFT SCHIFF Hallo '
+Fehler in Zeile 431: Zahl zu groß: `Hallo'. Stattdessen 1 benutzt.
+  `BOTSCHAFT GEBäude Hallo '
+Warnung zur Zeile 431: Kein Text.
+  `BOTSCHAFT GEBäude Hallo '
+Fehler in Zeile 432: Zahl zu groß: `Hallo'. Stattdessen 1 benutzt.
+  `BOTSCHAFT BURG Hallo '
+Warnung zur Zeile 432: Kein Text.
+  `BOTSCHAFT BURG Hallo '
+Fehler in Zeile 433: Zahl zu groß: `Hallo'. Stattdessen 1 benutzt.
+  `BOTSCHAFT PARTEI Hallo '
+Warnung zur Zeile 433: Kein Text.
+  `BOTSCHAFT PARTEI Hallo '
+Fehler in Zeile 434: Zahl zu groß: `Hallo'. Stattdessen 1 benutzt.
+  `BOTSCHAFT EINHEIT Hallo '
+Warnung zur Zeile 434: Kein Text.
+  `BOTSCHAFT EINHEIT Hallo '
+Warnung zur Zeile 422: Einheit mess hat keinen langen Befehl bekommen.
+  `EINHEIT mess; Weltenforscher [1,160$]'
+Fehler in Zeile 438: Unbekannter Trank.
+  `BENUTZEN Schild '
+Fehler in Zeile 439: Benutze was?.
+  `BENUTZEN '
+Fehler in Zeile 440: Unbekannter Trank.
+  `BENUTZEN 1 2 Gehirnschmalz '
+Warnung zur Zeile 435: Einheit use hat keinen langen Befehl bekommen.
+  `EINHEIT use; Weltenforscher [1,160$]'
+Fehler in Zeile 443: Beide Koordinaten müssen angegeben werden.
+  `URSPRUNG '
+Fehler in Zeile 444: Zu viele Argumente.
+  `URSPRUNG 1 , 0 '
+Fehler in Zeile 445: Zu viele Argumente.
+  `URSPRUNG 1 2 3 '
+Warnung zur Zeile 441: Einheit orig hat keinen langen Befehl bekommen.
+  `EINHEIT orig; Weltenforscher [1,160$]'
+Warnung zur Zeile 448: Kein Text.
+  `EMAIL '
+Fehler in Zeile 448: Ungültige eMail-Adresse.
+  `EMAIL '
+Fehler in Zeile 449: Ungültige eMail-Adresse.
+  `EMAIL foo abar '
+Fehler in Zeile 450: Ungültige eMail-Adresse.
+  `EMAIL foo '
+Warnung zur Zeile 446: Einheit emil hat keinen langen Befehl bekommen.
+  `EINHEIT emil; Weltenforscher [1,160$]'
+Warnung zur Zeile 453: Kein Text.
+  `BANNER '
+Fehler in Zeile 454: Zu viele Argumente.
+  `BANNER abc def '
+Warnung zur Zeile 451: Einheit bann hat keinen langen Befehl bekommen.
+  `EINHEIT bann; Weltenforscher [1,160$]'
+Fehler in Zeile 458: Nummer der Umfrage muß größer 0 sein.
+  `MEINUNG '
+Fehler in Zeile 458: Nummer der Meinung muß größer 0 sein.
+  `MEINUNG '
+Warnung zur Zeile 455: Einheit mein hat keinen langen Befehl bekommen.
+  `EINHEIT mein; Weltenforscher [1,160$]'
+Fehler in Zeile 466: Falsche Nummer.
+  `NUMMER EINHEIT TEMP '
+Fehler in Zeile 467: Falsche Nummer.
+  `NUMMER EINHEIT TEMP 1 '
+Fehler in Zeile 469: Zu viele Argumente.
+  `NUMMER BURG 123 123 '
+Fehler in Zeile 470: NUMMER SCHIFF, NUMMER BURG, NUMMER PARTEI oder NUMMER
+	EINHEIT.
+  `NUMMER '
+Warnung zur Zeile 459: Einheit numm hat keinen langen Befehl bekommen.
+  `EINHEIT numm; Weltenforscher [1,160$]'
+Fehler in Zeile 478: Fehlende Allianzaktion.
+  `ALLIANZ '
+Fehler in Zeile 479: Keine Parteinummer.
+  `ALLIANZ KOMMANDO'
+Fehler in Zeile 480: Keine Parteinummer.
+  `ALLIANZ EINLADEN'
+Fehler in Zeile 481: Keine Parteinummer.
+  `ALLIANZ BEITRETEN'
+Fehler in Zeile 482: Zu viele Argumente.
+  `ALLIANZ VERLASSEN 123'
+Fehler in Zeile 483: Zu viele Argumente.
+  `ALLIANZ NEU 123'
+Warnung zur Zeile 345: Einheit TEMP tem1 hat nicht rekrutiert und keine
+	Personen bekommen
+Warnung zur Zeile 350: Einheit TEMP tem2 hat nicht rekrutiert und keine
+	Personen bekommen
+Warnung zur Zeile 98: Das Silber in Region (-9999,-9999) reicht evtl. nicht
+	zum Leben; es fehlen 30 Silber.
+Warnung zur Zeile 147: Das Silber in Region (1,0) reicht evtl. nicht zum
+	Leben; es fehlen 20 Silber.
+Warnung zur Zeile 239: Einheit teac kann noch 10 Schüler lehren.
+Warnung zur Zeile 241: Einheit tea2 kann noch 9 Schüler lehren.
+Warnung zur Zeile 243: Einheit tea3 kann noch 10 Schüler lehren.
+
+Es wurden Befehle für 1 Partei und 101 Einheiten gelesen.
+Es wurden 186 Fehler und 114 Warnungen entdeckt.

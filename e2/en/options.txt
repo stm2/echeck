@@ -13,3 +13,6 @@ silverpool
 itempool
 addresses
 bzip2
+score
+skillchanges
+

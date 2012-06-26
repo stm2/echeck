@@ -7,7 +7,7 @@
 #############################################################################
 
 ALL,    All
-EACH, Each
+EACH,    Each
 PEASANTS, Peasants
 CASTLE,   Castle
 BUILDING, Building
@@ -33,17 +33,20 @@ SILVER,   Silver
 ROAD,   Road
 TEMP,   Temporary
 PRIVATE,  Private
-FIGHT,    Combat
 OBSERVE,  Perception
 GIVE,   Give
 GUARD,    Guard
-FACTIONSTEALTH, factionstealth
 WARN,   Warning
 LEVEL,    Level
 HORSES,   Horses
 FOREIGN,  foreign
 NUMBER,   Number
 LOCALE,   Locale
-
+ALLIANCE, Alliance
+KICK,     Kick
+LEAVE,    Leave
+NEW,      New
+INVITE,   Invite
+JOIN,     Join
 BEFORE, before
 AFTER, after

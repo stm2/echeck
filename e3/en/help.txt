@@ -7,8 +7,9 @@
 # use \n for newlines
 #############################################################################
 
-CAPTION, ECheck (version %s, %s), order file checker for Eressea - freeware!\n\nUsage:   %s [options] orderfile\n\n
-PATH,   -Ppath  search path for the additional files; locale %s will be appended
+CAPTION, ECheck (version %s, %s), order file checker for Eressea - freeware!\n\nUsage:   %s -Rgame [options] orderfile\n\n
+PATH,   -Ppath  search path for the additional files; game %s and locale %s will be appended
+TEXT,   -Rgame  read files from directory game; default: e2
 TEXT,   -       use stdin instead of an input file
 TEXT,   -b      suppress warnings and errors (brief)
 TEXT,   -q      do not expect hints regarding men/silver within [] after UNIT

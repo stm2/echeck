@@ -7,7 +7,7 @@
 #############################################################################
 
 ALL,    All
-EACH, Each
+EACH,    Each
 PEASANTS, Peasants
 CASTLE,   Castle
 BUILDING, Building
@@ -43,6 +43,9 @@ LEVEL,    Level
 HORSES,   Horses
 FOREIGN,  foreign
 NUMBER,   Number
+SEED,        Seed
+MALLORNSEED, Mallorn Seed
+# ^^ PLANT
 LOCALE,   Locale
 
 BEFORE, before

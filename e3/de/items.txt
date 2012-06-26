@@ -9,6 +9,7 @@
 # Umlaute müssen nicht umschrieben werden, sondern als ISO-Latin1
 # benutzt:	ae=ä, oe=ö, ue=ü, Ae=Ä, Oe=Ö, Ue=Ü, sz=ß
 # Trennzeichen ist , oder ;
+#############################################################################
 
 Balsam; Balsam, 4
 Gewürz; Gewürze; 5
@@ -17,7 +18,7 @@ Myrrhe; Myrrhe, 5
 Öl; Öl, 3
 Seide; Seide, 6
 Weihrauch; Weihrauch, 4
-
+#
 Eisen; Eisen
 Holz; Holz
 Stein; Steine
@@ -27,12 +28,12 @@ Katapult; Katapulte
 Schwert; Schwerter
 Speer; Speere
 Armbrust; Armbrüste
+Bogen; Bögen
+#Langbogen; Langbögen
 Mallornspeer; Mallornspeere
 Mallornarmbrust; Mallornarmbrüste
 Mallornbogen; Mallornbögen
-Samen; Samen
-Bogen; Bögen
-#Langbogen; Langbögen
+Mallornlanze; Mallornlanzen
 Kettenhemd; Kettenhemden
 Plattenpanzer; Plattenpanzer
 Bihänder; Bihänder
@@ -49,7 +50,21 @@ Hellebarde; Hellebarden
 Lanze; Lanzen
 Mallorn; Mallorn
 Katapultmunition; Katapultmunition
-
+Samen; Samen
+Rostiges Kettenhemd; Rostige Kettenhemden
+Rostiger Plattenpanzer; Rostige Plattenpanzer
+Rostiges Schwert; Rostige Schwerter
+Rostiger Schild; Rostige Schilde
+Rostige Hellebarde; Rostige Hellebarden
+#
+Amulett des Wahren Sehens; Amulette des Wahren Sehens
+Ring der Unsichtbarkeit; Ringe der Unsichtbarkeit
+Ring der Macht, Ringe der Macht
+#
+Streitross, Streitross, Streitrösser
+Repetierarmbrust, Repetierarmbrüste
+Schuppenpanzer
+Turmschild, Turmschilde
 # So, das waren die offiziellen Items; diese Liste sollte man nicht ändern,
 # wenn man auf das Ergebnis von ECheck Wert legt...
 # Man kann aber neue Items anhängen; nein, ich werde keine Fragen zu
