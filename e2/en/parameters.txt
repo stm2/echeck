@@ -21,7 +21,7 @@ HERBS,    Herbs
 NOT,    Not
 
 NEXT,   Next
-# ^^  this is no command für ECheck, but a parameter
+# ^^  this is no command for ECheck, but a parameter
 
 FACTION,  Eressea
 FACTION,  Faction

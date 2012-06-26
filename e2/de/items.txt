@@ -1,20 +1,20 @@
-# Liste der Items für ECheck V4 und höher - Faroul
+# Liste der Items fÃ¼r ECheck V4 und hÃ¶her - Faroul
 # Alle Items stehen hier mit allen dem Server bekannten Namen.
 # Pro Zeile gilt:
 #   erster Eintrag: Einzahl;
 #   zweiter Eintrag: Mehrzahl
-#   dritter und weitere Einträge: weitere Alternativen
+#   dritter und weitere EintrÃ¤ge: weitere Alternativen
 #	ist der dritte Eintrag eine Zahl, so ist dies der Einkaufspreis
-#	für ein Luxusgut!
-# Umlaute müssen nicht umschrieben werden, sondern als ISO-Latin1
-# benutzt:	ae=ä, oe=ö, ue=ü, Ae=Ä, Oe=Ö, Ue=Ü, sz=ß
+#	fÃ¼r ein Luxusgut!
+# Umlaute mÃ¼ssen nicht umschrieben werden, sondern als ISO-Latin1
+# benutzt:	ae=Ã¤, oe=Ã¶, ue=Ã¼, Ae=Ã„, Oe=Ã–, Ue=Ãœ, sz=ÃŸ
 # Trennzeichen ist , oder ;
 
 Balsam; Balsam, 4
-Gewürz; Gewürz; 5
+GewÃ¼rz; GewÃ¼rze; 5
 Juwel; Juwelen, 7
 Myrrhe; Myrrhe, 5
-Öl; Öl, 3
+Ã–l; Ã–l, 3
 Seide; Seide, 6
 Weihrauch; Weihrauch, 4
 
@@ -26,20 +26,20 @@ Wagen; Wagen
 Katapult; Katapulte
 Schwert; Schwerter
 Speer; Speere
-Armbrust; Armbrüste
+Armbrust; ArmbrÃ¼ste
 Mallornspeer; Mallornspeere
-Mallornarmbrust; Mallornarmbrüste
-Mallornbogen; Mallornbögen
+Mallornarmbrust; MallornarmbrÃ¼ste
+Mallornbogen; MallornbÃ¶gen
 Samen; Samen
-Bogen; Bögen
-#Langbogen; Langbögen
+Bogen; BÃ¶gen
+#Langbogen; LangbÃ¶gen
 Kettenhemd; Kettenhemden
 Plattenpanzer; Plattenpanzer
-Bihänder; Bihänder
-#Zweihänder
-Kriegsaxt; Kriegsäxte
-#Axt; Äxte
-Elfenbogen; Elfenbögen
+BihÃ¤nder; BihÃ¤nder
+#ZweihÃ¤nder
+Kriegsaxt; KriegsÃ¤xte
+#Axt; Ã„xte
+Elfenbogen; ElfenbÃ¶gen
 Laenschwert; Laenschwerter
 Laenschild; Laenschilde
 Laenkettenhemd; Laenkettenhemden
@@ -50,9 +50,9 @@ Lanze; Lanzen
 Mallorn; Mallorn
 Katapultmunition; Katapultmunition
 
-# So, das waren die offiziellen Items; diese Liste sollte man nicht ändern,
+# So, das waren die offiziellen Items; diese Liste sollte man nicht Ã¤ndern,
 # wenn man auf das Ergebnis von ECheck Wert legt...
-# Man kann aber neue Items anhängen; nein, ich werde keine Fragen zu
+# Man kann aber neue Items anhÃ¤ngen; nein, ich werde keine Fragen zu
 # etwaigen neuen Items beantworten, ebensowenig jemand anders aus dem
 # Design-Team - Faroul
 

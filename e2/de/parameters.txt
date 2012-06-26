@@ -1,10 +1,10 @@
-#################  parameter.txt      ECheck V4 und höher ##################
-# Diese Datei enthält die Liste aller Parameter, die ECheck versteht.
+#################  parameter.txt      ECheck V4 und hÃ¶her ##################
+# Diese Datei enthÃ¤lt die Liste aller Parameter, die ECheck versteht.
 #
-# Die Schlüsselworte kann man mit "echeck -hp" erhalten
+# Die SchlÃ¼sselworte kann man mit "echeck -hp" erhalten
 # 
-# Umlaute dürfen nicht umschrieben werden, sondern als ISO-Latin1 benutzt:
-# ae=ä, oe=ö, ue=ü, Ae=Ä, Oe=Ö, Ue=Ü, sz=ß. Trennzeichen ist , oder ;
+# Umlaute dÃ¼rfen nicht umschrieben werden, sondern als ISO-Latin1 benutzt:
+# ae=Ã¤, oe=Ã¶, ue=Ã¼, Ae=Ã„, Oe=Ã–, Ue=Ãœ, sz=ÃŸ. Trennzeichen ist , oder ;
 #
 # Kommentare mit einem # davor; Leerzeilen sind erlaubt
 ############################################################################
@@ -12,7 +12,7 @@
 ALL,         Alles
 PEASANTS,    Bauern
 CASTLE,      Burg
-BUILDING,    Gebäude
+BUILDING,    GebÃ¤ude
 UNIT,        Einheit
 FLEE,        Fliehe
 REAR,        Hinten
@@ -20,11 +20,11 @@ FRONT,       Vorne
 AGGRESSIVE,  aggressiv
 DEFENSIVE,   defensiv
 CONTROL,     Kommando
-HERBS,       Kräuter
+HERBS,       KrÃ¤uter
 NOT,         Nicht
 
-NEXT,        Nächster
-# ^^ muß hier als Parameter stehen!
+NEXT,        NÃ¤chster
+# ^^ muÃŸ hier als Parameter stehen!
 
 FACTION,     Eressea
 FACTION,     Partei
@@ -32,10 +32,10 @@ PERSON,      Personen
 REGION,      Region
 SHIP,        Schiff
 SILVER,      Silber
-ROAD,        Straßen
-TEMP,        Temporär
+ROAD,        StraÃŸen
+TEMP,        TemporÃ¤r
 PRIVATE,     Privat
-FIGHT,       Kämpfe
+FIGHT,       KÃ¤mpfe
 OBSERVE,     Wahrnehmung
 GIVE,        Gib
 GUARD,       Bewache
@@ -43,7 +43,7 @@ FACTIONSTEALTH, Parteitarnung
 WARN,        Warnung
 LEVEL,       Stufe
 HORSES,      Pferde
-# ^^ ZÜCHTE PFERDE
+# ^^ ZÃœCHTE PFERDE
 FOREIGN,     fremdes
 NUMBER,      Nummer
 # ^^ TARNE PARTEI NUMMER

@@ -1,13 +1,13 @@
-###################  zauber.txt      ECheck V4 und höher ###################
-# Diese Datei enthält die Liste aller Zauber
+###################  zauber.txt      ECheck V4 und hÃ¶her ###################
+# Diese Datei enthÃ¤lt die Liste aller Zauber
 #
-# Umlaute dürfen nicht umschrieben werden, sondern als ISO-Latin1 benutzt:
-# ae=ä, oe=ö, ue=ü, Ae=Ä, Oe=Ö, Ue=Ü, sz=ß. Trennzeichen ist , oder ;
+# Umlaute dÃ¼rfen nicht umschrieben werden, sondern als ISO-Latin1 benutzt:
+# ae=Ã¤, oe=Ã¶, ue=Ã¼, Ae=Ã„, Oe=Ã–, Ue=Ãœ, sz=ÃŸ. Trennzeichen ist , oder ;
 #
 # Alle Zauber stehen hier mit dem kompletten Namen
 # Pro Zeile gilt:
 #   erster Eintrag: Name des Zaubers
-#   zweiter Eintrag: Silberkosten für den Zauber
+#   zweiter Eintrag: Silberkosten fÃ¼r den Zauber
 #   dritter Eintrag: Typ des Zaubers	0 = "normaler" Zauber
 #					1 = Kampfzauber
 #					2 = Post-Kampfzauber
@@ -15,7 +15,7 @@
 # Kommentare mit einem # davor; Leerzeilen sind erlaubt
 ############################################################################
 
-# Diese Liste enthält absichtlich keine "echten" Zauber.
+# Diese Liste enthÃ¤lt absichtlich keine "echten" Zauber.
 # Es sollte jedem leicht fallen, die Liste anzupassen und zu erweitern.
 
 Magische Erbsensuppe; 0; 1	# ein Kampfzauber der stinkenden Art

@@ -1,10 +1,8 @@
-##################  befehle.txt      ECheck V4 und höher ###################
-# Diese Datei enthält die Liste aller Befehle, die ECheck versteht.
+##################  befehle.txt      ECheck V4 und hÃ¶her ###################
+# Diese Datei enthÃ¤lt die Liste aller Befehle, die ECheck versteht.
 #
-# Die Schlüsselworte kann man mit "echeck -hb" erhalten
-# 
-# Umlaute dürfen nicht umschrieben werden, sondern als ISO-Latin1 benutzt:
-# ae=ä, oe=ö, ue=ü, Ae=Ä, Oe=Ö, Ue=Ü, sz=ß. Trennzeichen ist , oder ;
+# Die SchlÃ¼sselworte kann man mit "echeck -hb" erhalten
+# Umlaute dÃ¼rfen nicht umschrieben werden.
 #
 # Kommentare mit einem # davor; Leerzeilen sind erlaubt
 ############################################################################
@@ -25,7 +23,7 @@ FOLLOW,       Folgen
 RESEARCH,     Forschen
 GIVE,         Gib
 HELP,         Helfen
-FIGHT,        Kämpfen
+FIGHT,        KÃ¤mpfen
 COMBATMAGIC,  Kampfzauber
 BUY,          Kaufen
 CONTACT,      Kontaktieren
@@ -49,13 +47,13 @@ SELL,         Verkaufen
 LEAVE,        Verlassen
 CAST,         Zaubere
 SHOW,         Zeigen
-DESTROY,      Zerstören
+DESTROY,      ZerstÃ¶ren
 FORGET,       Vergessen
 DEFAULT,      Default
 COMMENT,      //
 ROUTE,        Route
 SABOTAGE,     Sabotieren
-BREED,        Züchten
+BREED,        ZÃ¼chten
 ORIGIN,       Ursprung
 EMAIL,        Email
 RESERVE,      Reservieren
@@ -67,9 +65,9 @@ PIRACY,       Piraterie
 RESTART,      Neustart
 GROUP,        Gruppe
 SORT,         Sortieren
-PREFIX,       Präfix
-PROMOTION,    Beförderung
+PREFIX,       PrÃ¤fix
+PROMOTION,    BefÃ¶rderung
 
-# NEXT, Nächster     ist KEIN BEFEHL für ECheck, sondern ein PARAMETER!
-# dies ist aus internen Gründen notwendig, also entsprechend dort eintragen
+# NEXT, NÃ¤chster     ist KEIN BEFEHL fÃ¼r ECheck, sondern ein PARAMETER!
+# dies ist aus internen GrÃ¼nden notwendig, also entsprechend dort eintragen
 

@@ -1,8 +1,8 @@
-##################  talente.txt      ECheck V4 und höher ###################
-# Diese Datei enthält die Liste aller Talente
+##################  talente.txt      ECheck V4 und hÃ¶her ###################
+# Diese Datei enthÃ¤lt die Liste aller Talente
 #
-# Umlaute dürfen nicht umschrieben werden, sondern als ISO-Latin1 benutzt:
-# ae=ä, oe=ö, ue=ü, Ae=Ä, Oe=Ö, Ue=Ü, sz=ß. Trennzeichen ist , oder ;
+# Umlaute dÃ¼rfen nicht umschrieben werden, sondern als ISO-Latin1 benutzt:
+# ae=Ã¤, oe=Ã¶, ue=Ã¼, Ae=Ã„, Oe=Ã–, Ue=Ãœ, sz=ÃŸ. Trennzeichen ist , oder ;
 #
 # Kommentare mit einem # davor; Leerzeilen sind erlaubt
 #
@@ -14,29 +14,29 @@
 
 Waffenloser Kampf
 Alchemie, 200
-Armbrustschießen
+ArmbrustschieÃŸen
 Ausdauer
-Bogenschießen
+BogenschieÃŸen
 Katapultbedienung
-Kräuterkunde, 200
+KrÃ¤uterkunde, 200
 Reiten
 Taktik, 200
 Bergbau
 Burgenbau
 Handeln
-Holzfällen
+HolzfÃ¤llen
 
 Magie, -1
-# da die Magie-Lernkosten bei Eressea stufenabhängig sind, kann man bei
+# da die Magie-Lernkosten bei Eressea stufenabhÃ¤ngig sind, kann man bei
 # ECheck "LERNE MAGIE 250" schreiben, wenn es z.Zt. 250 Silber kostet
-# Dazu muß hier dann ein Wert <0 stehen. Für Empiria u.a. hier einfach
+# Dazu muÃŸ hier dann ein Wert <0 stehen. FÃ¼r Empiria u.a. hier einfach
 # Magie, 200  schreiben
 
 Pferdedressur
-Rüstungsbau
+RÃ¼stungsbau
 Segeln
 Steinbau
-Straßenbau
+StraÃŸenbau
 Tarnung
 Unterhaltung
 Waffenbau
@@ -48,5 +48,5 @@ Hiebwaffen
 Stangenwaffen
 Schiffbau
 
-# Weitere Talente können beliebig eingefügt werden.
+# Weitere Talente kÃ¶nnen beliebig eingefÃ¼gt werden.
 
