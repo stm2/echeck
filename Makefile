@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -g -Wall
 # CFLAGS = -O2 -fomit-frame-pointer -Wall
-LFLAGS = -s
+#LFLAGS = -s
 BINDIR = /usr/local/bin
 LIBDIR = /usr/local/lib/echeck
 

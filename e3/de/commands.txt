@@ -7,6 +7,7 @@
 # Kommentare mit einem # davor; Leerzeilen sind erlaubt
 ############################################################################
 
+ALLIANCE,     Allianz
 WORK,         Arbeiten
 ATTACK,       Attackieren
 NAME,         Benennen
@@ -28,6 +29,7 @@ STUDY,        Lernen
 MAKE,         Machen
 MOVE,         Nach
 PASSWORD,     Passwort
+PAY,          Bezahlen
 PLANT,        Pflanzen
 RECRUIT,      Rekrutieren
 REPORT,       Report

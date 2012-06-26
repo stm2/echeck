@@ -274,6 +274,8 @@ typedef struct _liste {
 
 
 enum {
+  K_ALLIANCE,
+  K_PAY,
   K_WORK,
   K_ATTACK,
   K_STEAL,
@@ -296,7 +298,6 @@ enum {
   K_CONTACT,
   K_TEACH,
   K_STUDY,
-  K_DELIVER,
   K_MAKE,
   K_MOVE,
   K_PASSWORD,
@@ -338,6 +339,8 @@ enum {
 };
 
 static char *Keywords[MAXKEYWORDS]={
+  "ALLIANCE",
+  "PAY",
   "WORK",
   "ATTACK",
   "STEAL",
@@ -360,7 +363,6 @@ static char *Keywords[MAXKEYWORDS]={
   "CONTACT",
   "TEACH",
   "STUDY",
-  "DELIVER",
   "MAKE",
   "MOVE",
   "PASSWORD",
@@ -2226,13 +2228,11 @@ igetstr(char *s1) {
 
 char *
 printkeyword(int key) {
-  t_keyword *k;
-  key=MAXKEYWORDS-key-1;  /* Die Befehle liegen down->top in der Liste */
-  for (k=keywords; key>0 && k; k=k->next, key--);
-  if (k) {
-    return k->name;
+  t_keyword *k = keywords;
+  while (k && k->keyword!=key) {
+    k = k->next;
   }
-  return NULL;
+  return (k && k->keyword==key)? k->name : 0;
 }
 
 
@@ -2240,10 +2240,10 @@ char *
 printdirection(int dir) {
   t_direction *d=directions;
 
-  while (d && d->dir!=dir) d=d->next;
-  if (!d)
-    return "<Error in Directions>";
-  return d->name;
+  while (d && d->dir!=dir) {
+    d=d->next;
+  }
+  return d ? d->name : 0;
 }
 
 
@@ -2252,9 +2252,7 @@ printparam(int par) {
   t_params *p=parameters;
 
   while (p && p->param!=par) p=p->next;
-  if (!p)
-    return "<Error in Params>";
-  return p->name;
+  return p ? p->name : 0;
 }
 
 
@@ -4148,13 +4146,6 @@ checkanorder(char *Orders) {
       break;
 
     case K_GIVE:
-    case K_DELIVER:
-      if (this_command==K_DELIVER)
-      {
-        awarning(errtxt[SUPPLYISOBSOLETE], 3);
-        i=K_GIVE;
-        at_cmd=1;
-      }
       checkgiving(i);
       break;
 
@@ -4655,13 +4646,6 @@ help_keys(char key) {
       fprintf(ERR, "Schlüsselworte / keywords:\n\n");
       for (i=1; i<UT_MAX; i++)
         fprintf(ERR, "%s\n", Keys[i]);
-      break;
-
-    case 'b':   /* Befehle */
-    case 'c':   /* Commands */
-      fprintf(ERR, "Befehle / commands:\n\n");
-      for (i=0; i<MAXKEYWORDS; i++)
-        fprintf(ERR, "%s\n", Keywords[i]);
       break;
 
     case 'p':   /* Parameter */

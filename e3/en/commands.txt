@@ -6,6 +6,7 @@
 # Comments start with a #; empty lines are allowed.
 #############################################################################
 
+ALLIANCE,     Alliance
 WORK,   Work
 ATTACK,   Attack
 NAME,   Name
@@ -27,6 +28,7 @@ STUDY,    Learn
 MAKE,   Make
 MOVE,   Move
 PASSWORD, Password
+PAY, Pay
 PLANT,    Plant
 RECRUIT,  Recruit
 REPORT,   Report
