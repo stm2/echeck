@@ -65,56 +65,44 @@ typedef unsigned char _Bool;
 # define __bool_true_false_are_defined 1
 #endif
 
-#ifdef HAVE__STRDUP
-# ifndef HAVE_STRDUP
-#  define strdup _strdup
-#  define HAVE_STRDUP
-# endif
+#if !defined(HAVE_STRDUP) && defined(HAVE__STRDUP)
+# define strdup _strdup
+# define HAVE_STRDUP
 #endif
 
-#ifndef HAVE_STRDUP
+#if !defined(HAVE_STRDUP)
 # define strdup(s) strcpy(malloc(strlen(s)+1), s)
 #endif
 
-#ifdef HAVE_STRCASECMP
-# ifndef HAVE_STRICMP
-#  define stricmp strcasecmp
-#  define strnicmp strncasecmp
-#  define HAVE_STRICMP
-# endif
+#if !defined(HAVE_STRICMP) && defined(HAVE_STRCASECMP)
+# define stricmp strcasecmp
+# define strnicmp strncasecmp
+# define HAVE_STRICMP
 #endif
 
-#ifdef HAVE__STRICMP
-# ifndef HAVE_STRICMP
-#  define stricmp _stricmp
-#  define strnicmp _strnicmp
-#  define HAVE_STRICMP
-# endif
+#if !defined(HAVE_STRICMP) && defined(HAVE__STRICMP)
+# define stricmp _stricmp
+# define strnicmp _strnicmp
+# define HAVE_STRICMP
 #endif
 
-#ifdef HAVE__SNPRINTF
-# ifndef HAVE_SNPRINTF
-#  define snprintf _snprintf
-#  define HAVE_SNPRINTF
-# endif
+#if !defined(HAVE_SNPRINTF) && defined(HAVE__SNPRINTF)
+# define snprintf _snprintf
+# define HAVE_SNPRINTF
 #endif
 
-#ifdef HAVE___MINMAX
-#ifndef HAVE_MINMAX
+#if !defined(HAVE_MINMAX) && defined(HAVE___MINMAX)
 # define MIN(a,b) __min(a, b)
 # define MAX(a,b) __max(a, b)
 # define HAVE_MINMAX
 #endif
-#endif
 
-#ifndef HAVE_MINMAX
-# ifdef HAVE_SYS_PARAM_H
+#if !defined(HAVE_MINMAX) && defined(HAVE_SYS_PARAM_H)
 # include <sys/param.h>
 # define HAVE_MINMAX
-# endif
 #endif
 
-#ifndef HAVE_MINMAX
+#if !defined(HAVE_MINMAX)
 # define MIN(a,b) ((a) < (b) ? (a) : (b))
 # define MAX(a,b) ((a) > (b) ? (a) : (b))
 #endif
