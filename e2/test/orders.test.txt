@@ -1,20 +1,17 @@
-; call echeck with "./echeck  -otest/echeck_output.txt -Otest/echeck_errors.txt test/orders.test.txt"
-; and you should get the same result (test/echeck.txt and test/orders.txt)
+; call echeck with "./echeck  -Re2 -oe2/test/echeck_output.txt -Oe2/test/echeck_errors.txt e2/test/orders.test.txt"
+; and you should get the same result as in e2/test/echeck_errors.template and e2/test/echeck_orders.template
 ERESSEA 1 1
 ; TIMESTAMP 1234805339430
 ; ECHECK -r80 -s -l -w99 -v4.3.4
 LOCALE de
 REGION 0 0; Heimat
 ; ECheck Lohn 13
-EINHEIT line;           Weltenforscher [1,160$]
-BENENNEN \
-EINHEIT "Großer \
-Krieger"
 EINHEIT bez;           Weltenforscher [1,160$]
 BEZAHLEN NICHT ; error
 EINHEIT clai;           Weltenforscher [1,160$]
 BEANSPRUCHE 2 Holz
-BEANSPRUCHE Holz
+BEANSPRUCHE "Rostiges Kettenhemd"
+BEANSPRUCHE Amulett~des~Wahren~Sehens
 BEANSPRUCHE 1 ; error
 BEANSPRUCHE 1 Foo ; error
 BEANSPRUCHE ; error
@@ -23,9 +20,9 @@ EINHEIT bef;           Weltenforscher [1,160$]
 BEF
 BEF 1 ; error
 EINHEIT pref;           Weltenforscher [1,160$]
-PRAEFIX
-PRAEFIX Blau
-PRAEFIX kein blau; error
+PRäFIX
+PRÄFIX Blau
+PRÄFIX kein blau; error
 EINHEIT pflz;           Weltenforscher [1,160$]
 PFLANZE Samen
 EINHEIT pfl2;           Weltenforscher [1,160$]
@@ -314,11 +311,11 @@ HELFE 1 ALLES 2 ; error
 HELFE 1 ; error
 HELFE ; error
 EINHEIT give;           Weltenforscher [1,160$]
-GIB 1 Sonnenschein
+GIB 1 Sonnenschein ; ja, man kann Zauber übergeben!?
 GIB 1 1 Silber
-GIB 1 ALLES Holz
+GIB 1 ALLES Ring~der~Unsichtbarkeit
 GIB 1 ALLES
-GIB TEMP a JE 1 Silber
+GIB TEMP a JE 1 "Rostiger Schild"
 GIB 2 JE 1 Silber
 GIB 3 KOMMANDO
 GIB 4 Kraeuter
@@ -343,11 +340,11 @@ TARNE PARTEI NUMMER 2
 TARNE Halblinge
 TARNE 1 2; error
 TARNE foo ; error
-EINHEIT res;           Weltenforscher [1,160$]
+EINHEIT for;           Weltenforscher [1,160$]
 FORSCHE Kraeuter
-EINHEIT res2;           Weltenforscher [1,160$]
+EINHEIT for2;           Weltenforscher [1,160$]
 FORSCHE ; error
-EINHEIT res3;           Weltenforscher [1,160$]
+EINHEIT for3;           Weltenforscher [1,160$]
 FORSCHE Foo ; error
 FORSCHE Kraeuter NICHT ; error
 EINHEIT tem;           Weltenforscher [1,160$]
@@ -373,7 +370,7 @@ BESCHREIBEN PRIVAT "abc"
 BESCHREIBEN EINHEIT 
 BESCHREIBEN EINHEIT "abc" 123 ; error
 EINHEIT name;           Weltenforscher [1,160$]
-BENENNEN EINHEIT "abc"
+BENENNEN EINHEIT "abc def"
 BENENNEN REGION "abc"
 BENENNEN BURG "abc"
 BENENNEN SCHIFF "abc"
@@ -403,7 +400,7 @@ ZUECHTE PFERDE
 EINHEIT bre2;           Weltenforscher [1,160$]
 ZUECHTE Kraeuter
 EINHEIT bre3;           Weltenforscher [1,160$]
-ZU 5 Pferde
+Zü 5 Pferde
 EINHEIT bre4;           Weltenforscher [1,160$]
 ZU 5 Kr
 EINHEIT bre5;           Weltenforscher [1,160$]
@@ -429,7 +426,7 @@ ARBEITEN
 EINHEIT wor1;           Weltenforscher [1,160$]
 ARBEITEN 10 ; error
 EINHEIT mess;           Weltenforscher [1,160$]
-BOTSCHAFT REGION "Hallo"
+BOTSCHAFT REGION "Hallo, Welt"
 BOTSCHAFT SCHIFF 123 "Hallo"
 BOTSCHAFT Gebäude 456 "Hallo"
 BOTSCHAFT BURG 456 "Hallo"
@@ -486,5 +483,13 @@ kämpfe nicht
 verkaufen 1 öl
 ZERSTOEREN Straße NO
 ZERSToeREN Strasse sw
+EINHEIT line;           Weltenforscher [1,160$]
+BENENNEN \
+EINHEIT "Großer \
+Krieger"
 BENENNEN EINHEIT "Ööóōß"
+EINHEIT dopp;           Weltenforscher [1,160$]
+LERNEN Hiebwaffen
+EINHEIT dopp;           Weltenforscher [1,160$]
+LERNEN Hiebwaffen
 NAECHSTER
