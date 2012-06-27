@@ -9,10 +9,14 @@ all: echeck
 
 install: echeck
 	install -t $(PREFIX) echeck
+	install -d $(PREFIX)/common/de
+	install -d $(PREFIX)/common/en
 	install -d $(PREFIX)/e2/de
 	install -d $(PREFIX)/e2/en
 	install -d $(PREFIX)/e3/de
 	install -d $(PREFIX)/e3/en
+	install -t $(PREFIX)/common/de common/de/*.txt
+	install -t $(PREFIX)/common/en common/en/*.txt
 	install -t $(PREFIX)/e2/de e2/de/*.txt
 	install -t $(PREFIX)/e2/en e2/en/*.txt
 	install -t $(PREFIX)/e3/de e3/de/*.txt

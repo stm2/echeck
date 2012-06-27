@@ -127,46 +127,38 @@ static int compact = 0;
 #define DESCRIBESIZE 4095
 #define NAMESIZE 127
 
-FILE *ERR, *OUT=0;
+FILE *ERR, *OUT = 0;
 
-int line_no,              /* count line number */
- filesread=0;
+int line_no,                    /* count line number */
+  filesread = 0;
 
-char echo_it=0,           /* option: echo input lines */
- no_comment=-3,           /* Keine Infos in [] hinter EINHEIT */
- show_warnings=4,         /* option: print warnings (levels) */
- warnings_cl=0,           /* -w auf der Kommandozeile gegeben */
- warn_off=0,              /* ECHECK NOWARN */
- use_stderr=0,            /* option: use stderr for errors etc */
- brief=0,                 /* option: don't list errors */
- ignore_NameMe=0,         /* option: ignoriere NameMe-Kommentare ;; */
- piping=0,                /* option: wird output als pipe-input benutzt? */
- lohn=10,                 /* Lohn für Arbeit - je Region zu setzen */
- silberpool=1,            /* option: Silberpool-Verwaltung */
- line_start=0,            /* option: Beginn der Zeilenzählung */
- noship=0,
- noroute=0,
- nolost=0,
- has_version=0,
- at_cmd=0,
- attack_warning=0,
- compile=0;               /* option: compiler-/magellan-style warnings */
-int error_count=0,        /* counter: errors */
- warning_count=0;         /* counter: warnings */
-char order_buf[BUFSIZE],  /* current order line */
- checked_buf[BUFSIZE],    /* checked order line */
- message_buf[BUFSIZE],    /* messages are composed here */
- warn_buf[BUFSIZE],       /* warnings are composed here */
- indent, next_indent,     /* indent index */
- does_default=0,          /* Ist DEFAULT aktiv? */
- befehle_ende,            /* EOF der Befehlsdatei */
- *echeck_locale="de",
- *echeck_rules="e2",
- *filename;
-int rec_cost=RECRUIT_COST,
- this_command,
- this_unit,               /* wird von getaunit gesetzt */
- Rx, Ry;                  /* Koordinaten der aktuellen Region */
+char echo_it = 0,               /* option: echo input lines */
+  no_comment = -3,              /* Keine Infos in [] hinter EINHEIT */
+  show_warnings = 4,            /* option: print warnings (levels) */
+  warnings_cl = 0,              /* -w auf der Kommandozeile gegeben */
+  warn_off = 0,                 /* ECHECK NOWARN */
+  use_stderr = 0,               /* option: use stderr for errors etc */
+  brief = 0,                    /* option: don't list errors */
+  ignore_NameMe = 0,            /* option: ignoriere NameMe-Kommentare ;; */
+  piping = 0,                   /* option: wird output als pipe-input  benutzt? */
+  lohn = 10,                    /* Lohn für Arbeit - je Region zu setzen */
+  silberpool = 1,               /* option: Silberpool-Verwaltung */
+  line_start = 0,               /* option: Beginn der Zeilenzählung */
+  noship = 0, noroute = 0, nolost = 0, has_version = 0, at_cmd = 0, attack_warning = 0, compile = 0;    /* option: compiler-/magellan-style  warnings */
+int error_count = 0,            /* counter: errors */
+  warning_count = 0;            /* counter: warnings */
+char order_buf[BUFSIZE],        /* current order line */
+  checked_buf[BUFSIZE],         /* checked order line */
+  message_buf[BUFSIZE],         /* messages are composed here */
+  warn_buf[BUFSIZE],            /* warnings are composed here */
+  indent, next_indent,          /* indent index */
+  does_default = 0,             /* Ist DEFAULT aktiv? */
+  befehle_ende,                 /* EOF der Befehlsdatei */
+  *echeck_locale = "de",        /* language */
+  *echeck_rules = "e2",         /* ruleset */
+  *filename;
+int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
+  Rx, Ry;                       /* Koordinaten der aktuellen Region */
 char *path;
 FILE *F;
 
@@ -1164,8 +1156,8 @@ char *ItemName(int i, int plural)
   return item->name->txt;
 }
 
-FILE *path_fopen(const char *path_par, const char *file, const char *mode)
-{
+FILE *
+path_fopen(const char *path_par, const char *rules, const char *file, const char *mode) {
   char *pathw = strdup(path_par);
   char *token = strtok(pathw, PATH_DELIM);
 
@@ -1173,11 +1165,12 @@ FILE *path_fopen(const char *path_par, const char *file, const char *mode)
     char buf[1024];
     FILE *F;
 
-    if (echeck_rules) {
-      sprintf(buf, "%s/%s/%s/%s", token, echeck_rules, echeck_locale, file);
+    if (rules) {
+      sprintf(buf, "%s/%s/%s/%s", token, rules, echeck_locale, file);
     } else {
       sprintf(buf, "%s/%s/%s", token, echeck_locale, file);
     }
+
     F = fopen(buf, mode);
     if (F != NULL) {
       free(pathw);
@@ -1722,9 +1715,13 @@ void readafile(const char *fn, int typ)
   FILE *F;
   char *s, *x;
 
-  F = path_fopen(path, fn, "r");
-  if (!F)
-    return;
+  F = path_fopen(path, echeck_rules, fn, "r");
+  if (!F) {
+    F = path_fopen(path, "common", fn, "r");
+    if (!F) {
+      return;
+    }
+  }
   for (line = 1;; line++) {
     do {
       s=fgets(order_buf, MAXLINE, F);
