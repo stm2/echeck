@@ -111,15 +111,6 @@ static int compact = 0;
 #include <crtdbg.h>
 #endif
 
-#ifndef BOOL_DEFINED
-#define BOOL_DEFINED
-#ifndef bool
-#define bool char
-#define true ((bool)1)
-#define false ((bool)0)
-#endif
-#endif
-
 #define SPACE_REPLACEMENT   '~'
 #define SPACE               ' '
 #define ESCAPE_CHAR         '\\'
@@ -1154,7 +1145,7 @@ path_fopen (const char *path_par, const char *file, const char *mode) {
     char buf[1024];
     FILE *F;
 
-    snprintf (buf, sizeof (buf), "%s/%s/%s", token, echeck_locale, file);
+    sprintf (buf, "%s/%s/%s", token, echeck_locale, file);
     F = fopen (buf, mode);
     if (F != NULL) {
       free (pathw);
@@ -4724,7 +4715,7 @@ readaunit (void) {
 
     i = igetkeyword (order_buf);
     if (i < -1)
-      continue;                        // Fehler: "@ Befehl" statt "@Befehl"
+      continue;                        /* Fehler: "@ Befehl" statt "@Befehl" */
     if (i < 0) {
       if (order_buf[0] == ';') {
         check_comment ();
