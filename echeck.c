@@ -119,13 +119,6 @@ static int compact = 0;
 #define INDENT_ORDERS       4
 #define INDENT_NEW_ORDERS   6
 
-#ifndef min
-#define min(a, b) ((a) < (b) ? (a) : (b))
-#endif
-#ifndef max
-#define max(a, b) ((a) > (b) ? (a) : (b))
-#endif
-
 #define BUFSIZE 8192
 #define MAXLINE 4096
 #define DESCRIBESIZE 4095
@@ -3665,7 +3658,7 @@ check_comment (void) {
                                                                                  * Arbeit 
                                                                                  */
     m = geti ();
-    lohn = (char) max (10, m);
+    lohn = (char) MAX (10, m);
     return;
   }
   if (strnicmp (s, "ROUT", 4) == 0) {        /* ROUTe */
@@ -3763,7 +3756,7 @@ check_money (bool do_move) {        /* do_move=true: vor der Bewegung,
           for (t = units; t && i > 0; t = t->next) {
             if (t->region != u->region || t == u)
               continue;
-            um = min (i, t->money - t->reserviert);
+            um = MIN (i, t->money - t->reserviert);
             if (um > 0) {
               u->money += um;
               i -= um;
@@ -3797,7 +3790,7 @@ check_money (bool do_move) {        /* do_move=true: vor der Bewegung,
         for (t = units; t && u->money < 0; t = t->next) {
           if (t->region != u->region || t == u)
             continue;
-          um = min (-u->money, t->money - t->reserviert);
+          um = MIN (-u->money, t->money - t->reserviert);
           if (um > 0) {
             u->money += um;
             u->reserviert += um;        /* das so erworbene Silber muß
@@ -4016,7 +4009,7 @@ check_teachings (void) {
       continue;
     }
 
-    n = min (t->teacher->lehrer, t->student->schueler);
+    n = MIN (t->teacher->lehrer, t->student->schueler);
     t->teacher->lehrer -= n;
     t->student->schueler -= n;
   }

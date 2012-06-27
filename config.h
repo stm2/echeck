@@ -28,6 +28,7 @@
 # define HAVE__STRDUP
 # define HAVE__STRICMP
 # define HAVE__SNPRINTF
+# define HAVE___MINMAX
 #endif
 
 #ifdef __GNUC__
@@ -39,6 +40,11 @@
 # endif
 # define HAVE_STRCASECMP
 # define HAVE_STDBOOL_H
+# define HAVE_SYS_PARAM_H
+#endif
+
+#if defined(MAX) && defined(MIN)
+#define HAVE_MINMAX
 #endif
 
 /* define some common macros that your compiler may name otherwise */
@@ -91,4 +97,23 @@ typedef unsigned char _Bool;
 #  define snprintf _snprintf
 #  define HAVE_SNPRINTF
 # endif
+#endif
+
+#ifdef HAVE___MINMAX
+#ifndef HAVE_MINMAX
+# define MIN(a,b) __min(a, b)
+# define MAX(a,b) __max(a, b)
+# define HAVE_MINMAX
+#endif
+#endif
+
+#ifndef HAVE_MINMAX
+# ifdef HAVE_SYS_PARAM_H
+# include <sys.param.h>
+# endif
+#endif
+
+#ifndef HAVE_MINMAX
+# define MIN(a,b) ((a) < (b) ? (a) : (b))
+# define MAX(a,b) ((a) > (b) ? (a) : (b))
 #endif
