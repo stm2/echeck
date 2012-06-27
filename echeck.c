@@ -1147,12 +1147,69 @@ path_fopen (const char *path_par, const char *file, const char *mode) {
   return NULL;
 }
 
+char * transliterate(char * out, size_t size, const char * in)
+{
+  const char *src = in;
+  char *dst = out;
+
+  --size; /* need space for a final 0-byte */
+  while (*src && size) {
+    size_t len;
+    const char * p = src;
+    while ((p+size>src) && *src && (~*src & 0x80)) {
+      *dst++ = (char)tolower(*src++);
+    }
+    len = src-p;
+    size -= len;
+    while (size>0 && *src && (*src & 0x80)) {
+      unsigned int advance = 2;
+      if (src[0]=='\xc3') {
+        if (src[1]=='\xa4' || src[1]=='\x84') {
+          memcpy(dst, "ae", 2);
+        } else if (src[1]=='\xb6' || src[1]=='\x96') {
+          memcpy(dst, "oe", 2);
+        } else if (src[1]=='\xbc' || src[1]=='\x9c') {
+          memcpy(dst, "ue", 2);
+        } else if (src[1]=='\x9f') {
+          memcpy(dst, "ss", 2);
+        } else {
+          advance = 0;
+        }
+      } else if (src[0]=='\xe1') {
+        if (src[1]=='\xba' && src[2]=='\x9e') {
+          memcpy(dst, "ss", 2);
+          ++src;
+        } else {
+          advance = 0;
+        }
+      } else {
+        advance = 0;
+      }
+
+      if (advance && advance<=size) {
+        src+=advance;
+        dst+=advance;
+        size-=advance;
+      } else {
+        ucs4_t ucs;
+        unicode_utf8_to_ucs4(&ucs, src, &len);
+        src+=len;
+        *dst++='?';
+        --size;
+      }
+    }
+  }
+  *dst = 0;
+  return *src ? 0 : out;
+}
+
 /** parsed einen String nach Zaubern */
 void
 readspell (char *s) {
   char *x;
   t_spell *sp;
-
+  char buffer[128];
+  
   sp = cmalloc (sizeof (t_spell));
   x = strchr (s, ';');
   if (!x)
@@ -1165,7 +1222,7 @@ readspell (char *s) {
       *x = 0;
     x = NULL;
   }
-  sp->name = strdup (s);
+  sp->name = strdup (transliterate(buffer, sizeof(buffer), s));
   if (x) {
     s = (char *) (x + 1);
     while (isspace(*s))
@@ -1188,6 +1245,7 @@ readspell (char *s) {
 
 void
 readskill (char *s) {                /* parsed einen String nach Talenten */
+  char buffer[128];
   char *x;
   t_skills *sk;
 
@@ -1203,7 +1261,7 @@ readskill (char *s) {                /* parsed einen String nach Talenten */
       *x = 0;
     x = NULL;
   }
-  sk->name = strdup (s);
+  sk->name = strdup (transliterate(buffer, sizeof(buffer), s));
   if (x) {
     s = (char *) (x + 1);
     while (isspace (*s))
@@ -1217,6 +1275,7 @@ readskill (char *s) {                /* parsed einen String nach Talenten */
 
 int
 readitem (char *s) {                /* parsed einen String nach Items */
+  char buffer[128];
   char *x;
   t_item *it;
   t_names *n, *nn;
@@ -1241,7 +1300,7 @@ readitem (char *s) {                /* parsed einen String nach Items */
                                  * 12 */
       it->preis = atoi (s);
     else {
-      n->txt = strdup (s);
+      n->txt = strdup (transliterate(buffer, sizeof(buffer), s));
       if (nn)
         nn->next = n;
       nn = n;
@@ -1266,12 +1325,13 @@ void
 readliste (char *s, t_liste ** L) {        /* parsed einen String nach einem Token */
   char *x;
   t_liste *ls;
+  char buffer[128];
 
   ls = cmalloc (sizeof (t_liste));
   x = strchr (s, '\n');
   if (x)
     *x = 0;
-  ls->name = strdup (s);
+  ls->name = strdup (transliterate(buffer, sizeof(buffer), s));
   addlist (L, ls);
 }
 
@@ -1280,6 +1340,7 @@ readkeywords (char *s) {        /* parsed einen String nach Befehlen */
   char *x;
   t_keyword *k;
   int i;
+  char buffer[64];
 
   k = cmalloc (sizeof (t_keyword));
   x = strchr (s, ';');
@@ -1289,6 +1350,7 @@ readkeywords (char *s) {        /* parsed einen String nach Befehlen */
     *x = 0;
   else
     return 0;
+
   for (i = 0; i < MAXKEYWORDS; i++) {
     if (stricmp(s, Keywords[i]) == 0) {
       break;
@@ -1305,7 +1367,7 @@ readkeywords (char *s) {        /* parsed einen String nach Befehlen */
   x = strchr (s, '\n');
   if (x)
     *x = 0;
-  k->name = strdup (s);
+  k->name = strdup(transliterate(buffer, sizeof(buffer), s));
   k->keyword = i;
   k->next = keywords;
   keywords = k;
@@ -1314,6 +1376,7 @@ readkeywords (char *s) {        /* parsed einen String nach Befehlen */
 
 int
 readparams (char *s) {                /* parsed einen String nach Parametern */
+  char buffer[128];
   char *x;
   t_params *p;
   int i;
@@ -1339,7 +1402,7 @@ readparams (char *s) {                /* parsed einen String nach Parametern */
   x = strchr (s, '\n');
   if (x)
     *x = 0;
-  p->name = strdup (s);
+  p->name = strdup (transliterate(buffer, sizeof(buffer), s));
   p->param = i;
   p->next = parameters;
   parameters = p;
@@ -1348,6 +1411,7 @@ readparams (char *s) {                /* parsed einen String nach Parametern */
 
 int
 readdirection (char *s) {        /* parsed einen String nach Richtungen */
+  char buffer[128];
   char *x;
   t_direction *d;
   int i;
@@ -1373,7 +1437,7 @@ readdirection (char *s) {        /* parsed einen String nach Richtungen */
   x = strchr (s, '\n');
   if (x)
     *x = 0;
-  d->name = strdup (s);
+  d->name = strdup (transliterate(buffer, sizeof(buffer), s));
   d->dir = i;
   d->next = directions;
   directions = d;
@@ -1411,7 +1475,7 @@ readerror (char *s) {
     memmove (x, x + 1, strlen (x));        /* Rest ein Zeichen "ranziehen" */
   }
   while (*x);
-  errtxt[i] = strdup (s);
+  errtxt[i] = strdup(s);
   filesread |= HAS_MESSAGES;
   return 1;
 }
@@ -2129,8 +2193,12 @@ findstr (char **v, const char *s, int max) {
 }
 
 int
-findtoken (const char *str, int type) {
+findtoken (const char *token, int type) {
   tnode *tk = &tokens[type];
+  char buffer[1024];
+  const char * str;
+
+  str = transliterate(buffer, sizeof(buffer), token);
 
   if (*str == '@') {
     str++;
