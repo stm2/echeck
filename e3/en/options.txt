@@ -8,7 +8,6 @@ plaintext
 computer
 statistics
 zipped
-merian
 template
 silverpool
 itempool

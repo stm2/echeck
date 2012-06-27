@@ -22,3 +22,7 @@ Damm
 Karawanserei
 Tunnel
 Taverne
+Marktplatz
+Wachturm
+Wachstube
+Wache
