@@ -138,13 +138,11 @@ char echo_it = 0,               /* option: echo input lines */
   use_stderr = 0,               /* option: use stderr for errors etc */
   brief = 0,                    /* option: don't list errors */
   ignore_NameMe = 0,            /* option: ignoriere NameMe-Kommentare ;; */
-  piping = 0,                   /* option: wird output als pipe-input
-                                 * benutzt? */
+  piping = 0,                   /* option: wird output als pipe-input  benutzt? */
   lohn = 10,                    /* Lohn für Arbeit - je Region zu setzen */
   silberpool = 1,               /* option: Silberpool-Verwaltung */
   line_start = 0,               /* option: Beginn der Zeilenzählung */
-  noship = 0, noroute = 0, nolost = 0, has_version = 0, at_cmd = 0, attack_warning = 0, compile = 0;    /* option: compiler-/magellan-style
-                                                                                                         * warnings */
+  noship = 0, noroute = 0, nolost = 0, has_version = 0, at_cmd = 0, attack_warning = 0, compile = 0;    /* option: compiler-/magellan-style  warnings */
 int error_count = 0,            /* counter: errors */
   warning_count = 0;            /* counter: warnings */
 char order_buf[BUFSIZE],        /* current order line */
@@ -927,15 +925,12 @@ typedef struct unit {
   int unterhalt;
   int line_no;
   int temp;
-  int ship;                     /* Nummer unseres Schiffes; ship<0: ich
-                                 * bin owner */
+  int ship;                     /* Nummer unseres Schiffes; ship<0: ich  bin owner */
   char lives, hasmoved;
   t_region *region;
   int newx, newy;
-  int transport;                /* hier steht drin, welche Einheit mich
-                                 * CARRYIEREn wird */
-  int drive;                    /* hier steht drin, welche Einheit mich
-                                 * CARRYIEREn soll */
+  int transport;                /* hier steht drin, welche Einheit mich  CARRYIEREn wird */
+  int drive;                    /* hier steht drin, welche Einheit mich  CARRYIEREn soll */
   /*
    * wenn drive!=0, muß transport==drive sein, sonst irgendwo
    * Tippfehler 
@@ -963,8 +958,7 @@ static unit *units = NULL;
 
 unit *order_unit,               /* Die Einheit, die gerade dran ist */
  *mother_unit,                  /* Die Einheit, die MACHE TEMP macht */
- *cmd_unit;                     /* Die Einheit, die gerade angesprochen
-                                 * wird, z.B. mit GIB */
+ *cmd_unit;                     /* Die Einheit, die gerade angesprochen  wird, z.B. mit GIB */
 
 t_region *Regionen = NULL;
 
@@ -1295,8 +1289,7 @@ readitem(char *s) {             /* parsed einen String nach Items */
         *x = 0;
       x = NULL;
     }
-    if (atoi(s) > 0)            /* Name, 12 -> Luxusgut "Name", EK-Preis * 
-                                 * 12 */
+    if (atoi(s) > 0)            /* Name, 12 -> Luxusgut "Name", EK-Preis *   12 */
       it->preis = atoi(s);
     else {
       n->txt = strdup(transliterate(buffer, sizeof(buffer), s));
@@ -1492,8 +1485,7 @@ readhelp(char *s) {
   x++;
   if (!(*x))
     return 0;
-  x++;                          /* erstes Leerzeichen hinter dem ,
-                                 * überlesen */
+  x++;                          /* erstes Leerzeichen hinter dem ,  überlesen */
   if (!(*x))
     return 0;
   i = findstr(Help, s, MAX_HELP);
@@ -1528,8 +1520,7 @@ readhelp(char *s) {
 
 int
 parsefile(char *s, int typ) {   /* ruft passende Routine auf */
-  int ok;                       /* nicht alle Zeilenparser geben Wert
-                                 * zurück */
+  int ok;                       /* nicht alle Zeilenparser geben Wert  zurück */
   char *x, *y;
   int i;
 
@@ -1688,9 +1679,7 @@ readafile(const char *fn, int typ) {
     do {
       s = fgets(order_buf, MAXLINE, F);
     }
-    while (!feof(F) && s && (*s == '#' || *s == '\n')); /* Leer- und
-                                                         * Kommentarzeilen 
-                                                         * * überlesen */
+    while (!feof(F) && s && (*s == '#' || *s == '\n')); /* Leer- und  Kommentarzeilen   überlesen */
     if (feof(F) || !s) {
       fclose(F);
       return;
@@ -2014,8 +2003,7 @@ addregion(int x, int y, int pers) {
     r->name = strdup("Region");
     r->line_no = line_no;
     if (Regionen) {
-      for (R = Regionen; R->next; R = R->next); /* letzte Region der Liste 
-                                                 */
+      for (R = Regionen; R->next; R = R->next); /* letzte Region der Liste  */
       R->next = r;              /* Region hinten dranklemmen */
     } else
       Regionen = r;
@@ -2030,15 +2018,11 @@ addteach(unit * teacher, unit * student) {
 
   for (t = teachings; t; t = t->next) {
     if (t->student == student) {
-      if (!teacher)             /* Aufruf durch Schüler, aber Lehrer hat
-                                 * * schon Struktur angelegt */
+      if (!teacher)             /* Aufruf durch Schüler, aber Lehrer hat  schon Struktur angelegt */
         return;
-      if (t->teacher == teacher)        /* kann eigentlich nicht *
-                                         * vorkommen, aber egal */
+      if (t->teacher == teacher)        /* kann eigentlich nicht *  vorkommen, aber egal */
         return;
-      if (t->teacher == NULL) { /* Schüler hat Struct angelegt (mit
-                                 * unbek. Lehrer), wir tragen jetzt nur
-                                 * noch den Lehrer nach */
+      if (t->teacher == NULL) { /* Schüler hat Struct angelegt (mit  unbek. Lehrer), wir tragen jetzt nur  noch den Lehrer nach */
         t->teacher = teacher;
         return;
       }
@@ -2284,8 +2268,7 @@ int
 finddirection(char *s) {
   if (!*s)
     return -2;
-  if (strcmp(s, "//") == 0)     /* "NACH NW NO NO // nach Xontormia" ist * 
-                                 * erlaubt */
+  if (strcmp(s, "//") == 0)     /* "NACH NW NO NO // nach Xontormia" ist *   erlaubt */
     return -2;
   return findtoken(s, UT_DIRECTION);
 }
@@ -2496,8 +2479,7 @@ getaunit(int type) {
     break;
   }
 
-  if (type == 42) {             /* Nur Test, ob eine Einheit kommt, weil
-                                 * das ein Fehler ist */
+  if (type == 42) {             /* Nur Test, ob eine Einheit kommt, weil  das ein Fehler ist */
     if (i)
       return 42;
     return 0;
@@ -2505,8 +2487,7 @@ getaunit(int type) {
 
   this_unit = i;
 
-  cmd_unit = newunit(i, is_temp);       /* Die Unit schon machen, wegen
-                                         * TEMP-Check */
+  cmd_unit = newunit(i, is_temp);       /* Die Unit schon machen, wegen  TEMP-Check */
   bcat(i);
   if (is_temp)
     return 3;
@@ -2562,8 +2543,7 @@ checkemail(void) {
 
 void
 end_unit_orders(void) {
-  if (!order_unit)              /* Für den ersten Befehl der ersten *
-                                 * Einheit. */
+  if (!order_unit)              /* Für den ersten Befehl der ersten *  Einheit. */
     return;
 
   if (order_unit->lives > 0 && !order_unit->long_order_line
@@ -2613,8 +2593,7 @@ orders_for_unit(int i, unit * u) {
     return;
   }
   k++;
-  while (!atoi(k)) {            /* Hier ist eine [ im Namen; 0 Personen
-                                 * ist nicht in der Zugvorlage */
+  while (!atoi(k)) {            /* Hier ist eine [ im Namen; 0 Personen  ist nicht in der Zugvorlage */
     k = strchr(k, '[');
     if (!k) {
       awarning(errtxt[CANTHANDLEPERSONCOMMENT], 4);
@@ -2657,9 +2636,7 @@ orders_for_unit(int i, unit * u) {
       }
     }
 
-    if (j < e && *j == 'I') {   /* I wie Illusion, auch Untote - eben
-                                 * alles, was nix frißt und keinen langen 
-                                 * Befehl braucht */
+    if (j < e && *j == 'I') {   /* I wie Illusion, auch Untote - eben  alles, was nix frißt und keinen langen   Befehl braucht */
       u->lives = -1;
       j += 2;                   /* hinter das I und das Zeichen danach */
     }
@@ -2670,10 +2647,8 @@ orders_for_unit(int i, unit * u) {
     } else if (j < e && *j == 'S') {    /* Ist Kapitän auf einem Schiff */
       j++;
       s = -btoi(j);
-      for (t = units; t; t = t->next)   /* vielleicht hat schon * eine
-                                         * Einheit durch */
-        if (t->ship == s) {     /* BETRETE das Kommando; das ist ja falsch 
-                                 */
+      for (t = units; t; t = t->next)   /* vielleicht hat schon * eine  Einheit durch */
+        if (t->ship == s) {     /* BETRETE das Kommando; das ist ja falsch  */
           t->ship = -s;
           break;
         }
@@ -2840,15 +2815,12 @@ check_leave(void) {
       sprintf(warn_buf, errtxt[MAINTAINANCEMOVED], message_buf, uid(t));
       break;
     }
-  order_unit->unterhalt = 0;    /* ACHTUNG! hierdurch geht die
-                                 * Unterhaltsinfo verloren! */
+  order_unit->unterhalt = 0;    /* ACHTUNG! hierdurch geht die  Unterhaltsinfo verloren! */
   if (s < 0) {                  /* wir waren Kapitän, neuen suchen */
     for (t = units; t; t = t->next)
       if (t->ship == -s)        /* eine Unit auf dem selben Schiff */
-        T = t;                  /* in ECheck sind die Units down->top,
-                                 * darum */
-    if (T)                      /* die letzte der Liste==erste Unit im *
-                                 * Programm */
+        T = t;                  /* in ECheck sind die Units down->top,  darum */
+    if (T)                      /* die letzte der Liste==erste Unit im *  Programm */
       T->ship = s;
   }
 }
@@ -2974,8 +2946,7 @@ getaspell(char *s, char spell_typ, unit * u, int reallycast) {
     if (*s)
       Scat(s);
   }
-  while (*s);                   /* restliche Parameter ohne Check ausgeben 
-                                 */
+  while (*s);                   /* restliche Parameter ohne Check ausgeben  */
   return 1;
 }
 
@@ -3345,8 +3316,7 @@ checkdirections(int key) {
         case D_PAUSE:
           if (rx == sx && ry == sy) {
             rx = x;
-            ry = y;             /* ROUTE: ersten Abschnitt merken für
-                                 * Silber verschieben */
+            ry = y;             /* ROUTE: ersten Abschnitt merken für  Silber verschieben */
           }
           break;
         }
@@ -3558,15 +3528,11 @@ check_comment(void) {
     fprintf(ERR, "%s\n", order_buf);
     return;
   }
-  if (strnicmp(s, "NOWARN", 6) == 0) {  /* Warnungen für nächste 
-                                         * Zeile aus */
+  if (strnicmp(s, "NOWARN", 6) == 0) {  /* Warnungen für nächste   Zeile aus */
     warn_off = 2;
     return;
   }
-  if (strnicmp(s, "LOHN", 4) == 0 || strnicmp(s, "WAGE", 4) == 0) {     /* LOHN 
-                                                                         * für 
-                                                                         * Arbeit 
-                                                                         */
+  if (strnicmp(s, "LOHN", 4) == 0 || strnicmp(s, "WAGE", 4) == 0) {     /* LOHN   für   Arbeit  */
     m = geti();
     lohn = (char) MAX(10, m);
     return;
@@ -3575,8 +3541,7 @@ check_comment(void) {
     noroute = (char) (1 - noroute);
     return;
   }
-  if (strnicmp(s, "KOMM", 4) == 0 || strnicmp(s, "COMM", 4) == 0) {     /* KOMMando 
-                                                                         */
+  if (strnicmp(s, "KOMM", 4) == 0 || strnicmp(s, "COMM", 4) == 0) {     /* KOMMando  */
     m = geti();
     if (!m) {
       m = order_unit->ship;
@@ -3608,10 +3573,8 @@ check_comment(void) {
 }
 
 void
-check_money(bool do_move) {     /* do_move=true: vor der Bewegung,
-                                 * anschließend */
-  unit *u, *t;                  /* Bewegung ausführen, damit das Silber
-                                 * bewegt wird */
+check_money(bool do_move) {     /* do_move=true: vor der Bewegung,  anschließend */
+  unit *u, *t;                  /* Bewegung ausführen, damit das Silber  bewegt wird */
   t_region *r;
   int i, x, y, um;
 
@@ -3624,8 +3587,7 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,
   if (do_move) {
     for (u = units; u; u = u->next) {   /* Check TEMP und leere Einheiten */
       if (u->lives < 1)         /* fremde Einheit oder Untot/Illusion */
-        continue;               /* auslassen, weil deren Geldbedarf nicht
-                                 * zählt */
+        continue;               /* auslassen, weil deren Geldbedarf nicht  zählt */
 
       if (u->temp && abs(u->temp) != 42) {
         sprintf(warn_buf, errtxt[TEMPNOTTEMP], itob(u->no));
@@ -3678,19 +3640,14 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,
 
     if (do_move)
       for (r = Regionen; r; r = r->next) {
-        if (r->reserviert > 0 && r->reserviert > r->geld) {     /* nur
-                                                                 * explizit 
-                                                                 * * mit
-                                                                 * RESERVIERE 
-                                                                 */
+        if (r->reserviert > 0 && r->reserviert > r->geld) {     /* nur  explizit   mit  RESERVIERE  */
           sprintf(warn_buf, errtxt[RESERVEDTOOMUCH], r->name,
                   r->x, r->y, r->reserviert, r->geld);
           warn(warn_buf, r->line_no, 3);
         }
       }
 
-    for (u = units; u; u = u->next) {   /* fehlendes Silber aus dem
-                                         * Silberpool nehmen */
+    for (u = units; u; u = u->next) {   /* fehlendes Silber aus dem  Silberpool nehmen */
       if (do_move && u->unterhalt) {
         u->money -= u->unterhalt;
         u->reserviert -= u->unterhalt;
@@ -3702,8 +3659,7 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,
           um = MIN(-u->money, t->money - t->reserviert);
           if (um > 0) {
             u->money += um;
-            u->reserviert += um;        /* das so erworbene Silber muß
-                                         * auch reserviert sein */
+            u->reserviert += um;        /* das so erworbene Silber muß  auch reserviert sein */
             t->money -= um;
           }
         }
@@ -3726,15 +3682,11 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,
 
   if (Regionen)
     for (r = Regionen; r; r = r->next)
-      r->geld = 0;              /* gleich wird Geld bei den Einheiten
-                                 * bewegt, darum den Pool leeren und nach
-                                 * der Bewegung nochmal füllen */
-  if (!do_move)                 /* Ebenso wird es in check_living nochmal
-                                 * * neu eingezahlt */
+      r->geld = 0;              /* gleich wird Geld bei den Einheiten  bewegt, darum den Pool leeren und nach  der Bewegung nochmal füllen */
+  if (!do_move)                 /* Ebenso wird es in check_living nochmal  neu eingezahlt */
     return;
 
-  if (!Regionen)                /* ohne Regionen Bewegungs-Check nicht *
-                                 * sinnvoll */
+  if (!Regionen)                /* ohne Regionen Bewegungs-Check nicht *  sinnvoll */
     return;
 
   for (u = units; u; u = u->next) {     /* Bewegen vormerken */
@@ -3746,8 +3698,7 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,
         warn(warn_buf, u->line_no, 4);
       }
       i = -u->ship;
-      if (i > 0) {              /* wir sind Kapitän; alle Einheiten auf
-                                 * dem Schiff auch bewegen */
+      if (i > 0) {              /* wir sind Kapitän; alle Einheiten auf  dem Schiff auch bewegen */
         x = u->newx;
         y = u->newy;
         for (t = units; t; t = t->next) {
@@ -3775,8 +3726,7 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,
       warning(checked_buf, u->line_no, u->long_order, 1);
       continue;
     }
-    if (u->drive) {             /* FAHRE; in u->transport steht die
-                                 * transportierende Einheit */
+    if (u->drive) {             /* FAHRE; in u->transport steht die  transportierende Einheit */
       if (u->hasmoved > 0) {
         sprintf(warn_buf, errtxt[UNITALREADYHASMOVED], uid(u));
         Error(warn_buf, u->line_no, u->long_order);
@@ -3833,12 +3783,10 @@ check_living(void) {
    * der Region zuständig 
    */
 
-  for (u = units; u; u = u->next) {     /* Silber der Einheiten in den
-                                         * Silberpool "einzahlen" */
+  for (u = units; u; u = u->next) {     /* Silber der Einheiten in den  Silberpool "einzahlen" */
     if (u->lives < 1)           /* jetzt nach der Umverteilung von Silber */
       continue;
-    u->region->geld += u->money;        /* jetzt wird reserviertes Silber
-                                         * nicht festgehalten */
+    u->region->geld += u->money;        /* jetzt wird reserviertes Silber  nicht festgehalten */
   }
 
   for (r = Regionen; r; r = r->next) {
@@ -3891,21 +3839,16 @@ check_teachings(void) {
   }
 
   for (t = teachings; t; t = t->next) {
-    if (t->teacher == NULL || t->student->lives < 1) {  /* lernt ohne
-                                                         * Lehrer bzw. */
+    if (t->teacher == NULL || t->student->lives < 1) {  /* lernt ohne  Lehrer bzw. */
       t->student->schueler = 0; /* keine eigene Einheit */
       continue;
     }
 
     if (!t->student->lernt) {
-      if (t->student->temp)     /* unbekannte TEMP-Einheit, wird * eh
-                                 * schon angemeckert */
+      if (t->student->temp)     /* unbekannte TEMP-Einheit, wird * eh  schon angemeckert */
         continue;
       sprintf(warn_buf, errtxt[UNITISTEACHED], uid(t->student));
-      strcat(warn_buf, uid(t->teacher));        /* uid() hat ein static
-                                                 * char*, das im sprintf() 
-                                                 * * dann zweimal das
-                                                 * selbe ergibt */
+      strcat(warn_buf, uid(t->teacher));        /* uid() hat ein static  char*, das im sprintf()   dann zweimal das  selbe ergibt */
       strcat(warn_buf, errtxt[BUTDOESNTLEARN]);
       warn(warn_buf, t->student->line_no, 2);
       t->student->schueler = 0;
@@ -4699,8 +4642,7 @@ void
 printhelp(int argc, char *argv[], int index) {
 
   if (!help_caption)
-    readfiles(0);               /* evtl. ist anderes echeck_locale
-                                 * gesetzt; darum _jetzt_ lesen */
+    readfiles(0);               /* evtl. ist anderes echeck_locale  gesetzt; darum _jetzt_ lesen */
 
   if (!help_caption) {
     fprintf(ERR, "\n  **  ECheck V%s, %s  **\n\n"
@@ -4732,8 +4674,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
     if (argv[i][0] == '-') {
       switch (argv[i][1]) {
       case 'P':
-        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr
-                                 * machen */
+        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           if (argv[i][2] == 0) {        /* -P path */
             i++;
             if (argv[i])
@@ -4815,8 +4756,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
         break;
 
       case 'E':
-        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr
-                                 * machen */
+        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           echo_it = 1;
           OUT = stdout;
           ERR = stdout;
@@ -4824,8 +4764,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
         break;
 
       case 'e':
-        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr
-                                 * machen */
+        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           echo_it = 1;
           OUT = stdout;
           ERR = stderr;
@@ -4833,8 +4772,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
         break;
 
       case 'O':
-        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr
-                                 * machen */
+        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           if (argv[i][2] == 0) {        /* "-O file" */
             i++;
             x = argv[i];
@@ -4859,8 +4797,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
         break;
 
       case 'o':
-        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr
-                                 * machen */
+        if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           if (argv[i][2] == 0) {        /* "-o file" */
             i++;
             x = argv[i];
@@ -4910,8 +4847,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
         break;
 
       case 's':
-        if (dostop)             /* bei Optionen via "; ECHECK" nicht mehr
-                                 * * machen */
+        if (dostop)             /* bei Optionen via "; ECHECK" nicht mehr  machen */
           ERR = stderr;
         break;
 
@@ -4946,22 +4882,19 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
 
       case '-':
         if (strcmp(argv[i] + 2, "help") == 0) { /* '--help' */
-          if (dostop)           /* bei Optionen via "; ECHECK" nicht mehr
-                                 * * machen */
+          if (dostop)           /* bei Optionen via "; ECHECK" nicht mehr  machen */
             printhelp(argc, argv, i);
           else
             fprintf(ERR, "Option `%s' unbekannt.\n"
                     "Unknow option `%s'\n", argv[i], argv[i]);
-          if (dostop)           /* Nicht stoppen, wenn dies die Parameter
-                                 * * aus der Datei selbst sind! */
+          if (dostop)           /* Nicht stoppen, wenn dies die Parameter  aus der Datei selbst sind! */
             exit(10);
         }
         break;
 
       case '?':
       case 'h':
-        if (dostop)             /* bei Optionen via "; ECHECK" nicht mehr
-                                 * * machen */
+        if (dostop)             /* bei Optionen via "; ECHECK" nicht mehr  machen */
           printhelp(argc, argv, i);
         break;
       case 'L':
@@ -4981,8 +4914,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
         if (argv[i][1]) {       /* sonst ist das nur '-' => stdin lesen */
           fprintf(ERR, "Option `%s' unbekannt.\n"
                   "Unknown option `%s'\n", argv[i], argv[i]);
-          if (dostop)           /* Nicht stoppen, wenn dies die Parameter
-                                 * * aus der Datei selbst sind! */
+          if (dostop)           /* Nicht stoppen, wenn dies die Parameter  aus der Datei selbst sind! */
             exit(10);
         }
       }
@@ -5012,8 +4944,7 @@ check_OPTION(void) {
   if (befehle_ende)
     return;
   if (strncmp(order_buf, "From ", 5) == 0) {    /* es ist eine Mail */
-    do {                        /* Bis zur Leerzeile suchen -> Mailheader
-                                 * zu Ende */
+    do {                        /* Bis zur Leerzeile suchen -> Mailheader  zu Ende */
       fgetbuffer(order_buf, BUFSIZE, F);
     }
     while (order_buf[0] != '\n' && !feof(F));
@@ -5138,8 +5069,7 @@ process_order_file(int *faction_count, int *unit_count) {
         fprintf(ERR, "%s:faction:%s\n", filename, itob(f));
       else
         fprintf(ERR, errtxt[FOUNDORDERS], itob(f));
-      check_OPTION();           /* Nach PARTEI auf "; OPTION" bzw. ";
-                                 * ECHECK" testen */
+      check_OPTION();           /* Nach PARTEI auf "; OPTION" bzw. ";  ECHECK" testen */
       if (befehle_ende)
         return;
       if (!compile) {
@@ -5184,11 +5114,9 @@ process_order_file(int *faction_count, int *unit_count) {
       porder();
       next = 1;
 
-      check_money(true);        /* Check für Lerngeld, Handel usw.; true: 
-                                 * dann Bewegung ausführen */
+      check_money(true);        /* Check für Lerngeld, Handel usw.; true:   dann Bewegung ausführen */
       if (Regionen) {
-        check_money(false);     /* Silber nochmal in den Pool, fehlendes
-                                 * aus Pool */
+        check_money(false);     /* Silber nochmal in den Pool, fehlendes  aus Pool */
         check_living();         /* Ernährung mit allem Silber der Region */
       }
       check_teachings();
@@ -5227,8 +5155,7 @@ process_order_file(int *faction_count, int *unit_count) {
     }
   }                             /* end while !befehle_ende */
 
-  if (igetparam(order_buf) == P_NEXT)   /* diese Zeile wurde ggf. gelesen
-                                         * * und dann kam */
+  if (igetparam(order_buf) == P_NEXT)   /* diese Zeile wurde ggf. gelesen  und dann kam */
     next = 1;                   /* EOF -> kein Check mehr, next=0... */
   if (f && !next)
     anerror(errtxt[MISSINGNEXT]);
@@ -5341,14 +5268,12 @@ main(int argc, char *argv[]) {
   int i, faction_count = 0, unit_count = 0, nextarg = 1;
 
 #if macintosh
-  argc = ccommand(&argv);       /* consolenabruf der parameter fuer
-                                 * macintosh added 15.6.00 chartus */
+  argc = ccommand(&argv);       /* consolenabruf der parameter fuer  macintosh added 15.6.00 chartus */
 #endif
 
   ERR = stderr;
   for (i = 0; i < MAX_ERRORS; i++)
-    errtxt[i] = Errors[i];      /* mit Defaults besetzten, weil NULL ->
-                                 * crash */
+    errtxt[i] = Errors[i];      /* mit Defaults besetzten, weil NULL ->  crash */
 
   /*
    * Path-Handling 
