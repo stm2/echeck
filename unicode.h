@@ -25,7 +25,7 @@ extern "C" {
 
 #include <wchar.h>
 #define USE_UNICODE
-  typedef wint_t ucs4_t;
+  typedef unsigned long ucs4_t;
   typedef char utf8_t;
 
   extern int unicode_utf8_to_cp437(char *result, const utf8_t * utf8_string,
