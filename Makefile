@@ -14,8 +14,8 @@ install: echeck
 tags:
 	@ctags *.c *.h
 
-echeck: echeck.c config.h
-	$(CC) $(CFLAGS) $(LFLAGS) -o echeck echeck.c
+echeck: echeck.c unicode.c unicode.h config.h
+	$(CC) $(CFLAGS) $(LFLAGS) -o echeck echeck.c unicode.c
 
 clean:
 	@rm -f *.o core *.bak echeck

@@ -23,6 +23,7 @@
 #include <wchar.h>
 
 #include "config.h"
+#include "unicode.h"
 
 static const char *echeck_version = "4.3.2-7";
 
@@ -1289,7 +1290,7 @@ readkeywords (char *s) {        /* parsed einen String nach Befehlen */
   else
     return 0;
   for (i = 0; i < MAXKEYWORDS; i++) {
-    if (stricmp (s, Keywords[i]) == 0) {
+    if (stricmp(s, Keywords[i]) == 0) {
       break;
     }
   }
@@ -1583,130 +1584,15 @@ macify (unsigned char *s) {
 }
 #endif
 
-/*
- * Convert a UTF-8 encoded character to UCS-4. 
- */
-int
-unicode_utf8_to_ucs4 (wint_t * ucs4_character, const char *utf8_string,
-                      size_t * length) {
-  unsigned char utf8_character = (unsigned char) utf8_string[0];
-
-  /*
-   * Is the character in the ASCII range? If so, just copy it to the
-   * output. 
-   */
-  if (~utf8_character & 0x80) {
-    *ucs4_character = utf8_character;
-    *length = 1;
-  }
-  else if ((utf8_character & 0xE0) == 0xC0) {
-    /*
-     * A two-byte UTF-8 sequence. Make sure the other byte is good. 
-     */
-    if (utf8_string[1] != '\0' && (utf8_string[1] & 0xC0) != 0x80) {
-      return EILSEQ;
-    }
-
-    *ucs4_character =
-      ((utf8_string[1] & 0x3F) << 0) + ((utf8_character & 0x1F) << 6);
-    *length = 2;
-  }
-  else if ((utf8_character & 0xF0) == 0xE0) {
-    /*
-     * A three-byte UTF-8 sequence. Make sure the other bytes are
-     * good. 
-     */
-    if ((utf8_string[1] != '\0') &&
-        (utf8_string[1] & 0xC0) != 0x80 &&
-        (utf8_string[2] != '\0') && (utf8_string[2] & 0xC0) != 0x80) {
-      return EILSEQ;
-    }
-
-    *ucs4_character =
-      ((utf8_string[2] & 0x3F) << 0) +
-      ((utf8_string[1] & 0x3F) << 6) + ((utf8_character & 0x0F) << 12);
-    *length = 3;
-  }
-  else if ((utf8_character & 0xF8) == 0xF0) {
-    /*
-     * A four-byte UTF-8 sequence. Make sure the other bytes are good. 
-     */
-    if ((utf8_string[1] != '\0') &&
-        (utf8_string[1] & 0xC0) != 0x80 &&
-        (utf8_string[2] != '\0') &&
-        (utf8_string[2] & 0xC0) != 0x80 &&
-        (utf8_string[3] != '\0') && (utf8_string[3] & 0xC0) != 0x80) {
-      return EILSEQ;
-    }
-
-    *ucs4_character =
-      ((utf8_string[3] & 0x3F) << 0) +
-      ((utf8_string[2] & 0x3F) << 6) +
-      ((utf8_string[1] & 0x3F) << 12) + ((utf8_character & 0x07) << 18);
-    *length = 4;
-  }
-  else if ((utf8_character & 0xFC) == 0xF8) {
-    /*
-     * A five-byte UTF-8 sequence. Make sure the other bytes are good. 
-     */
-    if ((utf8_string[1] != '\0') &&
-        (utf8_string[1] & 0xC0) != 0x80 &&
-        (utf8_string[2] != '\0') &&
-        (utf8_string[2] & 0xC0) != 0x80 &&
-        (utf8_string[3] != '\0') &&
-        (utf8_string[3] & 0xC0) != 0x80 &&
-        (utf8_string[4] != '\0') && (utf8_string[4] & 0xC0) != 0x80) {
-      return EILSEQ;
-    }
-
-    *ucs4_character =
-      ((utf8_string[4] & 0x3F) << 0) +
-      ((utf8_string[3] & 0x3F) << 6) +
-      ((utf8_string[2] & 0x3F) << 12) +
-      ((utf8_string[1] & 0x3F) << 18) + ((utf8_character & 0x03) << 24);
-    *length = 5;
-  }
-  else if ((utf8_character & 0xFE) == 0xFC) {
-    /*
-     * A six-byte UTF-8 sequence. Make sure the other bytes are good. 
-     */
-    if ((utf8_string[1] != '\0') &&
-        (utf8_string[1] & 0xC0) != 0x80 &&
-        (utf8_string[2] != '\0') &&
-        (utf8_string[2] & 0xC0) != 0x80 &&
-        (utf8_string[3] != '\0') &&
-        (utf8_string[3] & 0xC0) != 0x80 &&
-        (utf8_string[4] != '\0') &&
-        (utf8_string[4] & 0xC0) != 0x80 &&
-        (utf8_string[5] != '\0') && (utf8_string[5] & 0xC0) != 0x80) {
-      return EILSEQ;
-    }
-
-    *ucs4_character =
-      ((utf8_string[5] & 0x3F) << 0) +
-      ((utf8_string[4] & 0x3F) << 6) +
-      ((utf8_string[3] & 0x3F) << 12) +
-      ((utf8_string[2] & 0x3F) << 18) +
-      ((utf8_string[1] & 0x3F) << 24) + ((utf8_character & 0x01) << 30);
-    *length = 6;
-  }
-  else {
-    return EILSEQ;
-  }
-  return 0;
-}
-
-static int utf8_input = 0;
-
 static char *
 fgetbuffer (char *buf, int size, FILE * F) {
   char *s = fgets (buf, size, F);
 
-  if (s && utf8_input) {
+  if (s) {
     unsigned char *p = (unsigned char *) s;
 
     while (*s) {
-      wint_t ucs4;
+      ucs4_t ucs4;
       size_t length;
       int result = unicode_utf8_to_ucs4 (&ucs4, s, &length);
 
@@ -2237,7 +2123,7 @@ findstr (char **v, const char *s, int max) {
   if (!s[0])
     return -1;
   for (i = 0; i < max; i++)
-    if (v[i] && strnicmp (s, v[i], ss) == 0)
+    if (v[i] && unicode_utf8_strncasecmp (s, v[i], ss) == 0)
       return i;
   return -1;
 }
@@ -2305,7 +2191,7 @@ findspell (char *s) {
   if (!s[0] || !spells)
     return NULL;
   for (sp = spells; sp; sp = sp->next)
-    if (sp->name && !strnicmp (sp->name, s, strlen (s)))
+    if (sp->name && !unicode_utf8_strncasecmp(sp->name, s, strlen (s)))
       return sp;
   return NULL;
 }
@@ -4341,7 +4227,7 @@ checkanorder (char *Orders) {
       anerror (errtxt[UNRECOGNIZEDSKILL]);
     else {
       Scat (sk->name);
-      if (stricmp (sk->name, errtxt[MAGIC]) == 0)
+      if (unicode_utf8_strcasecmp(sk->name, errtxt[MAGIC]) == 0)
         if (order_unit->people > 1)
           anerror (errtxt[ONEPERSONPERMAGEUNIT]);
     }
@@ -4470,7 +4356,7 @@ checkanorder (char *Orders) {
     s = getstr ();
     i = findreport (s);
     if (i == -1) {
-      if (strnicmp (s, printkeyword (K_SHOW), strlen (s)))
+      if (unicode_utf8_strncasecmp (s, printkeyword (K_SHOW), strlen (s)))
         anerror (errtxt[UNRECOGNIZEDREPORTOPTION]);
       else {
         Scat (printkeyword (K_SHOW));
@@ -4631,8 +4517,8 @@ checkanorder (char *Orders) {
     scat (printkeyword (K_SORT));
     s = getstr ();
     if (*s) {
-      if (strnicmp (s, printparam (P_BEFORE), strlen (s)) == 0 ||
-          strnicmp (s, printparam (P_AFTER), strlen (s)) == 0) {
+      if (unicode_utf8_strncasecmp (s, printparam (P_BEFORE), strlen (s)) == 0 ||
+          unicode_utf8_strncasecmp (s, printparam (P_AFTER), strlen (s)) == 0) {
         Scat (s);
         i = getaunit (NECESSARY);
         if (i == 1 || i == 3)        /* normale oder TEMP-Einheit: ok */
@@ -4925,10 +4811,6 @@ check_options (int argc, char *argv[], char dostop, char command_line) {
 
       case 'c':
         compile = OUT_COMPILE;
-        break;
-
-      case 'u':
-        utf8_input = 1;
         break;
 
       case 'm':
