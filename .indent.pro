@@ -1,0 +1,21 @@
+-i2 -nut /* indent 2, no tabs */
+-cli0 /* case label indentation */
+-lp /*Line up continued lines at parentheses*/
+-nbad  /* don't force blank lines after declarations */
+-bap /* blank lines after procedure bodies */
+-sob /*Swallow optional blank lines*/
+-hnl /*--honour-newlines*/
+-bbo /* Prefer to break long lines before boolean operators */
+-nbc /*Do not force newlines after commas in declarations */
+-br -brf -brs /* braces on same line */
+-ce /* --cuddle-else */
+-psl /* Put the type of a procedure on the line before its name. */
+-ncdb /* --no-comment-delimiters-on-blank-lines */
+-cs /*--space-after-cast*/ 
+-saf -sai -saw /*Put a space after each for, if, while */
+-nprs /*Do not put a space after every ’(’ and before every ’)’*/
+-npcs /* do not put space after the function in function calls */
+-nfc1 /*--dont-format-first-column-comments*/
+-nfca /*Do not format any comments.*/
+-sc /*Put the ‘*’ character at the left of comments.*/
+-ppi1 /* indent preprocessor statement by 1 */
