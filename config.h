@@ -109,7 +109,8 @@ typedef unsigned char _Bool;
 
 #ifndef HAVE_MINMAX
 # ifdef HAVE_SYS_PARAM_H
-# include <sys.param.h>
+# include <sys/param.h>
+# define HAVE_MINMAX
 # endif
 #endif
 
