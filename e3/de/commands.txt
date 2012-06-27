@@ -26,6 +26,7 @@ HELP,         Helfen
 FIGHT,        Kämpfen
 COMBATMAGIC,  Kampfzauber
 CONTACT,      Kontaktieren
+STUDY,        Lernen
 MAKE,         Machen
 MOVE,         Nach
 PASSWORD,     Passwort

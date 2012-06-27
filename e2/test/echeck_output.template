@@ -1,16 +1,12 @@
 Partei 1 1
 LOCALE de
 REGION 0 0; Heimat
-  EINHEIT line; Weltenforscher [1,160$]
-    Benennen Einheit "Großer Krieger"
   EINHEIT bez; Weltenforscher [1,160$]
-    Bezahlen Nicht
-    Bezahlen
-    Bezahlen
-    Bezahlen Nicht
+    
   EINHEIT clai; Weltenforscher [1,160$]
     Beanspruchen 2 Holz
-    Beanspruchen Holz
+    Beanspruchen "Rostiges Kettenhemd"
+    Beanspruchen "Amulett des Wahren Sehens"
     Beanspruchen 1
     Beanspruchen 1
     Beanspruchen
@@ -310,9 +306,9 @@ REGION 0 0; Heimat
   EINHEIT give; Weltenforscher [1,160$]
     Gib 1 Sonnenschein
     Gib 1 1 Silber
-    Gib 1 Alles Holz
+    Gib 1 Alles "Ringe der Unsichtbarkeit"
     Gib 1 Alles
-    Gib TEMP a 1 Silber
+    Gib TEMP a 1 "Rostiger Schild"
     Gib 2 1 Silber
     Gib 3 Kommando
     Gib 4 Kräuter
@@ -337,11 +333,11 @@ REGION 0 0; Heimat
     Tarnen Halblinge
     Tarnen 1
     Tarnen
-  EINHEIT res; Weltenforscher [1,160$]
+  EINHEIT for; Weltenforscher [1,160$]
     Forschen Kräuter
-  EINHEIT res2; Weltenforscher [1,160$]
+  EINHEIT for2; Weltenforscher [1,160$]
     Forschen
-  EINHEIT res3; Weltenforscher [1,160$]
+  EINHEIT for3; Weltenforscher [1,160$]
     Forschen
     Forschen Kräuter
   EINHEIT tem; Weltenforscher [1,160$]
@@ -367,12 +363,12 @@ REGION 0 0; Heimat
     Beschreiben Einheit
     Beschreiben Einheit abc
   EINHEIT name; Weltenforscher [1,160$]
-    Benennen Einheit abc
+    Benennen Einheit "abc def"
     Benennen Region abc
     Benennen Burg abc
     Benennen Schiff abc
     Benennen Gebäude abc
-    Benennen Allianz abc
+    Benennen
     Benennen fremdes Einheit abc
     Benennen fremdes Burg abc
     Benennen fremdes Schiff abc
@@ -383,8 +379,8 @@ REGION 0 0; Heimat
     Benennen fremdes Einheit def
     Benennen fremdes Einheit
     Benennen fremdes
-    Benennen fremdes Allianz abc
-    Benennen Allianz
+    Benennen fremdes
+    Benennen
   EINHEIT thie; Weltenforscher [1,160$]
     Beklauen 1
   EINHEIT thi2; Weltenforscher [1,160$]
@@ -423,7 +419,7 @@ REGION 0 0; Heimat
   EINHEIT wor1; Weltenforscher [1,160$]
     Arbeiten
   EINHEIT mess; Weltenforscher [1,160$]
-    Botschaft Region Hallo
+    Botschaft Region "Hallo, Welt"
     Botschaft Schiff 123 Hallo
     Botschaft Gebäude 456 Hallo
     Botschaft Burg 456 Hallo
@@ -474,11 +470,17 @@ REGION 0 0; Heimat
   EINHEIT alli; Weltenforscher [1,160$]
     
   EINHEIT uml; Weltenforscher [1,160$]
-    
-    Kaufen 1
-    
-    Verkaufen 1
-    Zerstören
+    Kämpfen Nicht
+    Kaufen 1 Öl
+    Kämpfen Nicht
+    Verkaufen 1 Öl
+    Zerstören Straßen NO
     Zerstören Straßen SW
+  EINHEIT line; Weltenforscher [1,160$]
+    Benennen Einheit "Großer Krieger"
     Benennen Einheit Ööóōß
+  EINHEIT dopp; Weltenforscher [1,160$]
+    Lernen Hiebwaffen
+  EINHEIT dopp; Weltenforscher [1,160$]
+    Lernen Hiebwaffen
 Nächster

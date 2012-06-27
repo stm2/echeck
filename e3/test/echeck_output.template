@@ -8,7 +8,8 @@ REGION 0 0; Heimat
     Bezahlen Nicht
   EINHEIT clai; Weltenforscher [1,160$]
     Beanspruchen 2 Holz
-    Beanspruchen Holz
+    Beanspruchen "Rostiges Kettenhemd"
+    Beanspruchen "Amulett des Wahren Sehens"
     Beanspruchen 1
     Beanspruchen 1
     Beanspruchen
@@ -68,7 +69,9 @@ REGION 0 0; Heimat
     Default "Arbeiten"
     Default "Lernen Hiebwaffen"
     Default "Machen 1 Rostige Kettenhemden"
-    Default "Lernen Hiebwaffen"
+    Default "Machen 1 Rostige Kettenhemden"
+    Default "Machen 1 Rostige Kettenhemden"
+    Default "Lernen"
     Default "Machen 1 Rostige Kettenhemden"
   EINHEIT schu; Weltenforscher [1,160$]
     
@@ -203,10 +206,10 @@ REGION 0 0; Heimat
   EINHEIT stu2; Weltenforscher [1,160$]
     Lernen Taktik
   EINHEIT stu3; Weltenforscher [1,160$]
-    
-    
-    
-    
+    Lernen
+    Lernen
+    Lernen
+    Lernen Hiebwaffen
   EINHEIT verg; Weltenforscher [1,160$]
     Vergessen Hiebwaffen
     Vergessen
@@ -282,16 +285,17 @@ REGION 0 0; Heimat
   EINHEIT stel; Weltenforscher [1,160$]
     Tarnen Partei
     Tarnen Partei Nicht
+    Tarnen
     Tarnen Partei Nummer 0
     Tarnen Partei Nummer 2
     Tarnen Halblinge
     Tarnen 1
     Tarnen
-  EINHEIT res; Weltenforscher [1,160$]
+  EINHEIT for; Weltenforscher [1,160$]
     
-  EINHEIT res2; Weltenforscher [1,160$]
+  EINHEIT for2; Weltenforscher [1,160$]
     
-  EINHEIT tem; Weltenforscher [1,160$]
+  EINHEIT for; Weltenforscher [1,160$]
     Machen TEMP tem1
       Arbeiten
     Ende
@@ -424,4 +428,17 @@ REGION 0 0; Heimat
     Allianz Beitreten
     Allianz Verlassen
     Allianz Neu
+  EINHEIT uml; Weltenforscher [1,160$]
+    Kämpfen Nicht
+    
+    Kämpfen Nicht
+    
+    Zerstören Straßen NO
+    Zerstören Straßen SW
+  EINHEIT line; Weltenforscher [1,160$]
+    Benennen Einheit "Großer Krieger"
+  EINHEIT dopp; Weltenforscher [1,160$]
+    Lernen Hiebwaffen
+  EINHEIT dopp; Weltenforscher [1,160$]
+    Lernen Hiebwaffen
 Nächster

@@ -1,5 +1,5 @@
-; call echeck with "./echeck  -otest/echeck_output.txt -Otest/echeck_errors.txt test/orders.test.txt"
-; and you should get the same result (test/echeck.txt and test/orders.txt)
+; call echeck with "./echeck  -Re3 -oe3/test/echeck_output.txt -Oe3/test/echeck_errors.txt e3/test/orders.test.txt"
+; and you should get the same result as in e3/test/echeck_errors.template and e3/test/echeck_orders.template
 ERESSEA 1 1
 ; TIMESTAMP 1234805339430
 ; ECHECK -r80 -s -l -w99 -v4.3.3-0
@@ -13,7 +13,8 @@ BEZAHLEN foo ; error
 BEZAHLEN NICHT viel ; error
 EINHEIT clai;           Weltenforscher [1,160$]
 BEANSPRUCHE 2 Holz
-BEANSPRUCHE Holz
+BEANSPRUCHE "Rostiges Kettenhemd"
+BEANSPRUCHE Amulett~des~Wahren~Sehens
 BEANSPRUCHE 1 ; error
 BEANSPRUCHE 1 Foo ; error
 BEANSPRUCHE ; error
@@ -22,9 +23,9 @@ EINHEIT bef;           Weltenforscher [1,160$]
 BEF
 BEF 1 ; error
 EINHEIT pref;           Weltenforscher [1,160$]
-PRAEFIX
-PRAEFIX Blau
-PRAEFIX kein blau; error
+PRäFIX
+PRÄFIX Blau
+PRÄFIX kein blau; error
 EINHEIT pflz;           Weltenforscher [1,160$]
 PFLANZE Samen ; error
 EINHEIT sort;           Weltenforscher [1,160$]
@@ -73,7 +74,10 @@ EINHEIT def;           Weltenforscher [1,160$]
 DEFAULT ARBEITEN
 DEFAULT "LERNEN Hiebwaffen"
 DEFAULT "MACHEN 1 'Rostiges Kettenhemd'"
-DEFAULT LERNEN Hiebwaffen; error ?
+DEFAULT 'MACHEN 1 "Rostiges Kettenhemd"'
+DEFAULT 'MACHEN 1 "Rostiges \
+Kettenhemd"'
+DEFAULT Lernen Hiebwaffen; error ?
 DEFAULT "MACHEN 1 Rostiges Kettenhemd"; error
 EINHEIT schu;           Weltenforscher [1,160$]
 SCHULE Gwyrrd; error
@@ -293,11 +297,11 @@ TARNE PARTEI NUMMER 2 ; error
 TARNE Halblinge ; error
 TARNE 1 2; error
 TARNE foo ; error
-EINHEIT res;           Weltenforscher [1,160$]
+EINHEIT for;           Weltenforscher [1,160$]
 FORSCHE Kraeuter ; error
-EINHEIT res2;           Weltenforscher [1,160$]
+EINHEIT for2;           Weltenforscher [1,160$]
 FORSCHE ; error
-EINHEIT tem;           Weltenforscher [1,160$]
+EINHEIT for;           Weltenforscher [1,160$]
 MACHEN TEMP tem1
 ARBEITEN
 ENDE
@@ -430,4 +434,19 @@ ALLIANZ EINLADEN; error
 ALLIANZ BEITRETEN; error
 ALLIANZ VERLASSEN 123; error
 ALLIANZ NEU 123; error
+EINHEIT uml;           Weltenforscher [1,160$]
+KÄMPFE NICHT
+KAUFEN 1 Öl
+kämpfe nicht
+verkaufen 1 öl
+ZERSTOEREN Straße NO
+ZERSToeREN Strasse sw
+EINHEIT line;           Weltenforscher [1,160$]
+BENENNEN \
+EINHEIT "Großer \
+Krieger"
+EINHEIT dopp;           Weltenforscher [1,160$]
+LERNEN Hiebwaffen
+EINHEIT dopp;           Weltenforscher [1,160$]
+LERNEN Hiebwaffen
 NAECHSTER

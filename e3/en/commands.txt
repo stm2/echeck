@@ -25,6 +25,7 @@ HELP,     Help
 FIGHT,    Fight
 COMBATMAGIC,  Combatspell
 CONTACT,  Contact
+STUDY,    Learn
 MAKE,     Make
 MOVE,     Move
 PASSWORD, Password

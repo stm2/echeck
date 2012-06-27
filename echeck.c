@@ -171,7 +171,8 @@ enum {
 
 typedef struct _liste {
   struct _liste *next;
-  char *name;
+  char *key;
+  char *value;
 } t_liste;
 
 enum {
@@ -305,7 +306,8 @@ static char *Keywords[MAXKEYWORDS] = {
 
 typedef struct _keyword {
   struct _keyword *next;
-  char *name;
+  char *key;
+  char *value;
   int keyword;
 } t_keyword;
 
@@ -418,7 +420,8 @@ static const char *Params[MAXPARAMS] = {
 
 typedef struct _params {
   struct _params *next;
-  char *name;
+  char *key;
+  char *value;
   int param;
 } t_params;
 
@@ -451,7 +454,8 @@ t_liste *options = NULL;
 
 typedef struct _direction {
   struct _direction *next;
-  char *name;
+  char *key;
+  char *value;
   int dir;
 } t_direction;
 
@@ -897,7 +901,8 @@ char *help_caption = NULL, *help_path = NULL;
 
 typedef struct _names {
   struct _names *next;
-  char *txt;
+  char *key;
+  char *value;
 } t_names;
 
 typedef struct _item {
@@ -910,7 +915,8 @@ t_item *itemdata = NULL;
 
 typedef struct _spell {
   struct _spell *next;
-  char *name;
+  char *key;
+  char *value;
   int kosten;
   char typ;
 } t_spell;
@@ -919,7 +925,8 @@ t_spell *spells = NULL;
 
 typedef struct _skills {
   struct _skills *next;
-  char *name;
+  char *key;
+  char *value;
   int kosten;
 } t_skills;
 
@@ -952,7 +959,8 @@ typedef struct list {
 typedef struct t_region {
   struct t_region *next;
   int personen, geld, x, y, line_no, reserviert;
-  char *name;
+  char *key;
+  char *value;
 } t_region;
 
 typedef struct unit {
@@ -1152,12 +1160,13 @@ char *ItemName(int i, int plural)
     item = it;
   }
   if (plural)
-    return item->name->next->txt;
-  return item->name->txt;
+    return item->name->next->value;
+  return item->name->value;
 }
 
 FILE *
-path_fopen(const char *path_par, const char *rules, const char *file, const char *mode) {
+path_fopen(const char *path_par, const char *rules, const char *file,
+           const char *mode) {
   char *pathw = strdup(path_par);
   char *token = strtok(pathw, PATH_DELIM);
 
@@ -1182,8 +1191,34 @@ path_fopen(const char *path_par, const char *rules, const char *file, const char
   return NULL;
 }
 
-char *transliterate(char *out, size_t size, const char *in)
-{
+void
+transliterate_char(const char *src, char *dst, unsigned int *advance) {
+  if (src[0] == '\xc3') {
+    if (src[1] == '\xa4' || src[1] == '\x84') {
+      memcpy(dst, "ae", 2);
+    } else if (src[1] == '\xb6' || src[1] == '\x96') {
+      memcpy(dst, "oe", 2);
+    } else if (src[1] == '\xbc' || src[1] == '\x9c') {
+      memcpy(dst, "ue", 2);
+    } else if (src[1] == '\x9f') {
+      memcpy(dst, "ss", 2);
+    } else {
+      *advance = 0;
+    }
+  } else if (src[0] == '\xe1') {
+    if (src[1] == '\xba' && src[2] == '\x9e') {
+      memcpy(dst, "ss", 2);
+      ++src;
+    } else {
+      *advance = 0;
+    }
+  } else {
+    *advance = 0;
+  }
+}
+
+char *
+transliterate_string(char *out, size_t size, const char *in, bool ucs4) {
   const char *src = in;
   char *dst = out;
 
@@ -1197,37 +1232,28 @@ char *transliterate(char *out, size_t size, const char *in)
     len = src - p;
     size -= len;
     while (size > 0 && *src && (*src & 0x80)) {
-      unsigned int advance = 2;
-      if (src[0] == '\xc3') {
-        if (src[1] == '\xa4' || src[1] == '\x84') {
-          memcpy(dst, "ae", 2);
-        } else if (src[1] == '\xb6' || src[1] == '\x96') {
-          memcpy(dst, "oe", 2);
-        } else if (src[1] == '\xbc' || src[1] == '\x9c') {
-          memcpy(dst, "ue", 2);
-        } else if (src[1] == '\x9f') {
-          memcpy(dst, "ss", 2);
-        } else {
-          advance = 0;
-        }
-      } else if (src[0] == '\xe1') {
-        if (src[1] == '\xba' && src[2] == '\x9e') {
-          memcpy(dst, "ss", 2);
-          ++src;
-        } else {
-          advance = 0;
-        }
+      unsigned int advance = 2, src_advance = 1;
+      if (!ucs4) {
+        transliterate_char(src, dst, &advance);
+        src_advance = advance;
       } else {
-        advance = 0;
+        char help[5];
+        size_t size;
+        ucs4_t u = 0xFF;
+        u = u & (ucs4_t) * src;
+        unicode_ucs4_to_utf8(help, &size, u);
+        transliterate_char(help, dst, &advance);
+        src_advance = 1;
       }
 
       if (advance && advance <= size) {
-        src += advance;
+        src += src_advance;
         dst += advance;
         size -= advance;
       } else {
         ucs4_t ucs;
-        unicode_utf8_to_ucs4(&ucs, src, &len);
+        if (unicode_utf8_to_ucs4(&ucs, src, &len) == EILSEQ)
+          len = 1;
         src += len;
         *dst++ = '?';
         --size;
@@ -1236,6 +1262,11 @@ char *transliterate(char *out, size_t size, const char *in)
   }
   *dst = 0;
   return *src ? 0 : out;
+}
+
+char *
+transliterate(char *out, size_t size, const char *in) {
+  return transliterate_string(out, size, in, false);
 }
 
 /** parsed einen String nach Zaubern */
@@ -1257,7 +1288,8 @@ void readspell(char *s)
       *x = 0;
     x = NULL;
   }
-  sp->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  sp->key = strdup(transliterate(buffer, sizeof(buffer), s));
+  sp->value = strdup(s);
   if (x) {
     s = (char *)(x + 1);
     while (isspace(*s))
@@ -1296,7 +1328,8 @@ void readskill(char *s)
       *x = 0;
     x = NULL;
   }
-  sk->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  sk->key = strdup(transliterate(buffer, sizeof(buffer), s));
+  sk->value = strdup(s);
   if (x) {
     s = (char *)(x + 1);
     while (isspace(*s))
@@ -1334,7 +1367,8 @@ int readitem(char *s)
     if (atoi(s) > 0)            /* Name, 12 -> Luxusgut "Name", EK-Preis *   12 */
       it->preis = atoi(s);
     else {
-      n->txt = strdup(transliterate(buffer, sizeof(buffer), s));
+      n->key = strdup(transliterate(buffer, sizeof(buffer), s));
+      n->value = strdup(s);
       if (nn)
         nn->next = n;
       nn = n;
@@ -1365,7 +1399,8 @@ void readliste(char *s, t_liste ** L)
   x = strchr(s, '\n');
   if (x)
     *x = 0;
-  ls->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  ls->key = strdup(transliterate(buffer, sizeof(buffer), s));
+  ls->value = strdup(s);
   addlist(L, ls);
 }
 
@@ -1402,7 +1437,8 @@ int readkeywords(char *s)
   x = strchr(s, '\n');
   if (x)
     *x = 0;
-  k->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  k->key = strdup(transliterate(buffer, sizeof(buffer), s));
+  k->value = strdup(s);
   k->keyword = i;
   k->next = keywords;
   keywords = k;
@@ -1437,7 +1473,8 @@ int readparams(char *s)
   x = strchr(s, '\n');
   if (x)
     *x = 0;
-  p->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  p->key = strdup(transliterate(buffer, sizeof(buffer), s));
+  p->value = strdup(s);
   p->param = i;
   p->next = parameters;
   parameters = p;
@@ -1472,7 +1509,8 @@ int readdirection(char *s)
   x = strchr(s, '\n');
   if (x)
     *x = 0;
-  d->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  d->key = strdup(transliterate(buffer, sizeof(buffer), s));
+  d->value = strdup(s);
   d->dir = i;
   d->next = directions;
   directions = d;
@@ -1554,7 +1592,8 @@ int readhelp(char *s)
     break;
   default:
     h = cmalloc(sizeof(t_liste));
-    h->name = strdup(x);
+    h->key = strdup(x);
+    h->value = strdup(x);
     addlist(&help, h);
     break;
   }
@@ -1685,27 +1724,6 @@ static char *fgetbuffer(char *buf, int size, FILE * F)
 {
   char *s = fgets(buf, size, F);
 
-  if (s) {
-    unsigned char *p = (unsigned char *)s;
-
-    while (*s) {
-      ucs4_t ucs4;
-      size_t length;
-      int result = unicode_utf8_to_ucs4(&ucs4, s, &length);
-
-      if (result != 0) {
-        ++s;
-        *p++ = (unsigned char)'?';
-      } else {
-        if (ucs4 <= 0xff && ucs4 >= 0) {
-          *p++ = (unsigned char)ucs4;
-        }
-        s += length;
-      }
-    }
-    *p = 0;
-    return buf;
-  }
   return s;
 }
 
@@ -2048,7 +2066,8 @@ t_region *addregion(int x, int y, int pers)
     r->personen = pers;
     r->geld = 0;
     r->reserviert = 0;
-    r->name = strdup("Region");
+    r->key = strdup("Region");
+    r->value = strdup("Region");
     r->line_no = line_no;
     if (Regionen) {
       for (R = Regionen; R->next; R = R->next) ;        /* letzte Region der Liste  */
@@ -2155,7 +2174,7 @@ char *igetstr(char *s1)
   buf[i] = 0;
   if (i > 0 && buf[i - 1] == ';')
     /*
-     * Steht ein Semikolon direkt hinten dran, dies löschen 
+     * Steht ein Semikolon direkt hinten dran, dies löschen
      */
     buf[i - 1] = 0;
 
@@ -2169,7 +2188,7 @@ char *printkeyword(int key)
   while (k && k->keyword != key) {
     k = k->next;
   }
-  return (k && k->keyword == key) ? k->name : 0;
+  return (k && k->keyword == key) ? k->value : 0;
 }
 
 char *printdirection(int dir)
@@ -2179,7 +2198,7 @@ char *printdirection(int dir)
   while (d && d->dir != dir) {
     d = d->next;
   }
-  return d ? d->name : 0;
+  return d ? d->value : 0;
 }
 
 char *printparam(int par)
@@ -2188,15 +2207,15 @@ char *printparam(int par)
 
   while (p && p->param != par)
     p = p->next;
-  return p ? p->name : 0;
+  return p ? p->value : 0;
 }
 
 char *printliste(int key, t_liste * L)
 {
   t_liste *l;
 
-  for (l = L; key; l = l->next, key--) ;
-  return l->name;
+  for (l = L; key; l = l->next, key--);
+  return l->value;
 }
 
 #define getstr()  igetstr(NULL)
@@ -2283,7 +2302,7 @@ t_spell *findspell(char *s)
   if (!s[0] || !spells)
     return NULL;
   for (sp = spells; sp; sp = sp->next)
-    if (sp->name && !unicode_utf8_strncasecmp(sp->name, s, strlen(s)))
+    if (sp->key && !unicode_utf8_strncasecmp(sp->key, s, strlen(s)))
       return sp;
   return NULL;
 }
@@ -3031,7 +3050,7 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
     }
     return 0;
   }
-  qcat(sp->name);
+  qcat(sp->value);
 
   s=getstr();
   while (*s) {
@@ -3049,8 +3068,8 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
   } /* restliche Parameter ohne Check ausgeben */
 
   if (!(sp->typ & spell_typ)) {
-    sprintf(warn_buf, errtxt[ISCOMBATSPELL], sp->name,
-      (sp->typ & SP_ZAUBER) ? errtxt[ISNOTCOMBATSPELL] : "");
+    sprintf(warn_buf, errtxt[ISCOMBATSPELL], sp->value,
+            (sp->typ & SP_ZAUBER) ? errtxt[ISNOTCOMBATSPELL] : "");
     if (show_warnings > 0)      /* nicht bei -w0 */
       anerror(warn_buf);
   } else {
@@ -3885,8 +3904,8 @@ void check_money(bool do_move)
     if (do_move)
       for (r = Regionen; r; r = r->next) {
         if (r->reserviert > 0 && r->reserviert > r->geld) {     /* nur  explizit   mit  RESERVIERE  */
-          sprintf(warn_buf, errtxt[RESERVEDTOOMUCH], r->name,
-            r->x, r->y, r->reserviert, r->geld);
+          sprintf(warn_buf, errtxt[RESERVEDTOOMUCH], r->value,
+                  r->x, r->y, r->reserviert, r->geld);
           warn(warn_buf, r->line_no, 3);
         }
       }
@@ -4038,7 +4057,7 @@ void check_living(void)
         r->geld -= u->people * 10;
     if (r->geld < 0) {
       sprintf(warn_buf, errtxt[REGIONMISSSILVER],
-        r->name, r->x, r->y, -(r->geld));
+              r->value, r->x, r->y, -(r->geld));
       warn(warn_buf, r->line_no, 4);
     }
   }
@@ -4433,40 +4452,40 @@ checkanorder(char *Orders) {
     long_order();
     break;
 
-    case K_FORGET:
-      scat(printkeyword(K_FORGET));
-      s = getstr();
-      sk = findskill(s);
-      if (!*s || !sk)
-        anerror(errtxt[UNRECOGNIZEDSKILL]);
-      else {
-        Scat(sk->name);
-      }
-      break;
+  case K_FORGET:
+    scat(printkeyword(K_FORGET));
+    s = getstr();
+    sk = findskill(s);
+    if (!*s || !sk)
+      anerror(errtxt[UNRECOGNIZEDSKILL]);
+    else {
+      Scat(sk->value);
+    }
+    break;
 
-    case K_STUDY:
-      scat(printkeyword(K_STUDY));
-      s = getstr();
-      sk = findskill(s);
-      if (!*s || !sk)
-        anerror(errtxt[UNRECOGNIZEDSKILL]);
-      else {
-        Scat(sk->name);
-        if (strcasecmp(sk->name, errtxt[MAGIC])==0)
-          if (order_unit->people>1)
-            anerror(errtxt[ONEPERSONPERMAGEUNIT]);
+  case K_STUDY:
+    scat(printkeyword(K_STUDY));
+    s = getstr();
+    sk = findskill(s);
+    if (!*s || !sk)
+      anerror(errtxt[UNRECOGNIZEDSKILL]);
+    else {
+      Scat(sk->value);
+      if (unicode_utf8_strcasecmp(sk->value, errtxt[MAGIC]) == 0)
+        if (order_unit->people > 1)
+          anerror(errtxt[ONEPERSONPERMAGEUNIT]);
+    }
+    if (sk && !does_default) {
+      x = studycost(sk) * order_unit->people;
+      if (x) {
+        order_unit->money -= x;
+        order_unit->reserviert -= x;
       }
-      if (sk && !does_default) {
-        x=studycost(sk)*order_unit->people;
-        if (x) {
-          order_unit->money-=x;
-          order_unit->reserviert-=x;
-        }
-        addteach(NULL, order_unit);
-        order_unit->lernt=1;
-      }
-      long_order();
-      break;
+      addteach(NULL, order_unit);
+      order_unit->lernt = 1;
+    }
+    long_order();
+    break;
 
   case K_MAKE:
     checkmake();
@@ -4996,7 +5015,7 @@ void recurseprinthelp(t_liste * h)
 {
   if (h->next)
     recurseprinthelp(h->next);
-  fprintf(ERR, "%s\n", h->name);
+  fprintf(ERR, "%s\n", h->value);
 }
 
 void printhelp(int argc, char *argv[], int index)
@@ -5255,6 +5274,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
         if (dostop)             /* bei Optionen via "; ECHECK" nicht mehr  machen */
           printhelp(argc, argv, i);
         break;
+
       case 'R':                /* -R rules */
         if (argv[i][2] == 0) {
           i++;
@@ -5368,6 +5388,10 @@ void process_order_file(int *faction_count, int *unit_count)
   while (!befehle_ende) {
     switch (igetparam(order_buf)) {
     case P_LOCALE:
+      if (echo_it) {
+        fputs(order_buf, OUT);
+        putc('\n', OUT);
+      }
       x = getstr();
       get_order();
       break;
@@ -5413,16 +5437,22 @@ void process_order_file(int *faction_count, int *unit_count)
         x++;
         while (isspace(*x))
           x++;
-        if (r->name)
-          free(r->name);
-        r->name = strdup(x);
-        x = strchr(r->name, '\n');
+        if (r->key)
+          free(r->key);
+        if (r->value)
+          free(r->value);
+        r->key = strdup(x);
+        r->value = strdup(x);
+        x = strchr(r->key, '\n');
         if (x)
           *x = 0;
       } else {
-        if (r->name)
-          free(r->name);
-        r->name = strdup("");
+        if (r->key)
+          free(r->key);
+        if (r->value)
+          free(r->value);
+        r->key = strdup("");
+        r->value = strdup("");
       }
       get_order();
       break;
@@ -5490,8 +5520,10 @@ void process_order_file(int *faction_count, int *unit_count)
       check_teachings();
       while (Regionen) {
         r = Regionen->next;
-        if (Regionen->name)
-          free(Regionen->name);
+        if (Regionen->key)
+          free(Regionen->key);
+        if (Regionen->value)
+          free(Regionen->value);
         free(Regionen);
         Regionen = r;
       }
@@ -5520,6 +5552,7 @@ void process_order_file(int *faction_count, int *unit_count)
           awarning(errtxt[NOTEXECUTED], 1);
       }
       get_order();
+      break;
     }
   }                             /* end while !befehle_ende */
 
@@ -5593,40 +5626,40 @@ void inittokens(void)
 
   for (i = 0, it = itemdata; it; it = it->next, ++i)
     for (n = it->name; n; n = n->next)
-      addtoken(&tokens[UT_ITEM], n->txt, i);
+      addtoken(&tokens[UT_ITEM], n->key, i);
 
   for (p = parameters; p; p = p->next)
-    addtoken(&tokens[UT_PARAM], p->name, p->param);
+    addtoken(&tokens[UT_PARAM], p->key, p->param);
 
   for (i = 0, sk = skilldata; sk; sk = sk->next, ++i)
-    addtoken(&tokens[UT_SKILL], sk->name, i);
+    addtoken(&tokens[UT_SKILL], sk->key, i);
 
   for (i = 0, sp = spells; sp; sp = sp->next, ++i)
-    addtoken(&tokens[UT_SPELL], sp->name, i);
+    addtoken(&tokens[UT_SPELL], sp->key, i);
 
   for (i = 0, d = directions; d; d = d->next, ++i)
-    addtoken(&tokens[UT_DIRECTION], d->name, d->dir);
+    addtoken(&tokens[UT_DIRECTION], d->key, d->dir);
 
   for (kw = keywords; kw; kw = kw->next)
-    addtoken(&tokens[UT_KEYWORD], kw->name, kw->keyword);
+    addtoken(&tokens[UT_KEYWORD], kw->key, kw->keyword);
 
   for (i = 0, l = buildingtypes; l; l = l->next, ++i)
-    addtoken(&tokens[UT_BUILDING], l->name, i);
+    addtoken(&tokens[UT_BUILDING], l->key, i);
 
   for (i = 0, l = shiptypes; l; l = l->next, ++i)
-    addtoken(&tokens[UT_SHIP], l->name, i);
+    addtoken(&tokens[UT_SHIP], l->key, i);
 
   for (i = 0, l = herbdata; l; l = l->next, ++i)
-    addtoken(&tokens[UT_HERB], l->name, i);
+    addtoken(&tokens[UT_HERB], l->key, i);
 
   for (i = 0, l = potionnames; l; l = l->next, ++i)
-    addtoken(&tokens[UT_POTION], l->name, i);
+    addtoken(&tokens[UT_POTION], l->key, i);
 
   for (i = 0, l = Rassen; l; l = l->next, ++i)
-    addtoken(&tokens[UT_RACE], l->name, i);
+    addtoken(&tokens[UT_RACE], l->key, i);
 
   for (i = 0, l = options; l; l = l->next, ++i)
-    addtoken(&tokens[UT_OPTION], l->name, i);
+    addtoken(&tokens[UT_OPTION], l->key, i);
 }
 
 int main(int argc, char *argv[])
