@@ -107,10 +107,6 @@ const int filecount = sizeof (ECheck_Files) / sizeof (ECheck_Files[0]);
 static int verbose = 1;
 static int compact = 0;
 
-#ifdef _MSC_VER
-#include <crtdbg.h>
-#endif
-
 #ifndef BOOL_DEFINED
 #define BOOL_DEFINED
 #ifndef bool
@@ -2435,12 +2431,7 @@ getbuf (void) {
           if (*bp == '\\')
             cont = true;
           else
-#if !defined(AMIGA) && !defined(UMLAUTE)
           if (!iscntrl (*bp)) {
-#else
-          if ((unsigned char) (*bp) > 32) {
-#endif
-
             *(cp++) = *bp;
             eatwhite = (bool) ! quote;
           }
@@ -5636,11 +5627,5 @@ main (int argc, char *argv[]) {
 
   if (warning_count || error_count)
     fputs (errtxt[DISCOVERED], ERR);
-#ifdef AMIGA
-  if (error_count > 0)
-    return 10;                        /* FAIL beim AMIGA */
-  if (warning_count > 0)
-    return 5;                        /* WARN beim AMIGA */
-#endif
   return 0;
 }
