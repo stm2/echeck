@@ -1,7 +1,6 @@
 CC = gcc
 CFLAGS = -g -Wall
 # CFLAGS = -O2 -fomit-frame-pointer -Wall
-#LFLAGS = -s
 BINDIR = /usr/local/bin
 LIBDIR = /usr/local/lib/echeck
 
@@ -13,9 +12,9 @@ install: echeck
 	cp en/*.txt $(LIBDIR)/en
 
 tags:
-	@ctags *.c
+	@ctags *.c *.h
 
-echeck: echeck.c
+echeck: echeck.c config.h
 	$(CC) $(CFLAGS) $(LFLAGS) -o echeck echeck.c
 
 clean:

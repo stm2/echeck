@@ -20,33 +20,13 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <errno.h>
-#ifdef macintosh
-#include <console.h>                /* macintosh console handler */
-#endif
 #include <wchar.h>
 
-#if !defined(MACOSX)
-#if defined(__APPLE_CPP__) || defined(__APPLE_CC__) || defined(__APPLE__)
-#define MACOSX
-#endif
-#endif
+#include "config.h"
 
-#ifdef _MSC_VER
-#define strdup _strdup
-#define snprintf _snprintf
-#define stricmp _stricmp
-#define strnicmp _strnicmp
-#endif
-static const char *echeck_version = "4.3.2-6";
+static const char *echeck_version = "4.3.2-7";
 
-#if defined(unix)
-#define DEFAULT_PATH "/usr/local/lib/echeck:."
-#define PATH_DELIM ":"
-#else
 #define DEFAULT_PATH "."
-#define PATH_DELIM ";"
-#define UMLAUTE
-#endif
 
 enum {
   UT_NONE,
@@ -126,18 +106,6 @@ const t_ech_file ECheck_Files[] = {
 const int filecount = sizeof (ECheck_Files) / sizeof (ECheck_Files[0]);
 static int verbose = 1;
 static int compact = 0;
-
-#if __STDC__
-/*
- * strdup ist nicht ANSI 
- */
-#if !(defined __USE_SVID) && !(defined __USE_BSD) && !(defined __USE_XOPEN_EXTENDED)
-/*
- * ... ist aber unter Linux trotzdem definiert. 
- */
-#define strdup(s) (strcpy((char*)malloc(sizeof(char)*strlen(s)+1), s))
-#endif
-#endif
 
 #ifdef _MSC_VER
 #include <crtdbg.h>
