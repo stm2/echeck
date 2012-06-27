@@ -1161,7 +1161,8 @@ char *ItemName(int i, int plural)
   return item->name->txt;
 }
 
-FILE *path_fopen(const char *path_par, const char *file, const char *mode)
+FILE *path_fopen(const char *path_par, const char *rules, const char *file,
+  const char *mode)
 {
   char *pathw = strdup(path_par);
   char *token = strtok(pathw, PATH_DELIM);
@@ -1170,11 +1171,12 @@ FILE *path_fopen(const char *path_par, const char *file, const char *mode)
     char buf[1024];
     FILE *F;
 
-    if (echeck_rules) {
-      sprintf(buf, "%s/%s/%s/%s", token, echeck_rules, echeck_locale, file);
+    if (rules) {
+      sprintf(buf, "%s/%s/%s/%s", token, rules, echeck_locale, file);
     } else {
       sprintf(buf, "%s/%s/%s", token, echeck_locale, file);
     }
+
     F = fopen(buf, mode);
     if (F != NULL) {
       free(pathw);
@@ -1719,9 +1721,13 @@ void readafile(const char *fn, int typ)
   FILE *F;
   char *s, *x;
 
-  F = path_fopen(path, fn, "r");
-  if (!F)
-    return;
+  F = path_fopen(path, echeck_rules, fn, "r");
+  if (!F) {
+    F = path_fopen(path, "common", fn, "r");
+    if (!F) {
+      return;
+    }
+  }
   for (line = 1;; line++) {
     do {
       s = fgets(order_buf, MAXLINE, F);
