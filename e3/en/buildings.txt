@@ -19,4 +19,7 @@ dam
 caravanserai
 tunnel
 tavern
-university
+marketplace
+guard tower
+guard house
+watch
