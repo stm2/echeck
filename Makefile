@@ -1,15 +1,22 @@
 CC = gcc
 CFLAGS = -g -Wall -ansi
 # CFLAGS = -O2 -fomit-frame-pointer -Wall
-BINDIR = /usr/local/bin
-LIBDIR = /usr/local/lib/echeck
+ifeq ($(PREFIX),)
+PREFIX=/home/eressea/echeck
+endif
 
 all: echeck
 
 install: echeck
-	cp echeck $(BINDIR)
-	cp de/*.txt $(LIBDIR)/de
-	cp en/*.txt $(LIBDIR)/en
+	install -t $(PREFIX) echeck
+	install -d $(PREFIX)/e2/de
+	install -d $(PREFIX)/e2/en
+	install -d $(PREFIX)/e3/de
+	install -d $(PREFIX)/e3/en
+	install -t $(PREFIX)/e2/de e2/de/*.txt
+	install -t $(PREFIX)/e2/en e2/en/*.txt
+	install -t $(PREFIX)/e3/de e3/de/*.txt
+	install -t $(PREFIX)/e3/en e3/en/*.txt
 
 tags:
 	@ctags *.c *.h
