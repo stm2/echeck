@@ -316,6 +316,7 @@ static char *magiegebiet[] = {
 
 enum {
   P_ALLES,
+  P_EACH,
   P_PEASANT,
   P_CASTLE,
   P_BUILDING,
@@ -355,6 +356,7 @@ enum {
 
 static const char *Params[MAXPARAMS] = {
   "ALL",
+  "EACH",
   "PEASANTS",
   "CASTLE",
   "BUILDING",
@@ -2966,6 +2968,14 @@ void checkgiving(int key)
       if (findparam(s) == P_ALLES) {    /* GIB xx ALLES wasauchimmer */
         n = -1;
         Scat(printparam(P_ALLES));
+      } else if (findparam(s)==P_EACH) {
+        s=getstr();
+        n=atoi(s);
+        n*=order_unit->people;
+        if (n<1) {
+          anerror(errtxt[NUMMISSING]);
+          n=1;
+        }
       } else {
         anerror(errtxt[NUMMISSING]);
         n = 1;
@@ -3404,8 +3414,25 @@ void reserve(void)
     anerror(errtxt[TEMPUNITSCANTRESERVE]);
     return;
   }
-  n = geti();
-  icat(n);
+  
+  s=getstr();
+  n=atoi(s);
+  if (n<1) {
+    if (findparam(s)==P_EACH) {
+      s=getstr();
+      n=atoi(s);
+      n*=order_unit->people;
+      if (n<1) {
+        anerror(errtxt[NUMMISSING]);
+        n=1;
+      }
+    } else {
+      anerror(errtxt[NUMMISSING]);
+      n=1;
+    }
+  }
+  if (n>0) icat(n);
+
   s = getstr();
 
   if (!(*s)) {
