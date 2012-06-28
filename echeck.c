@@ -222,7 +222,6 @@ enum {
   K_EMAIL,
   K_RESERVE,
   K_BANNER,
-  K_OPINION,
   K_NUMBER,
   K_SCHOOL,
   K_PIRACY,
@@ -287,7 +286,6 @@ static char *Keywords[MAXKEYWORDS] = {
   "EMAIL",
   "RESERVE",
   "BANNER",
-  "OPINION",
   "NUMBER",
   "SCHOOL",
   "PIRACY",
@@ -1347,6 +1345,7 @@ int readkeywords(char *s)
     }
   }
   if (i == MAXKEYWORDS) {
+    fprintf(stderr, "Unknown keyword '%s'\n", s);
     return 0;
   }
   s = (char *)(x + 1);
@@ -3494,22 +3493,6 @@ int studycost(t_skills * talent)
   return talent->kosten;
 }
 
-void check_meinung(void)
-{
-  int i;
-
-  scat(printkeyword(K_OPINION));
-  i = geti();
-  if (i <= 0)
-    anerror(errtxt[ERRORSURVEY]);
-  icat(i);
-  i = geti();
-  if (i <= 0)
-    anerror(errtxt[ERROROPINION]);
-  icat(i);
-  checkstring(getstr(), DESCRIBESIZE, POSSIBLE);
-}
-
 void check_comment(void)
 {
   char *s;
@@ -3908,9 +3891,6 @@ void checkanorder(char *Orders)
       anerror(errtxt[WRONGNUMBER]);
     break;
 
-  case K_OPINION:
-    check_meinung();
-
   case K_BANNER:
     scat(printkeyword(K_BANNER));
     checkstring(getstr(), DESCRIBESIZE, NECESSARY);
@@ -3918,6 +3898,7 @@ void checkanorder(char *Orders)
 
   case K_EMAIL:
     checkemail();
+    break;
 
   case K_ORIGIN:
     scat(printkeyword(K_ORIGIN));
@@ -4021,6 +4002,18 @@ void checkanorder(char *Orders)
     if (findparam(s) == P_NOT) {
       Scat(printparam(P_NOT));
     }
+    break;
+
+  case K_PAY:
+    scat(printkeyword(K_PAY));
+    s = getstr();
+    if (findparam(s) == P_NOT) {
+      Scat(printparam(P_NOT));
+    }
+    break;
+
+  case K_ALLIANCE:
+    Scat(order_buf);
     break;
 
   case K_END:
