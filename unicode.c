@@ -101,7 +101,7 @@ unicode_latin1_to_utf8(utf8_t * dst, size_t * outlen, const char *in,
   return (int)*outlen;
 }
 
-int unicode_utf8_strcasecmp(const utf8_t * a, const utf8_t *b)
+int unicode_utf8_strcasecmp(const utf8_t * a, const utf8_t * b)
 {
   while (*a && *b) {
     int ret;
@@ -139,7 +139,7 @@ int unicode_utf8_strcasecmp(const utf8_t * a, const utf8_t *b)
   return 0;
 }
 
-int unicode_utf8_strncasecmp(const utf8_t * a, const utf8_t *b, size_t len)
+int unicode_utf8_strncasecmp(const utf8_t * a, const utf8_t * b, size_t len)
 {
   size_t parsed = 0;
   while (*a && *b) {
@@ -152,7 +152,7 @@ int unicode_utf8_strncasecmp(const utf8_t * a, const utf8_t *b, size_t len)
       if (ret != 0)
         return -1;
       a += size;
-      parsed +=size;
+      parsed += size;
     } else {
       ++a;
       ++parsed;
@@ -173,7 +173,7 @@ int unicode_utf8_strncasecmp(const utf8_t * a, const utf8_t *b, size_t len)
       if (ucsb > ucsa)
         return -1;
     }
-    if (parsed>=len) {
+    if (parsed >= len) {
       return 0;
     }
   }

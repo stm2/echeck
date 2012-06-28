@@ -128,7 +128,7 @@ static int compact = 0;
 FILE *ERR, *OUT = 0;
 
 int line_no,                    /* count line number */
-  filesread = 0;
+ filesread = 0;
 
 char echo_it = 0,               /* option: echo input lines */
   no_comment = -3,              /* Keine Infos in [] hinter EINHEIT */
@@ -146,11 +146,11 @@ char echo_it = 0,               /* option: echo input lines */
 int error_count = 0,            /* counter: errors */
   warning_count = 0;            /* counter: warnings */
 char order_buf[BUFSIZE],        /* current order line */
-  checked_buf[BUFSIZE],         /* checked order line */
-  message_buf[BUFSIZE],         /* messages are composed here */
-  warn_buf[BUFSIZE],            /* warnings are composed here */
-  indent, next_indent,          /* indent index */
-  does_default = 0,             /* Ist DEFAULT aktiv? */
+ checked_buf[BUFSIZE],          /* checked order line */
+ message_buf[BUFSIZE],          /* messages are composed here */
+ warn_buf[BUFSIZE],             /* warnings are composed here */
+ indent, next_indent,           /* indent index */
+ does_default = 0,              /* Ist DEFAULT aktiv? */
   befehle_ende,                 /* EOF der Befehlsdatei */
   *echeck_locale = "de", *filename;
 int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
@@ -957,8 +957,8 @@ teach *teachings = NULL;
 static unit *units = NULL;
 
 unit *order_unit,               /* Die Einheit, die gerade dran ist */
- *mother_unit,                  /* Die Einheit, die MACHE TEMP macht */
- *cmd_unit;                     /* Die Einheit, die gerade angesprochen  wird, z.B. mit GIB */
+*mother_unit,                   /* Die Einheit, die MACHE TEMP macht */
+*cmd_unit;                      /* Die Einheit, die gerade angesprochen  wird, z.B. mit GIB */
 
 t_region *Regionen = NULL;
 
@@ -978,8 +978,8 @@ int findstr(char **v, const char *s, int max);
 
 #define addlist(l, p)  (p->next=*l, *l=p)
 
-void *
-cmalloc(int n) {
+void *cmalloc(int n)
+{
   void *p;
 
   if (n == 0)
@@ -992,8 +992,8 @@ cmalloc(int n) {
   return p;
 }
 
-int
-Pow(int p) {
+int Pow(int p)
+{
   if (!p)
     return 1;
   else
@@ -1002,8 +1002,8 @@ Pow(int p) {
 
 static char nulls[] = "\0\0\0\0\0\0\0\0";
 
-const char *
-itob(int i) {
+const char *itob(int i)
+{
   char *dst;
   int b = i, x;
 
@@ -1016,9 +1016,9 @@ itob(int i) {
     b /= 36;
     dst--;
     if (x < 10)
-      *dst = (char) ('0' + x);
+      *dst = (char)('0' + x);
     else
-      *dst = (char) ('a' + (x - 10));
+      *dst = (char)('a' + (x - 10));
   }
   while (b > 0);
   return strdup(dst);
@@ -1027,8 +1027,8 @@ itob(int i) {
 #define scat(X) strcat(checked_buf, X)
 #define Scat(X) scat(" ");scat(X)
 
-void
-qcat(char *s) {
+void qcat(char *s)
+{
   char *x;
 
   x = strchr(s, ' ');
@@ -1041,24 +1041,24 @@ qcat(char *s) {
     scat("\"");
 }
 
-void
-icat(int n) {
+void icat(int n)
+{
   static char s[10];
 
   sprintf(s, " %d", n);
   scat(s);
 }
 
-void
-bcat(int n) {
+void bcat(int n)
+{
   static char s[10];
 
   sprintf(s, " %s", itob(n));
   scat(s);
 }
 
-int
-ItemPrice(int i) {
+int ItemPrice(int i)
+{
   static int ino = 0;
   static t_item *item = NULL, *it = NULL;
   int x;
@@ -1078,9 +1078,8 @@ ItemPrice(int i) {
       it = it->next;
     if (!it) {
       fprintf(ERR,
-              "Interner Fehler: ItemPrice %d (%d) nicht gefunden!\n"
-              "Internal Error: ItemPrice %d (%d) not found!\n", ino,
-              i, ino, i);
+        "Interner Fehler: ItemPrice %d (%d) nicht gefunden!\n"
+        "Internal Error: ItemPrice %d (%d) not found!\n", ino, i, ino, i);
       exit(123);
     }
     item = it;
@@ -1088,8 +1087,8 @@ ItemPrice(int i) {
   return item->preis;
 }
 
-char *
-ItemName(int i, int plural) {
+char *ItemName(int i, int plural)
+{
   static int ino = 0;
   static t_item *item = NULL, *it = NULL;
   int x;
@@ -1107,9 +1106,8 @@ ItemName(int i, int plural) {
       it = it->next;
     if (!it) {
       fprintf(ERR,
-              "Interner Fehler: ItemName %d (%d) nicht gefunden!\n"
-              "Internal Error: ItemName %d (%d) not found!\n", ino,
-              i, ino, i);
+        "Interner Fehler: ItemName %d (%d) nicht gefunden!\n"
+        "Internal Error: ItemName %d (%d) not found!\n", ino, i, ino, i);
       exit(123);
     }
     item = it;
@@ -1119,8 +1117,8 @@ ItemName(int i, int plural) {
   return item->name->txt;
 }
 
-FILE *
-path_fopen(const char *path_par, const char *file, const char *mode) {
+FILE *path_fopen(const char *path_par, const char *file, const char *mode)
+{
   char *pathw = strdup(path_par);
   char *token = strtok(pathw, PATH_DELIM);
 
@@ -1140,8 +1138,8 @@ path_fopen(const char *path_par, const char *file, const char *mode) {
   return NULL;
 }
 
-char *
-transliterate(char *out, size_t size, const char *in) {
+char *transliterate(char *out, size_t size, const char *in)
+{
   const char *src = in;
   char *dst = out;
 
@@ -1150,7 +1148,7 @@ transliterate(char *out, size_t size, const char *in) {
     size_t len;
     const char *p = src;
     while ((p + size > src) && *src && (~*src & 0x80)) {
-      *dst++ = (char) tolower(*src++);
+      *dst++ = (char)tolower(*src++);
     }
     len = src - p;
     size -= len;
@@ -1197,8 +1195,8 @@ transliterate(char *out, size_t size, const char *in) {
 }
 
 /** parsed einen String nach Zaubern */
-void
-readspell(char *s) {
+void readspell(char *s)
+{
   char *x;
   t_spell *sp;
   char buffer[128];
@@ -1217,7 +1215,7 @@ readspell(char *s) {
   }
   sp->name = strdup(transliterate(buffer, sizeof(buffer), s));
   if (x) {
-    s = (char *) (x + 1);
+    s = (char *)(x + 1);
     while (isspace(*s))
       s++;
     if (*s) {
@@ -1226,9 +1224,9 @@ readspell(char *s) {
       if (!x)
         x = strchr(s, ',');
       if (x) {
-        s = (char *) (x + 1);
+        s = (char *)(x + 1);
         if (*s)
-          sp->typ = (char) Pow(atoi(s));
+          sp->typ = (char)Pow(atoi(s));
       }
     }
   }
@@ -1236,8 +1234,8 @@ readspell(char *s) {
   spells = sp;
 }
 
-void
-readskill(char *s) {            /* parsed einen String nach Talenten */
+void readskill(char *s)
+{                               /* parsed einen String nach Talenten */
   char buffer[128];
   char *x;
   t_skills *sk;
@@ -1256,7 +1254,7 @@ readskill(char *s) {            /* parsed einen String nach Talenten */
   }
   sk->name = strdup(transliterate(buffer, sizeof(buffer), s));
   if (x) {
-    s = (char *) (x + 1);
+    s = (char *)(x + 1);
     while (isspace(*s))
       s++;
     if (*s)
@@ -1266,8 +1264,8 @@ readskill(char *s) {            /* parsed einen String nach Talenten */
   skilldata = sk;
 }
 
-int
-readitem(char *s) {             /* parsed einen String nach Items */
+int readitem(char *s)
+{                               /* parsed einen String nach Items */
   char buffer[128];
   char *x;
   t_item *it;
@@ -1300,7 +1298,7 @@ readitem(char *s) {             /* parsed einen String nach Items */
         it->name = nn;
     }
     if (x) {
-      s = (char *) (x + 1);
+      s = (char *)(x + 1);
       while (isspace(*s))
         s++;
     }
@@ -1313,8 +1311,8 @@ readitem(char *s) {             /* parsed einen String nach Items */
   return 1;
 }
 
-void
-readliste(char *s, t_liste ** L) {      /* parsed einen String nach einem Token */
+void readliste(char *s, t_liste ** L)
+{                               /* parsed einen String nach einem Token */
   char *x;
   t_liste *ls;
   char buffer[128];
@@ -1327,8 +1325,8 @@ readliste(char *s, t_liste ** L) {      /* parsed einen String nach einem Token 
   addlist(L, ls);
 }
 
-int
-readkeywords(char *s) {         /* parsed einen String nach Befehlen */
+int readkeywords(char *s)
+{                               /* parsed einen String nach Befehlen */
   char *x;
   t_keyword *k;
   int i;
@@ -1351,7 +1349,7 @@ readkeywords(char *s) {         /* parsed einen String nach Befehlen */
   if (i == MAXKEYWORDS) {
     return 0;
   }
-  s = (char *) (x + 1);
+  s = (char *)(x + 1);
   while (isspace(*s))
     s++;
   if (!s)
@@ -1366,8 +1364,8 @@ readkeywords(char *s) {         /* parsed einen String nach Befehlen */
   return 1;
 }
 
-int
-readparams(char *s) {           /* parsed einen String nach Parametern */
+int readparams(char *s)
+{                               /* parsed einen String nach Parametern */
   char buffer[128];
   char *x;
   t_params *p;
@@ -1386,7 +1384,7 @@ readparams(char *s) {           /* parsed einen String nach Parametern */
       break;
   if (i == MAXPARAMS)
     return 0;
-  s = (char *) (x + 1);
+  s = (char *)(x + 1);
   while (isspace(*s))
     s++;
   if (!s)
@@ -1401,8 +1399,8 @@ readparams(char *s) {           /* parsed einen String nach Parametern */
   return 1;
 }
 
-int
-readdirection(char *s) {        /* parsed einen String nach Richtungen */
+int readdirection(char *s)
+{                               /* parsed einen String nach Richtungen */
   char buffer[128];
   char *x;
   t_direction *d;
@@ -1421,7 +1419,7 @@ readdirection(char *s) {        /* parsed einen String nach Richtungen */
       break;
   if (i == MAXDIRECTIONS)
     return 0;
-  s = (char *) (x + 1);
+  s = (char *)(x + 1);
   while (isspace(*s))
     s++;
   if (!s)
@@ -1436,8 +1434,8 @@ readdirection(char *s) {        /* parsed einen String nach Richtungen */
   return 1;
 }
 
-int
-readerror(char *s) {
+int readerror(char *s)
+{
   int i;
   char *x;
 
@@ -1472,8 +1470,8 @@ readerror(char *s) {
   return 1;
 }
 
-int
-readhelp(char *s) {
+int readhelp(char *s)
+{
   int i;
   char *x;
   t_liste *h;
@@ -1518,8 +1516,8 @@ readhelp(char *s) {
   return 1;
 }
 
-int
-parsefile(char *s, int typ) {   /* ruft passende Routine auf */
+int parsefile(char *s, int typ)
+{                               /* ruft passende Routine auf */
   int ok;                       /* nicht alle Zeilenparser geben Wert  zurück */
   char *x, *y;
   int i;
@@ -1614,8 +1612,8 @@ parsefile(char *s, int typ) {   /* ruft passende Routine auf */
 }
 
 #ifdef MACOSX
-static void
-macify(unsigned char *s) {
+static void macify(unsigned char *s)
+{
 
   unsigned char translate[][2] = {
     {128, 196},                 /* Adieresis */
@@ -1638,12 +1636,12 @@ macify(unsigned char *s) {
 }
 #endif
 
-static char *
-fgetbuffer(char *buf, int size, FILE * F) {
+static char *fgetbuffer(char *buf, int size, FILE * F)
+{
   char *s = fgets(buf, size, F);
 
   if (s) {
-    unsigned char *p = (unsigned char *) s;
+    unsigned char *p = (unsigned char *)s;
 
     while (*s) {
       ucs4_t ucs4;
@@ -1652,10 +1650,10 @@ fgetbuffer(char *buf, int size, FILE * F) {
 
       if (result != 0) {
         ++s;
-        *p++ = (unsigned char) '?';
+        *p++ = (unsigned char)'?';
       } else {
         if (ucs4 <= 0xff && ucs4 >= 0) {
-          *p++ = (unsigned char) ucs4;
+          *p++ = (unsigned char)ucs4;
         }
         s += length;
       }
@@ -1666,8 +1664,8 @@ fgetbuffer(char *buf, int size, FILE * F) {
   return s;
 }
 
-void
-readafile(const char *fn, int typ) {
+void readafile(const char *fn, int typ)
+{
   int ok, line;
   FILE *F;
   char *s, *x;
@@ -1693,12 +1691,12 @@ readafile(const char *fn, int typ) {
     ok = parsefile(s, typ);
     if (!ok)
       fprintf(ERR, "Fehler in Datei %s Zeile %d: `%s'\n"
-              "Error in file %s line %d: `%s'\n", fn, line, s, fn, line, s);
+        "Error in file %s line %d: `%s'\n", fn, line, s, fn, line, s);
   }
 }
 
-void
-readfiles(int doall) {          /* liest externen Files */
+void readfiles(int doall)
+{                               /* liest externen Files */
   int i;
 
   if (doall)
@@ -1716,8 +1714,8 @@ readfiles(int doall) {          /* liest externen Files */
         readafile(ECheck_Files[i].name, ECheck_Files[i].type);
 }
 
-void
-porder(void) {
+void porder(void)
+{
   int i;
 
   if (echo_it) {
@@ -1740,8 +1738,8 @@ porder(void) {
     indent = next_indent;
 }
 
-char *
-wrap(char *s) {
+char *wrap(char *s)
+{
   int i, j, k, m, o = 0;
   static char buf[BUFSIZE];
 
@@ -1756,7 +1754,7 @@ wrap(char *s) {
 
   for (i = 0, j = 25; s[i]; i++, j++) { /* j=25: "Warnung zur Zeile xyz:" */
     if (j == m) {
-      for (k = i; !isspace(s[k]) && k > 0; k--);
+      for (k = i; !isspace(s[k]) && k > 0; k--) ;
       /*
        * findet man eine Leerstelle, wird sie durch '\n' ersetzt: 
        */
@@ -1797,8 +1795,8 @@ wrap(char *s) {
   return buf;
 }
 
-void
-Error(char *text, int line, char *order) {
+void Error(char *text, int line, char *order)
+{
   char bf[65];
 
   if (!order)
@@ -1811,7 +1809,7 @@ Error(char *text, int line, char *order) {
     switch (compile) {
     case OUT_NORMAL:
       fprintf(ERR, "%s %d: %s.\n  `%s'\n", errtxt[ERRORINLINE], line,
-              wrap(text), bf);
+        wrap(text), bf);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)|0|%s. `%s'\n", filename, line, text, bf);
@@ -1825,8 +1823,8 @@ Error(char *text, int line, char *order) {
 
 #define anerror(s)  Error(s, line_no, order_buf)
 
-int
-btoi(char *s) {
+int btoi(char *s)
+{
   char *x = s;
   int i = 0;
 
@@ -1843,7 +1841,7 @@ btoi(char *s) {
     return 1;
   }
 #ifdef HAVE_STRTOL
-  i = (int) (strtol(x, NULL, 36));
+  i = (int)(strtol(x, NULL, 36));
 #else
   while (isalnum(*s)) {
     i *= 36;
@@ -1859,8 +1857,8 @@ btoi(char *s) {
   return i;
 }
 
-const char *
-uid(unit * u) {
+const char *uid(unit * u)
+{
   static char *bf = NULL;
 
   if (!bf)
@@ -1869,8 +1867,8 @@ uid(unit * u) {
   return bf;
 }
 
-const char *
-Uid(int i) {
+const char *Uid(int i)
+{
   static char *bf = NULL;
   unit *u;
 
@@ -1888,8 +1886,8 @@ Uid(int i) {
   return bf;
 }
 
-void
-warn(char *s, int line, char level) {
+void warn(char *s, int line, char level)
+{
   if (warn_off)
     return;
   if (level > show_warnings)
@@ -1910,8 +1908,8 @@ warn(char *s, int line, char level) {
   }
 }
 
-void
-warning(char *s, int line, char *order, char level) {
+void warning(char *s, int line, char *order, char level)
+{
   char bf[65];
 
   strncpy(bf, order, 65);
@@ -1925,7 +1923,7 @@ warning(char *s, int line, char *order, char level) {
     switch (compile) {
     case OUT_NORMAL:
       fprintf(ERR, "%s %d: %s.\n  `%s'\n", errtxt[WARNINGLINE], line,
-              wrap(s), bf);
+        wrap(s), bf);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)%d|%s. `%s'\n", filename, line, level, s, bf);
@@ -1939,10 +1937,10 @@ warning(char *s, int line, char *order, char level) {
 
 #define awarning(s, level) warning(s, line_no, order_buf, level)
 
-void
-checkstring(char *s, size_t l, int type) {
+void checkstring(char *s, size_t l, int type)
+{
   if (l > 0 && strlen(s) > l) {
-    sprintf(warn_buf, errtxt[TEXTTOOLONG], (int) (l));
+    sprintf(warn_buf, errtxt[TEXTTOOLONG], (int)(l));
     awarning(warn_buf, 2);
   }
   if (s[0] == 0 && type == NECESSARY)
@@ -1973,8 +1971,8 @@ int from_temp_unit_no;
 
 #define val(x)  (x!=0)
 
-unit *
-find_unit(int i, int t) {
+unit *find_unit(int i, int t)
+{
   unit *u;
 
   for (u = units; u; u = u->next)
@@ -1983,8 +1981,8 @@ find_unit(int i, int t) {
   return u;
 }
 
-t_region *
-addregion(int x, int y, int pers) {
+t_region *addregion(int x, int y, int pers)
+{
   static t_region *r = NULL, *R;
 
   if (!r || r->x != x || r->y != y) {
@@ -2003,7 +2001,7 @@ addregion(int x, int y, int pers) {
     r->name = strdup("Region");
     r->line_no = line_no;
     if (Regionen) {
-      for (R = Regionen; R->next; R = R->next); /* letzte Region der Liste  */
+      for (R = Regionen; R->next; R = R->next) ;        /* letzte Region der Liste  */
       R->next = r;              /* Region hinten dranklemmen */
     } else
       Regionen = r;
@@ -2012,8 +2010,8 @@ addregion(int x, int y, int pers) {
   return r;
 }
 
-void
-addteach(unit * teacher, unit * student) {
+void addteach(unit * teacher, unit * student)
+{
   teach *t, **teachlist = &teachings;
 
   for (t = teachings; t; t = t->next) {
@@ -2035,8 +2033,8 @@ addteach(unit * teacher, unit * student) {
   addlist(teachlist, t);
 }
 
-unit *
-newunit(int n, int t) {
+unit *newunit(int n, int t)
+{
   unit *u = find_unit(n, t), *c;
 
   if (!u) {
@@ -2049,7 +2047,7 @@ newunit(int n, int t) {
     u->newy = Ry;
     u->temp = t;
     if (units) {
-      for (c = units; c->next; c = c->next);    /* letzte unit der Liste */
+      for (c = units; c->next; c = c->next) ;   /* letzte unit der Liste */
       c->next = u;              /* unit hinten dranklemmen */
     } else
       units = u;
@@ -2057,7 +2055,7 @@ newunit(int n, int t) {
 
   if (u->temp < 0) {
     sprintf(warn_buf, errtxt[ISUSEDIN2REGIONS], itob(u->no), Rx, Ry,
-            u->newx, u->newy, u->start_of_orders_line);
+      u->newx, u->newy, u->start_of_orders_line);
     anerror(warn_buf);
     u->long_order_line = 0;
   }
@@ -2073,8 +2071,8 @@ newunit(int n, int t) {
   return u;
 }
 
-int
-atoip(char *s) {
+int atoip(char *s)
+{
   int n;
 
   n = atoi(s);
@@ -2083,8 +2081,8 @@ atoip(char *s) {
   return n;
 }
 
-char *
-igetstr(char *s1) {
+char *igetstr(char *s1)
+{
   int i;
   static char *s;
   static char buf[BUFSIZE];
@@ -2094,7 +2092,7 @@ igetstr(char *s1) {
   while (*s == SPACE)
     s++;
 
-  for (i = 0; *s && *s != SPACE && i < (int) sizeof(buf); i++, s++) {
+  for (i = 0; *s && *s != SPACE && i < (int)sizeof(buf); i++, s++) {
     buf[i] = *s;
 
     if (*s == SPACE_REPLACEMENT) {
@@ -2114,8 +2112,8 @@ igetstr(char *s1) {
   return buf;
 }
 
-char *
-printkeyword(int key) {
+char *printkeyword(int key)
+{
   t_keyword *k = keywords;
 
   while (k && k->keyword != key) {
@@ -2124,8 +2122,8 @@ printkeyword(int key) {
   return (k && k->keyword == key) ? k->name : 0;
 }
 
-char *
-printdirection(int dir) {
+char *printdirection(int dir)
+{
   t_direction *d = directions;
 
   while (d && d->dir != dir) {
@@ -2134,8 +2132,8 @@ printdirection(int dir) {
   return d ? d->name : 0;
 }
 
-char *
-printparam(int par) {
+char *printparam(int par)
+{
   t_params *p = parameters;
 
   while (p && p->param != par)
@@ -2143,11 +2141,11 @@ printparam(int par) {
   return p ? p->name : 0;
 }
 
-char *
-printliste(int key, t_liste * L) {
+char *printliste(int key, t_liste * L)
+{
   t_liste *l;
 
-  for (l = L; key; l = l->next, key--);
+  for (l = L; key; l = l->next, key--) ;
   return l->name;
 }
 
@@ -2156,8 +2154,8 @@ printliste(int key, t_liste * L) {
 #define geti()  atoi(igetstr(NULL))
 #define getI()  btoi(igetstr(NULL))
 
-int
-findstr(char **v, const char *s, int max) {
+int findstr(char **v, const char *s, int max)
+{
   int i;
   size_t ss = strlen(s);
 
@@ -2169,8 +2167,8 @@ findstr(char **v, const char *s, int max) {
   return -1;
 }
 
-int
-findtoken(const char *token, int type) {
+int findtoken(const char *token, int type)
+{
   tnode *tk = &tokens[type];
   char buffer[1024];
   const char *str;
@@ -2188,9 +2186,9 @@ findtoken(const char *token, int type) {
     at_cmd = 0;
 
   while (*str) {
-    char c = (char) tolower((unsigned char) *str);
+    char c = (char)tolower((unsigned char)*str);
 
-    tk = tk->next[((unsigned char) c) % 32];
+    tk = tk->next[((unsigned char)c) % 32];
     while (tk && tk->c != c)
       tk = tk->nexthash;
     if (!tk)
@@ -2203,8 +2201,8 @@ findtoken(const char *token, int type) {
     return -1;
 }
 
-int
-findparam(const char *s) {
+int findparam(const char *s)
+{
   int p;
 
   if (!*s)
@@ -2218,8 +2216,8 @@ findparam(const char *s) {
   return -1;
 }
 
-int
-isparam(char *s, int i, char print) {
+int isparam(char *s, int i, char print)
+{
   if (i != findparam(s))
     return 0;
   if (print) {
@@ -2228,8 +2226,8 @@ isparam(char *s, int i, char print) {
   return 1;
 }
 
-t_spell *
-findspell(char *s) {
+t_spell *findspell(char *s)
+{
   t_spell *sp;
 
   if (!s[0] || !spells)
@@ -2240,8 +2238,8 @@ findspell(char *s) {
   return NULL;
 }
 
-t_skills *
-findskill(char *s) {
+t_skills *findskill(char *s)
+{
   int i;
   t_skills *sk = skilldata;
 
@@ -2264,8 +2262,8 @@ findskill(char *s) {
 #define getparam()  findparam(getstr())
 #define igetparam(s)  findparam(igetstr(s))
 
-int
-finddirection(char *s) {
+int finddirection(char *s)
+{
   if (!*s)
     return -2;
   if (strcmp(s, "//") == 0)     /* "NACH NW NO NO // nach Xontormia" ist *   erlaubt */
@@ -2279,8 +2277,8 @@ finddirection(char *s) {
 
 #define findkeyword(s)  findtoken(s, UT_KEYWORD)
 
-char *
-getbuf(void) {
+char *getbuf(void)
+{
   char lbuf[MAXLINE];
   bool cont = false;
   bool quote = false;
@@ -2329,7 +2327,7 @@ getbuf(void) {
             ++bp;
           }
           while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE
-                 && isspace(*bp));
+            && isspace(*bp));
         }
       } else {
         cont = false;
@@ -2366,8 +2364,8 @@ getbuf(void) {
   return warn_buf;
 }
 
-void
-get_order(void) {
+void get_order(void)
+{
   char *buf;
   bool ok = false;
 
@@ -2387,8 +2385,8 @@ get_order(void) {
   }
 }
 
-void
-getafaction(char *s) {
+void getafaction(char *s)
+{
   int i;
 
   i = btoi(s);
@@ -2401,8 +2399,8 @@ getafaction(char *s) {
   }
 }
 
-int
-getmoreunits(bool partei) {
+int getmoreunits(bool partei)
+{
   char *s;
   int i, count, temp;
   unit *u;
@@ -2445,8 +2443,8 @@ getmoreunits(bool partei) {
   return count;
 }
 
-int
-getaunit(int type) {
+int getaunit(int type)
+{
   char *s, is_temp = 0;
   int i;
 
@@ -2494,8 +2492,8 @@ getaunit(int type) {
   return 1;
 }
 
-void
-copy_unit(unit * from, unit * to) {
+void copy_unit(unit * from, unit * to)
+{
   to->no = from->no;
   to->people = from->people;
   to->money = from->money;
@@ -2513,8 +2511,8 @@ copy_unit(unit * from, unit * to) {
   to->lernt = from->lernt;
 }
 
-void
-checkemail(void) {
+void checkemail(void)
+{
   char *s, *addr;
   char bf[200];
 
@@ -2541,21 +2539,21 @@ checkemail(void) {
  * Check auf langen Befehl usw. - aus ACheck.c 4.1 
  */
 
-void
-end_unit_orders(void) {
+void end_unit_orders(void)
+{
   if (!order_unit)              /* Für den ersten Befehl der ersten *  Einheit. */
     return;
 
   if (order_unit->lives > 0 && !order_unit->long_order_line
-      && order_unit->people > 0) {
+    && order_unit->people > 0) {
     sprintf(warn_buf, errtxt[LONGORDERMISSING], uid(order_unit));
     warning(warn_buf, order_unit->start_of_orders_line,
-            order_unit->start_of_orders, 2);
+      order_unit->start_of_orders, 2);
   }
 }
 
-void
-orders_for_unit(int i, unit * u) {
+void orders_for_unit(int i, unit * u)
+{
   unit *t;
   char *k, *j, *e;
   int s;
@@ -2565,7 +2563,7 @@ orders_for_unit(int i, unit * u) {
 
   if (u->start_of_orders_line) {
     sprintf(warn_buf, errtxt[UNITALREADYHASORDERS],
-            uid(u), u->start_of_orders_line);
+      uid(u), u->start_of_orders_line);
     do {
       i++;
       if (i < 1)
@@ -2658,14 +2656,14 @@ orders_for_unit(int i, unit * u) {
   addregion(Rx, Ry, u->people);
 }
 
-void
-orders_for_temp_unit(unit * u) {
+void orders_for_temp_unit(unit * u)
+{
   if (u->start_of_orders_line && u->region == Regionen) {
     /*
      * in Regionen steht die aktuelle Region drin 
      */
     sprintf(warn_buf, errtxt[ALREADYUSEDINLINE],
-            itob(u->no), u->start_of_orders_line);
+      itob(u->no), u->start_of_orders_line);
     anerror(warn_buf);
     /*
      * return; Trotzdem kein return, damit die Befehle ordnungsgemäß
@@ -2687,8 +2685,8 @@ orders_for_temp_unit(unit * u) {
   order_unit = u;
 }
 
-void
-long_order(void) {
+void long_order(void)
+{
   char *s, *q;
   int i;
 
@@ -2716,7 +2714,7 @@ long_order(void) {
        */
     }
     if ((i == K_FOLLOW && this_command != K_FOLLOW) ||
-        (i != K_FOLLOW && this_command == K_FOLLOW))
+      (i != K_FOLLOW && this_command == K_FOLLOW))
       return;                   /* FOLGE ist nur Trigger */
 
     if (strlen(order_unit->long_order) > DESCRIBESIZE + NAMESIZE)
@@ -2725,8 +2723,7 @@ long_order(void) {
      * zu lange Befehle kappen 
      */
     sprintf(warn_buf, errtxt[UNITALREADYHASLONGORDERS],
-            uid(order_unit), order_unit->long_order_line,
-            order_unit->long_order);
+      uid(order_unit), order_unit->long_order_line, order_unit->long_order);
     awarning(warn_buf, 1);
   } else {
     order_unit->long_order = strdup(order_buf);
@@ -2734,8 +2731,8 @@ long_order(void) {
   }
 }
 
-void
-checknaming(void) {
+void checknaming(void)
+{
   int i;
   char *s;
 
@@ -2774,8 +2771,8 @@ checknaming(void) {
   }
 }
 
-void
-checkdisplay(void) {
+void checkdisplay(void)
+{
   int i;
 
   scat(printkeyword(K_DESCRIBE));
@@ -2801,8 +2798,8 @@ checkdisplay(void) {
   }
 }
 
-void
-check_leave(void) {
+void check_leave(void)
+{
   unit *t, *T = NULL;
   int s;
 
@@ -2825,8 +2822,8 @@ check_leave(void) {
   }
 }
 
-void
-checkenter(void) {
+void checkenter(void)
+{
   int i, n;
   unit *u;
 
@@ -2862,8 +2859,8 @@ checkenter(void) {
   }
 }
 
-int
-getaspell(char *s, char spell_typ, unit * u, int reallycast) {
+int getaspell(char *s, char spell_typ, unit * u, int reallycast)
+{
   t_spell *sp;
   int p;
 
@@ -2916,7 +2913,7 @@ getaspell(char *s, char spell_typ, unit * u, int reallycast) {
   qcat(sp->name);
   if (!(sp->typ & spell_typ)) {
     sprintf(warn_buf, errtxt[ISCOMBATSPELL], sp->name,
-            (sp->typ & SP_ZAUBER) ? errtxt[ISNOTCOMBATSPELL] : "");
+      (sp->typ & SP_ZAUBER) ? errtxt[ISNOTCOMBATSPELL] : "");
     if (show_warnings > 0)      /* nicht bei -w0 */
       anerror(warn_buf);
   } else {
@@ -2950,8 +2947,8 @@ getaspell(char *s, char spell_typ, unit * u, int reallycast) {
   return 1;
 }
 
-void
-checkgiving(int key) {
+void checkgiving(int key)
+{
   char *s;
   int i, n;
 
@@ -2959,8 +2956,8 @@ checkgiving(int key) {
   getaunit(NECESSARY);
   s = getstr();
   if (!getaspell(s, SP_ALL, NULL, 0)
-      && !isparam(s, P_CONTROL, 1)
-      && !isparam(s, P_HERBS, 1) && !isparam(s, P_UNIT, 1)) {
+    && !isparam(s, P_CONTROL, 1)
+    && !isparam(s, P_HERBS, 1) && !isparam(s, P_UNIT, 1)) {
     n = atoi(s);
     if (n < 1) {
       if (findparam(s) == P_ALLES) {    /* GIB xx ALLES wasauchimmer */
@@ -3066,13 +3063,12 @@ checkgiving(int key) {
     if (order_unit->ship && !does_default) {
       if (order_unit->ship > 0) {
         sprintf(warn_buf, errtxt[UNITMISSCONTROL], uid(order_unit),
-                itob(order_unit->ship));
+          itob(order_unit->ship));
         awarning(warn_buf, 4);
       } else if (cmd_unit) {
         if (cmd_unit->ship != 0 && abs(cmd_unit->ship) != -order_unit->ship) {
           sprintf(warn_buf, errtxt[UNITNOTONSHIPBUTONSHIP],
-                  uid(cmd_unit), itob(-order_unit->ship),
-                  itob(abs(cmd_unit->ship)));
+            uid(cmd_unit), itob(-order_unit->ship), itob(abs(cmd_unit->ship)));
           awarning(warn_buf, 4);
         }
         cmd_unit->ship = order_unit->ship;
@@ -3086,8 +3082,8 @@ checkgiving(int key) {
   }
 }
 
-void
-getluxuries(int cmd) {
+void getluxuries(int cmd)
+{
   char *s;
   int n, i;
 
@@ -3123,8 +3119,8 @@ getluxuries(int cmd) {
   }
 }
 
-void
-checkmake(void) {
+void checkmake(void)
+{
   int i, j = 0, k = 0;
   char *s;
   char bf[200];
@@ -3189,7 +3185,7 @@ checkmake(void) {
     k = getdirection();
     if (k < 0) {
       sprintf(bf, "%s %s %s", printkeyword(K_MAKE),
-              printparam(P_ROAD), errtxt[DIRECTION]);
+        printparam(P_ROAD), errtxt[DIRECTION]);
       anerror(bf);
     } else
       Scat(printdirection(k));
@@ -3265,8 +3261,8 @@ checkmake(void) {
    */
 }
 
-void
-checkdirections(int key) {
+void checkdirections(int key)
+{
   int i, count = 0, x, y, sx, sy, rx, ry;
 
   rx = sx = x = Rx;
@@ -3348,8 +3344,8 @@ checkdirections(int key) {
   }
 }
 
-void
-check_sabotage(void) {
+void check_sabotage(void)
+{
   if (getparam() != P_SHIP) {
     anerror(errtxt[ONLYSABOTAGESHIP]);
     return;
@@ -3358,8 +3354,8 @@ check_sabotage(void) {
   return;
 }
 
-void
-checkmail(void) {
+void checkmail(void)
+{
   char *s;
 
   scat(printkeyword(K_MESSAGE));
@@ -3394,8 +3390,8 @@ checkmail(void) {
   checkstring(s, 0, NECESSARY);
 }
 
-void
-reserve(void) {
+void reserve(void)
+{
   char *s;
   int i, n;
 
@@ -3439,8 +3435,8 @@ reserve(void) {
   }
 }
 
-void
-check_ally(void) {
+void check_ally(void)
+{
   int i;
   char *s;
 
@@ -3471,8 +3467,8 @@ check_ally(void) {
   }
 }
 
-int
-studycost(t_skills * talent) {
+int studycost(t_skills * talent)
+{
   if (does_default)
     return 0;
   if (talent->kosten < 0) {
@@ -3498,8 +3494,8 @@ studycost(t_skills * talent) {
   return talent->kosten;
 }
 
-void
-check_meinung(void) {
+void check_meinung(void)
+{
   int i;
 
   scat(printkeyword(K_OPINION));
@@ -3514,8 +3510,8 @@ check_meinung(void) {
   checkstring(getstr(), DESCRIBESIZE, POSSIBLE);
 }
 
-void
-check_comment(void) {
+void check_comment(void)
+{
   char *s;
   int m;
 
@@ -3534,11 +3530,11 @@ check_comment(void) {
   }
   if (strnicmp(s, "LOHN", 4) == 0 || strnicmp(s, "WAGE", 4) == 0) {     /* LOHN   für   Arbeit  */
     m = geti();
-    lohn = (char) MAX(10, m);
+    lohn = (char)MAX(10, m);
     return;
   }
   if (strnicmp(s, "ROUT", 4) == 0) {    /* ROUTe */
-    noroute = (char) (1 - noroute);
+    noroute = (char)(1 - noroute);
     return;
   }
   if (strnicmp(s, "KOMM", 4) == 0 || strnicmp(s, "COMM", 4) == 0) {     /* KOMMando  */
@@ -3572,8 +3568,8 @@ check_comment(void) {
   }
 }
 
-void
-check_money(bool do_move) {     /* do_move=true: vor der Bewegung,  anschließend */
+void check_money(bool do_move)
+{                               /* do_move=true: vor der Bewegung,  anschließend */
   unit *u, *t;                  /* Bewegung ausführen, damit das Silber  bewegt wird */
   t_region *r;
   int i, x, y, um;
@@ -3598,8 +3594,7 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,  anschließen
         warn(warn_buf, u->line_no, 3);
       }
 
-      if (u->people == 0
-          && ((!nolost && !u->temp && u->money > 0) || u->temp)) {
+      if (u->people == 0 && ((!nolost && !u->temp && u->money > 0) || u->temp)) {
         if (u->temp) {
           if (u->money > 0)
             sprintf(warn_buf, errtxt[UNITHASNTPERSONS], itob(u->no));
@@ -3642,7 +3637,7 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,  anschließen
       for (r = Regionen; r; r = r->next) {
         if (r->reserviert > 0 && r->reserviert > r->geld) {     /* nur  explizit   mit  RESERVIERE  */
           sprintf(warn_buf, errtxt[RESERVEDTOOMUCH], r->name,
-                  r->x, r->y, r->reserviert, r->geld);
+            r->x, r->y, r->reserviert, r->geld);
           warn(warn_buf, r->line_no, 3);
         }
       }
@@ -3666,14 +3661,13 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,  anschließen
       }
       if (u->money < 0) {
         sprintf(warn_buf, errtxt[UNITHASSILVER],
-                uid(u), do_move ? errtxt[BEFOREINCOME] : "", u->money);
+          uid(u), do_move ? errtxt[BEFOREINCOME] : "", u->money);
         warn(warn_buf, u->line_no, 3);
         if (u->unterhalt) {
           if (do_move)
             sprintf(warn_buf, errtxt[BUILDINGNEEDSSILVER], uid(u), -u->money);
           else
-            sprintf(warn_buf, errtxt[CANTMAINTAINBUILDING],
-                    uid(u), -u->money);
+            sprintf(warn_buf, errtxt[CANTMAINTAINBUILDING], uid(u), -u->money);
           warn(warn_buf, u->line_no, 1);
         }
       }
@@ -3773,8 +3767,8 @@ check_money(bool do_move) {     /* do_move=true: vor der Bewegung,  anschließen
   }
 }
 
-void
-check_living(void) {
+void check_living(void)
+{
   unit *u;
   t_region *r;
 
@@ -3795,14 +3789,14 @@ check_living(void) {
         r->geld -= u->people * 10;
     if (r->geld < 0) {
       sprintf(warn_buf, errtxt[REGIONMISSSILVER],
-              r->name, r->x, r->y, -(r->geld));
+        r->name, r->x, r->y, -(r->geld));
       warn(warn_buf, r->line_no, 4);
     }
   }
 }
 
-void
-remove_temp(void) {
+void remove_temp(void)
+{
   /*
    * Markiert das TEMP-Flag von Einheiten der letzten Region -> falsche
    * TEMP-Nummern bei GIB oder so fallen auf 
@@ -3813,8 +3807,8 @@ remove_temp(void) {
     u->temp = -u->temp;
 }
 
-void
-check_teachings(void) {
+void check_teachings(void)
+{
   teach *t;
   unit *u;
   int n;
@@ -3869,14 +3863,14 @@ check_teachings(void) {
     }
     if (u->schueler > 0) {
       sprintf(warn_buf, errtxt[UNITNEEDSTEACHERS],
-              uid(u), (u->schueler + 9) / 10);
+        uid(u), (u->schueler + 9) / 10);
       warn(warn_buf, u->line_no, 5);
     }
   }
 }
 
-void
-checkanorder(char *Orders) {
+void checkanorder(char *Orders)
+{
   int i, x;
   char *s;
   t_skills *sk;
@@ -3904,8 +3898,8 @@ checkanorder(char *Orders) {
     scat(printkeyword(K_NUMBER));
     i = getparam();
     if (!
-        (i == P_UNIT || i == P_SHIP || i == P_BUILDING || i == P_CASTLE
-         || i == P_FACTION)) {
+      (i == P_UNIT || i == P_SHIP || i == P_BUILDING || i == P_CASTLE
+        || i == P_FACTION)) {
       anerror(errtxt[ORDERNUMBER]);
       break;
     }
@@ -4251,7 +4245,7 @@ checkanorder(char *Orders) {
       icat(i);
     else
       i = 20 * order_unit->people;
-    while (*igetstr(NULL));
+    while (*igetstr(NULL)) ;
     long_order();
     if (!does_default)
       order_unit->money += i;
@@ -4420,7 +4414,7 @@ checkanorder(char *Orders) {
     porder();
     checkanorder(s);
     does_default = 2;
-    while (getstr()[0]);
+    while (getstr()[0]) ;
     copy_unit(u, order_unit);
     u->no = -1;
     u->long_order_line = 0;
@@ -4464,7 +4458,7 @@ checkanorder(char *Orders) {
     s = getstr();
     if (*s) {
       if (unicode_utf8_strncasecmp(s, printparam(P_BEFORE), strlen(s)) == 0 ||
-          unicode_utf8_strncasecmp(s, printparam(P_AFTER), strlen(s)) == 0) {
+        unicode_utf8_strncasecmp(s, printparam(P_AFTER), strlen(s)) == 0) {
         Scat(s);
         i = getaunit(NECESSARY);
         if (i == 1 || i == 3)   /* normale oder TEMP-Einheit: ok */
@@ -4493,8 +4487,8 @@ checkanorder(char *Orders) {
   }
 }
 
-void
-readaunit(void) {
+void readaunit(void)
+{
   int i;
   unit *u;
 
@@ -4555,8 +4549,8 @@ readaunit(void) {
   }
 }
 
-int
-readafaction(void) {
+int readafaction(void)
+{
   int i;
   char *s;
 
@@ -4582,8 +4576,8 @@ readafaction(void) {
   return i;
 }
 
-void
-help_keys(char key) {
+void help_keys(char key)
+{
   int i, j;
 
   switch (key) {
@@ -4631,23 +4625,23 @@ help_keys(char key) {
   exit(0);
 }
 
-void
-recurseprinthelp(t_liste * h) {
+void recurseprinthelp(t_liste * h)
+{
   if (h->next)
     recurseprinthelp(h->next);
   fprintf(ERR, "%s\n", h->name);
 }
 
-void
-printhelp(int argc, char *argv[], int index) {
+void printhelp(int argc, char *argv[], int index)
+{
 
   if (!help_caption)
     readfiles(0);               /* evtl. ist anderes echeck_locale  gesetzt; darum _jetzt_ lesen */
 
   if (!help_caption) {
     fprintf(ERR, "\n  **  ECheck V%s, %s  **\n\n"
-            " kann keine Datei lesen!  -  can't read any file!\n\n Pfad / Path: '%s/%s'\n\n",
-            echeck_version, __DATE__, path, echeck_locale);
+      " kann keine Datei lesen!  -  can't read any file!\n\n Pfad / Path: '%s/%s'\n\n",
+      echeck_version, __DATE__, path, echeck_locale);
     help_keys('f');
   }
 
@@ -4665,8 +4659,8 @@ printhelp(int argc, char *argv[], int index) {
   exit(1);
 }
 
-int
-check_options(int argc, char *argv[], char dostop, char command_line) {
+int check_options(int argc, char *argv[], char dostop, char command_line)
+{
   int i;
   char *x;
 
@@ -4685,7 +4679,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
               exit(1);
             }
           } else /* -Ppath */ if (*(argv[i] + 2))
-            path = strdup((char *) (argv[i] + 2));
+            path = strdup((char *)(argv[i] + 2));
         }
         break;
 
@@ -4712,7 +4706,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
             x++;
             if (show_warnings > 1) {
               fprintf(stderr, "Falsche ECheck-Version / "
-                      "Wrong ECheck-Version: %s\n", argv[i] + 2);
+                "Wrong ECheck-Version: %s\n", argv[i] + 2);
             }
           }
         }
@@ -4740,9 +4734,8 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
             rec_cost = atoi(argv[i]);
           else if (verbose)
             fprintf(stderr,
-                    "Fehlende Rekrutierungskosten, auf %d gesetzt\n"
-                    "Missing recruiting costs, set to %d",
-                    rec_cost, rec_cost);
+              "Fehlende Rekrutierungskosten, auf %d gesetzt\n"
+              "Missing recruiting costs, set to %d", rec_cost, rec_cost);
         } else
           rec_cost = atoi(argv[i] + 2);
         break;
@@ -4781,16 +4774,15 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
           if (!x) {
             fputs
               ("Keine Datei für Fehler-Texte, stderr benutzt\n"
-               "Using stderr for error output\n", stderr);
+              "Using stderr for error output\n", stderr);
             ERR = stderr;
             break;
           }
           ERR = fopen(x, "w");
           if (!ERR) {
             fprintf(stderr,
-                    "Kann Datei `%s' nicht schreiben:\n"
-                    "Can't write to file `%s':\n" " %s", x, x,
-                    strerror(errno));
+              "Kann Datei `%s' nicht schreiben:\n"
+              "Can't write to file `%s':\n" " %s", x, x, strerror(errno));
             exit(0);
           }
         }
@@ -4807,16 +4799,15 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
           if (!x) {
             fputs
               ("Leere Datei für 'geprüfte Datei', stdout benutzt\n"
-               "Empty file for checked file, using stdout\n", stderr);
+              "Empty file for checked file, using stdout\n", stderr);
             OUT = stdout;
             break;
           }
           OUT = fopen(x, "w");
           if (!OUT) {
             fprintf(stderr,
-                    "Kann Datei `%s' nicht schreiben:\n"
-                    "Can't write to file `%s':\n" " %s", x, x,
-                    strerror(errno));
+              "Kann Datei `%s' nicht schreiben:\n"
+              "Can't write to file `%s':\n" " %s", x, x, strerror(errno));
             exit(0);
           }
         }
@@ -4833,11 +4824,11 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
       case 'w':
         if (command_line == 1 || warnings_cl == 0) {
           if (argv[i][2])
-            show_warnings = (char) atoi(argv[i] + 2);
+            show_warnings = (char)atoi(argv[i] + 2);
           else {
             if (argv[i + 1] && isdigit(*argv[i + 1])) {
               i++;
-              show_warnings = (char) atoi(argv[i]);
+              show_warnings = (char)atoi(argv[i]);
             } else
               show_warnings = 0;
           }
@@ -4886,7 +4877,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
             printhelp(argc, argv, i);
           else
             fprintf(ERR, "Option `%s' unbekannt.\n"
-                    "Unknow option `%s'\n", argv[i], argv[i]);
+              "Unknow option `%s'\n", argv[i], argv[i]);
           if (dostop)           /* Nicht stoppen, wenn dies die Parameter  aus der Datei selbst sind! */
             exit(10);
         }
@@ -4904,7 +4895,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
             echeck_locale = argv[i];
           else
             fputs("Fehlende Spracheinstellung, benutze 'de'\n"
-                  "Missing locale, using 'de'\n", stderr);
+              "Missing locale, using 'de'\n", stderr);
         } else {
           echeck_locale = argv[i] + 2;
         }
@@ -4913,7 +4904,7 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
       default:
         if (argv[i][1]) {       /* sonst ist das nur '-' => stdin lesen */
           fprintf(ERR, "Option `%s' unbekannt.\n"
-                  "Unknown option `%s'\n", argv[i], argv[i]);
+            "Unknown option `%s'\n", argv[i], argv[i]);
           if (dostop)           /* Nicht stoppen, wenn dies die Parameter  aus der Datei selbst sind! */
             exit(10);
         }
@@ -4924,8 +4915,8 @@ check_options(int argc, char *argv[], char dostop, char command_line) {
   return i;
 }
 
-void
-parse_options(char *p, char dostop) {
+void parse_options(char *p, char dostop)
+{
   char *argv[10], **ap = argv, *vl, argc = 0;
 
   vl = strtok(p, " \t, ");
@@ -4938,8 +4929,8 @@ parse_options(char *p, char dostop) {
   check_options(argc, argv, dostop, 0);
 }
 
-void
-check_OPTION(void) {
+void check_OPTION(void)
+{
   get_order();
   if (befehle_ende)
     return;
@@ -4960,8 +4951,8 @@ check_OPTION(void) {
     do {
       if (strlen(order_buf) > 9) {
         if (strnicmp(order_buf, "; OPTION", 8) == 0 ||
-            strnicmp(order_buf, "; ECHECK", 8) == 0) {
-          parse_options((char *) (order_buf + 2), 0);
+          strnicmp(order_buf, "; ECHECK", 8) == 0) {
+          parse_options((char *)(order_buf + 2), 0);
           /*
            * "; " überspringen; zeigt dann auf "OPTION" 
            */
@@ -4975,8 +4966,8 @@ check_OPTION(void) {
     while (order_buf[0] == COMMENT_CHAR);
 }
 
-void
-process_order_file(int *faction_count, int *unit_count) {
+void process_order_file(int *faction_count, int *unit_count)
+{
   int f = 0, next = 0;
   t_region *r;
   teach *t;
@@ -5161,8 +5152,8 @@ process_order_file(int *faction_count, int *unit_count) {
     anerror(errtxt[MISSINGNEXT]);
 }
 
-void
-addtoken(tnode * root, const char *str, int id) {
+void addtoken(tnode * root, const char *str, int id)
+{
   static struct replace {
     char c;
     char *str;
@@ -5183,8 +5174,8 @@ addtoken(tnode * root, const char *str, int id) {
     root->id = id;
     root->leaf = 1;
   } else {
-    char c = (char) tolower(*str);
-    int lindex = ((unsigned char) c) % 32;
+    char c = (char)tolower(*str);
+    int lindex = ((unsigned char)c) % 32;
     int i = 0;
     tnode *tk = root->next[lindex];
 
@@ -5213,8 +5204,8 @@ addtoken(tnode * root, const char *str, int id) {
   }
 }
 
-void
-inittokens(void) {
+void inittokens(void)
+{
   int i;
   t_item *it;
   t_names *n;
@@ -5263,8 +5254,8 @@ inittokens(void) {
     addtoken(&tokens[UT_OPTION], l->name, i);
 }
 
-int
-main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   int i, faction_count = 0, unit_count = 0, nextarg = 1;
 
 #if macintosh
@@ -5298,8 +5289,8 @@ main(int argc, char *argv[]) {
 
   if (!(filesread & HAS_MESSAGES)) {
     fprintf(ERR, "\n  **  ECheck V%s, %s  **\n\n"
-            " kann keine Datei lesen!  -  can't read any file!\n\n Pfad / Path: '%s/%s'\n\n",
-            echeck_version, __DATE__, path, echeck_locale);
+      " kann keine Datei lesen!  -  can't read any file!\n\n Pfad / Path: '%s/%s'\n\n",
+      echeck_version, __DATE__, path, echeck_locale);
     help_keys('f');             /* help_keys() macht exit() */
   }
 
@@ -5344,8 +5335,7 @@ main(int argc, char *argv[]) {
         if (!compact)
           fputc('\n', ERR);
       } else
-        fprintf(ERR, "%s|version|%s|%s\n", filename,
-                echeck_version, __DATE__);
+        fprintf(ERR, "%s|version|%s|%s\n", filename, echeck_version, __DATE__);
       process_order_file(&faction_count, &unit_count);
     }
   }
@@ -5358,14 +5348,14 @@ main(int argc, char *argv[]) {
 
   if (compile) {
     fprintf(ERR, "%s|warnings|%d\n%s|errors|%d\n", filename,
-            warning_count, filename, error_count);
+      warning_count, filename, error_count);
     return 0;
   }
 
   fprintf(ERR, errtxt[ORDERSREAD],
-          faction_count,
-          faction_count != 1 ? errtxt[FACTIONS] : printparam(P_FACTION),
-          unit_count, unit_count != 1 ? errtxt[UNITS] : printparam(P_UNIT));
+    faction_count,
+    faction_count != 1 ? errtxt[FACTIONS] : printparam(P_FACTION),
+    unit_count, unit_count != 1 ? errtxt[UNITS] : printparam(P_UNIT));
 
   if (unit_count == 0) {
     fputs(errtxt[CHECKYOURORDERS], ERR);

@@ -37,7 +37,8 @@ extern "C" {
   extern int unicode_ucs4_to_utf8(utf8_t * result, size_t * size,
     ucs4_t ucs4_character);
   extern int unicode_utf8_strcasecmp(const utf8_t * a, const utf8_t * b);
-  extern int unicode_utf8_strncasecmp(const utf8_t * a, const utf8_t * b, size_t size);
+  extern int unicode_utf8_strncasecmp(const utf8_t * a, const utf8_t * b,
+    size_t size);
   extern int unicode_latin1_to_utf8(utf8_t * out, size_t * outlen,
     const char *in, size_t * inlen);
   extern int unicode_utf8_tolower(utf8_t * out, size_t outlen,
