@@ -22,7 +22,7 @@ FOLLOW,   Follow
 RESEARCH, Research
 GIVE,     Give
 HELP,     Help
-FIGHT,    Fight
+FIGHT,    Combat
 COMBATMAGIC,  Combatspell
 BUY,      Buy
 CONTACT,  Contact

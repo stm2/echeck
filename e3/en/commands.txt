@@ -22,7 +22,7 @@ RIDE,     Ride
 FOLLOW,   Follow
 GIVE,     Give
 HELP,     Help
-FIGHT,    Fight
+FIGHT,    Combat
 COMBATMAGIC,  Combatspell
 CONTACT,  Contact
 STUDY,    Learn
