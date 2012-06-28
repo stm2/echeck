@@ -29,7 +29,6 @@ BUY,          Kaufen
 CONTACT,      Kontaktieren
 TEACH,        Lehren
 STUDY,        Lernen
-DELIVER,      Liefere
 MAKE,         Machen
 MOVE,         Nach
 PASSWORD,     Passwort
@@ -58,7 +57,6 @@ ORIGIN,       Ursprung
 EMAIL,        Email
 RESERVE,      Reservieren
 BANNER,       Banner
-OPINION,      Meinung
 NUMBER,       Nummer
 SCHOOL,       Magiegebiet
 PIRACY,       Piraterie

@@ -152,7 +152,7 @@ char order_buf[BUFSIZE],        /* current order line */
  indent, next_indent,           /* indent index */
  does_default = 0,              /* Ist DEFAULT aktiv? */
   befehle_ende,                 /* EOF der Befehlsdatei */
-  *echeck_locale = "de", *filename;
+  *echeck_locale = "de", *echeck_rules=0, *filename;
 int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
   Rx, Ry;                       /* Koordinaten der aktuellen Region */
 char *path;
@@ -1124,7 +1124,11 @@ FILE *path_fopen(const char *path_par, const char *file, const char *mode)
     char buf[1024];
     FILE *F;
 
-    sprintf(buf, "%s/%s/%s", token, echeck_locale, file);
+    if (echeck_rules) {
+      sprintf(buf, "%s/%s/%s/%s", token, echeck_rules, echeck_locale, file);
+    } else {
+      sprintf(buf, "%s/%s/%s", token, echeck_locale, file);
+    }
     F = fopen(buf, mode);
     if (F != NULL) {
       free(pathw);
@@ -4283,6 +4287,7 @@ void checkanorder(char *Orders)
         s = getstr();
         x = btoi(s);
         Scat(s);
+        long_order();
       } else
         anerror(errtxt[FOLLOW]);
     }
@@ -4881,6 +4886,16 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
         if (dostop)             /* bei Optionen via "; ECHECK" nicht mehr  machen */
           printhelp(argc, argv, i);
         break;
+      case 'R': /* -R rules */
+         if (argv[i][2]==0) {
+           i++;
+           if (argv[i]) {
+             echeck_rules=argv[i];
+           }
+         } else {
+            echeck_rules=argv[i]+2;
+         }
+       break;
       case 'L':
         if (argv[i][2] == 0) {  /* -L loc */
           i++;

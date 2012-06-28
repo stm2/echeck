@@ -28,7 +28,6 @@ BUY,    Buy
 CONTACT,  Contact
 TEACH,    Teach
 STUDY,    Learn
-DELIVER,  Supply
 MAKE,   Make
 MOVE,   Move
 PASSWORD, Password
@@ -57,7 +56,6 @@ ORIGIN,   Origin
 EMAIL,    Email
 RESERVE,  Reserve
 BANNER,   Banner
-OPINION,  Opinion
 NUMBER,   Number
 SCHOOL,   School
 PIRACY,   Piracy
