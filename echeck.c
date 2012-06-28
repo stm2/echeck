@@ -4628,8 +4628,9 @@ checkanorder(char *Orders) {
 
   case K_OPTION:
     scat(printkeyword(K_OPTION));
-    i = getoption();
-    if (i < 0) {
+    s = getstr();
+    i = findoption(s);
+    if (!*s || i < 0) {
       anerror(errtxt[UNRECOGNIZEDOPTION]);
       break;
     }
@@ -4658,7 +4659,7 @@ checkanorder(char *Orders) {
     break;
 
   case K_DESTROY:
-    scat(printkeyword(K_DESTROY));
+    check_destroy();
     break;
 
     case K_RIDE:

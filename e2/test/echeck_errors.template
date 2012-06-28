@@ -158,8 +158,6 @@ Fehler in Zeile 132: Option unbekannt.
   `OPTION Almosen '
 Fehler in Zeile 133: Option unbekannt.
   `OPTION '
-Fehler in Zeile 134: Option unbekannt.
-  `OPTION Auswertung Computer '
 Fehler in Zeile 135: Zu viele Argumente.
   `OPTION Punkte NICHT mehr '
 Warnung zur Zeile 127: Einheit opt hat keinen langen Befehl bekommen.
@@ -591,30 +589,28 @@ Fehler in Zeile 460: Zu viele Argumente.
   `BANNER abc def '
 Warnung zur Zeile 457: Einheit bann hat keinen langen Befehl bekommen.
   `EINHEIT bann; Weltenforscher [1,160$]'
-Fehler in Zeile 464: Nummer der Umfrage muß größer 0 sein.
-  `MEINUNG '
-Fehler in Zeile 464: Nummer der Meinung muß größer 0 sein.
-  `MEINUNG '
+Fehler in Zeile 462: Befehl nicht erkannt.
+  `MEINUNG 1 2 abc '
 Warnung zur Zeile 461: Einheit mein hat keinen langen Befehl bekommen.
   `EINHEIT mein; Weltenforscher [1,160$]'
-Fehler in Zeile 472: Falsche Nummer.
+Fehler in Zeile 470: Falsche Nummer.
   `NUMMER EINHEIT TEMP '
-Fehler in Zeile 473: Falsche Nummer.
+Fehler in Zeile 471: Falsche Nummer.
   `NUMMER EINHEIT TEMP 1 '
-Fehler in Zeile 475: Zu viele Argumente.
+Fehler in Zeile 473: Zu viele Argumente.
   `NUMMER BURG 123 123 '
-Fehler in Zeile 476: NUMMER SCHIFF, NUMMER BURG, NUMMER PARTEI oder NUMMER
+Fehler in Zeile 474: NUMMER SCHIFF, NUMMER BURG, NUMMER PARTEI oder NUMMER
 	EINHEIT.
   `NUMMER '
-Warnung zur Zeile 465: Einheit numm hat keinen langen Befehl bekommen.
+Warnung zur Zeile 463: Einheit numm hat keinen langen Befehl bekommen.
   `EINHEIT numm; Weltenforscher [1,160$]'
-Fehler in Zeile 478: Befehl nicht erkannt.
+Fehler in Zeile 476: Befehl nicht erkannt.
   `ALLIANZ AUSSTOSSEN 123 M '
-Warnung zur Zeile 477: Einheit alli hat keinen langen Befehl bekommen.
+Warnung zur Zeile 475: Einheit alli hat keinen langen Befehl bekommen.
   `EINHEIT alli; Weltenforscher [1,160$]'
-Warnung zur Zeile 486: Einheit line hat keinen langen Befehl bekommen.
+Warnung zur Zeile 484: Einheit line hat keinen langen Befehl bekommen.
   `EINHEIT line; Weltenforscher [1,160$]'
-Warnung zur Zeile 493: Einheit dopp hat schon in Zeile 491 Befehle bekommen.
+Warnung zur Zeile 491: Einheit dopp hat schon in Zeile 489 Befehle bekommen.
 	Benutze stattdessen Einheit dopq.
   `EINHEIT dopp; Weltenforscher [1,160$]'
 Warnung zur Zeile 351: Einheit TEMP tem1 hat nicht rekrutiert und keine
@@ -630,4 +626,4 @@ Warnung zur Zeile 247: Einheit tea2 kann noch 9 Schüler lehren.
 Warnung zur Zeile 249: Einheit tea3 kann noch 10 Schüler lehren.
 
 Es wurden Befehle für 1 Partei und 107 Einheiten gelesen.
-Es wurden 182 Fehler und 114 Warnungen entdeckt.
+Es wurden 180 Fehler und 114 Warnungen entdeckt.

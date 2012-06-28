@@ -452,9 +452,7 @@ REGION 0 0; Heimat
     Banner
     Banner abc
   EINHEIT mein; Weltenforscher [1,160$]
-    Meinung 1 2 abc
-    Meinung 1 2
-    Meinung 0 0
+    
   EINHEIT numm; Weltenforscher [1,160$]
     Nummer Einheit
     Nummer Einheit abc

@@ -459,9 +459,7 @@ BANNER "abc"
 BANNER ; error
 BANNER abc def ; error
 EINHEIT mein;           Weltenforscher [1,160$]
-MEINUNG 1 2 "abc"
-MEINUNG 1 2
-MEINUNG ; error
+MEINUNG 1 2 "abc" ; error, command removed
 EINHEIT numm;           Weltenforscher [1,160$]
 NUMMER EINHEIT
 NUMMER EINHEIT abc

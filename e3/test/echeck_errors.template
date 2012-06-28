@@ -147,8 +147,6 @@ Fehler in Zeile 126: Option unbekannt.
   `OPTION Almosen '
 Fehler in Zeile 127: Option unbekannt.
   `OPTION '
-Fehler in Zeile 128: Option unbekannt.
-  `OPTION Auswertung Computer '
 Fehler in Zeile 129: Zu viele Argumente.
   `OPTION Punkte NICHT mehr '
 Warnung zur Zeile 121: Einheit opt hat keinen langen Befehl bekommen.
@@ -594,4 +592,4 @@ Warnung zur Zeile 143: Das Silber in Region (1,0) reicht evtl. nicht zum
 	Leben; es fehlen 20 Silber.
 
 Es wurden Befehle für 1 Partei und 92 Einheiten gelesen.
-Es wurden 172 Fehler und 111 Warnungen entdeckt.
+Es wurden 171 Fehler und 111 Warnungen entdeckt.
