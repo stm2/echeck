@@ -1644,28 +1644,6 @@ static void macify(unsigned char *s)
 static char *fgetbuffer(char *buf, int size, FILE * F)
 {
   char *s = fgets(buf, size, F);
-
-  if (s) {
-    unsigned char *p = (unsigned char *)s;
-
-    while (*s) {
-      ucs4_t ucs4;
-      size_t length;
-      int result = unicode_utf8_to_ucs4(&ucs4, s, &length);
-
-      if (result != 0) {
-        ++s;
-        *p++ = (unsigned char)'?';
-      } else {
-        if (ucs4 <= 0xff && ucs4 >= 0) {
-          *p++ = (unsigned char)ucs4;
-        }
-        s += length;
-      }
-    }
-    *p = 0;
-    return buf;
-  }
   return s;
 }
 
@@ -2180,7 +2158,7 @@ int findtoken(const char *token, int type)
 
   str = transliterate(buffer, sizeof(buffer), token);
 
-  if (*str == '@') {
+  if (str && *str == '@') {
     str++;
     at_cmd = 1;
     if (*str < 65) {
