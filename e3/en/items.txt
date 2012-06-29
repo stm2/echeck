@@ -47,6 +47,9 @@ halberd; halberds
 lance; lances
 mallorn; mallorn
 catapult ammunition; catapult ammunition
+repeating crossbow; repeating crossbows
+pangolin; pangolins
+tower shield; tower shields
 
 # Ok, these were the official items; you shouldn't change this list
 # if you count on the results of ECheck...
