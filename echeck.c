@@ -152,7 +152,7 @@ char order_buf[BUFSIZE],        /* current order line */
  indent, next_indent,           /* indent index */
  does_default = 0,              /* Ist DEFAULT aktiv? */
   befehle_ende,                 /* EOF der Befehlsdatei */
-  *echeck_locale = "de", *echeck_rules=0, *filename;
+  *echeck_locale = "de", *echeck_rules = 0, *filename;
 int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
   Rx, Ry;                       /* Koordinaten der aktuellen Region */
 char *path;
@@ -2946,13 +2946,13 @@ void checkgiving(int key)
       if (findparam(s) == P_ALLES) {    /* GIB xx ALLES wasauchimmer */
         n = -1;
         Scat(printparam(P_ALLES));
-      } else if (findparam(s)==P_EACH) {
-        s=getstr();
-        n=atoi(s);
-        n*=order_unit->people;
-        if (n<1) {
+      } else if (findparam(s) == P_EACH) {
+        s = getstr();
+        n = atoi(s);
+        n *= order_unit->people;
+        if (n < 1) {
           anerror(errtxt[NUMMISSING]);
-          n=1;
+          n = 1;
         }
       } else {
         anerror(errtxt[NUMMISSING]);
@@ -3392,24 +3392,25 @@ void reserve(void)
     anerror(errtxt[TEMPUNITSCANTRESERVE]);
     return;
   }
-  
-  s=getstr();
-  n=atoi(s);
-  if (n<1) {
-    if (findparam(s)==P_EACH) {
-      s=getstr();
-      n=atoi(s);
-      n*=order_unit->people;
-      if (n<1) {
+
+  s = getstr();
+  n = atoi(s);
+  if (n < 1) {
+    if (findparam(s) == P_EACH) {
+      s = getstr();
+      n = atoi(s);
+      n *= order_unit->people;
+      if (n < 1) {
         anerror(errtxt[NUMMISSING]);
-        n=1;
+        n = 1;
       }
     } else {
       anerror(errtxt[NUMMISSING]);
-      n=1;
+      n = 1;
     }
   }
-  if (n>0) icat(n);
+  if (n > 0)
+    icat(n);
 
   s = getstr();
 
@@ -4891,16 +4892,16 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
         if (dostop)             /* bei Optionen via "; ECHECK" nicht mehr  machen */
           printhelp(argc, argv, i);
         break;
-      case 'R': /* -R rules */
-         if (argv[i][2]==0) {
-           i++;
-           if (argv[i]) {
-             echeck_rules=argv[i];
-           }
-         } else {
-            echeck_rules=argv[i]+2;
-         }
-       break;
+      case 'R':                /* -R rules */
+        if (argv[i][2] == 0) {
+          i++;
+          if (argv[i]) {
+            echeck_rules = argv[i];
+          }
+        } else {
+          echeck_rules = argv[i] + 2;
+        }
+        break;
       case 'L':
         if (argv[i][2] == 0) {  /* -L loc */
           i++;
