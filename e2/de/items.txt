@@ -49,6 +49,9 @@ Hellebarde; Hellebarden
 Lanze; Lanzen
 Mallorn; Mallorn
 Katapultmunition; Katapultmunition
+Adamantium; Admantium
+Adamantiumaxt; Admantiumäxte
+Adamantiumrüstung; Adamantiumrüstungen
 
 # So, das waren die offiziellen Items; diese Liste sollte man nicht ändern,
 # wenn man auf das Ergebnis von ECheck Wert legt...

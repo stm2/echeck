@@ -47,6 +47,9 @@ halberd; halberds
 lance; lances
 mallorn; mallorn
 catapult ammunition; catapult ammunition
+adamantium; adamantium
+adamantium axe; adamantium axes
+adamantium plate; adamantium plates
 
 # Ok, these were the official items; you shouldn't change this list
 # if you count on the results of ECheck...
