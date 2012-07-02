@@ -11,16 +11,18 @@
  * Please send any changes or bugfixes to the authors.
  */
 
-#ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <wchar.h>
+
+#ifdef WITH_CUTEST
+#include <CuTest.h>
+int AddTestSuites(CuSuite * suite, const char * names);
+int RunAllTests(CuSuite * suite);
+#endif
 
 #include "config.h"
 #include "unicode.h"
@@ -127,8 +129,9 @@ static int compact = 0;
 
 FILE *ERR, *OUT = 0;
 
+const char * run_tests = 0;
 int line_no,                    /* count line number */
- filesread = 0;
+  filesread = 0;
 
 char echo_it = 0,               /* option: echo input lines */
   no_comment = -3,              /* Keine Infos in [] hinter EINHEIT */
@@ -978,26 +981,30 @@ int findstr(char **v, const char *s, int max);
 
 #define addlist(l, p)  (p->next=*l, *l=p)
 
-void *cmalloc(int n)
-{
-  void *p;
-
-  if (n == 0)
-    n = 1;
-  p = calloc(n, 1);
-  if (p == NULL) {
-    puts(" * Kein freier Speicher mehr! *\n" " * No more free memory! *");
-    exit(1);
-  }
-  return p;
-}
-
 int Pow(int p)
 {
   if (!p)
     return 1;
   else
     return 2 << (p - 1);
+}
+
+#define iswxspace(c) (c==160 || iswspace(c))
+
+char * eatwhite(char *ptr)
+{
+  int ret = 0;
+
+  while (*ptr) {
+    ucs4_t ucs;
+    size_t size = 0;
+    ret = unicode_utf8_to_ucs4(&ucs, ptr, &size);
+    if (ret != 0 || !iswxspace((wint_t) ucs)) {
+      break;
+    }
+    ptr += size;
+  }
+  return ptr;
 }
 
 static char nulls[] = "\0\0\0\0\0\0\0\0";
@@ -1205,7 +1212,7 @@ void readspell(char *s)
   t_spell *sp;
   char buffer[128];
 
-  sp = cmalloc(sizeof(t_spell));
+  sp = (t_spell *)calloc(1, sizeof(t_spell));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1219,9 +1226,7 @@ void readspell(char *s)
   }
   sp->name = strdup(transliterate(buffer, sizeof(buffer), s));
   if (x) {
-    s = (char *)(x + 1);
-    while (isspace(*s))
-      s++;
+    s = eatwhite(x + 1);
     if (*s) {
       sp->kosten = atoi(s);
       x = strchr(s, ';');
@@ -1244,7 +1249,7 @@ void readskill(char *s)
   char *x;
   t_skills *sk;
 
-  sk = cmalloc(sizeof(t_skills));
+  sk = (t_skills *)calloc(1, sizeof(t_skills));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1275,11 +1280,11 @@ int readitem(char *s)
   t_item *it;
   t_names *n, *nn;
 
-  it = cmalloc(sizeof(t_item));
+  it = (t_item *)calloc(1, sizeof(t_item));
   nn = NULL;
   x = s;
   do {
-    n = cmalloc(sizeof(t_names));
+    n = (t_names *)calloc(1, sizeof(t_names));
     x = strchr(s, ';');
     if (!x)
       x = strchr(s, ',');
@@ -1302,9 +1307,7 @@ int readitem(char *s)
         it->name = nn;
     }
     if (x) {
-      s = (char *)(x + 1);
-      while (isspace(*s))
-        s++;
+      s = eatwhite(x + 1);
     }
   }
   while (x && *s);
@@ -1321,7 +1324,7 @@ void readliste(char *s, t_liste ** L)
   t_liste *ls;
   char buffer[128];
 
-  ls = cmalloc(sizeof(t_liste));
+  ls = (t_liste *)calloc(1, sizeof(t_liste));
   x = strchr(s, '\n');
   if (x)
     *x = 0;
@@ -1336,7 +1339,7 @@ int readkeywords(char *s)
   int i;
   char buffer[64];
 
-  k = cmalloc(sizeof(t_keyword));
+  k = (t_keyword *)calloc(1, sizeof(t_keyword));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1354,10 +1357,8 @@ int readkeywords(char *s)
     fprintf(stderr, "Unknown keyword '%s'\n", s);
     return 0;
   }
-  s = (char *)(x + 1);
-  while (isspace(*s))
-    s++;
-  if (!s)
+  s = eatwhite(x + 1);
+  if (!*s)
     return 0;
   x = strchr(s, '\n');
   if (x)
@@ -1376,7 +1377,7 @@ int readparams(char *s)
   t_params *p;
   int i;
 
-  p = cmalloc(sizeof(t_params));
+  p = (t_params *)calloc(1, sizeof(t_params));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1389,10 +1390,8 @@ int readparams(char *s)
       break;
   if (i == MAXPARAMS)
     return 0;
-  s = (char *)(x + 1);
-  while (isspace(*s))
-    s++;
-  if (!s)
+  s = eatwhite(x + 1);
+  if (!*s)
     return 0;
   x = strchr(s, '\n');
   if (x)
@@ -1411,7 +1410,7 @@ int readdirection(char *s)
   t_direction *d;
   int i;
 
-  d = cmalloc(sizeof(t_direction));
+  d = (t_direction *)calloc(1, sizeof(t_direction));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1424,10 +1423,8 @@ int readdirection(char *s)
       break;
   if (i == MAXDIRECTIONS)
     return 0;
-  s = (char *)(x + 1);
-  while (isspace(*s))
-    s++;
-  if (!s)
+  s = eatwhite(x + 1);
+  if (!*s)
     return 0;
   x = strchr(s, '\n');
   if (x)
@@ -1451,9 +1448,7 @@ int readerror(char *s)
   i = findstr(Errors, s, MAX_ERRORS);
   if (i < 0)
     return 0;
-  x++;
-  while (isspace(*x))
-    x++;
+  x = eatwhite(x+1);
   if (!(*x) || *x == '\n')
     return 0;
   s = x;
@@ -1513,7 +1508,7 @@ int readhelp(char *s)
     help_path = strdup(x);
     break;
   default:
-    h = cmalloc(sizeof(t_liste));
+    h = (t_liste *)calloc(1, sizeof(t_liste));
     h->name = strdup(x);
     addlist(&help, h);
     break;
@@ -1607,8 +1602,7 @@ int parsefile(char *s, int typ)
         break;
     if (i == UT_MAX)
       return 0;
-    while (isspace(*y))
-      y++;
+    y = eatwhite(y);
     if (*y && (*y == '#' || *y == '\n'))
       return 1;
     return parsefile(y, i);
@@ -1641,10 +1635,39 @@ static void macify(unsigned char *s)
 }
 #endif
 
+static char * mocked_input = 0;
+static char * mock_pos = 0;
+
+void set_order_unit(unit * u) {
+  order_unit = u;
+}
+
+#ifdef WITH_CUTEST
+
+void mock_input(const char * input) {
+  free(mocked_input);
+  mocked_input = strdup(input);
+  mock_pos = mocked_input;
+}
+#endif
+
 static char *fgetbuffer(char *buf, int size, FILE * F)
 {
-  char *s = fgets(buf, size, F);
-  return s;
+  if (mocked_input) {
+    size_t bytes;
+    char * nextbr = strchr(mock_pos, '\n');
+    if (!nextbr) {
+      nextbr = mock_pos + strlen(mock_pos);
+    } else {
+      ++nextbr;
+    }
+    bytes = MIN(size-1, nextbr-mock_pos);
+    memcpy(buf, mock_pos, bytes);
+    buf[bytes] = 0;
+    mock_pos += bytes;
+    return buf;
+  }
+  return fgets(buf, size, F);
 }
 
 void readafile(const char *fn, int typ)
@@ -1721,63 +1744,6 @@ void porder(void)
     indent = next_indent;
 }
 
-char *wrap(char *s)
-{
-  int i, j, k, m, o = 0;
-  static char buf[BUFSIZE];
-
-  m = MARGIN;
-  strcpy(buf, s);
-
-  /*
-   * i zählt die Länge des Strings s ab. j zählt die Länge der Zeile 
-   * ab. Ist der Rand erreicht, wird k auf i gesetzt, und rückwärts
-   * eine Leerstelle gesucht, die man mit einem '\n' ersetzen könnte. 
-   */
-
-  for (i = 0, j = 25; s[i]; i++, j++) { /* j=25: "Warnung zur Zeile xyz:" */
-    if (j == m) {
-      for (k = i; !isspace(s[k]) && k > 0; k--) ;
-      /*
-       * findet man eine Leerstelle, wird sie durch '\n' ersetzt: 
-       */
-      if (k > 0) {
-        buf[k + o] = '\n';
-        o++;
-        memmove(buf + k + o + 1, buf + k + o, strlen(buf));
-        /*
-         * ein Zeichen weiterschieben damit das TAB da reinpaßt 
-         */
-        buf[k + o] = '\t';
-        j = i - k + 8;
-        if (m == MARGIN)
-          m -= 8;
-      }
-    } else
-      /*
-       * Hat man das letzte mal keine Leerstelle gefunden, so
-       * reagiert man einfach auf die nächste Leerstelle, ohne nach 
-       * vorwärts zu suchen (das hat man ja schon einmal gemacht) 
-       */
-
-    if (j > m && isspace(s[i])) {
-      {
-        buf[i + o] = '\n';
-        o++;
-        memmove(buf + i + o + 1, buf + i + o, strlen(buf));
-        /*
-         * ein Zeichen weiterschieben damit das TAB da reinpaßt 
-         */
-        buf[i + o] = '\t';
-      }
-      j = 8;
-      if (m == MARGIN)
-        m -= 8;
-    }
-  }
-  return buf;
-}
-
 void Error(char *text, int line, char *order)
 {
   char bf[65];
@@ -1792,7 +1758,7 @@ void Error(char *text, int line, char *order)
     switch (compile) {
     case OUT_NORMAL:
       fprintf(ERR, "%s %d: %s.\n  `%s'\n", errtxt[ERRORINLINE], line,
-        wrap(text), bf);
+        text, bf);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)|0|%s. `%s'\n", filename, line, text, bf);
@@ -1842,17 +1808,15 @@ int btoi(char *s)
 
 const char *uid(unit * u)
 {
-  static char *bf = NULL;
+  static char bf[18];
 
-  if (!bf)
-    bf = cmalloc(18);
   sprintf(bf, "%s%s", u->temp != 0 ? "TEMP " : "", itob(u->no));
   return bf;
 }
 
 const char *Uid(int i)
 {
-  static char *bf = NULL;
+  static char bf[18];
   unit *u;
 
   u = find_unit(i, 0);
@@ -1863,8 +1827,6 @@ const char *Uid(int i)
     Error(warn_buf, line_no, errtxt[INTERNALCHECK]);
     u = newunit(-1, 0);
   }
-  if (!bf)
-    bf = cmalloc(18);
   sprintf(bf, "%s%s", u->temp != 0 ? "TEMP " : "", itob(u->no));
   return bf;
 }
@@ -1879,7 +1841,7 @@ void warn(char *s, int line, char level)
   if (show_warnings && !brief) {
     switch (compile) {
     case OUT_NORMAL:
-      fprintf(ERR, "%s %d: %s\n", errtxt[WARNINGLINE], line, wrap(s));
+      fprintf(ERR, "%s %d: %s\n", errtxt[WARNINGLINE], line, s);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)|%d|%s\n", filename, line, level, s);
@@ -1906,7 +1868,7 @@ void warning(char *s, int line, char *order, char level)
     switch (compile) {
     case OUT_NORMAL:
       fprintf(ERR, "%s %d: %s.\n  `%s'\n", errtxt[WARNINGLINE], line,
-        wrap(s), bf);
+        s, bf);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)%d|%s. `%s'\n", filename, line, level, s, bf);
@@ -1933,7 +1895,7 @@ void checkstring(char *s, size_t l, int type)
 
   if (echo_it && s[0]) {
     if (strlen(s) + strlen(checked_buf) > MARGIN) {
-      qcat(wrap(s));
+      qcat(s);
     } else
       qcat(s);
   }
@@ -1975,7 +1937,7 @@ t_region *addregion(int x, int y, int pers)
   }
 
   if (!r) {
-    r = cmalloc(sizeof(t_region));
+    r = (t_region *)calloc(1, sizeof(t_region));
     r->x = x;
     r->y = y;
     r->personen = pers;
@@ -2009,7 +1971,7 @@ void addteach(unit * teacher, unit * student)
       }
     }
   }
-  t = cmalloc(sizeof(teach));
+  t = (teach *)malloc(sizeof(teach));
   t->next = NULL;
   t->teacher = teacher;
   t->student = student;
@@ -2021,7 +1983,7 @@ unit *newunit(int n, int t)
   unit *u = find_unit(n, t), *c;
 
   if (!u) {
-    u = cmalloc(sizeof(unit));
+    u = (unit *)calloc(1, sizeof(unit));
     u->no = n;
     u->line_no = line_no;
     u->order = strdup(order_buf);
@@ -2542,7 +2504,7 @@ void orders_for_unit(int i, unit * u)
   int s;
 
   end_unit_orders();
-  mother_unit = order_unit = u;
+  set_order_unit(mother_unit = u);
 
   if (u->start_of_orders_line) {
     sprintf(warn_buf, errtxt[UNITALREADYHASORDERS],
@@ -2557,7 +2519,7 @@ void orders_for_unit(int i, unit * u)
     strcat(warn_buf, errtxt[USINGUNITINSTEAD]);
     strcat(warn_buf, itob(i));
     awarning(warn_buf, 1);
-    order_unit = u;
+    set_order_unit(u);
   }
 
   u->start_of_orders = strdup(order_buf);
@@ -2665,7 +2627,7 @@ void orders_for_temp_unit(unit * u)
   u->start_of_orders = strdup(order_buf);
   u->start_of_orders_line = line_no;
   mother_unit = order_unit;
-  order_unit = u;
+  set_order_unit(u);
 }
 
 void long_order(void)
@@ -2930,12 +2892,12 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
   return 1;
 }
 
-void checkgiving(int key)
+void checkgiving(void)
 {
   char *s;
   int i, n;
 
-  scat(printkeyword(key));
+  scat(printkeyword(K_GIVE));
   getaunit(NECESSARY);
   s = getstr();
   if (!getaspell(s, SP_ALL, NULL, 0)
@@ -2947,9 +2909,12 @@ void checkgiving(int key)
         n = -1;
         Scat(printparam(P_ALLES));
       } else if (findparam(s) == P_EACH) {
+        Scat(printparam(P_EACH));
         s = getstr();
         n = atoi(s);
-        n *= order_unit->people;
+        if (order_unit->people) {
+          n *= order_unit->people;
+        }
         if (n < 1) {
           anerror(errtxt[NUMMISSING]);
           n = 1;
@@ -3152,7 +3117,7 @@ void checkmake(void)
       if (*s)
         qcat(s);
       from_temp_unit_no = j;
-      u = newunit(j, 42);
+      u = newunit(j, 1);
       if (u->ship == 0)
         u->ship = abs(order_unit->ship);
       orders_for_temp_unit(u);
@@ -4034,7 +3999,7 @@ void checkanorder(char *Orders)
     end_unit_orders();
     from_temp_unit_no = current_temp_no = 0;
     if (mother_unit) {
-      order_unit = mother_unit;
+      set_order_unit(mother_unit);
       mother_unit = NULL;
     }
     break;
@@ -4086,7 +4051,7 @@ void checkanorder(char *Orders)
     break;
 
   case K_GIVE:
-    checkgiving(i);
+    checkgiving();
     break;
 
   case K_HELP:
@@ -4752,6 +4717,10 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
         compile = OUT_MAGELLAN;
         break;
 
+      case 'T':
+        run_tests = argv[i][2]=='=' ? argv[i]+2 : "all";
+        break;
+
       case 'E':
         if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           echo_it = 1;
@@ -5198,7 +5167,7 @@ void addtoken(tnode * root, const char *str, int id)
     while (tk && tk->c != c)
       tk = tk->nexthash;
     if (!tk) {
-      tk = calloc(1, sizeof(tnode));
+      tk = (tnode *)calloc(1, sizeof(tnode));
       tk->id = -1;
       tk->c = c;
       tk->nexthash = root->next[lindex];
@@ -5334,7 +5303,26 @@ int main(int argc, char *argv[])
     fputs(checked_buf, ERR);
     return 5;
   }
+
   inittokens();
+
+  if (run_tests) {
+#ifdef WITH_CUTEST
+    CuSuite * suite = CuSuiteNew();
+    CuString *output = CuStringNew();
+
+    AddTestSuites(suite, run_tests);
+    CuSuiteRun(suite);
+    CuSuiteSummary(suite, output);
+    CuSuiteDetails(suite, output);
+    printf("%s\n", output->buffer);
+
+    return suite->failCount;
+#else
+    return 0;
+#endif
+  }
+
   F = stdin;
 
   for (i = nextarg; i < argc; i++) {
