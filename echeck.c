@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <wchar.h>
+#include <wctype.h>
 
 #ifdef WITH_CUTEST
 #include <CuTest.h>
@@ -27,7 +28,7 @@ int RunAllTests(CuSuite * suite);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.3.2-7";
+static const char *echeck_version = "4.3.3";
 
 #define DEFAULT_PATH "."
 
@@ -4718,7 +4719,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
         break;
 
       case 'T':
-        run_tests = argv[i][2]=='=' ? argv[i]+2 : "all";
+        run_tests = argv[i][3]=='=' ? argv[i]+3 : "all";
         break;
 
       case 'E':
