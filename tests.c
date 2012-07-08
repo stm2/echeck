@@ -15,6 +15,46 @@ extern void checkgiving(void);
 extern void checkanorder(char *);
 extern struct unit *newunit(int n, int t);
 extern void set_order_unit(struct unit * u);
+void process_order_file(int *faction_count, int *unit_count);
+
+static void test_process_nothing(CuTest * tc)
+{
+  int faction_count = 0, unit_count = 0;
+  
+  error_count = warning_count = 0;
+  mock_input("\n");
+  process_order_file(&faction_count, &unit_count);
+  CuAssertIntEquals(tc, 0, faction_count);
+  CuAssertIntEquals(tc, 0, unit_count);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
+static void test_process_faction(CuTest * tc)
+{
+  int faction_count = 0, unit_count = 0;
+  
+  error_count = warning_count = 0;
+  mock_input("ERESSEA 1 \"password\"\n");
+  process_order_file(&faction_count, &unit_count);
+  CuAssertIntEquals(tc, 1, faction_count);
+  CuAssertIntEquals(tc, 0, unit_count);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
+static void test_process_unit(CuTest * tc)
+{
+  int faction_count = 0, unit_count = 0;
+  
+  error_count = warning_count = 0;
+  mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nNAECHSTER\n");
+  process_order_file(&faction_count, &unit_count);
+  CuAssertIntEquals(tc, 1, faction_count);
+  CuAssertIntEquals(tc, 1, unit_count);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 1, warning_count);
+}
 
 static void test_nothing(CuTest * tc)
 {
@@ -44,9 +84,19 @@ static void test_give_each(CuTest * tc)
   CuAssertIntEquals(tc, 1, warning_count);
 }
 
+static void test_make_temp(CuTest * tc)
+{
+  set_order_unit(newunit(1, 0));
+  mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nMACHE TEMP 1\nENDE\nNAECHSTER\n");
+  error_count = warning_count = 0;
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 2, warning_count);
+}
+
 int AddTestSuites(CuSuite * suite, const char * args)
 {
-  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,give");
+  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,give");
   char * name = strtok(names, ",");
   CuSuite * cs;
 
@@ -58,9 +108,17 @@ int AddTestSuites(CuSuite * suite, const char * args)
       SUITE_ADD_TEST(cs, test_nothing);
       CuSuiteAddSuite(suite, cs);
     }
+    else if (strcmp(name, "process")==0) {
+      cs = CuSuiteNew();
+      SUITE_ADD_TEST(cs, test_process_nothing);
+      SUITE_ADD_TEST(cs, test_process_faction);
+      SUITE_ADD_TEST(cs, test_process_unit);
+      CuSuiteAddSuite(suite, cs);
+    }
     else if (strcmp(name, "give")==0) {
       cs = CuSuiteNew();
       SUITE_ADD_TEST(cs, test_give_each);
+      SUITE_ADD_TEST(cs, test_make_temp);
       CuSuiteAddSuite(suite, cs);
     }
     name = strtok(0, ",");

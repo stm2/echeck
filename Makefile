@@ -7,7 +7,7 @@ ifeq ($(PREFIX),)
 PREFIX=/home/eressea/echeck
 endif
 
-all: echeck
+all: echeck test
 
 install: echeck
 	install -t $(PREFIX) echeck
@@ -30,4 +30,4 @@ clean:
 	@rm -f *.o core *.bak echeck
 
 test: echeck
-	@./echeck -T=all -Lde -Re2
+	@./echeck -T=all -Lde -Re2 -b

@@ -28,7 +28,7 @@ int RunAllTests(CuSuite * suite);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.3.3";
+static const char *echeck_version = "4.3.4";
 
 #define DEFAULT_PATH "."
 
@@ -1656,14 +1656,16 @@ static char *fgetbuffer(char *buf, int size, FILE * F)
 {
   if (mocked_input) {
     size_t bytes;
-    char * nextbr = strchr(mock_pos, '\n');
+    char * nextbr;
+    if (!*mock_pos) return 0;
+    nextbr = strchr(mock_pos, '\n');
     if (!nextbr) {
       nextbr = mock_pos + strlen(mock_pos);
     } else {
       ++nextbr;
     }
     bytes = MIN(size-1, nextbr-mock_pos);
-    memcpy(buf, mock_pos, bytes);
+    if (bytes) memcpy(buf, mock_pos, bytes);
     buf[bytes] = 0;
     mock_pos += bytes;
     return buf;
@@ -2243,7 +2245,7 @@ char *getbuf(void)
       return NULL;
 
     end = bp + strlen(bp);
-    if (*(end - 1) == '\n') {
+    if (end==bp || *(end - 1) == '\n') {
       line_no++;
       *(--end) = 0;
     } else {
@@ -3118,7 +3120,7 @@ void checkmake(void)
       if (*s)
         qcat(s);
       from_temp_unit_no = j;
-      u = newunit(j, 1);
+      u = newunit(j, 42);
       if (u->ship == 0)
         u->ship = abs(order_unit->ship);
       orders_for_temp_unit(u);
@@ -4719,7 +4721,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
         break;
 
       case 'T':
-        run_tests = argv[i][3]=='=' ? argv[i]+3 : "all";
+        run_tests = argv[i][2]=='=' ? argv[i]+3 : "all";
         break;
 
       case 'E':
@@ -5045,6 +5047,7 @@ void process_order_file(int *faction_count, int *unit_count)
       else
         fprintf(ERR, errtxt[FOUNDORDERS], itob(f));
       check_OPTION();           /* Nach PARTEI auf "; OPTION" bzw. ";  ECHECK" testen */
+      if (faction_count) ++*faction_count;
       if (befehle_ende)
         return;
       if (!compile) {
@@ -5058,7 +5061,6 @@ void process_order_file(int *faction_count, int *unit_count)
             fprintf(ERR, errtxt[HINTNOVERSION], echeck_version);
         }
       }
-      (*faction_count)++;
       next = 0;
       break;
 
@@ -5066,7 +5068,7 @@ void process_order_file(int *faction_count, int *unit_count)
       if (f) {
         scat(order_buf);
         readaunit();
-        (*unit_count)++;
+        if (unit_count) ++*unit_count;
       } else
         get_order();
       break;
