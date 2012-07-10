@@ -225,6 +225,7 @@ enum {
   K_ORIGIN,
   K_EMAIL,
   K_RESERVE,
+  K_CLAIM,
   K_BANNER,
   K_NUMBER,
   K_SCHOOL,
@@ -289,6 +290,7 @@ static char *Keywords[MAXKEYWORDS] = {
   "ORIGIN",
   "EMAIL",
   "RESERVE",
+  "CLAIM",
   "BANNER",
   "NUMBER",
   "SCHOOL",
@@ -3349,6 +3351,25 @@ void checkmail(void)
   checkstring(s, 0, NECESSARY);
 }
 
+void claim(void)
+{
+  char *s;
+  int i, n;
+  
+  scat(printkeyword(K_RESERVE));
+  s = getstr();
+  n = atoi(s);
+  if (n < 1) {
+    anerror(errtxt[NUMMISSING]);
+    n = 1;
+  } else {
+    s = getstr();
+  }
+  icat(n);
+  i = finditem(s);
+  Scat(ItemName(i, n != 1));
+}
+
 void reserve(void)
 {
   char *s;
@@ -4401,6 +4422,10 @@ void checkanorder(char *Orders)
 
   case K_RESERVE:
     reserve();
+    break;
+
+  case K_CLAIM:
+    claim();
     break;
 
   case K_RESTART:

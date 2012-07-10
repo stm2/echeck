@@ -55,6 +55,7 @@ BREED,    Grow
 ORIGIN,   Origin
 EMAIL,    Email
 RESERVE,  Reserve
+CLAIM, Claim
 BANNER,   Banner
 NUMBER,   Number
 SCHOOL,   School

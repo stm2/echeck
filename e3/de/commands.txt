@@ -50,6 +50,7 @@ BREED,        Züchten
 ORIGIN,       Ursprung
 EMAIL,        Email
 RESERVE,      Reservieren
+CLAIM, Beanspruchen
 BANNER,       Banner
 NUMBER,       Nummer
 SCHOOL,       Magiegebiet
