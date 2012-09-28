@@ -10,7 +10,7 @@
 ############################################################################
 
 ALL,         Alles
-EACH, Je
+EACH,        Je
 PEASANTS,    Bauern
 CASTLE,      Burg
 BUILDING,    Gebäude
@@ -48,7 +48,9 @@ HORSES,      Pferde
 FOREIGN,     fremdes
 NUMBER,      Nummer
 # ^^ TARNE PARTEI NUMMER
-LOCALE, Locale
-
+SEED,        Samen
+MALLORNSEED, Mallornsamen
+# ^^ PFLANZE
+LOCALE,      Locale
 BEFORE,      vor
 AFTER,       hinter

@@ -1,0 +1,480 @@
+partei 1 1
+REGION 0 0; Heimat
+  EINHEIT line; Weltenforscher [1,160$]
+    benennen einheit "Großer Krieger"
+  EINHEIT bez; Weltenforscher [1,160$]
+    
+  EINHEIT clai; Weltenforscher [1,160$]
+    beanspruchen 2 holz
+    beanspruchen holz
+    beanspruchen 1
+    beanspruchen 1
+    beanspruchen
+    beanspruchen
+  EINHEIT bef; Weltenforscher [1,160$]
+    befoerderung
+    befoerderung
+  EINHEIT pref; Weltenforscher [1,160$]
+    praefix
+    praefix Blau
+    praefix kein
+  EINHEIT pflz; Weltenforscher [1,160$]
+    pflanzen samen
+  EINHEIT pfl2; Weltenforscher [1,160$]
+    pflanzen 3 mallornsamen
+    pflanzen
+    pflanzen 4
+    pflanzen samen
+  EINHEIT sort; Weltenforscher [1,160$]
+    sortieren VOR 1
+    sortieren HINTER 2
+    sortieren VOR
+    sortieren HINTER
+    sortieren
+    sortieren
+    sortieren
+    sortieren VOR blub
+  EINHEIT grou; Weltenforscher [1,160$]
+    gruppe
+    gruppe Bla
+    gruppe Bla
+  EINHEIT neu; Weltenforscher [1,160$]
+    neustart goblins foo
+    neustart menschen
+    neustart goblins
+    neustart goblins foo
+  EINHEIT res; Weltenforscher [1,160$]
+    reservieren 1 silber
+    reservieren je 1 holz
+    reservieren 1 holz
+    reservieren 1
+    reservieren je 1
+    reservieren 1
+    reservieren 4
+    reservieren 1
+    reservieren 4 silber
+  EINHEIT comm; Weltenforscher [1,160$]
+    //
+    // foo bar go home
+    
+    // ECHECK
+    // ECHECK VERSION
+    // ECHECK NOWARN
+    // ECHECK LOHN
+    // ECHECK ROUT
+    route no no
+  EINHEIT warn; Weltenforscher [1,160$]
+    // ECHECK WARN
+    // ECHECK ROUT
+    route no no
+  EINHEIT def; Weltenforscher [1,160$]
+    default "arbeiten"
+    default "unterhalten 500"
+    default "machen 1 rostige kettenhemden"
+    default "machen 1 rostige kettenhemden"
+    default "machen 1 rostige kettenhemden"
+    default "unterhalten"
+    default "machen 1 rostige kettenhemden"
+  EINHEIT schu; Weltenforscher [1,160$]
+    
+    
+    
+    
+  EINHEIT pir; Weltenforscher [1,160$]
+    piraterie
+  EINHEIT pir2; Weltenforscher [1,160$]
+    piraterie 1 2 3 4
+  EINHEIT pir3; Weltenforscher [1,160$]
+    piraterie 1
+  EINHEIT carr; Weltenforscher [1,160$]
+    transportieren 123
+    transportieren
+    transportieren 1
+  EINHEIT pass; Weltenforscher [1,160$]
+    fahren 345
+  EINHEIT pas1; Weltenforscher [1,160$]
+    fahren
+  EINHEIT pas2; Weltenforscher [1,160$]
+    fahren 1
+  EINHEIT dest; Weltenforscher [1,160$]
+    zerstoeren
+    zerstoeren 15
+    zerstoeren strassen no
+    zerstoeren 15 strassen no
+    zerstoeren 15 strassen
+    zerstoeren
+    zerstoeren 15
+  EINHEIT show; Weltenforscher [1,160$]
+    zeigen Schild
+    zeigen 2
+    zeigen 
+  EINHEIT cast; Weltenforscher [1,160$]
+    zaubere schattenspiele
+    zaubere stufe 2 sonnenschein
+    zaubere region 1 1 stufe 2 sonnenschein
+    zaubere region 1 1 sonnenschein
+    zaubere sonnenschein foo
+    zaubere 
+    zaubere blitzlicht
+    zaubere stufe 2 REGION
+  EINHEIT opt; Weltenforscher [1,160$]
+    option auswertung
+    option computer
+    option punkte
+    option punkte nicht
+    option
+    option
+    option auswertung
+    option punkte nicht
+  EINHEIT repo; Weltenforscher [1,160$]
+    report Kampf Warnungen
+  EINHEIT foll; Weltenforscher [1,160$]
+    folgen einheit 123
+    folgen schiff 123
+    folgen
+    folgen einheit
+    folgen schiff 
+    folgen
+    folgen
+    folgen einheit 123
+  EINHEIT rout; Weltenforscher [1,160$]
+    route osten no nw westen sw so pause
+  EINHEIT rou1; Weltenforscher [1,160$]
+    nach osten
+  EINHEIT rou2; Weltenforscher [1,160$]
+    nach osten no nw westen sw so
+  EINHEIT rou3; Weltenforscher [1,160$]
+    nach no so
+  EINHEIT rou4; Weltenforscher [1,160$]
+    nach osten no nw westen sw so
+    route pause
+    nach
+    route
+  EINHEIT verl; Weltenforscher [1,160$]
+    verlassen
+    verlassen
+  EINHEIT betr; Weltenforscher [1,160$]
+    betreten burg 123
+    betreten gebaeude 1
+    betreten schiff 123
+    betreten burg
+    betreten schiff
+    betreten burg 1
+    betreten burg 123
+  EINHEIT unt; Weltenforscher [1,160$]
+    unterhalten
+  EINHEIT unt2; Weltenforscher [1,160$]
+    unterhalten 15
+  EINHEIT unt3; Weltenforscher [1,160$]
+    unterhalten
+    unterhalten 15
+  EINHEIT tax; Weltenforscher [1,160$]
+    treiben
+  EINHEIT tax2; Weltenforscher [1,160$]
+    treiben 15
+  EINHEIT tax3; Weltenforscher [1,160$]
+    treiben
+    treiben 15
+    treiben 15
+  EINHEIT quit; Weltenforscher [1,160$]
+    stirb pw
+    stirb pw
+    stirb
+    stirb 1
+  EINHEIT rec; Weltenforscher [1,160$]
+    rekrutieren 123
+    rekrutieren
+    rekrutieren 1
+  EINHEIT pw; Weltenforscher [1,160$]
+    passwort
+    passwort 123
+    passwort 1
+    passwort 1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  EINHEIT sabo; Weltenforscher [1,160$]
+    sabotieren schiff
+  EINHEIT sab1; Weltenforscher [1,160$]
+    sabotieren schiff
+    sabotieren
+    sabotieren
+  EINHEIT make; Weltenforscher [1,160$]
+    machen 1 holz
+  EINHEIT mak1; Weltenforscher [1,160$]
+    machen holz
+  EINHEIT mak2; Weltenforscher [1,160$]
+    machen "ringe der unsichtbarkeit"
+  EINHEIT mak3; Weltenforscher [1,160$]
+    machen trireme
+  EINHEIT mak4; Weltenforscher [1,160$]
+    machen schiff 123
+  EINHEIT mak5; Weltenforscher [1,160$]
+    machen burg 4
+  EINHEIT mak6; Weltenforscher [1,160$]
+    machen strassen no
+  EINHEIT maka; Weltenforscher [1,160$]
+    machen burg
+  EINHEIT makb; Weltenforscher [1,160$]
+    machen
+  EINHEIT mak7; Weltenforscher [1,160$]
+    machen strassen no
+  EINHEIT mak8; Weltenforscher [1,160$]
+    machen
+    machen 1 holz
+    machen
+    machen strassen pause
+  EINHEIT stud; Weltenforscher [1,160$]
+    lernen hiebwaffen
+  EINHEIT stu2; Weltenforscher [1,160$]
+    lernen taktik
+  EINHEIT stu3; Weltenforscher [1,160$]
+    lernen
+    lernen
+    lernen
+    lernen hiebwaffen
+  EINHEIT verg; Weltenforscher [1,160$]
+    vergessen hiebwaffen
+    vergessen
+    vergessen hiebwaffen
+    vergessen
+  EINHEIT teac; Weltenforscher [1,160$]
+    lehren stud
+  EINHEIT tea2; Weltenforscher [1,160$]
+    lehren stud 1 2 3 4 5
+  EINHEIT tea3; Weltenforscher [1,160$]
+    lehren
+    lehren 1
+  EINHEIT spy; Weltenforscher [1,160$]
+    spionieren 123
+  EINHEIT spy2; Weltenforscher [1,160$]
+    spionieren 123
+    spionieren
+  EINHEIT cont; Weltenforscher [1,160$]
+    kontaktieren 123
+    kontaktieren
+    kontaktieren 123
+  EINHEIT trad; Weltenforscher [1,160$]
+    verkaufen 1 myrrhe
+    verkaufen 5 oel
+    kaufen 2 balsam
+  EINHEIT tra2; Weltenforscher [1,160$]
+    kaufen 5 balsam
+    kaufen 5 balsam
+  EINHEIT tra3; Weltenforscher [1,160$]
+    verkaufen alles 1 balsam
+    kaufen
+  EINHEIT tra4; Weltenforscher [1,160$]
+    kaufen 1 balsam
+    verkaufen 1 balsam
+    verkaufen 1 oel
+    verkaufen 1 balsam
+    kaufen 1 balsam
+  EINHEIT mag1; Weltenforscher [1,160$]
+    kampfzauber "magische erbsensuppe"
+    kampfzauber stufe 2 pesthauch
+    kampfzauber stufe 2 "magisches lametta" NICHT
+    kampfzauber stufe 2 "magisches lametta"
+    kampfzauber 
+    kampfzauber Foo
+    kampfzauber blitzlicht
+    kampfzauber blitzlicht Blitzlicht
+    kampfzauber blitzlicht NICHT Blitzlicht
+    kampfzauber NICHT
+  EINHEIT comb; Weltenforscher [1,160$]
+    kaempfen vorne
+    kaempfen hinten
+    kaempfen vorne
+    kaempfen aggressiv
+    kaempfen defensiv
+    kaempfen fliehe
+    kaempfen helfen
+    kaempfen helfen nicht
+    kaempfen helfen
+    kaempfen Bla
+    kaempfen hinten
+  EINHEIT help; Weltenforscher [1,160$]
+    helfen 1 alles
+    helfen 1 kaempfe
+    helfen 1 silber
+    helfen 1 gib
+    helfen 1 parteitarnung
+    helfen 1 bewache
+    helfen 1 alles nicht
+    helfen 1
+    helfen 1 alles
+    helfen 1 alles
+    helfen 1
+    helfen
+  EINHEIT give; Weltenforscher [1,160$]
+    gib 1 sonnenschein
+    gib 1 1 silber
+    gib 1 alles holz
+    gib 1 alles
+    gib TEMP a je 1 silber
+    gib 2 je 1 silber
+    gib 3 kommando
+    gib 4 kraeuter
+    gib 5 einheit
+    gib 6 5 personen
+    gib 6 alles personen
+    gib 0 alles
+    gib 0 kommando
+    gib 2 je 1 silber
+    gib 2 je 1
+    gib 2 je 1
+    gib 3 kommando
+    gib 3 1
+    gib 1 1 silber
+  EINHEIT stel; Weltenforscher [1,160$]
+    tarnen
+    tarnen 1
+    tarnen partei
+    tarnen partei nicht
+    tarnen partei nummer 0
+    tarnen partei nummer 2
+    tarnen halblinge
+    tarnen 1
+    tarnen
+  EINHEIT res; Weltenforscher [1,160$]
+    forschen kraeuter
+  EINHEIT res2; Weltenforscher [1,160$]
+    forschen
+  EINHEIT res3; Weltenforscher [1,160$]
+    forschen
+    forschen kraeuter
+  EINHEIT tem; Weltenforscher [1,160$]
+    machen TEMP tem1
+      arbeiten
+    ende
+    ende
+  EINHEIT tem2; Weltenforscher [1,160$]
+    machen TEMP tem2
+      arbeiten
+      reservieren
+    ende
+  EINHEIT guar; Weltenforscher [1,160$]
+    bewachen
+    bewachen nicht
+    bewachen
+  EINHEIT desc; Weltenforscher [1,160$]
+    beschreiben einheit abc
+    beschreiben region abc
+    beschreiben burg abc
+    beschreiben schiff abc
+    beschreiben privat abc
+    beschreiben einheit
+    beschreiben einheit abc
+  EINHEIT name; Weltenforscher [1,160$]
+    benennen einheit abc
+    benennen region abc
+    benennen burg abc
+    benennen schiff abc
+    benennen gebaeude abc
+    benennen
+    benennen fremdes einheit abc
+    benennen fremdes burg abc
+    benennen fremdes schiff abc
+    benennen einheit
+    benennen einheit
+    benennen einheit abc
+    benennenfremdes region abc
+    benennen fremdes einheit def
+    benennen fremdes einheit
+    benennen fremdes
+    benennen fremdes
+    benennen
+  EINHEIT thie; Weltenforscher [1,160$]
+    beklauen 1
+  EINHEIT thi2; Weltenforscher [1,160$]
+    beklauen 1
+    beklauen
+    beklauen 1
+    beklauen 1
+  EINHEIT bree; Weltenforscher [1,160$]
+    zuechten pferde
+  EINHEIT bre2; Weltenforscher [1,160$]
+    zuechten kraeuter
+  EINHEIT bre3; Weltenforscher [1,160$]
+    zuechten 5 pferde
+  EINHEIT bre4; Weltenforscher [1,160$]
+    zuechten 5 kraeuter
+  EINHEIT bre5; Weltenforscher [1,160$]
+    zuechten
+    zuechten 5 pferde
+    zuechten 5
+  EINHEIT sieg; Weltenforscher [1,160$]
+    belagere 123
+  EINHEIT sie2; Weltenforscher [1,160$]
+    belagere
+    belagere 123
+    belagere burg
+    belagere 1
+  EINHEIT att; Weltenforscher [1,160$]
+    attackieren 123
+    attackieren 456
+    attackieren
+    attackieren 123
+    attackieren 1
+    attackieren TEMP 123
+  EINHEIT work; Weltenforscher [1,160$]
+    arbeiten
+  EINHEIT wor1; Weltenforscher [1,160$]
+    arbeiten
+  EINHEIT mess; Weltenforscher [1,160$]
+    botschaft region Hallo
+    botschaft schiff 123 Hallo
+    botschaft gebaeude 456 Hallo
+    botschaft burg 456 Hallo
+    botschaft partei 123 Hallo
+    botschaft einheit 123 Hallo
+    botschaft region 1
+    botschaft schiff 1
+    botschaft gebaeude 1
+    botschaft burg 1
+    botschaft partei 1
+    botschaft einheit 1
+  EINHEIT use; Weltenforscher [1,160$]
+    benutzen bauernblut
+    benutzen 1 gehirnschmalz
+    benutzen
+    benutzen 
+    benutzen 1
+  EINHEIT orig; Weltenforscher [1,160$]
+    ursprung 1 0
+    ursprung
+    ursprung 1 0
+    ursprung 1 2
+  EINHEIT emil; Weltenforscher [1,160$]
+    email a@b.com; Zustellung an  a@b.com
+    email
+    email foo
+    email foo
+  EINHEIT bann; Weltenforscher [1,160$]
+    banner abc
+    banner
+    banner abc
+  EINHEIT mein; Weltenforscher [1,160$]
+    
+    
+    
+  EINHEIT numm; Weltenforscher [1,160$]
+    nummer einheit
+    nummer einheit abc
+    nummer partei abc
+    nummer schiff abc
+    nummer burg bac
+    nummer gebaeude 123
+    nummer einheit TEMP 0
+    nummer einheit TEMP 1
+    nummer partei 0
+    nummer burg 123
+    nummer
+  EINHEIT alli; Weltenforscher [1,160$]
+    
+  EINHEIT uml; Weltenforscher [1,160$]
+    kaempfen nicht
+    kaufen 1 oel
+    kaempfen nicht
+    verkaufen 1 oel
+    zerstoeren strassen no
+    zerstoeren strassen sw
+    benennen einheit Ööóōß
+naechster

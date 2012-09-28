@@ -10,7 +10,7 @@
 ############################################################################
 
 ALL,         Alles
-EACH, Je
+EACH,        Je
 PEASANTS,    Bauern
 CASTLE,      Burg
 BUILDING,    Gebäude
@@ -36,11 +36,9 @@ SILVER,      Silber
 ROAD,        Straßen
 TEMP,        Temporär
 PRIVATE,     Privat
-FIGHT,       Kämpfe
 OBSERVE,     Wahrnehmung
 GIVE,        Gib
 GUARD,       Bewache
-FACTIONSTEALTH, Parteitarnung
 WARN,        Warnung
 LEVEL,       Stufe
 HORSES,      Pferde
@@ -48,7 +46,12 @@ HORSES,      Pferde
 FOREIGN,     fremdes
 NUMBER,      Nummer
 # ^^ TARNE PARTEI NUMMER
-LOCALE, Locale
-
+LOCALE,      Locale
+ALLIANCE,    Allianz
+KICK,        Ausstoßen
+LEAVE,       Verlassen
+NEW,         Neu
+INVITE,      Einladen
+JOIN,        Beitreten
 BEFORE,      vor
 AFTER,       hinter

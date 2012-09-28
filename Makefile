@@ -28,6 +28,15 @@ echeck: echeck.c unicode.c unicode.h config.h tests.c cutest/CuTest.c cutest/CuT
 
 clean:
 	@rm -f *.o core *.bak echeck
+	@rm -f e2/test/echeck_output.txt e2/test/echeck_errors.txt e3/test/echeck_output.txt e3/test/echeck_errors.txt
 
 test: echeck
 	@./echeck -T=all -Lde -Re2 -b
+	./echeck  -Re2 -oe2/test/echeck_output.txt -Oe2/test/echeck_errors.txt e2/test/orders.test.txt > /dev/null
+	./echeck  -Re3 -oe3/test/echeck_output.txt -Oe3/test/echeck_errors.txt e3/test/orders.test.txt > /dev/null
+	diff -q e2/test/echeck_output.txt e2/test/echeck_output.template
+	diff -q e2/test/echeck_errors.txt e2/test/echeck_errors.template
+	diff -q e3/test/echeck_output.txt e3/test/echeck_output.template
+	diff -q e3/test/echeck_errors.txt e3/test/echeck_errors.template
+	@echo "tests completed successfully"
+

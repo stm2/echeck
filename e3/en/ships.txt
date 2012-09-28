@@ -4,8 +4,15 @@
 # Comments start with a #; empty lines are allowed.
 #############################################################################
 
-Boat
-Longboat
-Longship
+Canoe
+Raft
+Cutter
+Barge
+Royal Barge
+Catamaran
+Cog
 Caravel
+Frigate
+Galleon
+Dragonship
 Trireme
