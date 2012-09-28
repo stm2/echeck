@@ -21,7 +21,7 @@
 
 #ifdef WITH_CUTEST
 #include <CuTest.h>
-int AddTestSuites(CuSuite * suite, const char * names);
+int AddTestSuites(CuSuite * suite, const char *names);
 int RunAllTests(CuSuite * suite);
 #endif
 
@@ -130,9 +130,9 @@ static int compact = 0;
 
 FILE *ERR, *OUT = 0;
 
-const char * run_tests = 0;
+const char *run_tests = 0;
 int line_no,                    /* count line number */
-  filesread = 0;
+ filesread = 0;
 
 char echo_it = 0,               /* option: echo input lines */
   no_comment = -3,              /* Keine Infos in [] hinter EINHEIT */
@@ -994,7 +994,7 @@ int Pow(int p)
 
 #define iswxspace(c) (c==160 || iswspace(c))
 
-char * eatwhite(char *ptr)
+char *eatwhite(char *ptr)
 {
   int ret = 0;
 
@@ -1215,7 +1215,7 @@ void readspell(char *s)
   t_spell *sp;
   char buffer[128];
 
-  sp = (t_spell *)calloc(1, sizeof(t_spell));
+  sp = (t_spell *) calloc(1, sizeof(t_spell));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1252,7 +1252,7 @@ void readskill(char *s)
   char *x;
   t_skills *sk;
 
-  sk = (t_skills *)calloc(1, sizeof(t_skills));
+  sk = (t_skills *) calloc(1, sizeof(t_skills));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1283,11 +1283,11 @@ int readitem(char *s)
   t_item *it;
   t_names *n, *nn;
 
-  it = (t_item *)calloc(1, sizeof(t_item));
+  it = (t_item *) calloc(1, sizeof(t_item));
   nn = NULL;
   x = s;
   do {
-    n = (t_names *)calloc(1, sizeof(t_names));
+    n = (t_names *) calloc(1, sizeof(t_names));
     x = strchr(s, ';');
     if (!x)
       x = strchr(s, ',');
@@ -1327,7 +1327,7 @@ void readliste(char *s, t_liste ** L)
   t_liste *ls;
   char buffer[128];
 
-  ls = (t_liste *)calloc(1, sizeof(t_liste));
+  ls = (t_liste *) calloc(1, sizeof(t_liste));
   x = strchr(s, '\n');
   if (x)
     *x = 0;
@@ -1342,7 +1342,7 @@ int readkeywords(char *s)
   int i;
   char buffer[64];
 
-  k = (t_keyword *)calloc(1, sizeof(t_keyword));
+  k = (t_keyword *) calloc(1, sizeof(t_keyword));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1380,7 +1380,7 @@ int readparams(char *s)
   t_params *p;
   int i;
 
-  p = (t_params *)calloc(1, sizeof(t_params));
+  p = (t_params *) calloc(1, sizeof(t_params));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1413,7 +1413,7 @@ int readdirection(char *s)
   t_direction *d;
   int i;
 
-  d = (t_direction *)calloc(1, sizeof(t_direction));
+  d = (t_direction *) calloc(1, sizeof(t_direction));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1451,7 +1451,7 @@ int readerror(char *s)
   i = findstr(Errors, s, MAX_ERRORS);
   if (i < 0)
     return 0;
-  x = eatwhite(x+1);
+  x = eatwhite(x + 1);
   if (!(*x) || *x == '\n')
     return 0;
   s = x;
@@ -1511,7 +1511,7 @@ int readhelp(char *s)
     help_path = strdup(x);
     break;
   default:
-    h = (t_liste *)calloc(1, sizeof(t_liste));
+    h = (t_liste *) calloc(1, sizeof(t_liste));
     h->name = strdup(x);
     addlist(&help, h);
     break;
@@ -1638,16 +1638,18 @@ static void macify(unsigned char *s)
 }
 #endif
 
-static char * mocked_input = 0;
-static char * mock_pos = 0;
+static char *mocked_input = 0;
+static char *mock_pos = 0;
 
-void set_order_unit(unit * u) {
+void set_order_unit(unit * u)
+{
   order_unit = u;
 }
 
 #ifdef WITH_CUTEST
 
-void mock_input(const char * input) {
+void mock_input(const char *input)
+{
   free(mocked_input);
   mocked_input = strdup(input);
   mock_pos = mocked_input;
@@ -1658,16 +1660,18 @@ static char *fgetbuffer(char *buf, int size, FILE * F)
 {
   if (mocked_input) {
     size_t bytes;
-    char * nextbr;
-    if (!*mock_pos) return 0;
+    char *nextbr;
+    if (!*mock_pos)
+      return 0;
     nextbr = strchr(mock_pos, '\n');
     if (!nextbr) {
       nextbr = mock_pos + strlen(mock_pos);
     } else {
       ++nextbr;
     }
-    bytes = MIN(size-1, nextbr-mock_pos);
-    if (bytes) memcpy(buf, mock_pos, bytes);
+    bytes = MIN(size - 1, nextbr - mock_pos);
+    if (bytes)
+      memcpy(buf, mock_pos, bytes);
     buf[bytes] = 0;
     mock_pos += bytes;
     return buf;
@@ -1762,8 +1766,7 @@ void Error(char *text, int line, char *order)
   if (!brief) {
     switch (compile) {
     case OUT_NORMAL:
-      fprintf(ERR, "%s %d: %s.\n  `%s'\n", errtxt[ERRORINLINE], line,
-        text, bf);
+      fprintf(ERR, "%s %d: %s.\n  `%s'\n", errtxt[ERRORINLINE], line, text, bf);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)|0|%s. `%s'\n", filename, line, text, bf);
@@ -1872,8 +1875,7 @@ void warning(char *s, int line, char *order, char level)
   if (show_warnings && !brief) {
     switch (compile) {
     case OUT_NORMAL:
-      fprintf(ERR, "%s %d: %s.\n  `%s'\n", errtxt[WARNINGLINE], line,
-        s, bf);
+      fprintf(ERR, "%s %d: %s.\n  `%s'\n", errtxt[WARNINGLINE], line, s, bf);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)%d|%s. `%s'\n", filename, line, level, s, bf);
@@ -1942,7 +1944,7 @@ t_region *addregion(int x, int y, int pers)
   }
 
   if (!r) {
-    r = (t_region *)calloc(1, sizeof(t_region));
+    r = (t_region *) calloc(1, sizeof(t_region));
     r->x = x;
     r->y = y;
     r->personen = pers;
@@ -1976,7 +1978,7 @@ void addteach(unit * teacher, unit * student)
       }
     }
   }
-  t = (teach *)malloc(sizeof(teach));
+  t = (teach *) malloc(sizeof(teach));
   t->next = NULL;
   t->teacher = teacher;
   t->student = student;
@@ -1988,7 +1990,7 @@ unit *newunit(int n, int t)
   unit *u = find_unit(n, t), *c;
 
   if (!u) {
-    u = (unit *)calloc(1, sizeof(unit));
+    u = (unit *) calloc(1, sizeof(unit));
     u->no = n;
     u->line_no = line_no;
     u->order = strdup(order_buf);
@@ -2247,7 +2249,7 @@ char *getbuf(void)
       return NULL;
 
     end = bp + strlen(bp);
-    if (end==bp || *(end - 1) == '\n') {
+    if (end == bp || *(end - 1) == '\n') {
       line_no++;
       *(--end) = 0;
     } else {
@@ -3355,7 +3357,7 @@ void claim(void)
 {
   char *s;
   int i, n;
-  
+
   scat(printkeyword(K_RESERVE));
   s = getstr();
   n = atoi(s);
@@ -4746,7 +4748,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
         break;
 
       case 'T':
-        run_tests = argv[i][2]=='=' ? argv[i]+3 : "all";
+        run_tests = argv[i][2] == '=' ? argv[i] + 3 : "all";
         break;
 
       case 'E':
@@ -5072,7 +5074,8 @@ void process_order_file(int *faction_count, int *unit_count)
       else
         fprintf(ERR, errtxt[FOUNDORDERS], itob(f));
       check_OPTION();           /* Nach PARTEI auf "; OPTION" bzw. ";  ECHECK" testen */
-      if (faction_count) ++*faction_count;
+      if (faction_count)
+        ++ * faction_count;
       if (befehle_ende)
         return;
       if (!compile) {
@@ -5093,7 +5096,8 @@ void process_order_file(int *faction_count, int *unit_count)
       if (f) {
         scat(order_buf);
         readaunit();
-        if (unit_count) ++*unit_count;
+        if (unit_count)
+          ++ * unit_count;
       } else
         get_order();
       break;
@@ -5195,7 +5199,7 @@ void addtoken(tnode * root, const char *str, int id)
     while (tk && tk->c != c)
       tk = tk->nexthash;
     if (!tk) {
-      tk = (tnode *)calloc(1, sizeof(tnode));
+      tk = (tnode *) calloc(1, sizeof(tnode));
       tk->id = -1;
       tk->c = c;
       tk->nexthash = root->next[lindex];
@@ -5336,7 +5340,7 @@ int main(int argc, char *argv[])
 
   if (run_tests) {
 #ifdef WITH_CUTEST
-    CuSuite * suite = CuSuiteNew();
+    CuSuite *suite = CuSuiteNew();
     CuString *output = CuStringNew();
 
     AddTestSuites(suite, run_tests);
