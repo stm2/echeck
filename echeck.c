@@ -1232,7 +1232,7 @@ char *transliterate_string(char *out, size_t size, const char *in, bool ucs4)
     size_t len;
     const char *p = src;
     while ((p + size > src) && *src && (~*src & 0x80)) {
-      *dst++ = (char)tolower(*src++);
+      *dst++ = (char)tolower((unsigned char)*src++);
     }
     len = src - p;
     size -= len;
@@ -1335,7 +1335,7 @@ void readskill(char *s)
   sk->value = strdup(s);
   if (x) {
     s = (char *)(x + 1);
-    while (isspace(*s))
+    while (isspace((unsigned char)*s))
       s++;
     if (*s)
       sk->kosten = atoi(s);
@@ -1671,7 +1671,7 @@ int parsefile(char *s, int typ)
     if (!x)
       return 0;
     y = x + 1;
-    while (isspace(*(x - 1)))
+    while (isspace((unsigned char)*(x - 1)))
       x--;
     *x = 0;
     for (i = 1; i < UT_MAX; i++)
@@ -1866,7 +1866,7 @@ int btoi(char *s)
 
   if (!(*s))
     return 0;
-  while (isalnum(*s))
+  while (isalnum((unsigned char)*s))
     s++;
   if (s)
     *s = 0;
@@ -1879,13 +1879,13 @@ int btoi(char *s)
 #ifdef HAVE_STRTOL
   i = (int)(strtol(x, NULL, 36));
 #else
-  while (isalnum(*s)) {
+  while (isalnum((unsigned char)*s)) {
     i *= 36;
-    if (isupper(*s))
+    if (isupper((unsigned char)*s))
       i += (*s) - 'A' + 10;
-    else if (islower(*s))
+    else if (islower((unsigned char)*s))
       i += (*s) - 'a' + 10;
-    else if (isdigit(*s))
+    else if (isdigit((unsigned char)*s))
       i += (*s) - '0';
     ++s;
   }
@@ -2320,18 +2320,18 @@ void mask_quoted(char *buf)
   char *cp = buf;
 
   while (cp != buf + MAXLINE && bp != buf + MAXLINE && *bp) {
-    if (isspace(*bp)) {
+    if (isspace((unsigned char)*bp)) {
       if (eatwhite) {
         do {
           ++bp;
-        } while (bp != buf + MAXLINE && isspace(*bp));
+        } while (bp != buf + MAXLINE && isspace((unsigned char)*bp));
         if (!quote2 && !quote1 && !start)
           *(cp++) = ' ';
       } else {
         do {
           *(cp++) = SPACE_REPLACEMENT;
           ++bp;
-        } while (cp != buf + MAXLINE && bp != buf + MAXLINE && isspace(*bp));
+        } while (cp != buf + MAXLINE && bp != buf + MAXLINE && isspace((unsigned char)*bp));
       }
     } else if ((*bp == SINGLEQUOTE || *bp == DOUBLEQUOTE) && !comment) {
       if (quote2) {
@@ -2362,7 +2362,7 @@ void mask_quoted(char *buf)
       *(cp++) = *(bp++);
     } else {
 #if !defined(AMIGA) && !defined(UMLAUTE)
-      if (!iscntrl(*bp)) {
+      if (!iscntrl((unsigned char)*bp)) {
 #else
       if ((unsigned char)(*bp) > 32) {
 #endif
@@ -2414,12 +2414,12 @@ char *getbuf(void)
     }
     cont = false;
     while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE && *bp) {
-      if (isspace(*bp)) {
+      if (isspace((unsigned char)*bp)) {
         do {
           *(cp++) = *bp;
           ++bp;
         } while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE
-          && isspace(*bp));
+          && isspace((unsigned char)*bp));
       } else {
         cont = false;
         {
@@ -2427,7 +2427,7 @@ char *getbuf(void)
             cont = true;
           else
 #if !defined(AMIGA) && !defined(UMLAUTE)
-          if (!iscntrl(*bp)) {
+          if (!iscntrl((unsigned char)*bp)) {
 #else
           if ((unsigned char)(*bp) > 32) {
 #endif
@@ -2705,10 +2705,10 @@ void orders_for_unit(int i, unit * u)
     no_comment++;
     return;
   }
-  while (!isdigit(*j))
+  while (!isdigit((unsigned char)*j))
     j++;
   u->money += atoi(j);
-  while (isdigit(*j))
+  while (isdigit((unsigned char)*j))
     j++;                        /* hinter die Zahl */
 
   k = j;
@@ -2721,9 +2721,9 @@ void orders_for_unit(int i, unit * u)
     j++;
     if (j < e && *j == 'U') {   /* Muß ein Gebäude unterhalten */
       j++;
-      if (isdigit(*j)) {
+      if (isdigit((unsigned char)*j)) {
         u->unterhalt = atoi(j);
-        while (isdigit(*j))
+        while (isdigit((unsigned char)*j))
           j++;
         j++;
       }
@@ -3255,7 +3255,7 @@ void checkmake(void)
   scat(printkeyword(K_MAKE));
   s = getstr();
 
-  if (isdigit(*s)) {            /* MACHE anzahl "Gegenstand" */
+  if (isdigit((unsigned char)*s)) {            /* MACHE anzahl "Gegenstand" */
     j = atoi(s);
     if (j == 0)
       awarning(errtxt[NUMBER0SENSELESS], 2);
@@ -3666,7 +3666,7 @@ void check_claim(void)
   scat(printkeyword(K_CLAIM));
   s = getstr();
 
-  if (isdigit(*s)) {            /* BEANSPRUCHE anzahl "Gegenstand" */
+  if (isdigit((unsigned char)*s)) {            /* BEANSPRUCHE anzahl "Gegenstand" */
     n = atoi(s);
     if (n == 0)
       awarning(errtxt[NUMBER0SENSELESS], 2);
@@ -3737,7 +3737,7 @@ void check_destroy(void)
   scat(printkeyword(K_DESTROY));
   s = getstr();
 
-  if (isdigit(*s)) {            /* ZERSTOERE anzahl ... */
+  if (isdigit((unsigned char)*s)) {            /* ZERSTOERE anzahl ... */
     n = atoi(s);
     if (n == 0)
       awarning(errtxt[NUMBER0SENSELESS], 2);
@@ -4205,7 +4205,7 @@ void checkanorder(char *Orders)
     scat(printkeyword(K_USE));
     s = getstr();
 
-    if (isdigit(*s)) {          /* BENUTZE anzahl "Trank" */
+    if (isdigit((unsigned char)*s)) {          /* BENUTZE anzahl "Trank" */
       i = atoi(s);
       icat(i);
       if (i == 0)
@@ -4355,7 +4355,7 @@ void checkanorder(char *Orders)
       }
       break;
     }
-    if (isdigit(s[0])) {
+    if (isdigit((unsigned char)s[0])) {
       i = atoip(s);
       icat(i);
       break;
@@ -4777,7 +4777,7 @@ void checkanorder(char *Orders)
     scat(printkeyword(K_PLANT));
     s = getstr();
 
-    if (isdigit(*s)) {          /* PFLANZE anzahl "Kraeuter/Samen/Mallornsamen" */
+    if (isdigit((unsigned char)*s)) {          /* PFLANZE anzahl "Kraeuter/Samen/Mallornsamen" */
       i = atoi(s);
       if (i == 0)
         awarning(errtxt[NUMBER0SENSELESS], 2);
@@ -5207,7 +5207,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
           if (argv[i][2])
             show_warnings = (char)atoi(argv[i] + 2);
           else {
-            if (argv[i + 1] && isdigit(*argv[i + 1])) {
+            if (argv[i + 1] && isdigit((unsigned char)*argv[i + 1])) {
               i++;
               show_warnings = (char)atoi(argv[i]);
             } else
@@ -5401,7 +5401,7 @@ void process_order_file(int *faction_count, int *unit_count)
       }
       x = getstr();
       if (*x) {
-        if (!isdigit(*x) && (*x != '-'))
+        if (!isdigit((unsigned char)*x) && (*x != '-'))
           /*
            * REGION ohne Koordinaten - z.B. Astralebene 
            */
@@ -5430,7 +5430,7 @@ void process_order_file(int *faction_count, int *unit_count)
       x = strchr(order_buf, ';');
       if (x) {
         x++;
-        while (isspace(*x))
+        while (isspace((unsigned char)*x))
           x++;
         if (r->key)
           free(r->key);
@@ -5581,7 +5581,7 @@ void addtoken(tnode * root, const char *str, int id)
     root->id = id;
     root->leaf = 1;
   } else {
-    char c = (char)tolower(*str);
+    char c = (char)tolower((unsigned char)*str);
     int lindex = ((unsigned char)c) % 32;
     int i = 0;
     tnode *tk = root->next[lindex];
