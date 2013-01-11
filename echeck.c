@@ -1031,7 +1031,7 @@ const char *itob(int i)
       *dst = (char)('a' + (x - 10));
   }
   while (b > 0);
-  return strdup(dst);
+  return dst;
 }
 
 #define scat(X) strcat(checked_buf, X)
