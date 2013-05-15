@@ -50,6 +50,9 @@ catapult ammunition; catapult ammunition
 adamantium; adamantium
 adamantium axe; adamantium axes
 adamantium plate; adamantium plates
+mallorn seed; mallorn seeds
+rusty chainmail; rusty chainmails
+rusty claymore; rusty claymores
 
 # Ok, these were the official items; you shouldn't change this list
 # if you count on the results of ECheck...
