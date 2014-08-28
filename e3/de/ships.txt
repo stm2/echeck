@@ -7,8 +7,15 @@
 # Kommentare mit einem # davor; Leerzeilen sind erlaubt
 ############################################################################
 
-Boot
-Langboot
-Drachenschiff
+Einbaum
+Floß
+Kutter
+Barke
+Königsbarke
+Katamaran
+Kogge
 Karavelle
+Fregatte
+Galeone
+Drachenschiff
 Trireme
