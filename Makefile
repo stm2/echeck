@@ -1,6 +1,4 @@
-CC = gcc
 CFLAGS = -g -Wall -std=c99 -Werror
-# CFLAGS = -O2 -fomit-frame-pointer -Wall
 CFLAGS += -Icutest -DWITH_CUTEST
 
 ifeq ($(PREFIX),)
