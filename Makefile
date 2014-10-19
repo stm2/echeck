@@ -5,7 +5,7 @@ ifeq ($(PREFIX),)
 PREFIX=/home/eressea/echeck
 endif
 
-all: echeck test
+all: echeck
 
 install: echeck
 	install -t $(PREFIX) echeck
