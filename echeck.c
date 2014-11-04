@@ -2137,7 +2137,8 @@ int findtoken(const char *token, int type)
   } else
     at_cmd = 0;
 
-  while (*str) {
+    if (str) {
+    while (*str) {
     char c = (char)tolower((unsigned char)*str);
 
     tk = tk->next[((unsigned char)c) % 32];
@@ -2146,7 +2147,8 @@ int findtoken(const char *token, int type)
     if (!tk)
       return -1;
     ++str;
-  }
+    }
+    }
   if (tk->id >= 0)
     return tk->id;
   else
