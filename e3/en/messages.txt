@@ -60,6 +60,7 @@ FACTION0USED, Faction 0 used
 FACTIONINVALID, Faction "%s" invalid
 FACTIONMISSING, Faction missing
 FACTIONS, factions
+FACTION, faction
 FOLLOW, FOLLOW UNIT xx, FOLLOW SHIP xx or FOLLOW
 FOUNDERROR, There was one error
 FOUNDERRORS, There were %d errors

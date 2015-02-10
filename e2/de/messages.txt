@@ -60,6 +60,7 @@ FACTION0USED, Partei 0 verwendet
 FACTIONINVALID, Partei "%s" ungültig
 FACTIONMISSING, Partei fehlt
 FACTIONS, Parteien
+FACTION, Partei
 FOLLOW, FOLGE EINHEIT xx, FOLGE SCHIFF xx oder FOLGE
 FOUNDERROR, Es wurde ein Fehler
 FOUNDERRORS, Es wurden %d Fehler
