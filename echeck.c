@@ -512,11 +512,11 @@ enum {
   ERRORREGIONPARAMETER,
   ERRORSPELLSYNTAX,
   ERRORSURVEY,
+  FACTION,
+  FACTIONS,
   FACTION0USED,
   FACTIONINVALID,
   FACTIONMISSING,
-  FACTIONS,
-  FACTION,
   FOLLOW,
   FOUNDERROR,
   FOUNDERRORS,
@@ -702,11 +702,11 @@ static char *Errors[MAX_ERRORS] = {
   "ERRORREGIONPARAMETER",
   "ERRORSPELLSYNTAX",
   "ERRORSURVEY",
+  "FACTION",
+  "FACTIONS",
   "FACTION0USED",
   "FACTIONINVALID",
   "FACTIONMISSING",
-  "FACTIONS",
-  "FACTION",
   "FOLLOW",
   "FOUNDERROR",
   "FOUNDERRORS",
@@ -5391,9 +5391,9 @@ int main(int argc, char *argv[])
   }
 
   fprintf(ERR, errtxt[ORDERSREAD],
-    faction_count,
-    faction_count != 1 ? errtxt[FACTIONS] : errtxt[FACTION],
-    unit_count, unit_count != 1 ? errtxt[UNITS] : printparam(P_UNIT));
+          faction_count,
+          faction_count != 1 ? errtxt[FACTIONS] : errtxt[FACTION],
+          unit_count, unit_count != 1 ? errtxt[UNITS] : printparam(P_UNIT));
 
   if (unit_count == 0) {
     fputs(errtxt[CHECKYOURORDERS], ERR);
