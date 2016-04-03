@@ -52,6 +52,10 @@ Katapultmunition; Katapultmunition
 Repetierarmbrust; Repetierarmbrüste
 Schuppenpanzer; Schuppenpanzer
 Turmschild; Turmschilde
+Streitross; Streitrösser
+Mallornsamen; Mallornsamen
+Rostiger Zweihänder; Rostige Zweihänder
+Rostiges Kettenhemd; Rostige Kettenhemden
 
 # So, das waren die offiziellen Items; diese Liste sollte man nicht ändern,
 # wenn man auf das Ergebnis von ECheck Wert legt...

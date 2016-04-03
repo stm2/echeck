@@ -50,6 +50,7 @@ catapult ammunition; catapult ammunition
 repeating crossbow; repeating crossbows
 pangolin; pangolins
 tower shield; tower shields
+charger; chargers
 mallorn seed; mallorn seeds
 rusty chainmail; rusty chainmails
 rusty claymore; rusty claymores
