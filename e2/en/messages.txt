@@ -146,6 +146,7 @@ TEACHWHO, Teach who?
 TEMPHASNTPERSONS, Unit TEMPORARY %s hasn't got men and hasn't recruited anyone
 TEMPNOTTEMP, Unit TEMPORARY %s hasn't been generated with MAKE TEMPORARY
 TEMPUNITSCANTRESERVE, TEMPORARY units can't use RESERVE! Use GIVE instead!
+TEMPUNITSCANTGIVE, TEMPORARY units can't use GIVE, it happens before MAKE!
 TEXTTOOLONG, Text too long (max. %d)
 THERE, There 
 UNIT0NOTPOSSIBLE, Unit 0/Peasants not possible here

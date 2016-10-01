@@ -602,6 +602,7 @@ enum {
   TEMPHASNTPERSONS,
   TEMPNOTTEMP,
   TEMPUNITSCANTRESERVE,
+  TEMPUNITSCANTGIVE,
   TEXTTOOLONG,
   THERE,
   UNIT0NOTPOSSIBLE,
@@ -792,6 +793,7 @@ static char *Errors[MAX_ERRORS] = {
   "TEMPHASNTPERSONS",
   "TEMPNOTTEMP",
   "TEMPUNITSCANTRESERVE",
+  "TEMPUNITSCANTGIVE",
   "TEXTTOOLONG",
   "THERE",
   "UNIT0NOTPOSSIBLE",
@@ -2908,6 +2910,10 @@ void checkgiving(void)
   char *s;
   int i, n;
 
+  if (from_temp_unit_no) {
+    anerror(errtxt[TEMPUNITSCANTGIVE]);
+    return;
+  }
   scat(printkeyword(K_GIVE));
   getaunit(NECESSARY);
   s = getstr();
