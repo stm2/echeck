@@ -48,6 +48,7 @@ Schild; Schilde
 Hellebarde; Hellebarden
 Lanze; Lanzen
 Mallorn; Mallorn
+Mallornsamen; Mallornsamen
 Katapultmunition; Katapultmunition
 Adamantium; Admantium
 Adamantiumaxt; Admantiumäxte
