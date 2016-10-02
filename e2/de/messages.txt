@@ -147,7 +147,7 @@ TEMPHASNTPERSONS, Einheit TEMP %s hat nicht rekrutiert und keine Personen bekomm
 TEMPNOTTEMP, Einheit TEMP %s wurde nicht mit MACHE TEMP generiert
 TEMPUNITSCANTRESERVE, TEMP-Einheiten können nichts reservieren! Bitte GIB benutzen!T
 TEMPUNITSCANTGIVE, TEMP-Einheiten können nichts übergebenen! Befehlsreihenfolge beachten!
-EXTTOOLONG, Text zu lang (max. %d)
+TEXTTOOLONG, Text zu lang (max. %d)
 THERE, Es 
 UNIT0NOTPOSSIBLE, Einheit 0 bzw. Bauern geht hier nicht
 UNIT0USED, Einheit 0 verwendet
