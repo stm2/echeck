@@ -28,7 +28,7 @@ int RunAllTests(CuSuite * suite);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.3.4";
+static const char *echeck_version = "4.3.5";
 
 #define DEFAULT_PATH "."
 
@@ -629,6 +629,7 @@ enum {
   UNITNOTPOSSIBLEHERE,
   UNITONSHIPHASMOVED,
   UNITS,
+  UNIT,
   UNRECOGNIZEDDIRECTION,
   UNRECOGNIZEDOBJECT,
   UNRECOGNIZEDOPTION,
@@ -820,6 +821,7 @@ static char *Errors[MAX_ERRORS] = {
   "UNITNOTPOSSIBLEHERE",
   "UNITONSHIPHASMOVED",
   "UNITS",
+  "UNIT",
   "UNRECOGNIZEDDIRECTION",
   "UNRECOGNIZEDOBJECT",
   "UNRECOGNIZEDOPTION",
@@ -5399,7 +5401,7 @@ int main(int argc, char *argv[])
   fprintf(ERR, errtxt[ORDERSREAD],
           faction_count,
           faction_count != 1 ? errtxt[FACTIONS] : errtxt[FACTION],
-          unit_count, unit_count != 1 ? errtxt[UNITS] : printparam(P_UNIT));
+          unit_count, unit_count != 1 ? errtxt[UNITS] : errtxt[UNIT]);
 
   if (unit_count == 0) {
     fputs(errtxt[CHECKYOURORDERS], ERR);

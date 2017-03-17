@@ -173,6 +173,7 @@ UNITNOTONSHIPBUTONSHIP, Einheit %s ist evtl. nicht auf Schiff %s sondern auf Sch
 UNITNOTPOSSIBLEHERE, Einheit '%s' geht hier nicht
 UNITONSHIPHASMOVED, Einheit %s auf Schiff %s hat sich schon bewegt
 UNITS, Einheiten
+UNIT, Einheit
 UNRECOGNIZEDDIRECTION, Richtung nicht erkannt
 UNRECOGNIZEDOBJECT, Objekt nicht erkannt
 UNRECOGNIZEDOPTION, Option unbekannt
