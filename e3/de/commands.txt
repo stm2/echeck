@@ -30,7 +30,6 @@ STUDY,        Lernen
 MAKE,         Machen
 MOVE,         Nach
 PASSWORD,     Passwort
-PAY,          Bezahlen
 PLANT,        Pflanzen
 RECRUIT,      Rekrutieren
 REPORT,       Report

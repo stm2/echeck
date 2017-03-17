@@ -16,6 +16,7 @@ USE,          Benutzen
 DESCRIBE,     Beschreiben
 ENTER,        Betreten
 GUARD,        Bewachen
+PAY,          Bezahlen
 MESSAGE,      Botschaft
 END,          Ende
 RIDE,         Fahren

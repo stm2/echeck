@@ -31,6 +31,7 @@ STUDY,    Learn
 MAKE,   Make
 MOVE,   Move
 PASSWORD, Password
+PAY, Pay
 PLANT,    Plant
 RECRUIT,  Recruit
 REPORT,   Report
