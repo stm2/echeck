@@ -67,6 +67,7 @@ GROUP,        Gruppe
 SORT,         Sortieren
 PREFIX,       Präfix
 PROMOTION,    Beförderung
+PROMOTE,    Befördere
 
 # NEXT, Nächster     ist KEIN BEFEHL für ECheck, sondern ein PARAMETER!
 # dies ist aus internen Gründen notwendig, also entsprechend dort eintragen

@@ -235,6 +235,7 @@ enum {
   K_SORT,
   K_PREFIX,
   K_PROMOTION,
+  K_PROMOTE,
   MAXKEYWORDS
 };
 
@@ -300,6 +301,7 @@ static char *Keywords[MAXKEYWORDS] = {
   "SORT",
   "PREFIX",
   "PROMOTION",
+  "PROMOTE"
 };
 
 typedef struct _keyword {
@@ -4486,8 +4488,9 @@ void checkanorder(char *Orders)
     if (*s)
       Scat(s);
     break;
+  case K_PROMOTE:
   case K_PROMOTION:
-    scat(printkeyword(K_PROMOTION));
+    scat(printkeyword(i));
     break;
   default:
     anerror(errtxt[UNRECOGNIZEDORDER]);
