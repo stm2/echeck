@@ -28,7 +28,7 @@ int RunAllTests(CuSuite * suite);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.3.5";
+static const char *echeck_version = "4.3.6";
 
 #define DEFAULT_PATH "."
 
@@ -146,7 +146,7 @@ char echo_it = 0,               /* option: echo input lines */
   lohn = 10,                    /* Lohn für Arbeit - je Region zu setzen */
   silberpool = 1,               /* option: Silberpool-Verwaltung */
   line_start = 0,               /* option: Beginn der Zeilenzählung */
-  noship = 0, noroute = 0, nolost = 0, has_version = 0, at_cmd = 0, attack_warning = 0, compile = 0;    /* option: compiler-/magellan-style  warnings */
+  noship = 0, noroute = 0, nolost = 0, has_version = 0, bang_cmd = 0, at_cmd = 0, attack_warning = 0, compile = 0;    /* option: compiler-/magellan-style  warnings */
 int error_count = 0,            /* counter: errors */
   warning_count = 0;            /* counter: warnings */
 char order_buf[BUFSIZE],        /* current order line */
@@ -1746,6 +1746,9 @@ void porder(void)
       for (i = 0; i != indent; i++)
         putc(' ', OUT);
 
+    if (bang_cmd)
+      putc('!', OUT);
+    bang_cmd = 0;
     if (at_cmd)
       putc('@', OUT);
     at_cmd = 0;
@@ -2135,33 +2138,39 @@ int findtoken(const char *token, int type)
 
   str = transliterate(buffer, sizeof(buffer), token);
 
-  if (str && *str == '@') {
-    str++;
-    at_cmd = 1;
-    if (*str < 65) {
-      anerror(errtxt[NOSPACEHERE]);
-      return -2;
+  if (str) {
+    if (type==UT_KEYWORD) {
+      at_cmd = 0;
+      bang_cmd = 0;
+      for (; *str; ++str) {
+        if (*str=='!') bang_cmd = 1;
+        else if (*str=='@') at_cmd = 1;
+        else break;
+      }
+      if (*str < 65) {
+        anerror(errtxt[NOSPACEHERE]);
+        return -2;
+      }
     }
-  } else
-    at_cmd = 0;
-
-    if (str) {
     while (*str) {
-    char c = (char)tolower((unsigned char)*str);
+      char c = (char)tolower((unsigned char)*str);
 
-    tk = tk->next[((unsigned char)c) % 32];
-    while (tk && tk->c != c)
-      tk = tk->nexthash;
-    if (!tk)
-      return -1;
-    ++str;
+      tk = tk->next[((unsigned char)c) % 32];
+      while (tk && tk->c != c) {
+        tk = tk->nexthash;
+      }
+      if (!tk) {
+        return -1;
+      }
+      ++str;
     }
-    }
+  }
   if (tk->id >= 0)
     return tk->id;
   else
     return -1;
 }
+
 
 int findparam(const char *s)
 {
