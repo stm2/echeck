@@ -2147,7 +2147,7 @@ int findtoken(const char *token, int type)
         else if (*str=='@') at_cmd = 1;
         else break;
       }
-      if (*str < 65) {
+      if ((at_cmd || bang_cmd) && *str < 65) {
         anerror(errtxt[NOSPACEHERE]);
         return -2;
       }
