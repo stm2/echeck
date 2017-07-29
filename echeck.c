@@ -11,6 +11,7 @@
  * Please send any changes or bugfixes to the authors.
  */
 
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -28,7 +29,7 @@ int RunAllTests(CuSuite * suite);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.3.6";
+static const char *echeck_version = "4.3.7";
 
 #define DEFAULT_PATH "."
 
@@ -1350,7 +1351,6 @@ int readkeywords(char *s)
   int i;
   char buffer[64];
 
-  k = (t_keyword *) calloc(1, sizeof(t_keyword));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1374,6 +1374,7 @@ int readkeywords(char *s)
   x = strchr(s, '\n');
   if (x)
     *x = 0;
+  k = (t_keyword *) calloc(1, sizeof(t_keyword));
   k->name = strdup(transliterate(buffer, sizeof(buffer), s));
   k->keyword = i;
   k->next = keywords;
@@ -1796,12 +1797,12 @@ int btoi(char *s)
   char *x = s;
   int i = 0;
 
+  assert(s);
   if (!(*s))
     return 0;
   while (isalnum(*s))
     s++;
-  if (s)
-    *s = 0;
+  *s = 0;
   s = x;
   if (strlen(s) > 4) {
     sprintf(message_buf, "%s: `%s'. %s", errtxt[NTOOBIG], s, errtxt[USED1]);
@@ -1876,7 +1877,7 @@ void warning(char *s, int line, char *order, char level)
 {
   char bf[65];
 
-  strncpy(bf, order, 65);
+  strncpy(bf, order, 64);
   strcpy(bf + 61, "...");       /* zu lange Befehle ggf. kürzen */
   if (warn_off)
     return;
@@ -2055,7 +2056,7 @@ char *igetstr(char *s1)
   while (*s == SPACE)
     s++;
 
-  for (i = 0; *s && *s != SPACE && i < (int)sizeof(buf); i++, s++) {
+  for (i = 0; *s && *s != SPACE && i+1 < (int)sizeof(buf); i++, s++) {
     buf[i] = *s;
 
     if (*s == SPACE_REPLACEMENT) {
@@ -2588,9 +2589,8 @@ void orders_for_unit(int i, unit * u)
     j++;                        /* hinter die Zahl */
 
   k = j;
-  if (k)
-    j = strchr(k, ',');
-  if (!j && k)
+  j = strchr(k, ',');
+  if (!j)
     j = strchr(k, ';');
 
   if (j) {
@@ -2662,7 +2662,7 @@ void long_order(void)
   int i;
 
   if (order_unit->long_order_line) {
-    s = strdup(order_unit->long_order);
+    s = order_unit->long_order;
     q = strchr(s, ' ');
     if (q)
       *q = 0;                   /* Den Befehl extrahieren */
@@ -2711,6 +2711,7 @@ void checknaming(void)
   i = findparam(getstr());
   s = getstr();
   if (i == P_FOREIGN) {
+    /* FIXME: this can never happen, must be a bug! */
     if (i == P_REGION) {
       sprintf(warn_buf, errtxt[ERRORNAMEFOREIGN], printparam(i));
       anerror(warn_buf);
