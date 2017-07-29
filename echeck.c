@@ -1043,7 +1043,7 @@ const char *itob(int i)
 }
 
 #define scat(X) strcat(checked_buf, X)
-#define Scat(X) scat(" ");scat(X)
+#define Scat(X) do { scat(" ");scat(X); } while (0)
 
 void qcat(char *s)
 {
