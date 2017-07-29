@@ -971,7 +971,7 @@ teach *teachings = NULL;
 
 static unit *units = NULL;
 
-unit *order_unit,               /* Die Einheit, die gerade dran ist */
+static unit *order_unit,               /* Die Einheit, die gerade dran ist */
 *mother_unit,                   /* Die Einheit, die MACHE TEMP macht */
 *cmd_unit;                      /* Die Einheit, die gerade angesprochen  wird, z.B. mit GIB */
 
@@ -1947,13 +1947,11 @@ unit *find_unit(int i, int t)
 
 t_region *addregion(int x, int y, int pers)
 {
-  static t_region *r = NULL, *R;
+  t_region *r, *R;
 
-  if (!r || r->x != x || r->y != y) {
-    for (r = Regionen; r; r = r->next)
-      if (x == r->x && y == r->y)
-        break;
-  }
+  for (r = Regionen; r; r = r->next)
+    if (x == r->x && y == r->y)
+      break;
 
   if (!r) {
     r = (t_region *) calloc(1, sizeof(t_region));
@@ -5176,8 +5174,11 @@ void process_order_file(int *faction_count, int *unit_count)
         teachings = t;
       }
       teachings = NULL;
-      Regionen = (t_region *) NULL;
-      units = (unit *) NULL;
+      Regionen = NULL;
+      units = NULL;
+      order_unit = NULL;
+      cmd_unit = NULL;
+      order_unit = NULL;
 
     default:
       if (order_buf[0] == ';') {
