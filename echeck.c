@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.0";
+static const char *echeck_version = "4.4.1";
 
 #define DEFAULT_PATH "."
 
@@ -1378,10 +1378,9 @@ int readparams(char *s)
 {                               /* parsed einen String nach Parametern */
   char buffer[128];
   char *x;
-  t_params *p;
   int i;
+  t_params *p; 
 
-  p = (t_params *) calloc(1, sizeof(t_params));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1400,6 +1399,7 @@ int readparams(char *s)
   x = strchr(s, '\n');
   if (x)
     *x = 0;
+  p = (t_params *) calloc(1, sizeof(t_params));
   p->name = strdup(transliterate(buffer, sizeof(buffer), s));
   p->param = i;
   p->next = parameters;
