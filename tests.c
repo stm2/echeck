@@ -8,6 +8,7 @@
 struct unit;
 extern int error_count;
 extern int warning_count;
+extern char show_warnings;
 extern void mock_input(const char * input);
 extern char *getbuf(void);
 extern char *igetstr(char *);
@@ -53,7 +54,7 @@ static void test_process_unit(CuTest * tc)
   CuAssertIntEquals(tc, 1, faction_count);
   CuAssertIntEquals(tc, 1, unit_count);
   CuAssertIntEquals(tc, 0, error_count);
-  CuAssertIntEquals(tc, 1, warning_count);
+  CuAssertIntEquals(tc, 0, warning_count);
 }
 
 static void test_nothing(CuTest * tc)
@@ -81,7 +82,7 @@ static void test_give_each(CuTest * tc)
   error_count = warning_count = 0;
   checkanorder(getbuf());
   CuAssertIntEquals(tc, 0, error_count);
-  CuAssertIntEquals(tc, 1, warning_count);
+  CuAssertIntEquals(tc, 0, warning_count);
 }
 
 static void test_make_temp(CuTest * tc)
@@ -91,7 +92,7 @@ static void test_make_temp(CuTest * tc)
   error_count = warning_count = 0;
   process_order_file(0, 0);
   CuAssertIntEquals(tc, 0, error_count);
-  CuAssertIntEquals(tc, 2, warning_count);
+  CuAssertIntEquals(tc, 0, warning_count);
 }
 
 int AddTestSuites(CuSuite * suite, const char * args)
@@ -123,18 +124,7 @@ int AddTestSuites(CuSuite * suite, const char * args)
     }
     name = strtok(0, ",");
   }
+  show_warnings = 0;
   return 0;
-}
-
-int RunAllTests(CuSuite * suite)
-{
-  CuString *output = CuStringNew();
-
-  CuSuiteRun(suite);
-  CuSuiteSummary(suite, output);
-  CuSuiteDetails(suite, output);
-  printf("%s\n", output->buffer);
-
-  return suite->failCount;
 }
 

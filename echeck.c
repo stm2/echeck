@@ -23,7 +23,6 @@
 #ifdef WITH_CUTEST
 #include <CuTest.h>
 int AddTestSuites(CuSuite * suite, const char *names);
-int RunAllTests(CuSuite * suite);
 #endif
 
 #include "config.h"

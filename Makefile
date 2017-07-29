@@ -29,3 +29,4 @@ clean:
 
 test: echeck
 	@./echeck -T=all -Lde -Re2 -b
+
