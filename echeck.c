@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.3.7";
+static const char *echeck_version = "4.4.0";
 
 #define DEFAULT_PATH "."
 
@@ -2708,12 +2708,7 @@ void checknaming(void)
   i = findparam(getstr());
   s = getstr();
   if (i == P_FOREIGN) {
-    /* FIXME: this can never happen, must be a bug! */
-    if (i == P_REGION) {
-      sprintf(warn_buf, errtxt[ERRORNAMEFOREIGN], printparam(i));
-      anerror(warn_buf);
-    } else
-      Scat(printparam(P_FOREIGN));
+    Scat(printparam(P_FOREIGN));
     i = findparam(s);
     s = getstr();
   }
