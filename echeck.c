@@ -160,7 +160,7 @@ char order_buf[BUFSIZE],        /* current order line */
   *echeck_locale = "de", *echeck_rules = 0, *filename;
 int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
   Rx, Ry;                       /* Koordinaten der aktuellen Region */
-char *path;
+static char *path;
 FILE *F;
 
 enum {
@@ -3749,6 +3749,7 @@ void check_money(bool do_move)
         t = find_unit(u->transport, 0);
         if (!t)
           t = find_unit(u->transport, 1);
+        assert(t);
         /*
          * muß es geben, hat ja schließlich u->transport gesetzt 
          */
@@ -4695,14 +4696,17 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
         if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           if (argv[i][2] == 0) {        /* -P path */
             i++;
-            if (argv[i])
+            if (argv[i]) {
+              free(path);
               path = strdup(argv[i]);
+            }
             else {
               fputs
                 ("Leere Pfad-Angabe ungültig\nEmpty path invalid\n", stderr);
               exit(1);
             }
           } else /* -Ppath */ if (*(argv[i] + 2))
+            free(path);
             path = strdup((char *)(argv[i] + 2));
         }
         break;
@@ -5312,7 +5316,7 @@ int main(int argc, char *argv[])
   path = getenv("ECHECKPATH");
   if (!path)
     path = DEFAULT_PATH;
-
+  path = strdup(path);
   ERR = stdout;
 
   filename = getenv("ECHECKOPTS");
