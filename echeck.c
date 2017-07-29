@@ -1287,15 +1287,10 @@ void readskill(char *s)
 int readitem(char *s)
 {                               /* parsed einen String nach Items */
   char buffer[128];
-  char *x;
-  t_item *it;
-  t_names *n, *nn;
+  char *x = s;
+  t_item *it = (t_item *) calloc(1, sizeof(t_item));
 
-  it = (t_item *) calloc(1, sizeof(t_item));
-  nn = NULL;
-  x = s;
   do {
-    n = (t_names *) calloc(1, sizeof(t_names));
     x = strchr(s, ';');
     if (!x)
       x = strchr(s, ',');
@@ -1310,12 +1305,10 @@ int readitem(char *s)
     if (atoi(s) > 0)            /* Name, 12 -> Luxusgut "Name", EK-Preis *   12 */
       it->preis = atoi(s);
     else {
+      t_names *n = (t_names *) calloc(1, sizeof(t_names));
       n->txt = strdup(transliterate(buffer, sizeof(buffer), s));
-      if (nn)
-        nn->next = n;
-      nn = n;
-      if (!it->name)
-        it->name = nn;
+      n->next = it->name;
+      it->name = n;
     }
     if (x) {
       s = eatwhite(x + 1);
