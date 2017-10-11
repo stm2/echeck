@@ -136,7 +136,7 @@ RESTARTMSG, RESTART found!
 RIDESWRONGUNIT, Unit %s is carried by unit %s but rides with 
 ROUTENOTCYCLIC, ROUTE is not cyclic; (%d,%d) -> (%d,%d)
 ROUTESTARTSWITHPAUSE, ROUTE starts with PAUSE
-SCHOOLCHOSEN, School "%s" chosen
+SCHOOLCHOSEN, School "%s" chosen.\n
 SEARCHPATHIS, Search path is
 SILVERPOOL, Silver pool is active.
 SORT, SORT BEFORE or BEHIND <unit>

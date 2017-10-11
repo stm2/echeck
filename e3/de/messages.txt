@@ -136,7 +136,7 @@ RESTARTMSG, NEUSTART befohlen!
 RIDESWRONGUNIT, Einheit %s wird von Einheit %s transportiert, fährt aber mit 
 ROUTENOTCYCLIC, ROUTE ist kein Kreis; (%d,%d) -> (%d,%d)
 ROUTESTARTSWITHPAUSE, ROUTE beginnt mit PAUSE
-SCHOOLCHOSEN, Magiegebiet '%s' gewählt
+SCHOOLCHOSEN, Magiegebiet '%s' gewählt.\n
 SEARCHPATHIS, Suchpfad ist
 SILVERPOOL, Silberpool aktiviert.
 SORT, SORTIERE VOR oder HINTER <einheit>
