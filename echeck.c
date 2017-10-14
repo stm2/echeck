@@ -3992,11 +3992,29 @@ void checkanorder(char *Orders)
 
   case K_BREED:
     scat(printkeyword(K_BREED));
-    i = getparam();
-    if (i == P_HERBS || i == P_HORSE)
+
+    s = getstr();
+    x = -1;
+    if (isdigit(*s)) {          /* ZÜCHTE anzahl KRÄUTER */
+      x = atoi(s);
+      if (x <= 0)
+        awarning(errtxt[NUMBER0SENSELESS], 2);
+      s = getstr();
+    }
+
+    i = findparam(s);
+    if (x > 0 && i != P_HERBS)
+      anerror(errtxt[NUMBERNOTPOSSIBLE]);
+
+    if (i == P_HERBS || i == P_HORSE) {
+      /* ZÜCHTE [anzahl] KRÄUTER */
+      /* ZÜCHTE PFERDE */
       scat(printparam(i));
-    else
+    } else if (s && (*s)) {
       anerror(errtxt[BREEDHORSESORHERBS]);
+    } else { 
+      /* ZÜCHTE */
+    }
     long_order();
     break;
 
