@@ -149,6 +149,8 @@ TEMPUNITSCANTRESERVE, TEMP-Einheiten können nichts reservieren! Bitte GIB benut
 TEMPUNITSCANTGIVE, TEMP-Einheiten können nichts übergebenen! Befehlsreihenfolge beachten!
 TEXTTOOLONG, Text zu lang (max. %d)
 THERE, Es 
+UNIT, Einheit
+UNITS, Einheiten
 UNIT0NOTPOSSIBLE, Einheit 0 bzw. Bauern geht hier nicht
 UNIT0USED, Einheit 0 verwendet
 UNITALREADYHAS, Einheit %s hat schon einen 
@@ -172,8 +174,6 @@ UNITNEEDSTEACHERS, Einheit %s kann noch %d Lehrer gebrauchen.
 UNITNOTONSHIPBUTONSHIP, Einheit %s ist evtl. nicht auf Schiff %s sondern auf Schiff %s
 UNITNOTPOSSIBLEHERE, Einheit '%s' geht hier nicht
 UNITONSHIPHASMOVED, Einheit %s auf Schiff %s hat sich schon bewegt
-UNITS, Einheiten
-UNIT, Einheit
 UNRECOGNIZEDDIRECTION, Richtung nicht erkannt
 UNRECOGNIZEDOBJECT, Objekt nicht erkannt
 UNRECOGNIZEDOPTION, Option unbekannt

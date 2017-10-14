@@ -149,6 +149,8 @@ TEMPUNITSCANTRESERVE, TEMPORARY units can't use RESERVE! Use GIVE instead!
 TEMPUNITSCANTGIVE, TEMPORARY units can't use GIVE, it happens before MAKE!
 TEXTTOOLONG, Text too long (max. %d)
 THERE, There 
+UNIT, unit
+UNITS, units
 UNIT0NOTPOSSIBLE, Unit 0/Peasants not possible here
 UNIT0USED, Unit 0 used
 UNITALREADYHAS, Unit %s already has a 
@@ -172,8 +174,6 @@ UNITNEEDSTEACHERS, Unit \nould make use of %d more teachers
 UNITNOTONSHIPBUTONSHIP, Unit %s may be on ship %s instead of ship %s
 UNITNOTPOSSIBLEHERE, Unit "%s" is not possible here
 UNITONSHIPHASMOVED, Unit %s on ship %s has already moved
-UNITS, units
-UNIT, unit
 UNRECOGNIZEDDIRECTION, Unrecognized direction
 UNRECOGNIZEDOBJECT, Unrecognized object
 UNRECOGNIZEDOPTION, Unrecognized option
