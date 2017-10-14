@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.1";
+static const char *echeck_version = "4.4.2";
 
 #define DEFAULT_PATH "."
 
@@ -607,6 +607,8 @@ enum {
   TEMPUNITSCANTGIVE,
   TEXTTOOLONG,
   THERE,
+  UNIT,
+  UNITS,
   UNIT0NOTPOSSIBLE,
   UNIT0USED,
   UNITALREADYHAS,
@@ -630,8 +632,6 @@ enum {
   UNITNOTONSHIPBUTONSHIP,
   UNITNOTPOSSIBLEHERE,
   UNITONSHIPHASMOVED,
-  UNITS,
-  UNIT,
   UNRECOGNIZEDDIRECTION,
   UNRECOGNIZEDOBJECT,
   UNRECOGNIZEDOPTION,
@@ -799,6 +799,8 @@ static char *Errors[MAX_ERRORS] = {
   "TEMPUNITSCANTGIVE",
   "TEXTTOOLONG",
   "THERE",
+  "UNIT",
+  "UNITS",
   "UNIT0NOTPOSSIBLE",
   "UNIT0USED",
   "UNITALREADYHAS",
@@ -822,8 +824,6 @@ static char *Errors[MAX_ERRORS] = {
   "UNITNOTONSHIPBUTONSHIP",
   "UNITNOTPOSSIBLEHERE",
   "UNITONSHIPHASMOVED",
-  "UNITS",
-  "UNIT",
   "UNRECOGNIZEDDIRECTION",
   "UNRECOGNIZEDOBJECT",
   "UNRECOGNIZEDOPTION",
