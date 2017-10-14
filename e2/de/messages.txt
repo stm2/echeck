@@ -12,11 +12,6 @@
 ############################################################################
 # Diese Datei am besten nicht modifizieren
 
-0PERSONSLEARN, Einheit %s hat 0 Personen und wird von Einheit 
-0PERSONSTEACH, Einheit %s hat 0 Personen und lehrt Einheit 
-1ATTACKPERUNIT, Pro Einheit muß ein ATTACKIERE-Befehl gegeben werden
-1CARRYPERUNIT, Pro Einheit muß ein TRANSPORTIERE-Befehl gegeben werden
-1PERSONPERMAGEUNIT, Magiereinheiten dürfen nur eine Person haben
 ACTIVATED, ~aktiviert.
 ALREADYUSEDINLINE, "TEMP %s" wurde in Zeile %d schon gebraucht
 AND, ~und
@@ -28,6 +23,7 @@ BUILDINGNEEDSSILVER, Einheit %s braucht noch %d Silber, um ein Gebäude zu unter
 BUTDOESNTLEARN, ~gelehrt, lernt aber nicht.
 BUYALLNOTPOSSIBLE, KAUFE geht nicht mit ALLES
 CANTATTACKTEMP, TEMP-Einheiten kann man nicht ATTACKIEREn
+CANTCHANGELOCALE, Kann die Sprache nicht im laufenden Programm ändern.\nBitte mit entsprechendem "-L"-Parameter neu starten
 CANTDESCRIBEOBJECT, Objekt kann nicht beschrieben werden
 CANTENTEROBJECT, Objekt kann nicht betreten werden
 CANTFINDUNIT, Konnte Einheit %s nicht ermitteln
@@ -56,11 +52,11 @@ ERRORREGION, REGION fehlerhaft
 ERRORREGIONPARAMETER, Fehler bei REGION-Parameter
 ERRORSPELLSYNTAX, [ ] und  < >  dürfen nicht mit eingegeben werden!
 ERRORSURVEY, Nummer der Umfrage muß größer 0 sein
+FACTION, Partei
 FACTION0USED, Partei 0 verwendet
 FACTIONINVALID, Partei "%s" ungültig
 FACTIONMISSING, Partei fehlt
 FACTIONS, Parteien
-FACTION, Partei
 FOLLOW, FOLGE EINHEIT xx, FOLGE SCHIFF xx oder FOLGE
 FOUNDERROR, Es wurde ein Fehler
 FOUNDERRORS, Es wurden %d Fehler
@@ -70,29 +66,30 @@ HINTNOVERSION, Hinweis: es wurde keine ECheck-Version angegeben (-v%s)\n\n
 INTERNALCHECK, <interner Check>
 INVALIDEMAIL, Ungültige eMail-Adresse
 ISCOMBATSPELL, "%s" ist %sein Kampfzauber
-ISUSEDIN2REGIONS, "TEMP %s" wird in Region %d,%d und Region %d,%d (Zeile %d) gebraucht
 ISNOTCOMBATSPELL, k
+ISUSEDIN2REGIONS, "TEMP %s" wird in Region %d,%d und Region %d,%d (Zeile %d) gebraucht
 ITEM, Gegenstand
 LINETOOLONG, Zeile zu lang
 LONGCOMBATNOLONGORDER, Längere Kämpfe schließen den langen Befehl aus
 LONGORDERMISSING, Einheit %s hat keinen langen Befehl bekommen
 MAGIC, Magie
-MISSINGFILES, Es fehlen Dateien für:
-MISSFILEPARAM, Parameter
+MAINTAINANCEMOVED, Gebäudeunterhalt von Einheit %s nach Einheit %s verschoben
 MISSFILECMD, Befehle
-MISSFILEITEM, Gegenstände
-MISSFILESKILL, Talente
 MISSFILEDIR, Richtungen
+MISSFILEITEM, Gegenstände
 MISSFILEMSG, Meldungen
-MISSINGQUOTES, Fehlende "
+MISSFILEPARAM, Parameter
+MISSFILESKILL, Talente
 MISSINGDISGUISEPARAMETERS, TARNE ohne Parameter
 MISSINGEND, TEMP-Einheit %s wird nicht durch ENDE abgeschlossen
 MISSINGFACTIONNUMBER, Keine Parteinummer
+MISSINGFILES, Es fehlen Dateien für:
 MISSINGNEXT, NÄCHSTER fehlt
 MISSINGNUMRECRUITS, Anzahl Rekruten fehlt
 MISSINGOFFER, Geldgebot fehlt
 MISSINGPARAMETERS, Parameter STUFE oder REGION fehlt
 MISSINGPASSWORD, Kein Passwort angeben
+MISSINGQUOTES, Fehlende "
 MISSINGUNITNUMBER, Keine Einheitsnummer
 MOVENOTPOSSIBLEWITHPAUSE, NACH geht nicht mit PAUSE
 MSGTO, BOTSCHAFT AN PARTEI, BOTSCHAFT AN EINHEIT oder BOTSCHAFT AN REGION
@@ -108,12 +105,17 @@ NOTEXECUTED, Wird von keiner Einheit ausgeführt
 NOTEXT, Kein Text
 NOTFOUND, nicht gefunden
 NTOOBIG, Zahl zu groß
+NULLPERSONSLEARN, Einheit %s hat 0 Personen und wird von Einheit 
+NULLPERSONSTEACH, Einheit %s hat 0 Personen und lehrt Einheit 
 NUMBER0SENSELESS, Anzahl 0 macht keinen Sinn
 NUMBERNOTPOSSIBLE, Anzahl hier nicht möglich
 NUMCASTLEMISSING, Nummer der Burg fehlt
 NUMLUXURIESMISSING, Anzahl Luxusgüter fehlt
 NUMMISSING, Anzahl Gegenstände/Personen/Silber fehlt
 OBJECTNUMBERMISSING, Nummer des Objektes fehlt
+ONEATTACKPERUNIT, Pro Einheit muß ein ATTACKIERE-Befehl gegeben werden
+ONECARRYPERUNIT, Pro Einheit muß ein TRANSPORTIERE-Befehl gegeben werden
+ONEPERSONPERMAGEUNIT, Magiereinheiten dürfen nur eine Person haben
 ONLYSABOTAGESHIP, Bislang gibt es nur SABOTIERE SCHIFF
 ORDERNUMBER, NUMMER SCHIFF, NUMMER BURG, NUMMER PARTEI oder NUMMER EINHEIT
 ORDERSOK, Die Befehle scheinen in Ordnung zu sein.\n
@@ -145,12 +147,11 @@ TEACHED, ~gelehrt.
 TEACHWHO, Wen lehren?
 TEMPHASNTPERSONS, Einheit TEMP %s hat nicht rekrutiert und keine Personen bekommen
 TEMPNOTTEMP, Einheit TEMP %s wurde nicht mit MACHE TEMP generiert
-TEMPUNITSCANTRESERVE, TEMP-Einheiten können nichts reservieren! Bitte GIB benutzen!
 TEMPUNITSCANTGIVE, TEMP-Einheiten können nichts übergebenen! Befehlsreihenfolge beachten!
+TEMPUNITSCANTRESERVE, TEMP-Einheiten können nichts reservieren! Bitte GIB benutzen!
 TEXTTOOLONG, Text zu lang (max. %d)
 THERE, Es 
 UNIT, Einheit
-UNITS, Einheiten
 UNIT0NOTPOSSIBLE, Einheit 0 bzw. Bauern geht hier nicht
 UNIT0USED, Einheit 0 verwendet
 UNITALREADYHAS, Einheit %s hat schon einen 
@@ -174,6 +175,7 @@ UNITNEEDSTEACHERS, Einheit %s kann noch %d Lehrer gebrauchen.
 UNITNOTONSHIPBUTONSHIP, Einheit %s ist evtl. nicht auf Schiff %s sondern auf Schiff %s
 UNITNOTPOSSIBLEHERE, Einheit '%s' geht hier nicht
 UNITONSHIPHASMOVED, Einheit %s auf Schiff %s hat sich schon bewegt
+UNITS, Einheiten
 UNRECOGNIZEDDIRECTION, Richtung nicht erkannt
 UNRECOGNIZEDOBJECT, Objekt nicht erkannt
 UNRECOGNIZEDOPTION, Option unbekannt
@@ -187,9 +189,9 @@ UNRECOGNIZEDSPELL, Zauberspruch nicht erkannt
 USED1, Stattdessen 1 benutzt
 USEEMAIL, eMail bitte mit EMAIL setzen
 USINGUNITINSTEAD, Benutze stattdessen Einheit 
-WARNINGS, ~%d Warnungen
 WARNINGLEVEL, Warning Level %d.\n
 WARNINGLINE, Warnung zur Zeile
+WARNINGS, ~%d Warnungen
 WAS, wurde
 WERE, wurden
 WRONGFACTIONNUMBER, Falsche Parteinummer
@@ -197,5 +199,3 @@ WRONGFIGHTSTATE, Falscher Kampfstatus
 WRONGNUMBER, Falsche Nummer
 WRONGOUTPUTLEVEL, falscher Ausgabe-Level
 WRONGPARAMETER, Falscher Parameter
-CANTCHANGELOCALE, Kann die Sprache nicht im laufenden Programm ändern.\nBitte mit entsprechendem "-L"-Parameter neu starten
-MAINTAINANCEMOVED, Gebäudeunterhalt von Einheit %s nach Einheit %s verschoben
