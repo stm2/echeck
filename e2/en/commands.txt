@@ -9,7 +9,6 @@
 WORK,   Work
 ATTACK,   Attack
 STEAL,    Steal
-SIEGE,    Siege
 NAME,   Name
 USE,    Use
 DESCRIBE, Describe

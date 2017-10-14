@@ -10,7 +10,6 @@
 WORK,         Arbeiten
 ATTACK,       Attackieren
 STEAL,        Beklauen
-SIEGE,        Belagere
 NAME,         Benennen
 USE,          Benutzen
 DESCRIBE,     Beschreiben
@@ -48,7 +47,7 @@ LEAVE,        Verlassen
 CAST,         Zaubere
 SHOW,         Zeigen
 DESTROY,      Zerstören
-FORGET,       Vergessen
+FORGET,       Vergiss
 DEFAULT,      Default
 COMMENT,      //
 ROUTE,        Route
