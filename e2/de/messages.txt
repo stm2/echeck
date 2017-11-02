@@ -145,7 +145,7 @@ TEACHED, ~gelehrt.
 TEACHWHO, Wen lehren?
 TEMPHASNTPERSONS, Einheit TEMP %s hat nicht rekrutiert und keine Personen bekommen
 TEMPNOTTEMP, Einheit TEMP %s wurde nicht mit MACHE TEMP generiert
-TEMPUNITSCANTRESERVE, TEMP-Einheiten können nichts reservieren! Bitte GIB benutzen!T
+TEMPUNITSCANTRESERVE, TEMP-Einheiten können nichts reservieren! Bitte GIB benutzen!
 TEMPUNITSCANTGIVE, TEMP-Einheiten können nichts übergebenen! Befehlsreihenfolge beachten!
 TEXTTOOLONG, Text zu lang (max. %d)
 THERE, Es 
