@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.2";
+static const char *echeck_version = "4.4.3";
 
 #define DEFAULT_PATH "."
 
@@ -359,6 +359,7 @@ enum {
   P_LOCALE,
   P_BEFORE,
   P_AFTER,
+  P_ALLIANCE,
   MAXPARAMS
 };
 
@@ -398,7 +399,8 @@ static const char *Params[MAXPARAMS] = {
   "NUMBER",
   "LOCALE",
   "BEFORE",
-  "AFTER"
+  "AFTER",
+  "ALLIANCE"
 };
 
 typedef struct _params {
@@ -2713,6 +2715,7 @@ void checknaming(void)
     anerror(errtxt[UNRECOGNIZEDOBJECT]);
     break;
 
+  case P_ALLIANCE:
   case P_UNIT:
   case P_FACTION:
   case P_BUILDING:

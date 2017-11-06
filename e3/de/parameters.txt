@@ -52,3 +52,4 @@ LOCALE, Locale
 
 BEFORE,      vor
 AFTER,       hinter
+ALLIANCE,    allianz
