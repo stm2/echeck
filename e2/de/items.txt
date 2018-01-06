@@ -53,6 +53,11 @@ Katapultmunition; Katapultmunition
 Adamantium; Admantium
 Adamantiumaxt; Admantiumäxte
 Adamantiumrüstung; Adamantiumrüstungen
+Sonnensegel; Sonnensegel
+Schneekugel; Schneekugeln
+Schneemann; Schneemänner
+Weihnachtsbaum; Weihnachtsbäume
+Sternenstaub; Sternenstaub
 
 # So, das waren die offiziellen Items; diese Liste sollte man nicht ändern,
 # wenn man auf das Ergebnis von ECheck Wert legt...
