@@ -1,5 +1,5 @@
 CFLAGS = -g -Wall -std=c99 -Werror
-CFLAGS += -Icutest -DWITH_CUTEST
+CFLAGS += -I. -DWITH_CUTEST
 
 ifeq ($(PREFIX),)
 PREFIX=/home/eressea/echeck
@@ -21,8 +21,8 @@ install: echeck
 tags:
 	@ctags *.c *.h
 
-echeck: echeck.c unicode.c unicode.h config.h tests.c cutest/CuTest.c cutest/CuTest.h
-	$(CC) $(CFLAGS) $(LFLAGS) -o echeck echeck.c unicode.c tests.c cutest/CuTest.c
+echeck: echeck.c unicode.c unicode.h config.h tests.c CuTest.c CuTest.h
+	$(CC) $(CFLAGS) $(LFLAGS) -o echeck echeck.c unicode.c tests.c CuTest.c
 
 clean:
 	@rm -f *.o core *.bak echeck

@@ -16,9 +16,7 @@
 /* platform-specific defines */
 #ifdef WIN32
 # define PATH_DELIM ";"
-#endif
-
-#ifdef __unix__
+#else
 # define PATH_DELIM ":"
 #endif
 
