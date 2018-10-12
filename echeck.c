@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.3";
+static const char *echeck_version = "4.4.4";
 
 #define DEFAULT_PATH "."
 
@@ -360,6 +360,7 @@ enum {
   P_BEFORE,
   P_AFTER,
   P_ALLIANCE,
+  P_AUTO,
   MAXPARAMS
 };
 
@@ -400,7 +401,8 @@ static const char *Params[MAXPARAMS] = {
   "LOCALE",
   "BEFORE",
   "AFTER",
-  "ALLIANCE"
+  "ALLIANCE",
+  "AUTO"
 };
 
 typedef struct _params {
@@ -4176,9 +4178,20 @@ void checkanorder(char *Orders)
 
   case K_STUDY:
     scat(printkeyword(K_STUDY));
-    sk = getskill();
-    if (!sk)
+    sk = NULL;
+    s = getstr();
+    if (*s) {
+        if (findparam(s) == P_AUTO) {
+            Scat(printparam(P_AUTO));
+            sk = getskill();
+        }
+        else {
+            sk = findskill(s);
+        }
+    }
+    if (!sk) {
       anerror(errtxt[UNRECOGNIZEDSKILL]);
+    }
     else {
       Scat(sk->name);
       if (unicode_utf8_strcasecmp(sk->name, errtxt[MAGIC]) == 0)
