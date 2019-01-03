@@ -1674,7 +1674,10 @@ static char *fgetbuffer(char *buf, int size, FILE * F)
     } else {
       ++nextbr;
     }
-    bytes = MIN(size - 1, nextbr - mock_pos);
+    bytes = size - 1;
+    if (bytes > nextbr - mock_pos) {
+      bytes = nextbr - mock_pos;
+    }
     if (bytes)
       memcpy(buf, mock_pos, bytes);
     buf[bytes] = 0;
@@ -3528,7 +3531,7 @@ void check_comment(void)
   }
   if (strnicmp(s, "LOHN", 4) == 0 || strnicmp(s, "WAGE", 4) == 0) {     /* LOHN   für   Arbeit  */
     m = geti();
-    lohn = (char)MAX(10, m);
+    lohn = (m > 10) ? m : 10;
     return;
   }
   if (strnicmp(s, "ROUT", 4) == 0) {    /* ROUTe */
@@ -3620,7 +3623,8 @@ void check_money(bool do_move)
           for (t = units; t && i > 0; t = t->next) {
             if (t->region != u->region || t == u)
               continue;
-            um = MIN(i, t->money - t->reserviert);
+            um = t->money - t->reserviert;
+            if (um > i) um = i;
             if (um > 0) {
               u->money += um;
               i -= um;
@@ -3649,7 +3653,8 @@ void check_money(bool do_move)
         for (t = units; t && u->money < 0; t = t->next) {
           if (t->region != u->region || t == u)
             continue;
-          um = MIN(-u->money, t->money - t->reserviert);
+          um = t->money - t->reserviert;
+          if (um < -u->money) um = -u->money;
           if (um > 0) {
             u->money += um;
             u->reserviert += um;        /* das so erworbene Silber muß  auch reserviert sein */
@@ -3848,7 +3853,8 @@ void check_teachings(void)
       continue;
     }
 
-    n = MIN(t->teacher->lehrer, t->student->schueler);
+    n = (t->teacher->lehrer < t->student->schueler) ?
+      t->teacher->lehrer : t->teacher->schueler;
     t->teacher->lehrer -= n;
     t->student->schueler -= n;
   }
