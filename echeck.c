@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.4";
+static const char *echeck_version = "4.4.5";
 
 #define DEFAULT_PATH "."
 
@@ -4939,6 +4939,9 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
           echeck_rules = argv[i] + 2;
         }
         break;
+      case 'V':
+        fprintf(stdout, "echeck version %s\n", echeck_version);
+        exit(0);
       case 'L':
         if (argv[i][2] == 0) {  /* -L loc */
           i++;

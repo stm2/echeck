@@ -8,7 +8,7 @@ ifeq ($(PREFIX),)
 PREFIX=/home/eressea/echeck
 endif
 
-all: echeck.exe echeck
+all: echeck.zip echeck
 
 install: echeck
 	install -t $(PREFIX) echeck
@@ -32,8 +32,10 @@ echeck: echeck.c unicode.c unicode.h config.h $(TEST_SRC)
 	$(CC) $(DEBUG_CFLAGS) -DWITH_CUTEST -o echeck echeck.c unicode.c $(TEST_SRC)
 
 clean:
-	@rm -f *.o core *.bak echeck echeck.exe
+	@rm -f *.o core *.bak echeck echeck.exe echeck.zip
 
 test: echeck
 	@./echeck -T=all -Lde -Re2 -b
 
+echeck.zip: echeck.exe changelog.txt LIESMICH.txt README.txt
+	zip -r echeck.zip echeck.exe e2 e3 changelog.txt LIESMICH.txt README.txt
