@@ -2,8 +2,9 @@ MINGW_STRIP = i686-w64-mingw32-strip
 MINGW_CC = i686-w64-mingw32-gcc
 CFLAGS = -Wall -std=c99 -Werror -I.
 RELEASE_CFLAGS = $(CFLAGS) -Os
-DEBUG_CFLAGS = $(CFLAGS) -g -DWITH_CUTEST
-TEST_SRC = tests.c CuTest.c CuTest.h
+DEBUG_CFLAGS = $(CFLAGS) -g
+TEST_SRC = tests.c CuTest.c
+TEST_HDR = CuTest.h
 ifeq ($(PREFIX),)
 PREFIX=/home/eressea/echeck
 endif
@@ -28,7 +29,7 @@ echeck.exe: echeck.c unicode.c unicode.h config.h
 	$(MINGW_CC) $(RELEASE_CFLAGS) -o echeck.exe echeck.c unicode.c
 	$(MINGW_STRIP) echeck.exe
 
-echeck: echeck.c unicode.c unicode.h config.h $(TEST_SRC)
+echeck: echeck.c unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
 	$(CC) $(DEBUG_CFLAGS) -DWITH_CUTEST -o echeck echeck.c unicode.c $(TEST_SRC)
 
 clean:
