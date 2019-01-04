@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.5";
+static const char *echeck_version = "4.4.6";
 
 #define DEFAULT_PATH "."
 
@@ -156,7 +156,7 @@ char order_buf[BUFSIZE],        /* current order line */
  indent, next_indent,           /* indent index */
  does_default = 0,              /* Ist DEFAULT aktiv? */
   befehle_ende,                 /* EOF der Befehlsdatei */
-  *echeck_locale = "de", *echeck_rules = 0, *filename;
+  *echeck_locale = "de", *echeck_rules = "e2", *filename;
 int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
   Rx, Ry;                       /* Koordinaten der aktuellen Region */
 static char *path;
