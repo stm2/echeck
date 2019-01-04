@@ -1319,8 +1319,10 @@ int readitem(char *s)
     }
   }
   while (x && *s);
-  if (!it->name)
-    return 0;
+  if (!it->name) {
+      free(it);
+      return 0;
+  }
   it->next = itemdata;
   itemdata = it;
   return 1;
@@ -1418,7 +1420,6 @@ int readdirection(char *s)
   t_direction *d;
   int i;
 
-  d = (t_direction *) calloc(1, sizeof(t_direction));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1426,6 +1427,7 @@ int readdirection(char *s)
     *x = 0;
   else
     return 0;
+
   for (i = 0; i < MAXDIRECTIONS; i++)
     if (stricmp(s, Directions[i]) == 0)
       break;
@@ -1437,6 +1439,7 @@ int readdirection(char *s)
   x = strchr(s, '\n');
   if (x)
     *x = 0;
+  d = (t_direction *) calloc(1, sizeof(t_direction));
   d->name = strdup(transliterate(buffer, sizeof(buffer), s));
   d->dir = i;
   d->next = directions;
