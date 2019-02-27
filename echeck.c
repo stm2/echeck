@@ -146,7 +146,7 @@ char echo_it = 0,               /* option: echo input lines */
   lohn = 10,                    /* Lohn für Arbeit - je Region zu setzen */
   silberpool = 1,               /* option: Silberpool-Verwaltung */
   line_start = 0,               /* option: Beginn der Zeilenzählung */
-  noship = 0, noroute = 0, nolost = 0, has_version = 0, bang_cmd = 0, at_cmd = 0, attack_warning = 0, compile = 0;    /* option: compiler-/magellan-style  warnings */
+  noship = 0, noroute = 0, nolost = 0, bang_cmd = 0, at_cmd = 0, attack_warning = 0, compile = 0;    /* option: compiler-/magellan-style  warnings */
 int error_count = 0,            /* counter: errors */
   warning_count = 0;            /* counter: warnings */
 char order_buf[BUFSIZE],        /* current order line */
@@ -528,7 +528,6 @@ enum {
   FOUNDERRORS,
   FOUNDORDERS,
   GIVEWHAT,
-  HINTNOVERSION,
   INTERNALCHECK,
   INVALIDEMAIL,
   ISCOMBATSPELL,
@@ -720,7 +719,6 @@ static char *Errors[MAX_ERRORS] = {
   "FOUNDERRORS",
   "FOUNDORDERS",
   "GIVEWHAT",
-  "HINTNOVERSION",
   "INTERNALCHECK",
   "INVALIDEMAIL",
   "ISCOMBATSPELL",
@@ -4728,17 +4726,12 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
           if (!argv[i])
             break;
         }
-        has_version = 1;
         x = strchr(argv[i], '.');
         if (x) {
           *x = 0;
           if (strncmp(echeck_version, argv[i] + 2, strlen(argv[i] + 2)) == 0) {
             *x = '.';
             x++;
-            if (show_warnings > 1) {
-              fprintf(stderr, "Falsche ECheck-Version / "
-                "Wrong ECheck-Version: %s\n", argv[i] + 2);
-            }
           }
         }
         break;
@@ -5117,8 +5110,6 @@ void process_order_file(int *faction_count, int *unit_count)
           if (silberpool)
             fputs(errtxt[SILVERPOOL], ERR);
           fputs("\n\n", ERR);
-          if (!has_version)
-            fprintf(ERR, errtxt[HINTNOVERSION], echeck_version);
         }
       }
       next = 0;

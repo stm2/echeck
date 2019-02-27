@@ -66,7 +66,6 @@ FOUNDERROR, Es wurde ein Fehler
 FOUNDERRORS, Es wurden %d Fehler
 FOUNDORDERS, Befehle für Partei %s gefunden.\n
 GIVEWHAT, Was übergeben?
-HINTNOVERSION, Hinweis: es wurde keine ECheck-Version angegeben (-v%s)\n\n
 INTERNALCHECK, <interner Check>
 INVALIDEMAIL, Ungültige eMail-Adresse
 ISCOMBATSPELL, "%s" ist %sein Kampfzauber
