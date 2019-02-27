@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.4";
+static const char *echeck_version = "4.4.6";
 
 #define DEFAULT_PATH "."
 
@@ -156,7 +156,7 @@ char order_buf[BUFSIZE],        /* current order line */
  indent, next_indent,           /* indent index */
  does_default = 0,              /* Ist DEFAULT aktiv? */
   befehle_ende,                 /* EOF der Befehlsdatei */
-  *echeck_locale = "de", *echeck_rules = 0, *filename;
+  *echeck_locale = "de", *echeck_rules = "e2", *filename;
 int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
   Rx, Ry;                       /* Koordinaten der aktuellen Region */
 static char *path;
@@ -1317,8 +1317,10 @@ int readitem(char *s)
     }
   }
   while (x && *s);
-  if (!it->name)
-    return 0;
+  if (!it->name) {
+      free(it);
+      return 0;
+  }
   it->next = itemdata;
   itemdata = it;
   return 1;
@@ -1416,7 +1418,6 @@ int readdirection(char *s)
   t_direction *d;
   int i;
 
-  d = (t_direction *) calloc(1, sizeof(t_direction));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1424,6 +1425,7 @@ int readdirection(char *s)
     *x = 0;
   else
     return 0;
+
   for (i = 0; i < MAXDIRECTIONS; i++)
     if (stricmp(s, Directions[i]) == 0)
       break;
@@ -1435,6 +1437,7 @@ int readdirection(char *s)
   x = strchr(s, '\n');
   if (x)
     *x = 0;
+  d = (t_direction *) calloc(1, sizeof(t_direction));
   d->name = strdup(transliterate(buffer, sizeof(buffer), s));
   d->dir = i;
   d->next = directions;
@@ -1672,7 +1675,10 @@ static char *fgetbuffer(char *buf, int size, FILE * F)
     } else {
       ++nextbr;
     }
-    bytes = MIN(size - 1, nextbr - mock_pos);
+    bytes = size - 1;
+    if (bytes > nextbr - mock_pos) {
+      bytes = nextbr - mock_pos;
+    }
     if (bytes)
       memcpy(buf, mock_pos, bytes);
     buf[bytes] = 0;
@@ -3526,7 +3532,7 @@ void check_comment(void)
   }
   if (strnicmp(s, "LOHN", 4) == 0 || strnicmp(s, "WAGE", 4) == 0) {     /* LOHN   für   Arbeit  */
     m = geti();
-    lohn = (char)MAX(10, m);
+    lohn = (m > 10) ? m : 10;
     return;
   }
   if (strnicmp(s, "ROUT", 4) == 0) {    /* ROUTe */
@@ -3618,7 +3624,8 @@ void check_money(bool do_move)
           for (t = units; t && i > 0; t = t->next) {
             if (t->region != u->region || t == u)
               continue;
-            um = MIN(i, t->money - t->reserviert);
+            um = t->money - t->reserviert;
+            if (um > i) um = i;
             if (um > 0) {
               u->money += um;
               i -= um;
@@ -3647,7 +3654,8 @@ void check_money(bool do_move)
         for (t = units; t && u->money < 0; t = t->next) {
           if (t->region != u->region || t == u)
             continue;
-          um = MIN(-u->money, t->money - t->reserviert);
+          um = t->money - t->reserviert;
+          if (um < -u->money) um = -u->money;
           if (um > 0) {
             u->money += um;
             u->reserviert += um;        /* das so erworbene Silber muß  auch reserviert sein */
@@ -3846,7 +3854,8 @@ void check_teachings(void)
       continue;
     }
 
-    n = MIN(t->teacher->lehrer, t->student->schueler);
+    n = (t->teacher->lehrer < t->student->schueler) ?
+      t->teacher->lehrer : t->teacher->schueler;
     t->teacher->lehrer -= n;
     t->student->schueler -= n;
   }
@@ -4926,6 +4935,9 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
           echeck_rules = argv[i] + 2;
         }
         break;
+      case 'V':
+        fprintf(stdout, "echeck version %s\n", echeck_version);
+        exit(0);
       case 'L':
         if (argv[i][2] == 0) {  /* -L loc */
           i++;
