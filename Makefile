@@ -6,7 +6,7 @@ DEBUG_CFLAGS = $(CFLAGS) -g
 TEST_SRC = tests.c CuTest.c
 TEST_HDR = CuTest.h
 ifeq ($(PREFIX),)
-PREFIX=/home/eressea/echeck
+PREFIX=$(HOME)/echeck
 endif
 
 default: echeck
