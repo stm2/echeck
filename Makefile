@@ -9,6 +9,8 @@ ifeq ($(PREFIX),)
 PREFIX=/home/eressea/echeck
 endif
 
+default: echeck
+
 all: echeck.zip echeck
 
 install: echeck
