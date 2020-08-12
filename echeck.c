@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.7";
+static const char *echeck_version = "4.4.8";
 
 #define DEFAULT_PATH "."
 
@@ -1045,7 +1045,7 @@ const char *itob(int i)
 }
 
 #define scat(X) strcat(checked_buf, X)
-#define Scat(X) do { scat(" ");scat(X); } while (0)
+#define Scat(X) do { scat(" "); scat(X); } while (0)
 
 void qcat(char *s)
 {
@@ -4153,7 +4153,20 @@ void checkanorder(char *Orders)
 
   case K_CONTACT:
     scat(printkeyword(K_CONTACT));
-    getaunit(NECESSARY);
+    s = getstr();
+    switch (i = findparam(s)) {
+    case P_UNIT:
+	Scat(printparam(i));
+        getaunit(NECESSARY);
+        break;
+    case P_FACTION:
+	Scat(printparam(i));
+        getafaction(getstr());
+        break;
+    default:
+        anerror(errtxt[WRONGPARAMETER]);
+    }
+
     break;
 
   case K_SPY:
