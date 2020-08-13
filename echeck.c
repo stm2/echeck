@@ -4509,6 +4509,13 @@ void help_keys(char key)
   int i;
 
   switch (key) {
+  case 'b':                    /* Befehle */
+  case 'c':                    /* Commands */
+    fprintf(ERR, "Befehle / commands:\n\n");
+    for (i = 1; i < MAXKEYWORDS; i++)
+      fprintf(ERR, "%s\n", Keywords[i]);
+    break;
+
   case 's':                    /* Schlüsselworte */
   case 'k':                    /* Keywords */
     fprintf(ERR, "Schlüsselworte / keywords:\n\n");
