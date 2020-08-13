@@ -502,6 +502,7 @@ enum {
   CHECKYOURORDERS,
   COMBATSPELLSET,
   DELIVERYTO,
+  DESTROYNOSTREET,
   DIRECTION,
   DISCOVERED,
   DOESNTCARRY,
@@ -693,6 +694,7 @@ static char *Errors[MAX_ERRORS] = {
   "CHECKYOURORDERS",
   "COMBATSPELLSET",
   "DELIVERYTO",
+  "DESTROYNOSTREET",
   "DIRECTION",
   "DISCOVERED",
   "DOESNTCARRY",
@@ -2502,6 +2504,7 @@ void checkemail(void)
     return;
   }
   scat(errtxt[DELIVERYTO]);
+  scat(" ");
   scat(addr);
 }
 
@@ -3512,6 +3515,42 @@ int studycost(t_skills * talent)
   return talent->kosten;
 }
 
+void
+check_destroy(void) {
+  char *s;
+  int n;
+
+  scat(printkeyword(K_DESTROY));
+  s = getstr();
+
+  if (isdigit(*s)) { /* ZERSTOERE anzahl ...*/
+    n = atoi(s);
+    if (n == 0)
+      awarning(errtxt[NUMBER0SENSELESS], 2);
+    icat(n);
+    s = getstr();
+  }
+  if (*s) {
+    int i;
+    i = findparam(s);
+    switch (i) {
+    case P_ROAD:
+      Scat(printparam(i));
+      i = getdirection();
+      if (i < 0 || i == D_PAUSE) {
+        anerror(errtxt[UNRECOGNIZEDDIRECTION]);
+      } else {
+        Scat(printdirection(i));
+      }
+      return;
+    default:
+      anerror(errtxt[DESTROYNOSTREET]);
+      break;
+    }
+  }
+}
+
+
 void check_comment(void)
 {
   char *s;
@@ -4390,7 +4429,8 @@ void checkanorder(char *Orders)
     break;
 
   case K_DESTROY:
-    scat(printkeyword(K_DESTROY));
+    check_destroy();
+    long_order();
     break;
 
   case K_RIDE:

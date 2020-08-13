@@ -95,9 +95,60 @@ static void test_make_temp(CuTest * tc)
   CuAssertIntEquals(tc, 0, warning_count);
 }
 
+static void test_destroy(CuTest * tc)
+{
+  set_order_unit(newunit(1, 0));
+  mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE\nNAECHSTER\n");
+  error_count = warning_count = 0;
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
+static void test_destroy_level(CuTest * tc)
+{
+  set_order_unit(newunit(1, 0));
+  mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE 4\nNAECHSTER\n");
+  error_count = warning_count = 0;
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
+static void test_destroy_unhappy(CuTest * tc)
+{
+  set_order_unit(newunit(1, 0));
+  mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE BURG\nNAECHSTER\n");
+  error_count = warning_count = 0;
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 1, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
+static void test_destroy_street(CuTest * tc)
+{
+  set_order_unit(newunit(1, 0));
+  mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE 1 STRASSE O\nNAECHSTER\n");
+  error_count = warning_count = 0;
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
+static void test_destroy_street_direction(CuTest * tc)
+{
+  set_order_unit(newunit(1, 0));
+  mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE 1 STRASSE L\nEINHEIT 2\nZERSTOERE NO\nNAECHSTER\n");
+  error_count = warning_count = 0;
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 2, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
+
 int AddTestSuites(CuSuite * suite, const char * args)
 {
-  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,give");
+  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,give,destroy");
   char * name = strtok(names, ",");
   CuSuite * cs;
 
@@ -120,6 +171,15 @@ int AddTestSuites(CuSuite * suite, const char * args)
       cs = CuSuiteNew();
       SUITE_ADD_TEST(cs, test_give_each);
       SUITE_ADD_TEST(cs, test_make_temp);
+      CuSuiteAddSuite(suite, cs);
+    }
+    else if (strcmp(name, "destroy")==0) {
+      cs = CuSuiteNew();
+      SUITE_ADD_TEST(cs, test_destroy);
+      SUITE_ADD_TEST(cs, test_destroy_level);
+      SUITE_ADD_TEST(cs, test_destroy_unhappy);
+      SUITE_ADD_TEST(cs, test_destroy_street);
+      SUITE_ADD_TEST(cs, test_destroy_street_direction);
       CuSuiteAddSuite(suite, cs);
     }
     name = strtok(0, ",");
