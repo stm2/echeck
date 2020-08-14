@@ -10,7 +10,6 @@
 WORK,         Arbeiten
 ATTACK,       Attackieren
 STEAL,        Beklauen
-SIEGE,        Belagere
 NAME,         Benennen
 USE,          Benutzen
 DESCRIBE,     Beschreiben
