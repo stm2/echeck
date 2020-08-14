@@ -36,11 +36,9 @@ SILVER,      Silber
 ROAD,        Straßen
 TEMP,        Temporär
 PRIVATE,     Privat
-FIGHT,       Kämpfe
 OBSERVE,     Wahrnehmung
 GIVE,        Gib
 GUARD,       Bewache
-FACTIONSTEALTH, Parteitarnung
 WARN,        Warnung
 LEVEL,       Stufe
 HORSES,      Pferde
