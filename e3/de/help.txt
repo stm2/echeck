@@ -10,6 +10,7 @@
 
 CAPTION, ECheck (Version %s, %s), Zug-Checker für Eressea - Freeware!\n\nBenutzung: %s [Optionen] Befehlsdatei\n\n
 PATH,   -Ppfad  Pfadangabe für die Zusatzdateien; das Locale %s wird angehängt
+TEXT,   -Rgame  Zusatzdateien aus Unterverzeichnis game einlesen; Standardeinstellung: e2
 TEXT,   -       Verwendet stdin anstelle einer Eingabedatei.
 TEXT,   -b      unterdrückt Warnungen und Fehler (brief)
 TEXT,   -q      erwartet keine Angaben zu Personen/Silber in [] bei EINHEIT
