@@ -59,13 +59,11 @@ RESERVE,      Reservieren
 CLAIM, Beanspruchen
 BANNER,       Banner
 NUMBER,       Nummer
-SCHOOL,       Magiegebiet
 PIRACY,       Piraterie
 RESTART,      Neustart
 GROUP,        Gruppe
 SORT,         Sortieren
 PREFIX,       Präfix
-PROMOTION,    Beförderung
 PROMOTE,    Befördere
 
 # NEXT, Nächster     ist KEIN BEFEHL für ECheck, sondern ein PARAMETER!
