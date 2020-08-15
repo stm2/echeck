@@ -28,7 +28,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.8";
+static const char *echeck_version = "4.4.9";
 
 #define DEFAULT_PATH "."
 
@@ -108,7 +108,7 @@ const t_ech_file ECheck_Files[] = {
 };
 
 const int filecount = sizeof(ECheck_Files) / sizeof(ECheck_Files[0]);
-static int verbose = 1;
+int verbose = 1;
 static int compact = 0;
 
 #define SPACE_REPLACEMENT   '~'
@@ -1662,6 +1662,13 @@ void mock_input(const char *input)
   mocked_input = strdup(input);
   mock_pos = mocked_input;
 }
+
+int get_long_order_line() {
+  if (order_unit)
+    return order_unit->long_order_line;
+  else
+    return -1;
+}
 #endif
 
 static char *fgetbuffer(char *buf, int size, FILE * F)
@@ -2136,6 +2143,9 @@ int findtoken(const char *token, int type)
   tnode *tk = &tokens[type];
   char buffer[1024];
   const char *str;
+
+  if (!(*token))
+    return -1;
 
   str = transliterate(buffer, sizeof(buffer), token);
 
@@ -3379,7 +3389,7 @@ void claim(void)
   char *s;
   int i, n;
 
-  scat(printkeyword(K_RESERVE));
+  scat(printkeyword(K_CLAIM));
   s = getstr();
   n = atoi(s);
   if (n < 1) {
@@ -3389,7 +3399,13 @@ void claim(void)
     s = getstr();
   }
   icat(n);
+  if (!(*s)) {
+    anerror(errtxt[UNRECOGNIZEDOBJECT]);
+    return;
+  }
   i = finditem(s);
+  if (i <= 0)
+    awarning(errtxt[UNRECOGNIZEDOBJECT], 1);
   Scat(ItemName(i, n != 1));
 }
 
@@ -5185,10 +5201,12 @@ void process_order_file(int *faction_count, int *unit_count)
       scat(printparam(P_FACTION));
       befehle_ende = 0;
       f = readafaction();
-      if (compile)
-        fprintf(ERR, "%s:faction:%s\n", filename, itob(f));
-      else
-        fprintf(ERR, errtxt[FOUNDORDERS], itob(f));
+      if (brief <= 1) {
+        if (compile)
+          fprintf(ERR, "%s:faction:%s\n", filename, itob(f));
+        else 
+          fprintf(ERR, errtxt[FOUNDORDERS], itob(f));
+      }
       check_OPTION();           /* Nach PARTEI auf "; OPTION" bzw. ";  ECHECK" testen */
       if (faction_count)
         ++ * faction_count;
