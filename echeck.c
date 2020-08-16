@@ -3958,7 +3958,7 @@ void check_teachings(void)
 
 void checkanorder(char *Orders)
 {
-  int i, x;
+  int i, x, old_errors;
   char *s;
   t_skills *sk;
   unit *u;
@@ -3977,6 +3977,8 @@ void checkanorder(char *Orders)
      */
     strcpy(order_buf, Orders);
   }
+
+  old_errors = error_count;
 
   i = igetkeyword(order_buf);
   this_command = i;
@@ -4557,11 +4559,13 @@ void checkanorder(char *Orders)
     break;
 
   case K_PIRACY:
+    scat(printkeyword(K_PIRACY));
     getmoreunits(true);
     long_order();
     break;
 
   case K_SCHOOL:               /* Magiegebiet */
+    /* FIXME not an order any more */
     s = getstr();
     i = findstr(magiegebiet, s, 5);
     if (i < 0) {
@@ -4606,6 +4610,9 @@ void checkanorder(char *Orders)
   case K_COMMENT:
     check_comment();
     scat(Orders);
+    do {
+      s = getstr();
+    } while (*s);
     break;
 
   case K_RESERVE:
@@ -4617,6 +4624,7 @@ void checkanorder(char *Orders)
     break;
 
   case K_RESTART:
+    scat(printkeyword(K_RESTART));
     i = findtoken(getstr(), UT_RACE);
     if (i < 0) {
       anerror(errtxt[UNRECOGNIZEDRACE]);
@@ -4633,6 +4641,7 @@ void checkanorder(char *Orders)
     break;
 
   case K_GROUP:
+    scat(printkeyword(K_GROUP));
     s = getstr();
     if (*s)
       Scat(s);
@@ -4653,7 +4662,7 @@ void checkanorder(char *Orders)
     anerror(errtxt[SORT]);
     break;
 
-  case K_PLANT:
+  case K_PLANT: /* FIXME long order */
   case K_PREFIX:
     scat(printkeyword(i));
     s = getstr();
@@ -4668,10 +4677,8 @@ void checkanorder(char *Orders)
     anerror(errtxt[UNRECOGNIZEDORDER]);
   }
 
-  /* FIXME: no more parameters after last one
   if (error_count == old_errors)
     expect_last(1);
-  */
 
   if (does_default != 1) {
     porder();
