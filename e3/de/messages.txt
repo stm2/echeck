@@ -109,6 +109,7 @@ NOTEXT, Kein Text
 NOTFOUND, nicht gefunden
 NTOOBIG, Zahl zu groß
 NUMBER0SENSELESS, Anzahl 0 macht keinen Sinn
+NUMBEREXPECTED, Zahl erwartet
 NUMBERNOTPOSSIBLE, Anzahl hier nicht möglich
 NUMCASTLEMISSING, Nummer der Burg fehlt
 NUMLUXURIESMISSING, Anzahl Luxusgüter fehlt
@@ -149,6 +150,7 @@ TEMPUNITSCANTRESERVE, TEMP-Einheiten können nichts reservieren! Bitte GIB benut
 TEMPUNITSCANTGIVE, TEMP-Einheiten können nichts übergebenen! Befehlsreihenfolge beachten!
 TEXTTOOLONG, Text zu lang (max. %d)
 THERE, Es 
+TOOMANYPARAMETERS, Zu viele Parameter
 UNIT, Einheit
 UNITS, Einheiten
 UNIT0NOTPOSSIBLE, Einheit 0 bzw. Bauern geht hier nicht
