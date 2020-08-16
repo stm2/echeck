@@ -11,6 +11,7 @@ extern int warning_count;
 extern int verbose;
 extern int brief;
 extern char show_warnings;
+extern char *echeck_rules;
 extern int line_no;
 extern int get_long_order_line();
 extern void mock_input(const char * input);
@@ -182,6 +183,14 @@ static void test_entertain(CuTest * tc)
 {
   test_orders(tc, "UNTERHALTE", 0, 0);
   assert_long_order(tc, 1);
+  test_orders(tc, "UNTERHALTE 500", 0, 0);
+  assert_long_order(tc, 1);
+  test_orders(tc, "UNTERHALTE x", 1, 0);
+  assert_long_order(tc, 1);
+  test_orders(tc, "GIB x y z\nUNTERHALTE x", 1, 1);
+  assert_long_order(tc, 2);
+  test_orders(tc, "ALLIANZ VERLASSEN", 0, 1);
+  assert_long_order(tc, 0);
 }
 
 static void test_claim_nothing(CuTest * tc)
@@ -191,9 +200,46 @@ static void test_claim_nothing(CuTest * tc)
   test_orders(tc, "BEANSPRUCHE 1 bla", 1, 0);
 }
 
+static void test_e3(CuTest * tc)
+{
+  test_orders(tc, "UNTERHALTE", 0, 1);
+}
+
+static void test_alliance_happy(CuTest * tc)
+{
+  test_orders(tc, "ALLIANZ AUSSTOSSEN xy", 0, 0);
+  test_orders(tc, "ALLIANZ VERLASSEN", 0, 0);
+  test_orders(tc, "ALLIANZ KOMMANDO abc", 0, 0);
+  test_orders(tc, "ALLIANZ NEU", 0, 0);
+  test_orders(tc, "ALLIANZ EINLADEN abc", 0, 0);
+  test_orders(tc, "ALLIANZ BEITRETEN xyz", 0, 0);
+  test_orders(tc, "BENENNE ALLIANZ 'Hodor'", 0, 0);
+}
+
+static void test_alliance_missing(CuTest * tc)
+{
+  test_orders(tc, "ALLIANZ", 0, 1);
+  test_orders(tc, "ALLIANZ AUSSTOSSEN", 0, 1);
+  test_orders(tc, "ALLIANZ KOMMANDO", 0, 1);
+  test_orders(tc, "ALLIANZ EINLADEN", 0, 1);
+  test_orders(tc, "ALLIANZ BEITRETEN", 0, 1);
+  test_orders(tc, "BENENNE ALLIANZ", 1, 0);
+}
+
+static void test_alliance_toomuch(CuTest * tc)
+{
+  test_orders(tc, "ALLIANZ AUSSTOSSEN xy ab", 0, 1);
+  test_orders(tc, "ALLIANZ VERLASSEN 1", 0, 1);
+  test_orders(tc, "ALLIANZ KOMMANDO abc def", 0, 1);
+  test_orders(tc, "ALLIANZ NEU x", 0, 1);
+  test_orders(tc, "ALLIANZ EINLADEN abc def", 0, 1);
+  test_orders(tc, "ALLIANZ BEITRETEN xyz abc", 0, 1);
+  test_orders(tc, "ALLIANZ xyz", 0, 1);
+}
+
 int AddTestSuites(CuSuite * suite, const char * args)
 {
-  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,give,destroy,entertain,claim");
+  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,give,destroy,entertain,claim,e3,alliance");
   char * name = strtok(names, ",");
   CuSuite * cs;
 
@@ -231,15 +277,32 @@ int AddTestSuites(CuSuite * suite, const char * args)
       SUITE_ADD_TEST(cs, test_destroy_street_direction);
       CuSuiteAddSuite(suite, cs);
     }
-    else if (strcmp(name, "entertain")==0) {
-      cs = CuSuiteNew();
-      SUITE_ADD_TEST(cs, test_entertain);
-      CuSuiteAddSuite(suite, cs);
-    }
     else if (strcmp(name, "claim")==0) {
       cs = CuSuiteNew();
       SUITE_ADD_TEST(cs, test_claim_nothing);
       CuSuiteAddSuite(suite, cs);
+    }
+    /************* e2 only tests **************/
+    else if (strcmp(echeck_rules, "e2") == 0) {
+      if (strcmp(name, "entertain") == 0) {
+        cs = CuSuiteNew();
+        SUITE_ADD_TEST(cs, test_entertain);
+        CuSuiteAddSuite(suite, cs);
+      }
+    /************* e3 only tests **************/
+    } else if (strcmp(echeck_rules, "e3") == 0) {
+      if (strcmp(name, "e3") == 0) {
+        cs = CuSuiteNew();
+        SUITE_ADD_TEST(cs, test_e3);
+        CuSuiteAddSuite(suite, cs);
+      }
+      else if (strcmp(name, "alliance") == 0) {
+        cs = CuSuiteNew();
+        SUITE_ADD_TEST(cs, test_alliance_happy);
+        SUITE_ADD_TEST(cs, test_alliance_missing);
+        SUITE_ADD_TEST(cs, test_alliance_toomuch);
+        CuSuiteAddSuite(suite, cs);
+      }
     }
     name = strtok(0, ",");
   }

@@ -51,4 +51,9 @@ LOCALE, Locale
 BEFORE,      vor
 AFTER,       hinter
 ALLIANCE,    allianz
+KICK,        Ausstoßen
+LEAVE,       Verlassen
+NEW,         Neu
+INVITE,      Einladen
+JOIN,        Beitreten
 AUTO, auto

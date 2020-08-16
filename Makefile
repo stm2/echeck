@@ -38,6 +38,7 @@ clean:
 	@rm -f *.o core *.bak echeck echeck.exe echeck.zip
 
 test: echeck
+	@./echeck -T=all -Lde -Re3 -b
 	@./echeck -T=all -Lde -Re2 -b
 
 echeck.zip: echeck.exe changelog.txt LIESMICH.txt README.txt

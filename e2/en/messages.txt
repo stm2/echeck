@@ -110,6 +110,7 @@ NOTEXT, No text
 NOTFOUND, not found
 NTOOBIG, figure too big
 NUMBER0SENSELESS, Number 0 doesn't make sense
+NUMBEREXPECTED, Number expected
 NUMBERNOTPOSSIBLE, Number is not possible here
 NUMCASTLEMISSING, Number of castle missing
 NUMLUXURIESMISSING, Number of luxuries missing
@@ -150,6 +151,7 @@ TEMPUNITSCANTRESERVE, TEMPORARY units can't use RESERVE! Use GIVE instead!
 TEMPUNITSCANTGIVE, TEMPORARY units can't use GIVE, it happens before MAKE!
 TEXTTOOLONG, Text too long (max. %d)
 THERE, There 
+TOOMANYPARAMETERS, Too many parameters
 UNIT, unit
 UNITS, units
 UNIT0NOTPOSSIBLE, Unit 0/Peasants not possible here

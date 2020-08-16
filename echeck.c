@@ -360,6 +360,11 @@ enum {
   P_BEFORE,
   P_AFTER,
   P_ALLIANCE,
+  P_KICK,
+  P_LEAVE,
+  P_NEW,
+  P_INVITE,
+  P_JOIN,
   P_AUTO,
   MAXPARAMS
 };
@@ -402,6 +407,11 @@ static const char *Params[MAXPARAMS] = {
   "BEFORE",
   "AFTER",
   "ALLIANCE",
+  "KICK",
+  "LEAVE",
+  "NEW",
+  "INVITE",
+  "JOIN",
   "AUTO"
 };
 
@@ -571,6 +581,7 @@ enum {
   NOTFOUND,
   NTOOBIG,
   NUMBER0SENSELESS,
+  NUMBEREXPECTED,
   NUMBERNOTPOSSIBLE,
   NUMCASTLEMISSING,
   NUMLUXURIESMISSING,
@@ -611,6 +622,7 @@ enum {
   TEMPUNITSCANTGIVE,
   TEXTTOOLONG,
   THERE,
+  TOOMANYPARAMETERS,
   UNIT,
   UNITS,
   UNIT0NOTPOSSIBLE,
@@ -763,6 +775,7 @@ static char *Errors[MAX_ERRORS] = {
   "NOTFOUND",
   "NTOOBIG",
   "NUMBER0SENSELESS",
+  "NUMBEREXPECTED",
   "NUMBERNOTPOSSIBLE",
   "NUMCASTLEMISSING",
   "NUMLUXURIESMISSING",
@@ -803,6 +816,7 @@ static char *Errors[MAX_ERRORS] = {
   "TEMPUNITSCANTGIVE",
   "TEXTTOOLONG",
   "THERE",
+  "TOOMANYPARAMETERS",
   "UNIT",
   "UNITS",
   "UNIT0NOTPOSSIBLE",
@@ -2493,6 +2507,18 @@ void copy_unit(unit * from, unit * to)
   to->lernt = from->lernt;
 }
 
+void expect_last(int level)
+{
+  char *s = getstr();
+  if (s && s[0]) {
+    if (level < 0)
+      anerror(errtxt[TOOMANYPARAMETERS]);
+    else
+      awarning(errtxt[TOOMANYPARAMETERS], level);
+  }
+}
+
+
 void checkemail(void)
 {
   char *s, *addr;
@@ -4111,9 +4137,39 @@ void checkanorder(char *Orders)
     }
     break;
 
-  case K_ALLIANCE:
-    Scat(order_buf);
+  case K_ALLIANCE: {
+    int a;
+    scat(printkeyword(K_ALLIANCE));
+    a = getparam();
+    switch (a) {
+    case P_LEAVE:
+    case P_NEW:
+      Scat(printparam(a));
+      break;
+    case P_KICK:
+    case P_CONTROL:
+    case P_INVITE:
+    case P_JOIN:
+      Scat(printparam(a));
+      s = getstr();
+      i = btoi(s);
+      if (!*s || !i) {
+        if (i == P_JOIN)
+          anerror(errtxt[WRONGNUMBER]);
+        else
+          anerror(errtxt[WRONGFACTIONNUMBER]);
+      } else {
+        Scat(s);
+      }
+      break;
+    default:
+      anerror(errtxt[WRONGPARAMETER]);
+      break;
+    }
+    expect_last(-1);
+    
     break;
+  }
 
   case K_END:
     if (from_temp_unit_no == 0)
@@ -4368,10 +4424,18 @@ void checkanorder(char *Orders)
 
   case K_ENTERTAIN:
     scat(printkeyword(K_ENTERTAIN));
-    i = geti();
-    if (!does_default) {
+    s = getstr();
+    if (*s) {
+      scat(s);
+      i = atoi(s);
+      if (i <= 0)
+        awarning(errtxt[NUMBER0SENSELESS], 1);
+    } else {
       if (!i)
         i = 20 * order_unit->people;
+    }
+    
+    if (!does_default) {
       order_unit->money += i;
     }
     long_order();
@@ -4603,6 +4667,12 @@ void checkanorder(char *Orders)
   default:
     anerror(errtxt[UNRECOGNIZEDORDER]);
   }
+
+  /* FIXME: no more parameters after last one
+  if (error_count == old_errors)
+    expect_last(1);
+  */
+
   if (does_default != 1) {
     porder();
     does_default = 0;

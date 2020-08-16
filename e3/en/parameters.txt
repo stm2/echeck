@@ -46,4 +46,9 @@ LOCALE,   Locale
 BEFORE, before
 AFTER, after
 ALLIANCE, alliance
+KICK,        Kick
+LEAVE,       Leave
+NEW,         New
+INVITE,      Invite
+JOIN,        Join
 AUTO, auto
