@@ -176,7 +176,7 @@ static void test_destroy_street_direction(CuTest * tc)
   error_count = warning_count = 0;
   process_order_file(0, 0);
   CuAssertIntEquals(tc, 2, error_count);
-  CuAssertIntEquals(tc, 1, warning_count);
+  CuAssertIntEquals(tc, 0, warning_count);
 }
 
 static void test_entertain(CuTest * tc)
@@ -237,9 +237,32 @@ static void test_alliance_toomuch(CuTest * tc)
   test_orders(tc, "ALLIANZ xyz", 0, 1);
 }
 
+static void test_check_additional_parameters(CuTest *tc)
+{
+  test_orders(tc, "// bla blubb", 0, 0);
+  test_orders(tc, "//bla blubb", 0, 1);
+  test_orders(tc, "PIRATERIE x y z", 0, 0);
+  test_orders(tc, "ZAUBERE \"Sonnenschein\" a b 1 2 3", 0, 0);
+  
+  test_orders(tc, "BEFÖRDERE 1", 1, 0);
+  test_orders(tc, "FAHRE 1 2", 1, 0);
+  test_orders(tc, "PRAEFIX a b c", 1, 0);
+  test_orders(tc, "RESERVIERE 1 Silber und Gold", 1, 0);
+
+  test_orders(tc, "ATTACKIERE 1 2 3", 0, 1);
+  test_orders(tc, "NACH no nw 1", 0, 1);
+  test_orders(tc, "ROUTE no nw pause 1", 0, 1);
+  test_orders(tc, "TRANSPORTIERE x y", 0, 1);
+
+  if (strcmp(echeck_rules, "e2") == 0) {
+    test_orders(tc, "BEKLAUE x y", 1, 0);
+    test_orders(tc, "LEHRE a b c d", 0, 0); /* Personen */
+  }
+}
+
 int AddTestSuites(CuSuite * suite, const char * args)
 {
-  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,give,destroy,entertain,claim,e3,alliance");
+  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,common,give,destroy,entertain,claim,e3,alliance");
   char * name = strtok(names, ",");
   CuSuite * cs;
 
@@ -280,6 +303,11 @@ int AddTestSuites(CuSuite * suite, const char * args)
     else if (strcmp(name, "claim")==0) {
       cs = CuSuiteNew();
       SUITE_ADD_TEST(cs, test_claim_nothing);
+      CuSuiteAddSuite(suite, cs);
+    }
+    else if (strcmp(name, "common")==0) {
+      cs = CuSuiteNew();
+      SUITE_ADD_TEST(cs, test_check_additional_parameters);
       CuSuiteAddSuite(suite, cs);
     }
     /************* e2 only tests **************/
