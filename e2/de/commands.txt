@@ -64,7 +64,8 @@ RESTART,      Neustart
 GROUP,        Gruppe
 SORT,         Sortieren
 PREFIX,       Präfix
-PROMOTE,    Befördere
+PROMOTE,      Befördere
+LANGUAGE,     Sprache
 
 # NEXT, Nächster     ist KEIN BEFEHL für ECheck, sondern ein PARAMETER!
 # dies ist aus internen Gründen notwendig, also entsprechend dort eintragen
