@@ -115,6 +115,8 @@ static int compact = 0;
 #define SPACE               ' '
 #define ESCAPE_CHAR         '\\'
 #define COMMENT_CHAR        ';'
+#define SINGLE_QUOTE        '\''
+#define DOUBLE_QUOTE        '"'
 #define MARGIN              78
 #define RECRUIT_COST        50
 
@@ -2279,7 +2281,7 @@ char *getbuf(void)
 {
   char lbuf[MAXLINE];
   bool cont = false;
-  bool quote = false;
+  char quote = 0;
   bool report = false;
   char *cp = warn_buf;
 
@@ -2328,16 +2330,27 @@ char *getbuf(void)
             && isspace(*bp));
         }
       } else {
-        cont = false;
-        if (*bp == '"') {
-          quote = (bool) ! quote;
-          eatwhite = true;
+        if ((!quote || quote == *bp) && (*bp == DOUBLE_QUOTE || *bp == SINGLE_QUOTE)) {
+          if (!cont && !quote) {
+            quote = *bp;
+            eatwhite = true;
+          } else if (!cont && quote == *bp) {
+            quote = 0;
+            while(cp >= warn_buf && (*(cp-1) == SPACE_REPLACEMENT)) {
+              --cp;
+            }
+            eatwhite = true;
+          } else {
+            *(cp++) = *bp;
+          }
+          cont = false;
         } else {
-          if (*bp == '\\')
+          if (*bp == '\\') {
             cont = true;
-          else if (!iscntrl(*bp)) {
+          } else if (!iscntrl(*bp)) {
             *(cp++) = *bp;
             eatwhite = (bool) ! quote;
+            cont = false;
           }
         }
         ++bp;
