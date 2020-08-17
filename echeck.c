@@ -334,6 +334,7 @@ enum {
   P_FRONT,
   P_CONTROL,
   P_HERBS,
+  P_TREES,
   P_NOT,
   P_NEXT,
   P_FACTION,
@@ -381,6 +382,7 @@ static const char *Params[MAXPARAMS] = {
   "FRONT",
   "CONTROL",
   "HERBS",
+  "TREES",
   "NOT",
   "NEXT",
   "FACTION",
@@ -4018,7 +4020,8 @@ void checkanorder(char *Orders)
         icat(x);
       } else
         anerror(errtxt[NEEDBOTHCOORDINATES]);
-    }
+    } else
+      anerror(errtxt[NEEDBOTHCOORDINATES]);
     break;
 
   case K_USE:
@@ -4662,7 +4665,35 @@ void checkanorder(char *Orders)
     anerror(errtxt[SORT]);
     break;
 
-  case K_PLANT: /* FIXME long order */
+  case K_PLANT: {
+    int n = 1;
+    scat(printkeyword(K_PLANT));
+    s = getstr();
+    if (isdigit(*s)) {          /* PFLANZE anzahl "Kraeuter/Samen/Mallornsamen" */
+      n = atoi(s);
+      if (n == 0)
+        awarning(errtxt[NUMBER0SENSELESS], 2);
+      icat(n);
+      s = getstr();
+    }
+
+    i = findparam(s);
+    if (i == P_HERBS || i == P_TREES) {
+      Scat(printparam(i));
+    } else {
+      i = finditem(s);
+      if (i >= 0) {
+        Scat(ItemName(i, n != 1));
+      } else if (!(*s)) {
+        anerror(errtxt[UNRECOGNIZEDOBJECT]);
+      } else {
+        awarning(errtxt[UNRECOGNIZEDOBJECT], 1);
+      }
+    }
+    long_order();
+  }
+    break;
+
   case K_PREFIX:
     scat(printkeyword(i));
     s = getstr();

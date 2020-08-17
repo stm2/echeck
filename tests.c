@@ -260,9 +260,30 @@ static void test_check_additional_parameters(CuTest *tc)
   }
 }
 
+static void test_plant(CuTest *tc)
+{
+  test_orders(tc, "PFLANZE KRÄUTER", 0, 0);
+  assert_long_order(tc, 1);
+  test_orders(tc, "PFLANZE 2 KRÄUTER", 0, 0);
+  test_orders(tc, "PFLANZE 3 BAEUME", 0, 0);
+  test_orders(tc, "PFLANZE 4 Mallornsamen", 0, 0);
+  test_orders(tc, "PFLANZE 5 Samen", 0, 0);
+  /* test_orders(tc, "PFLANZE 5 Silber", 1, 0); */
+  test_orders(tc, "PFLANZE", 0, 1);
+  test_orders(tc, "PFLANZE 1 2", 1, 0);
+  test_orders(tc, "PFLANZE 1 BAEUME Samen", 1, 0);
+}
+
+static void test_origin(CuTest *tc)
+{
+  test_orders(tc, "URSPRUNG 1 -1", 0, 0);
+  test_orders(tc, "URSPRUNG 1", 0, 1);
+  test_orders(tc, "URSPRUNG", 0, 1);
+}
+
 int AddTestSuites(CuSuite * suite, const char * args)
 {
-  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,common,give,destroy,entertain,claim,e3,alliance");
+  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,common,give,destroy,entertain,claim,e3,alliance,plant");
   char * name = strtok(names, ",");
   CuSuite * cs;
 
@@ -305,9 +326,15 @@ int AddTestSuites(CuSuite * suite, const char * args)
       SUITE_ADD_TEST(cs, test_claim_nothing);
       CuSuiteAddSuite(suite, cs);
     }
+    else if (strcmp(name, "plant")==0) {
+      cs = CuSuiteNew();
+      SUITE_ADD_TEST(cs, test_plant);
+      CuSuiteAddSuite(suite, cs);
+    }
     else if (strcmp(name, "common")==0) {
       cs = CuSuiteNew();
       SUITE_ADD_TEST(cs, test_check_additional_parameters);
+      SUITE_ADD_TEST(cs, test_origin);
       CuSuiteAddSuite(suite, cs);
     }
     /************* e2 only tests **************/

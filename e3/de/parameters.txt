@@ -22,6 +22,7 @@ AGGRESSIVE,  aggressiv
 DEFENSIVE,   defensiv
 CONTROL,     Kommando
 HERBS,       Kräuter
+TREES,       Bäume
 NOT,         Nicht
 
 NEXT,        Nächster
