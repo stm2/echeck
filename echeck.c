@@ -3983,6 +3983,7 @@ void checkanorder(char *Orders)
 
     if (isdigit(*s)) {          /* BENUTZE anzahl "Trank" */
       i = atoi(s);
+      icat(i);
       if (i == 0)
         awarning(errtxt[NUMBER0SENSELESS], 2);
       s = getstr();
@@ -4057,7 +4058,7 @@ void checkanorder(char *Orders)
     if (i == P_HERBS || i == P_HORSE) {
       /* ZÜCHTE [anzahl] KRÄUTER */
       /* ZÜCHTE PFERDE */
-      scat(printparam(i));
+      Scat(printparam(i));
     } else if (s && (*s)) {
       anerror(errtxt[BREEDHORSESORHERBS]);
     } else { 
@@ -4081,6 +4082,8 @@ void checkanorder(char *Orders)
     s = getstr();
     if (findparam(s) == P_NOT) {
       Scat(printparam(P_NOT));
+    } else if (*s) {
+      anerror(errtxt[WRONGPARAMETER]);
     }
     break;
 
@@ -4113,7 +4116,7 @@ void checkanorder(char *Orders)
     scat(printkeyword(K_RESEARCH));
     i = getparam();
     if (i == P_HERBS) {
-      scat(printparam(P_HERBS));        /* momentan nur FORSCHE KRÄUTER */
+      Scat(printparam(P_HERBS));        /* momentan nur FORSCHE KRÄUTER */
     } else
       anerror(errtxt[RESEARCHHERBSONLY]);
     long_order();
@@ -4342,7 +4345,6 @@ void checkanorder(char *Orders)
       icat(i);
     else
       i = 20 * order_unit->people;
-    while (*igetstr(NULL)) ;
     long_order();
     if (!does_default)
       order_unit->money += i;
