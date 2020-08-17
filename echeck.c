@@ -383,6 +383,7 @@ enum {
   P_FRONT,
   P_CONTROL,
   P_HERBS,
+  P_TREES,
   P_NOT,
   P_NEXT,
   P_FACTION,
@@ -425,6 +426,7 @@ static const char *Params[MAXPARAMS] = {
   "FRONT",
   "CONTROL",
   "HERBS",
+  "TREES",
   "NOT",
   "NEXT",
   "FACTION",
@@ -3813,7 +3815,10 @@ void checkanorder(char *Orders)
       if (*s) {
         x = atoi(s);
         icat(x);
-      } else
+      } else {
+        anerror(cgettext(Errors[NEEDBOTHCOORDINATES]));
+      }
+    } else {
         anerror(cgettext(Errors[NEEDBOTHCOORDINATES]));
     }
     break;
@@ -4414,7 +4419,36 @@ void checkanorder(char *Orders)
     anerror(cgettext(Errors[SORT]));
     break;
 
-  case K_PLANT:
+  case K_PLANT: {
+    int n = 1;
+    scat(printkeyword(K_PLANT));
+    s = getstr();
+    if (isdigit(*s)) {          /* PFLANZE anzahl "Kraeuter/Samen/Mallornsamen" */
+      n = atoi(s);
+      if (n == 0) {
+        awarning(_("Number 0 does not make sense here"), 2);
+      }
+      icat(n);
+      s = getstr();
+    }
+
+    i = findparam(s);
+    if (i == P_HERBS || i == P_TREES) {
+      Scat(printparam(i));
+    } else {
+      i = finditem(s);
+      if (i >= 0) {
+        Scat(ItemName(i, n != 1));
+      } else if (!(*s)) {
+        anerror(cgettext(Errors[UNRECOGNIZEDOBJECT]));
+      } else {
+        awarning(cgettext(Errors[UNRECOGNIZEDOBJECT]), 1);
+      }
+    }
+    long_order();
+  }
+    break;
+
   case K_PREFIX:
     scat(printkeyword(i));
     s = getstr();
