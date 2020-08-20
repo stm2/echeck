@@ -13,10 +13,14 @@ extern int brief;
 extern char show_warnings;
 extern char *echeck_rules;
 extern int line_no;
+extern char no_comment;
 extern int get_long_order_line();
 extern void mock_input(const char * input);
+extern void set_output(FILE *out, FILE *err);
 extern char *getbuf(void);
 extern char *igetstr(char *);
+extern int btoi(char *s);
+extern char *itob(int i);
 extern void checkgiving(void);
 extern void checkanorder(char *);
 extern struct unit *newunit(int n, int t);
@@ -24,6 +28,15 @@ extern void set_order_unit(struct unit * u);
 void process_order_file(int *faction_count, int *unit_count);
 
 #define BUFSIZE 65000
+
+#define DEFAULT_VERB 0
+#define DEFAULT_BRIEF 2
+#define DEFAULT_WARN 1
+
+#define ERROR_FILE ".#echeck.test.error#"
+#define OUTPUT_FILE ".#echeck.test.echo#"
+
+static FILE *OUT = NULL, *ERR = NULL;
 
 static int unit_no = 0;
 
@@ -55,6 +68,74 @@ static void test_orders(CuTest * tc, char * orders, int exp_warnings, int exp_er
 
 static void assert_long_order(CuTest * tc, int expected_line) {
   CuAssertIntEquals_Msg(tc, "long order line", expected_line, get_long_order_line());
+}
+
+void start_output() {
+  if (ERR)
+    fclose(ERR);
+  ERR = fopen(ERROR_FILE, "w");
+  if (OUT)
+    fclose(OUT);
+  OUT = fopen(OUTPUT_FILE, "w");
+  set_output(OUT, ERR);
+}
+
+void reset_output() {
+  if (ERR)
+    fclose(ERR);
+  if (OUT)
+    fclose(OUT);
+  remove(OUTPUT_FILE);
+  remove(ERROR_FILE);
+  set_output(stdout, stderr);
+}
+
+char * get_file_content(char *filename) {
+  FILE *IN;
+  long lSize;
+  char *buffer;
+
+  IN = fopen(filename, "rb");
+  if (IN) {
+    fseek(IN, 0L, SEEK_END);
+    lSize = ftell(IN);
+    rewind(IN);
+    buffer = malloc(sizeof(char) * (lSize + 1));
+    if (buffer) {
+      if (1 == fread(buffer, lSize, 1, IN)) {
+        buffer[lSize] = 0;
+        fclose(IN);
+        return buffer;
+      }
+    }
+    fclose(IN);
+  }
+  return "";
+}
+
+char * get_output() {
+  if (ERR)
+    fflush(ERR);
+  return get_file_content(ERROR_FILE);
+}
+
+char * get_echo() {
+  if (OUT)
+    fflush(OUT);
+  return get_file_content(OUTPUT_FILE);
+}
+
+void setup_test() {
+  no_comment = -128;
+  verbose = DEFAULT_VERB;
+  brief = DEFAULT_BRIEF;
+  show_warnings = DEFAULT_WARN;
+  reset_output();
+}
+
+static void test_tear_down(CuTest *tc)
+{
+  reset_output();
 }
 
 static void test_process_nothing(CuTest * tc)
@@ -329,16 +410,57 @@ static void test_language(CuTest *tc)
   test_orders(tc, "SPRACHE a b", 1, 0);
 }
 
+static void test_itob(CuTest *tc)
+{
+  char buf[40];
+  sprintf(buf, "-%s-%s-%s-%s", itob(btoi("1111")), itob(btoi("2222")), itob(btoi("3333")), itob(btoi("4444")));
+  CuAssertStrEquals(tc, buf, "-1111-2222-3333-4444");
+  //  sprintf(buf, "-%s-", itob(btoi("1111111")));
+  CuAssertIntEquals(tc, 1, btoi("22222"));
+}
+
+static void test_leave_ship_on(CuTest *tc)
+{
+  char *output;
+  
+  show_warnings = 5;
+  brief = 0;
+  
+  start_output();
+  mock_input("ERESSEA 1 \"password\"\nREGION 3,3 ; null\nEINHEIT cap ; Captain [1,20$,Sshp1]\nNACH o\nEINHEIT 2 ; On Ship [1,20$,sshp1]\nNACH w\nEINHEIT 3; a [1,20$]\nNAECHSTER\n");
+  error_count = warning_count = 0;
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 1, warning_count);
+
+  output = get_output();
+  CuAssertTrue(tc, 0 < strstr(output, "Warnung zur Zeile 5: Einheit 2 auf Schiff shp1 hat sich schon bewegt."));
+  free(output);
+  reset_output();
+
+  setup_test();
+}
+
+static void test_leave_ship_off(CuTest *tc)
+{
+  show_warnings = 1;
+  mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nNAECHSTER\n");
+  mock_input("ERESSEA 1 \"password\"\nREGION 3,3 ; null\nEINHEIT cap ; Captain [1,20$,Sshp1]\nNACH o\nEINHEIT 2 ; On Ship [1,20$,sshp1]\nNACH w\nNAECHSTER\n");
+  error_count = warning_count = 0;
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+  show_warnings = DEFAULT_WARN;
+}
+
 int AddTestSuites(CuSuite * suite, const char * args)
 {
-  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,common,give,destroy,entertain,claim,e3,alliance,plant");
+  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,common,give,destroy,entertain,claim,e3,alliance,plant,ship");
   char * name = strtok(names, ",");
   CuSuite * cs;
 
   while (name) {
-    verbose = 0;
-    brief=2;
-    show_warnings = 1;
+    setup_test();
 
     if (strcmp(name, "echeck")==0) {
       cs = CuSuiteNew();
@@ -388,6 +510,13 @@ int AddTestSuites(CuSuite * suite, const char * args)
       SUITE_ADD_TEST(cs, test_language);
       CuSuiteAddSuite(suite, cs);
     }
+    else if (strcmp(name, "ship")==0) {
+      cs = CuSuiteNew();
+      SUITE_ADD_TEST(cs, test_itob);
+      SUITE_ADD_TEST(cs, test_leave_ship_on);
+      SUITE_ADD_TEST(cs, test_leave_ship_off);
+      CuSuiteAddSuite(suite, cs);
+    }
     /************* e2 only tests **************/
     else if (strcmp(echeck_rules, "e2") == 0) {
       if (strcmp(name, "entertain") == 0) {
@@ -412,5 +541,8 @@ int AddTestSuites(CuSuite * suite, const char * args)
     }
     name = strtok(0, ",");
   }
+  cs = CuSuiteNew();
+  SUITE_ADD_TEST(cs, test_tear_down);
+  CuSuiteAddSuite(suite, cs);
   return 0;
 }
