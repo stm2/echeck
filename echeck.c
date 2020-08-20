@@ -1042,17 +1042,21 @@ char *eatwhite(char *ptr)
   return ptr;
 }
 
-static char nulls[] = "\0\0\0\0\0\0\0\0";
 
 const char *itob(int i)
 {
+  static char buffer[40];
+  static int index = 0;
   char *dst;
   int b = i, x;
 
   if (i == 0)
     return "0";
 
-  dst = nulls + 6;
+  index = (index+1) % 4;
+  dst = buffer + index * 10 + 9;
+
+  *dst = 0;
   do {
     x = b % 36;
     b /= 36;
@@ -1683,6 +1687,13 @@ void mock_input(const char *input)
   mock_pos = mocked_input;
 }
 
+void set_output(FILE *out, FILE *err) {
+  if (out)
+    OUT = out;
+  if (err)
+    ERR = err;
+}
+
 int get_long_order_line() {
   if (order_unit)
     return order_unit->long_order_line;
@@ -1823,23 +1834,25 @@ void Error(char *text, int line, char *order)
 
 int btoi(char *s)
 {
-  char *x = s;
+  static char buf[5];
+  int n = 0;
   int i = 0;
 
   assert(s);
   if (!(*s))
     return 0;
-  while (isalnum(*s))
-    s++;
-  *s = 0;
-  s = x;
-  if (strlen(s) > 4) {
+
+  for(n = 0; n < 5 && isalnum(*s); ++n)
+    buf[n] = *(s++);
+  if (n > 4) {
     sprintf(message_buf, "%s: `%s'. %s", errtxt[NTOOBIG], s, errtxt[USED1]);
     anerror(message_buf);
     return 1;
   }
+  buf[n] = 0;
+  s = buf;
 #ifdef HAVE_STRTOL
-  i = (int)(strtol(x, NULL, 36));
+  i = (int)(strtol(s, NULL, 36));
 #else
   while (isalnum(*s)) {
     i *= 36;
@@ -3804,7 +3817,7 @@ void check_money(bool do_move)
           if (t->ship == i) {
             if (t->hasmoved > 1) {      /* schon bewegt! */
               sprintf(warn_buf, errtxt[UNITONSHIPHASMOVED], uid(t), itob(i));
-              Error(warn_buf, t->line_no, t->long_order);
+              warning(warn_buf, t->line_no, t->long_order, 2);
             }
             t->hasmoved = 1;
             t->newx = x;
@@ -4908,6 +4921,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
 {
   int i;
   char *x;
+  FILE *F;
 
   for (i = 1; i < argc; i++) {
     if (argv[i][0] == '-') {
@@ -5000,16 +5014,14 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
       case 'E':
         if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           echo_it = 1;
-          OUT = stdout;
-          ERR = stdout;
+          set_output(stdout, stdout);
         }
         break;
 
       case 'e':
         if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           echo_it = 1;
-          OUT = stdout;
-          ERR = stderr;
+          set_output(stdout, stderr);
         }
         break;
 
@@ -5024,17 +5036,19 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
             fputs
               ("Keine Datei für Fehler-Texte, stderr benutzt\n"
               "Using stderr for error output\n", stderr);
-            ERR = stderr;
+            set_output(NULL, stderr);
             break;
           }
-          ERR = fopen(x, "w");
-          if (!ERR) {
+          F = fopen(x, "w");
+          if (!F) {
             fprintf(stderr,
               "Kann Datei `%s' nicht schreiben:\n"
               "Can't write to file `%s':\n" " %s", x, x, strerror(errno));
             exit(0);
           }
+          set_output(NULL, F);
         }
+      
         break;
 
       case 'o':
@@ -5049,16 +5063,17 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
             fputs
               ("Leere Datei für 'geprüfte Datei', stdout benutzt\n"
               "Empty file for checked file, using stdout\n", stderr);
-            OUT = stdout;
+            set_output(stdout, NULL);
             break;
           }
-          OUT = fopen(x, "w");
-          if (!OUT) {
+          F = fopen(x, "w");
+          if (!F) {
             fprintf(stderr,
               "Kann Datei `%s' nicht schreiben:\n"
               "Can't write to file `%s':\n" " %s", x, x, strerror(errno));
             exit(0);
           }
+          set_output(F, NULL);
         }
         break;
 
@@ -5088,7 +5103,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
 
       case 's':
         if (dostop)             /* bei Optionen via "; ECHECK" nicht mehr  machen */
-          ERR = stderr;
+          set_output(NULL, stderr);
         break;
 
       case 'n':
@@ -5251,7 +5266,8 @@ void process_order_file(int *faction_count, int *unit_count)
    */
 
   while (!befehle_ende) {
-    switch (igetparam(order_buf)) {
+    int i = igetparam(order_buf);
+    switch (i) {
     case P_LOCALE:
       x = getstr();
       get_order();
@@ -5529,7 +5545,7 @@ int main(int argc, char *argv[])
   argc = ccommand(&argv);       /* consolenabruf der parameter fuer  macintosh added 15.6.00 chartus */
 #endif
 
-  ERR = stderr;
+  set_output(stdout, stderr);
   for (i = 0; i < MAX_ERRORS; i++)
     errtxt[i] = Errors[i];      /* mit Defaults besetzten, weil NULL ->  crash */
 
@@ -5540,7 +5556,7 @@ int main(int argc, char *argv[])
   if (!path)
     path = DEFAULT_PATH;
   path = strdup(path);
-  ERR = stdout;
+  set_output(NULL, stdout);
 
   filename = getenv("ECHECKOPTS");
   if (filename)
