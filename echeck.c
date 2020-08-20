@@ -2584,6 +2584,7 @@ void orders_for_unit(int i, unit * u)
   char *k, *j, *e;
   int s;
 
+  /* FIXME last unit is not checked for long orders*/
   end_unit_orders();
   set_order_unit(mother_unit = u);
 
@@ -3133,7 +3134,7 @@ void getluxuries(int cmd)
         anerror(errtxt[BUYALLNOTPOSSIBLE]);
         return;
       } else
-        scat(printparam(P_ALLES));
+        Scat(printparam(P_ALLES));
     } else {
       anerror(errtxt[NUMLUXURIESMISSING]);
     }
@@ -3533,7 +3534,7 @@ void check_ally(void)
   case P_GUARD:
   case P_FACTIONSTEALTH:
   case P_ALLES:
-  case P_NOT:
+  case P_NOT: /* FIXME: legal? */
     Scat(printparam(i));
     break;
   default:
@@ -3544,6 +3545,8 @@ void check_ally(void)
   s = getstr();
   if (findparam(s) == P_NOT) {
     Scat(printparam(P_NOT));
+  } else {
+    anerror(errtxt[TOOMANYPARAMETERS]);
   }
 }
 
@@ -4247,7 +4250,7 @@ void checkanorder(char *Orders)
       icat(i);
       break;
     }
-    awarning(errtxt[MISSINGDISGUISEPARAMETERS], 5);
+    awarning(errtxt[MISSINGDISGUISEPARAMETERS], 5); /* FIXME */
     break;
 
   case K_GIVE:
@@ -4446,7 +4449,7 @@ void checkanorder(char *Orders)
     scat(printkeyword(K_ENTERTAIN));
     s = getstr();
     if (*s) {
-      scat(s);
+      Scat(s);
       i = atoi(s);
       if (i <= 0)
         awarning(errtxt[NUMBER0SENSELESS], 1);
