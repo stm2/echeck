@@ -56,7 +56,7 @@ BREED,        Züchten
 ORIGIN,       Ursprung
 EMAIL,        Email
 RESERVE,      Reservieren
-CLAIM, Beanspruchen
+CLAIM,        Beanspruchen
 BANNER,       Banner
 NUMBER,       Nummer
 PIRACY,       Piraterie

@@ -104,7 +104,7 @@ NOFIND, FIND has been replaced by OPTION ADDRESSES
 NOLUXURY, No luxury
 NORMALUNITSONLY, %s is possible with normal units only
 NOSEND, SEND has been renamed into OPTION
-NOSPACEHERE, No space allowed here
+NOSPACEHERE, Space not allowed here
 NOTEMPNUMBER, No TEMPORARY number
 NOTEXECUTED, Isn't carried out by any unit
 NOTEXT, No text
