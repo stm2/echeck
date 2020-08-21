@@ -571,6 +571,7 @@ enum {
   MISSINGOFFER,
   MISSINGPARAMETERS,
   MISSINGPASSWORD,
+  MISSINGSTART,
   MISSINGUNITNUMBER,
   MOVENOTPOSSIBLEWITHPAUSE,
   MSGTO,
@@ -765,6 +766,7 @@ static char *Errors[MAX_ERRORS] = {
   "MISSINGOFFER",
   "MISSINGPARAMETERS",
   "MISSINGPASSWORD",
+  "MISSINGSTART",
   "MISSINGUNITNUMBER",
   "MOVENOTPOSSIBLEWITHPAUSE",
   "MSGTO",
@@ -5281,7 +5283,7 @@ void check_OPTION(void)
 
 void process_order_file(int *faction_count, int *unit_count)
 {
-  int f = 0, next = 0;
+  int f = 0, next = 0, start_warning = 1;
   t_region *r;
   teach *t;
   unit *u;
@@ -5420,6 +5422,7 @@ void process_order_file(int *faction_count, int *unit_count)
       indent = next_indent = INDENT_FACTION;
       porder();
       next = 1;
+      start_warning = 1;
 
       check_money(true);        /* Check für Lerngeld, Handel usw.; true:   dann Bewegung ausführen */
       if (Regionen) {
@@ -5454,12 +5457,19 @@ void process_order_file(int *faction_count, int *unit_count)
       cmd_unit = NULL;
       order_unit = NULL;
 
+      get_order();
+      break;
+
     default:
       if (order_buf[0] == ';') {
         check_comment();
       } else {
         if (f && order_buf[0])
           awarning(errtxt[NOTEXECUTED], 1);
+        else if (start_warning && order_buf[0]) {
+          anerror(errtxt[MISSINGSTART]);
+          start_warning = 0;
+        }
       }
       get_order();
     }
