@@ -508,6 +508,7 @@ enum {
   BUTDOESNTLEARN,
   BUYALLNOTPOSSIBLE,
   CANTATTACKTEMP,
+  CANTCHANGELOCALE,
   CANTDESCRIBEOBJECT,
   CANTENTEROBJECT,
   CANTFINDUNIT,
@@ -557,6 +558,7 @@ enum {
   LONGCOMBATNOLONGORDER,
   LONGORDERMISSING,
   MAGIC,
+  MAINTAINANCEMOVED,
   MISSINGFILES,
   MISSFILEPARAM,
   MISSFILECMD,
@@ -584,6 +586,7 @@ enum {
   NOLUXURY,
   NORMALUNITSONLY,
   NOSEND,
+  NOSPACEHERE,
   NOTEMPNUMBER,
   NOTEXECUTED,
   NOTEXT,
@@ -680,9 +683,6 @@ enum {
   WRONGNUMBER,
   WRONGOUTPUTLEVEL,
   WRONGPARAMETER,
-  CANTCHANGELOCALE,
-  MAINTAINANCEMOVED,
-  NOSPACEHERE,
   MAX_ERRORS
 };
 
@@ -703,6 +703,7 @@ static char *Errors[MAX_ERRORS] = {
   "BUTDOESNTLEARN",
   "BUYALLNOTPOSSIBLE",
   "CANTATTACKTEMP",
+  "CANTCHANGELOCALE",
   "CANTDESCRIBEOBJECT",
   "CANTENTEROBJECT",
   "CANTFINDUNIT",
@@ -752,6 +753,7 @@ static char *Errors[MAX_ERRORS] = {
   "LONGCOMBATNOLONGORDER",
   "LONGORDERMISSING",
   "MAGIC",
+  "MAINTAINANCEMOVED",
   "MISSINGFILES",
   "MISSFILEPARAM",
   "MISSFILECMD",
@@ -779,6 +781,7 @@ static char *Errors[MAX_ERRORS] = {
   "NOLUXURY",
   "NORMALUNITSONLY",
   "NOSEND",
+  "NOSPACEHERE",
   "NOTEMPNUMBER",
   "NOTEXECUTED",
   "NOTEXT",
@@ -875,9 +878,6 @@ static char *Errors[MAX_ERRORS] = {
   "WRONGNUMBER",
   "WRONGOUTPUTLEVEL",
   "WRONGPARAMETER",
-  "CANTCHANGELOCALE",
-  "MAINTAINANCEMOVED",
-  "NOSPACEHERE"
 };
 
 char *errtxt[MAX_ERRORS];
@@ -4965,8 +4965,8 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
           } else if (*(argv[i] + 2)) {
 	    /* -Ppath */
 	    free(path);
+            path = strdup((char *)(argv[i] + 2));
 	  }
-          path = strdup((char *)(argv[i] + 2));
         }
         break;
 
