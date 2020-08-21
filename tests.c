@@ -453,6 +453,16 @@ static void test_leave_ship_off(CuTest *tc)
   show_warnings = DEFAULT_WARN;
 }
 
+static void test_use(CuTest *tc)
+{
+  test_orders(tc, "BENUTZE 1 Wundsalbe", 0, 0);
+  test_orders(tc, "BENUTZE Wundsalbe", 0, 0);
+  test_orders(tc, "BENUTZE Holz", 0, 0);
+  test_orders(tc, "BENUTZE", 0, 1);
+  test_orders(tc, "BENUTZE 1", 0, 1);
+  test_orders(tc, "BENUTZE Herpderp", 1, 0);
+}
+
 int AddTestSuites(CuSuite * suite, const char * args)
 {
   char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,common,give,destroy,entertain,claim,e3,alliance,plant,ship");
@@ -508,6 +518,7 @@ int AddTestSuites(CuSuite * suite, const char * args)
       SUITE_ADD_TEST(cs, test_origin);
       SUITE_ADD_TEST(cs, test_check_quotes);
       SUITE_ADD_TEST(cs, test_language);
+      SUITE_ADD_TEST(cs, test_use);
       CuSuiteAddSuite(suite, cs);
     }
     else if (strcmp(name, "ship")==0) {

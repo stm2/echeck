@@ -4073,11 +4073,26 @@ void checkanorder(char *Orders)
     }
 
     i = findpotion(s);
-    if (i < 0)
-      anerror(errtxt[UNRECOGNIZEDPOTION]);
-    else {
+    if (i >= 0) {
       Scat(printliste(i, potionnames));
+    } else {
+      i = finditem(s);
+      if (i >= 0) {
+        Scat(ItemName(i, 1));
+      } else if (!(*s)) {
+        anerror(errtxt[UNRECOGNIZEDOBJECT]);
+      } else {
+        awarning(errtxt[UNRECOGNIZEDOBJECT], 1);
+      }
     }
+    /* additional parameters may be in order */
+    do {
+      s = getstr();
+      if (*s)
+        Scat(s);
+    }
+    while (*s);
+    
     break;
 
   case K_MESSAGE:
