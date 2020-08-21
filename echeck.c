@@ -327,6 +327,7 @@ static char *magiegebiet[] = {
 };
 
 enum {
+  P_ORDERSTART,
   P_ALLES,
   P_EACH,
   P_PEASANT,
@@ -375,6 +376,7 @@ enum {
 };
 
 static const char *Params[MAXPARAMS] = {
+  "ORDERSTART",
   "ALL",
   "EACH",
   "PEASANTS",
@@ -4806,7 +4808,7 @@ void readaunit(void)
       } else
         switch (igetparam(order_buf)) {
         case P_UNIT:
-        case P_FACTION:
+        case P_ORDERSTART:
         case P_NEXT:
         case P_REGION:
           if (from_temp_unit_no != 0) {
@@ -5264,6 +5266,13 @@ void check_OPTION(void)
     while (order_buf[0] == COMMENT_CHAR);
 }
 
+static void check_start(int f, int *start_warning) {
+  if (!f && *start_warning) {
+    anerror(errtxt[MISSINGSTART]);
+    *start_warning = 0;
+  }
+}
+
 void process_order_file(int *faction_count, int *unit_count)
 {
   int f = 0, next = 0, start_warning = 1;
@@ -5290,11 +5299,13 @@ void process_order_file(int *faction_count, int *unit_count)
     int i = igetparam(order_buf);
     switch (i) {
     case P_LOCALE:
+      check_start(f, &start_warning);
       x = getstr();
       get_order();
       break;
 
     case P_REGION:
+      check_start(f, &start_warning);
       if (Regionen)
         remove_temp();
       attack_warning = 0;
@@ -5349,10 +5360,10 @@ void process_order_file(int *faction_count, int *unit_count)
       get_order();
       break;
 
-    case P_FACTION:
+    case P_ORDERSTART:
       if (f && !next)
         awarning(errtxt[MISSINGNEXT], 0);
-      scat(printparam(P_FACTION));
+      scat(printparam(P_ORDERSTART));
       befehle_ende = 0;
       f = readafaction();
       if (brief <= 1) {
@@ -5361,6 +5372,7 @@ void process_order_file(int *faction_count, int *unit_count)
         else 
           fprintf(ERR, errtxt[FOUNDORDERS], itob(f));
       }
+      
       check_OPTION();           /* Nach PARTEI auf "; OPTION" bzw. ";  ECHECK" testen */
       if (faction_count)
         ++ * faction_count;
@@ -5379,6 +5391,7 @@ void process_order_file(int *faction_count, int *unit_count)
       break;
 
     case P_UNIT:
+      check_start(f, &start_warning);
       if (f) {
         scat(order_buf);
         readaunit();
@@ -5400,6 +5413,7 @@ void process_order_file(int *faction_count, int *unit_count)
        */
 
     case P_NEXT:
+      check_start(f, &start_warning);
       f = 0;
       scat(printparam(P_NEXT));
       indent = next_indent = INDENT_FACTION;
