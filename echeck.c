@@ -1870,10 +1870,15 @@ int btoi(char *s)
 
 const char *uid(unit * u)
 {
-  static char bf[18];
+  static char buffer[18*4];
+  char *dst;
+  static int index = 0;
 
-  sprintf(bf, "%s%s", u->temp != 0 ? "TEMP " : "", itob(u->no));
-  return bf;
+  index = (index+1) % 4;
+  dst = buffer + index * 18;
+
+  sprintf(dst, "%s%s", u->temp != 0 ? "TEMP " : "", itob(u->no));
+  return dst;
 }
 
 const char *Uid(int i)
@@ -3969,7 +3974,7 @@ void check_teachings(void)
     }
 
     n = (t->teacher->lehrer < t->student->schueler) ?
-      t->teacher->lehrer : t->teacher->schueler;
+      t->teacher->lehrer : t->student->schueler;
     t->teacher->lehrer -= n;
     t->student->schueler -= n;
   }
@@ -4910,7 +4915,6 @@ void recurseprinthelp(t_liste * h)
 
 void printhelp(int argc, char *argv[], int index)
 {
-
   if (!help_caption)
     readfiles(0);               /* evtl. ist anderes echeck_locale  gesetzt; darum _jetzt_ lesen */
 
