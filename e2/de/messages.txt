@@ -93,7 +93,7 @@ MISSINGNUMRECRUITS, Anzahl Rekruten fehlt
 MISSINGOFFER, Geldgebot fehlt
 MISSINGPARAMETERS, Parameter STUFE oder REGION fehlt
 MISSINGPASSWORD, Kein Passwort angeben
-MISSINGSTART, ERESSEA partei-nummer "Passwort" fehlt
+MISSINGSTART, ERESSEA partei-nummer "Passwort" fehlt oder versehentliches NAECHSTER!
 MISSINGUNITNUMBER, Keine Einheitsnummer
 MOVENOTPOSSIBLEWITHPAUSE, NACH geht nicht mit PAUSE
 MSGTO, BOTSCHAFT PARTEI, BOTSCHAFT EINHEIT oder BOTSCHAFT REGION

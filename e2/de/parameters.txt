@@ -9,6 +9,7 @@
 # Kommentare mit einem # davor; Leerzeilen sind erlaubt
 ############################################################################
 
+ORDERSTART,  ERESSEA
 ALL,         Alles
 EACH, Je
 PEASANTS,    Bauern
@@ -28,7 +29,6 @@ NOT,         Nicht
 NEXT,        Nächster
 # ^^ muß hier als Parameter stehen!
 
-FACTION,     Eressea
 FACTION,     Partei
 PERSON,      Personen
 REGION,      Region

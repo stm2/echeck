@@ -6,6 +6,7 @@
 # Comments start with a #; empty lines are allowed.
 #############################################################################
 
+ORDERSTART,  Eressea
 ALL,    All
 EACH, Each
 PEASANTS, Peasants
@@ -25,7 +26,6 @@ NOT,    Not
 NEXT,   Next
 # ^^  this is no command for ECheck, but a parameter
 
-FACTION,  Eressea
 FACTION,  Faction
 PERSON,   Men
 REGION,   Region
