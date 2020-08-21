@@ -19,6 +19,7 @@ dam
 caravanserai
 tunnel
 tavern
+stonecircle
 marketplace
 guard tower
 guard house
