@@ -19,4 +19,4 @@ dam
 caravanserai
 tunnel
 tavern
-
+stonecircle
