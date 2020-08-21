@@ -46,6 +46,15 @@ static void test_process_faction(CuTest * tc)
   CuAssertIntEquals(tc, 0, warning_count);
 }
 
+static void test_process_feressea(CuTest * tc)
+{
+  error_count = warning_count = 0;
+  mock_input("FERESSEA 1 \"password\"\n");
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 1, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
 static void test_process_unit(CuTest * tc)
 {
   int faction_count = 0, unit_count = 0;
@@ -361,6 +370,7 @@ int AddTestSuites(CuSuite * suite, const char * args)
       cs = CuSuiteNew();
       SUITE_ADD_TEST(cs, test_process_nothing);
       SUITE_ADD_TEST(cs, test_process_faction);
+      SUITE_ADD_TEST(cs, test_process_feressea);
       SUITE_ADD_TEST(cs, test_process_unit);
       CuSuiteAddSuite(suite, cs);
     }
