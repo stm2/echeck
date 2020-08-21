@@ -593,6 +593,7 @@ enum {
   UNITMUSTBEONSHIP,
   UNITONSHIPHASMOVED,
   UNRECOGNIZEDDIRECTION,
+  UNRECOGNIZEDOBJECT,
   UNRECOGNIZEDOPTION,
   UNRECOGNIZEDORDER,
   UNRECOGNIZEDPOTION,
@@ -670,6 +671,7 @@ static const char *Errors[MAX_ERRORS] = {
   "UNITMUSTBEONSHIP",
   "UNITONSHIPHASMOVED",
   "UNRECOGNIZEDDIRECTION",
+  "UNRECOGNIZEDOBJECT",
   "UNRECOGNIZEDOPTION",
   "UNRECOGNIZEDORDER",
   "UNRECOGNIZEDPOTION",
@@ -3811,11 +3813,26 @@ void checkanorder(char *Orders)
     }
 
     i = findpotion(s);
-    if (i < 0)
-      anerror(cgettext(Errors[UNRECOGNIZEDPOTION]));
-    else {
+    if (i >= 0) {
       Scat(printliste(i, potionnames));
+    } else {
+      i = finditem(s);
+      if (i >= 0) {
+        Scat(ItemName(i, 1));
+      } else if (!(*s)) {
+        anerror(cgettext(Errors[UNRECOGNIZEDOBJECT]));
+      } else {
+        awarning(cgettext(Errors[UNRECOGNIZEDOBJECT]), 1);
+      }
     }
+    /* additional parameters may be in order */
+    do {
+      s = getstr();
+      if (*s)
+        Scat(s);
+    }
+    while (*s);
+    
     break;
 
   case K_MESSAGE:
