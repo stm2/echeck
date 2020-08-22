@@ -59,6 +59,12 @@ SORT,         Sortieren
 PREFIX,       Präfix
 PROMOTE,      Befördere
 LANGUAGE,     Sprache
+ORDERSTART,   Eressea
+ORDERSTART,   Partei
+NEXT,         Nächster
+LOCALE,       Locale
+UNIT,         Einheit
+REGION,       Region
 
 # NEXT, Nächster     ist KEIN BEFEHL für ECheck, sondern ein PARAMETER!
 # dies ist aus internen Gründen notwendig, also entsprechend dort eintragen

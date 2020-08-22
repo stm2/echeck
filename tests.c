@@ -87,7 +87,7 @@ void reset_output() {
     fclose(OUT);
   remove(OUTPUT_FILE);
   remove(ERROR_FILE);
-  set_output(stdout, stderr);
+  set_output(stdout, stdout);
 }
 
 char * get_file_content(char *filename) {
@@ -182,10 +182,21 @@ static void test_wrong_next(CuTest * tc)
   CuAssertIntEquals(tc, 0, warning_count);
 }
 
+static void test_orderstart2(CuTest * tc)
+{
+  int faction_count = 0;
+  error_count = warning_count = 0;
+  mock_input("PARTEI 1 \"password\"\nNAECHSTER\n");
+  process_order_file(&faction_count, 0);
+  CuAssertIntEquals(tc, 1, faction_count);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
 static void test_two_factions(CuTest * tc)
 {
   int faction_count = 0, unit_count = 0;
-  
+
   error_count = warning_count = 0;
   mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nNAECHSTER\nERESSEA x \"pw\"\nEINHEIT 2\nNAECHSTER\n");
   process_order_file(&faction_count, &unit_count);
@@ -516,6 +527,7 @@ int AddTestSuites(CuSuite * suite, const char * args)
       SUITE_ADD_TEST(cs, test_process_nothing);
       SUITE_ADD_TEST(cs, test_process_faction);
       SUITE_ADD_TEST(cs, test_process_feressea);
+      SUITE_ADD_TEST(cs, test_orderstart2);
       SUITE_ADD_TEST(cs, test_wrong_next);
       SUITE_ADD_TEST(cs, test_two_factions);
       SUITE_ADD_TEST(cs, test_process_unit);

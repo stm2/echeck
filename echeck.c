@@ -239,6 +239,11 @@ enum {
   K_PROMOTION,
   K_PROMOTE,
   K_LANGUAGE,
+  K_ORDERSTART,
+  K_NEXT,
+  K_LOCALE,
+  K_UNIT,
+  K_REGION,
   MAXKEYWORDS
 };
 
@@ -305,7 +310,12 @@ static char *Keywords[MAXKEYWORDS] = {
   "PREFIX",
   "PROMOTION",
   "PROMOTE",
-  "LANGUAGE"
+  "LANGUAGE",
+  "ORDERSTART",
+  "NEXT",
+  "LOCALE",
+  "UNIT",
+  "REGION"
 };
 
 typedef struct _keyword {
@@ -327,7 +337,6 @@ static char *magiegebiet[] = {
 };
 
 enum {
-  P_ORDERSTART,
   P_ALLES,
   P_EACH,
   P_PEASANT,
@@ -341,7 +350,6 @@ enum {
   P_HERBS,
   P_TREES,
   P_NOT,
-  P_NEXT,
   P_FACTION,
   P_PERSON,
   P_REGION,
@@ -362,7 +370,6 @@ enum {
   P_AGGRESSIVE,
   P_DEFENSIVE,
   P_NUMBER,
-  P_LOCALE,
   P_BEFORE,
   P_AFTER,
   P_ALLIANCE,
@@ -376,7 +383,6 @@ enum {
 };
 
 static const char *Params[MAXPARAMS] = {
-  "ORDERSTART",
   "ALL",
   "EACH",
   "PEASANTS",
@@ -390,7 +396,6 @@ static const char *Params[MAXPARAMS] = {
   "HERBS",
   "TREES",
   "NOT",
-  "NEXT",
   "FACTION",
   "PERSON",
   "REGION",
@@ -411,7 +416,6 @@ static const char *Params[MAXPARAMS] = {
   "AGGRESSIVE",
   "DEFENSIVE",
   "NUMBER",
-  "LOCALE",
   "BEFORE",
   "AFTER",
   "ALLIANCE",
@@ -4817,26 +4821,29 @@ void readaunit(void)
      */
 
     i = igetkeyword(order_buf);
-    if (i < -1)
-      continue;                 /* Fehler: "@ Befehl" statt "@Befehl" */
-    if (i < 0) {
-      if (order_buf[0] == ';') {
-        check_comment();
-        continue;
-      } else
-        switch (igetparam(order_buf)) {
-        case P_UNIT:
-        case P_ORDERSTART:
-        case P_NEXT:
-        case P_REGION:
-          if (from_temp_unit_no != 0) {
-            sprintf(warn_buf, errtxt[MISSINGEND], itob(from_temp_unit_no));
-            awarning(warn_buf, 2);
-            from_temp_unit_no = 0;
-          }
-          return;
+    switch (i) {
+    case K_UNIT:
+    case K_ORDERSTART:
+    case K_NEXT:
+    case K_REGION:
+      if (from_temp_unit_no != 0) {
+        sprintf(warn_buf, errtxt[MISSINGEND], itob(from_temp_unit_no));
+        awarning(warn_buf, 2);
+        from_temp_unit_no = 0;
+      }
+      return;
+    default:
+      if (i < -1)
+        continue;                 /* Fehler: "@ Befehl" statt "@Befehl" */
+      if (i < 0) {
+        if (order_buf[0] == ';') {
+          check_comment();
+          continue;
         }
+      }
+      break;
     }
+
     if (order_buf[0])
       checkanorder(order_buf);
   }
@@ -5314,15 +5321,15 @@ void process_order_file(int *faction_count, int *unit_count)
    */
 
   while (!befehle_ende) {
-    int i = igetparam(order_buf);
+    int i = igetkeyword(order_buf);
     switch (i) {
-    case P_LOCALE:
+    case K_LOCALE:
       check_start(f, &start_warning);
       x = getstr();
       get_order();
       break;
 
-    case P_REGION:
+    case K_REGION:
       check_start(f, &start_warning);
       if (Regionen)
         remove_temp();
@@ -5378,10 +5385,10 @@ void process_order_file(int *faction_count, int *unit_count)
       get_order();
       break;
 
-    case P_ORDERSTART:
+    case K_ORDERSTART:
       if (f && !next)
         awarning(errtxt[MISSINGNEXT], 0);
-      scat(printparam(P_ORDERSTART));
+      scat(printkeyword(i));
       befehle_ende = 0;
       f = readafaction();
       if (brief <= 1) {
@@ -5390,7 +5397,7 @@ void process_order_file(int *faction_count, int *unit_count)
         else 
           fprintf(ERR, errtxt[FOUNDORDERS], itob(f));
       }
-      
+
       check_OPTION();           /* Nach PARTEI auf "; OPTION" bzw. ";  ECHECK" testen */
       if (faction_count)
         ++ * faction_count;
@@ -5408,7 +5415,7 @@ void process_order_file(int *faction_count, int *unit_count)
       next = 0;
       break;
 
-    case P_UNIT:
+    case K_UNIT:
       check_start(f, &start_warning);
       if (f) {
         scat(order_buf);
@@ -5430,10 +5437,10 @@ void process_order_file(int *faction_count, int *unit_count)
        * gelesen werden muß. 
        */
 
-    case P_NEXT:
+    case K_NEXT:
       check_start(f, &start_warning);
       f = 0;
-      scat(printparam(P_NEXT));
+      scat(printkeyword(K_NEXT));
       indent = next_indent = INDENT_FACTION;
       porder();
       next = 1;
@@ -5490,7 +5497,7 @@ void process_order_file(int *faction_count, int *unit_count)
     }
   }                             /* end while !befehle_ende */
 
-  if (igetparam(order_buf) == P_NEXT)   /* diese Zeile wurde ggf. gelesen  und dann kam */
+  if (igetkeyword(order_buf) == K_NEXT)   /* diese Zeile wurde ggf. gelesen  und dann kam */
     next = 1;                   /* EOF -> kein Check mehr, next=0... */
   if (f && !next)
     anerror(errtxt[MISSINGNEXT]);
