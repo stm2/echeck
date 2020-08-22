@@ -45,7 +45,7 @@ static char msg_buf[BUFSIZE];
 
 static void test_orders(CuTest * tc, char * orders, int exp_warnings, int exp_errors) {
   char * order;
-    
+
   set_order_unit(newunit(++unit_no, 0));
   line_no = 0;
   error_count = warning_count = 0;
@@ -59,7 +59,7 @@ static void test_orders(CuTest * tc, char * orders, int exp_warnings, int exp_er
     checkanorder(getbuf());
     order = strtok(0, "\n");
   }
-  
+
   sprintf(msg_buf, exp_errors?"errors expected in '%s'":"no errors expected in '%s'", orders);
   CuAssertIntEquals_Msg(tc, msg_buf, exp_errors, error_count);
   sprintf(msg_buf, exp_warnings?"warnings expected in '%s'":"no warnings expected in '%s'", orders);
@@ -141,7 +141,7 @@ static void test_tear_down(CuTest *tc)
 static void test_process_nothing(CuTest * tc)
 {
   int faction_count = 0, unit_count = 0;
-  
+
   error_count = warning_count = 0;
   mock_input("\n");
   process_order_file(&faction_count, &unit_count);
@@ -154,7 +154,7 @@ static void test_process_nothing(CuTest * tc)
 static void test_process_faction(CuTest * tc)
 {
   int faction_count = 0, unit_count = 0;
-  
+
   error_count = warning_count = 0;
   mock_input("ERESSEA 1 \"password\"\n");
   process_order_file(&faction_count, &unit_count);
@@ -209,7 +209,7 @@ static void test_two_factions(CuTest * tc)
 static void test_process_unit(CuTest * tc)
 {
   int faction_count = 0, unit_count = 0;
-  
+
   error_count = warning_count = 0;
   mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nNAECHSTER\n");
   process_order_file(&faction_count, &unit_count);
@@ -378,7 +378,7 @@ static void test_check_additional_parameters(CuTest *tc)
   test_orders(tc, "//bla blubb", 0, 1);
   test_orders(tc, "PIRATERIE x y z", 0, 0);
   test_orders(tc, "ZAUBERE \"Sonnenschein\" a b 1 2 3", 0, 0);
-  
+
   test_orders(tc, "BEFÖRDERE 1", 1, 0);
   test_orders(tc, "FAHRE 1 2", 1, 0);
   test_orders(tc, "PRAEFIX a b c", 1, 0);
@@ -464,10 +464,10 @@ static void test_itob(CuTest *tc)
 static void test_leave_ship_on(CuTest *tc)
 {
   char *output;
-  
+
   show_warnings = 5;
   brief = 0;
-  
+
   start_output();
   mock_input("ERESSEA 1 \"password\"\nREGION 3,3 ; null\nEINHEIT cap ; Captain [1,20$,Sshp1]\nNACH o\nEINHEIT 2 ; On Ship [1,20$,sshp1]\nNACH w\nEINHEIT 3; a [1,20$]\nNAECHSTER\n");
   error_count = warning_count = 0;
