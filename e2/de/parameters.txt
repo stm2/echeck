@@ -9,7 +9,6 @@
 # Kommentare mit einem # davor; Leerzeilen sind erlaubt
 ############################################################################
 
-ORDERSTART,  ERESSEA
 ALL,         Alles
 EACH, Je
 PEASANTS,    Bauern
@@ -25,10 +24,6 @@ CONTROL,     Kommando
 HERBS,       Kräuter
 TREES,       Bäume
 NOT,         Nicht
-
-NEXT,        Nächster
-# ^^ muß hier als Parameter stehen!
-
 FACTION,     Partei
 PERSON,      Personen
 REGION,      Region
@@ -49,7 +44,6 @@ HORSES,      Pferde
 FOREIGN,     fremdes
 NUMBER,      Nummer
 # ^^ TARNE PARTEI NUMMER
-LOCALE, Locale
 
 BEFORE,      vor
 AFTER,       hinter

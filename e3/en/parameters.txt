@@ -6,7 +6,6 @@
 # Comments start with a #; empty lines are allowed.
 #############################################################################
 
-ORDERSTART,  Eressea
 ALL,    All
 EACH, Each
 PEASANTS, Peasants
@@ -22,10 +21,6 @@ CONTROL,  Control
 HERBS,    Herbs
 TREES,  Trees
 NOT,    Not
-
-NEXT,   Next
-# ^^  this is no command for ECheck, but a parameter
-
 FACTION,  Faction
 PERSON,   Men
 REGION,   Region
@@ -42,7 +37,6 @@ LEVEL,    Level
 HORSES,   Horses
 FOREIGN,  foreign
 NUMBER,   Number
-LOCALE,   Locale
 
 BEFORE, before
 AFTER, after
