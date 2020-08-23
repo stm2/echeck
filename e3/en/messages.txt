@@ -74,6 +74,7 @@ ISUSEDIN2REGIONS, "TEMPORARY %s" is used in region %d,%d and region %d,%d (line 
 ISNOTCOMBATSPELL, ~no
 ITEM, item
 LINETOOLONG, Line too long
+LOCALEMISMATCH, Locales '%s' of ECheck and '%s' of the orders do not match
 LONGCOMBATNOLONGORDER, Longer combats exclude long orders
 LONGORDERMISSING, Unit %s hasn't got a long order
 MAGIC, Magic
