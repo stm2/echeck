@@ -559,6 +559,7 @@ enum {
   ISNOTCOMBATSPELL,
   ITEM,
   LINETOOLONG,
+  LOCALEMISMATCH,
   LONGCOMBATNOLONGORDER,
   LONGORDERMISSING,
   MAGIC,
@@ -754,6 +755,7 @@ static char *Errors[MAX_ERRORS] = {
   "ISNOTCOMBATSPELL",
   "ITEM",
   "LINETOOLONG",
+  "LOCALEMISMATCH",
   "LONGCOMBATNOLONGORDER",
   "LONGORDERMISSING",
   "MAGIC",
@@ -5308,6 +5310,10 @@ void process_order_file(int *faction_count, int *unit_count)
     case K_LOCALE:
       check_start(f, &start_warning);
       x = getstr();
+      if (strcmp(x, echeck_locale) != 0) {
+        sprintf(warn_buf, errtxt[LOCALEMISMATCH], echeck_locale, x);
+        awarning(warn_buf, 0);
+      }
       get_order();
       break;
 

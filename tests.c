@@ -219,6 +219,24 @@ static void test_process_unit(CuTest * tc)
   CuAssertIntEquals(tc, 0, warning_count);
 }
 
+static void test_locale(CuTest * tc)
+{
+  error_count = warning_count = 0;
+  mock_input("ERESSEA 1 \"password\"\nLOCALE de\nNAECHSTER\n");
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
+static void test_locale_mismatch(CuTest * tc)
+{
+  error_count = warning_count = 0;
+  mock_input("ERESSEA 1 \"password\"\nLOCALE en\nNAECHSTER\n");
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 1, warning_count);
+}
+
 static void test_nothing(CuTest * tc)
 {
   CuAssertTrue(tc, 1);
@@ -531,6 +549,8 @@ int AddTestSuites(CuSuite * suite, const char * args)
       SUITE_ADD_TEST(cs, test_wrong_next);
       SUITE_ADD_TEST(cs, test_two_factions);
       SUITE_ADD_TEST(cs, test_process_unit);
+      SUITE_ADD_TEST(cs, test_locale);
+      SUITE_ADD_TEST(cs, test_locale_mismatch);
       CuSuiteAddSuite(suite, cs);
     }
     else if (strcmp(name, "give")==0) {

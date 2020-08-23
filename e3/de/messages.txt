@@ -74,6 +74,7 @@ ISUSEDIN2REGIONS, "TEMP %s" wird in Region %d,%d und Region %d,%d (Zeile %d) geb
 ISNOTCOMBATSPELL, k
 ITEM, Gegenstand
 LINETOOLONG, Zeile zu lang
+LOCALEMISMATCH, Locales '%s' von ECheck und '%s' der Befehle passen nicht zusammen
 LONGCOMBATNOLONGORDER, Längere Kämpfe schließen den langen Befehl aus
 LONGORDERMISSING, Einheit %s hat keinen langen Befehl bekommen
 MAGIC, Magie
