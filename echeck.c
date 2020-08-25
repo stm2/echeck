@@ -1688,6 +1688,13 @@ void set_order_unit(unit * u)
   order_unit = u;
 }
 
+void set_output(FILE *out, FILE *err) {
+  if (out)
+    OUT = out;
+  if (err)
+    ERR = err;
+}
+
 #ifdef WITH_CUTEST
 
 void mock_input(const char *input)
@@ -1695,13 +1702,6 @@ void mock_input(const char *input)
   free(mocked_input);
   mocked_input = strdup(input);
   mock_pos = mocked_input;
-}
-
-void set_output(FILE *out, FILE *err) {
-  if (out)
-    OUT = out;
-  if (err)
-    ERR = err;
 }
 
 int get_long_order_line() {
@@ -2585,8 +2585,7 @@ void checkemail(void)
     return;
   }
   scat(errtxt[DELIVERYTO]);
-  scat(" ");
-  scat(addr);
+  Scat(addr);
 }
 
 /*
@@ -3562,7 +3561,7 @@ void check_ally(void)
   case P_GUARD:
   case P_FACTIONSTEALTH:
   case P_ALLES:
-  case P_NOT: /* FIXME: legal? */
+  case P_NOT: /* server actually accepts HELFE foe NICHT = HELFE foe ALLES NICHT */
     Scat(printparam(i));
     break;
   default:
@@ -4629,7 +4628,7 @@ void checkanorder(char *Orders)
     break;
 
   case K_SCHOOL:               /* Magiegebiet */
-    /* FIXME not an order any more */
+    /* not an order any more */
     s = getstr();
     i = findstr(magiegebiet, s, 5);
     if (i < 0) {
