@@ -1688,6 +1688,13 @@ void set_order_unit(unit * u)
   order_unit = u;
 }
 
+void set_output(FILE *out, FILE *err) {
+  if (out)
+    OUT = out;
+  if (err)
+    ERR = err;
+}
+
 #ifdef WITH_CUTEST
 
 void mock_input(const char *input)
@@ -1695,13 +1702,6 @@ void mock_input(const char *input)
   free(mocked_input);
   mocked_input = strdup(input);
   mock_pos = mocked_input;
-}
-
-void set_output(FILE *out, FILE *err) {
-  if (out)
-    OUT = out;
-  if (err)
-    ERR = err;
 }
 
 int get_long_order_line() {
