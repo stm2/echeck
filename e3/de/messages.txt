@@ -102,6 +102,7 @@ NOFIND, FINDE wurde gegen OPTION ADRESSEN ersetzt
 NOLUXURY, Kein Luxusgut
 NORMALUNITSONLY, %s geht nur mit normalen Einheiten
 NOSEND, SENDE wurde in OPTION umbenannt
+NOSPACEHERE, Leerzeichen hier nicht erlaubt
 NOTEMPNUMBER, Keine TEMP-Nummer
 NOTEXECUTED, Wird von keiner Einheit ausgeführt
 NOTEXT, Kein Text
