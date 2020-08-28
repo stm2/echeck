@@ -4726,11 +4726,10 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
                 ("Leere Pfad-Angabe ungültig\nEmpty path invalid\n", stderr);
               exit(1);
             }
-          } else if (*(argv[i] + 2)) {
-	    /* -Ppath */
-	    free(path);
-	  }
-          path = strdup((char *)(argv[i] + 2));
+          } else /* -Ppath */ if (*(argv[i] + 2)) {
+            free(path);
+            path = strdup((char *)(argv[i] + 2));
+          }
         }
         break;
 
