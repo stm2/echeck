@@ -48,3 +48,4 @@ LOCALE,   Locale
 BEFORE, before
 AFTER, after
 ALLIANCE, alliance
+AUTO, auto

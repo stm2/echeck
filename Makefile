@@ -1,11 +1,17 @@
-CFLAGS = -g -Wall -std=c99 -Werror
-CFLAGS += -Icutest -DWITH_CUTEST
-
+MINGW_STRIP = i686-w64-mingw32-strip
+MINGW_CC = i686-w64-mingw32-gcc
+CFLAGS = -Wall -std=c99 -Werror -I.
+RELEASE_CFLAGS = $(CFLAGS) -Os
+DEBUG_CFLAGS = $(CFLAGS) -g
+TEST_SRC = tests.c CuTest.c
+TEST_HDR = CuTest.h
 ifeq ($(PREFIX),)
-PREFIX=/home/eressea/echeck
+PREFIX=$(HOME)/echeck
 endif
 
-all: echeck
+default: echeck
+
+all: echeck.zip echeck
 
 install: echeck
 	install -t $(PREFIX) echeck
@@ -21,12 +27,18 @@ install: echeck
 tags:
 	@ctags *.c *.h
 
-echeck: echeck.c unicode.c unicode.h config.h tests.c cutest/CuTest.c cutest/CuTest.h
-	$(CC) $(CFLAGS) $(LFLAGS) -o echeck echeck.c unicode.c tests.c cutest/CuTest.c
+echeck.exe: echeck.c unicode.c unicode.h config.h
+	$(MINGW_CC) $(RELEASE_CFLAGS) -o echeck.exe echeck.c unicode.c
+	$(MINGW_STRIP) echeck.exe
+
+echeck: echeck.c unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
+	$(CC) $(DEBUG_CFLAGS) -DWITH_CUTEST -o echeck echeck.c unicode.c $(TEST_SRC)
 
 clean:
-	@rm -f *.o core *.bak echeck
+	@rm -f *.o core *.bak echeck echeck.exe echeck.zip
 
 test: echeck
 	@./echeck -T=all -Lde -Re2 -b
 
+echeck.zip: echeck.exe changelog.txt LIESMICH.txt README.txt
+	zip -r echeck.zip echeck.exe e2 e3 changelog.txt LIESMICH.txt README.txt

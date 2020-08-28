@@ -16,9 +16,7 @@
 /* platform-specific defines */
 #ifdef WIN32
 # define PATH_DELIM ";"
-#endif
-
-#ifdef __unix__
+#else
 # define PATH_DELIM ":"
 #endif
 
@@ -28,7 +26,6 @@
 # define HAVE__STRDUP
 # define HAVE__STRICMP
 # define HAVE__SNPRINTF
-# define HAVE___MINMAX
 #endif
 
 #ifdef __GNUC__
@@ -41,10 +38,6 @@
 # define HAVE_STRCASECMP
 # define HAVE_STDBOOL_H
 # define HAVE_SYS_PARAM_H
-#endif
-
-#if defined(MAX) && defined(MIN)
-#define HAVE_MINMAX
 #endif
 
 /* define some common macros that your compiler may name otherwise */
@@ -89,20 +82,4 @@ typedef unsigned char _Bool;
 #if !defined(HAVE_SNPRINTF) && defined(HAVE__SNPRINTF)
 # define snprintf _snprintf
 # define HAVE_SNPRINTF
-#endif
-
-#if !defined(HAVE_MINMAX) && defined(HAVE___MINMAX)
-# define MIN(a,b) __min(a, b)
-# define MAX(a,b) __max(a, b)
-# define HAVE_MINMAX
-#endif
-
-#if !defined(HAVE_MINMAX) && defined(HAVE_SYS_PARAM_H)
-# include <sys/param.h>
-# define HAVE_MINMAX
-#endif
-
-#if !defined(HAVE_MINMAX)
-# define MIN(a,b) ((a) < (b) ? (a) : (b))
-# define MAX(a,b) ((a) > (b) ? (a) : (b))
 #endif
