@@ -4175,9 +4175,9 @@ void checkanorder(char *Orders)
       /* ZÜCHTE PFERDE */
       Scat(printparam(i));
     } else if (s && (*s)) {
-      anerror(errtxt[BREEDHORSESORHERBS]);
-    } else { 
-      /* ZÜCHTE */
+      anerror(errtxt[WRONGPARAMETER]);
+    } else {
+      anerror(errtxt[MISSINGPARAMETERS]);
     }
     long_order();
     break;
