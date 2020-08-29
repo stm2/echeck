@@ -45,12 +45,14 @@ static char msg_buf[BUFSIZE];
 
 static void test_orders(CuTest * tc, char * orders, int exp_warnings, int exp_errors) {
   char * order;
+  char * buf;
 
   set_order_unit(newunit(++unit_no, 0));
   line_no = 0;
   error_count = warning_count = 0;
 
-  order = strtok(strdup(orders), "\n");
+  buf = strdup(orders);
+  order = strtok(buf, "\n");
   while (order) {
     input_buf[0] = 0;
     strcat(input_buf, order);
@@ -59,6 +61,7 @@ static void test_orders(CuTest * tc, char * orders, int exp_warnings, int exp_er
     checkanorder(getbuf());
     order = strtok(0, "\n");
   }
+  free(buf);
 
   sprintf(msg_buf, exp_errors?"errors expected in '%s'":"no errors expected in '%s'", orders);
   CuAssertIntEquals_Msg(tc, msg_buf, exp_errors, error_count);
@@ -71,20 +74,24 @@ static void assert_long_order(CuTest * tc, int expected_line) {
 }
 
 void start_output() {
-  if (ERR)
+  if (ERR && ERR != stdout && ERR != stderr)
     fclose(ERR);
   ERR = fopen(ERROR_FILE, "w");
-  if (OUT)
+  if (OUT && OUT != stdout && OUT != stderr)
     fclose(OUT);
   OUT = fopen(OUTPUT_FILE, "w");
   set_output(OUT, ERR);
 }
 
 void reset_output() {
-  if (ERR)
+  if (ERR && ERR != stdout && ERR != stderr) {
     fclose(ERR);
-  if (OUT)
+    ERR = 0;
+  }
+  if (OUT && OUT != stdout && OUT != stderr) {
     fclose(OUT);
+    OUT = 0;
+  }
   remove(OUTPUT_FILE);
   remove(ERROR_FILE);
   set_output(stdout, stdout);
@@ -110,7 +117,7 @@ char * get_file_content(char *filename) {
     }
     fclose(IN);
   }
-  return "";
+  return NULL;
 }
 
 char * get_output() {
@@ -269,7 +276,7 @@ static void test_cont(CuTest *tc)
 
 static void test_give_each(CuTest * tc)
 {
-  set_order_unit(newunit(1, 0));
+  set_order_unit(newunit(++unit_no, 0));
   mock_input("GIB 2 JE 1 SILBER\n");
   error_count = warning_count = 0;
   checkanorder(getbuf());
@@ -279,7 +286,7 @@ static void test_give_each(CuTest * tc)
 
 static void test_make_temp(CuTest * tc)
 {
-  set_order_unit(newunit(1, 0));
+  set_order_unit(newunit(++unit_no, 0));
   mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nMACHE TEMP 1\nENDE\nNAECHSTER\n");
   error_count = warning_count = 0;
   process_order_file(0, 0);
@@ -289,7 +296,7 @@ static void test_make_temp(CuTest * tc)
 
 static void test_destroy(CuTest * tc)
 {
-  set_order_unit(newunit(1, 0));
+  set_order_unit(newunit(++unit_no, 0));
   mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE\nNAECHSTER\n");
   error_count = warning_count = 0;
   process_order_file(0, 0);
@@ -299,7 +306,7 @@ static void test_destroy(CuTest * tc)
 
 static void test_destroy_level(CuTest * tc)
 {
-  set_order_unit(newunit(1, 0));
+  set_order_unit(newunit(++unit_no, 0));
   mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE 4\nNAECHSTER\n");
   error_count = warning_count = 0;
   process_order_file(0, 0);
@@ -309,7 +316,7 @@ static void test_destroy_level(CuTest * tc)
 
 static void test_destroy_unhappy(CuTest * tc)
 {
-  set_order_unit(newunit(1, 0));
+  set_order_unit(newunit(++unit_no, 0));
   mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE BURG\nNAECHSTER\n");
   error_count = warning_count = 0;
   process_order_file(0, 0);
@@ -324,7 +331,7 @@ static void test_destroy_street(CuTest * tc)
 
 static void test_destroy_street_direction(CuTest * tc)
 {
-  set_order_unit(newunit(1, 0));
+  set_order_unit(newunit(++unit_no, 0));
   mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE 1 STRASSE L\nEINHEIT 2\nZERSTOERE NO\nNAECHSTER\n");
   error_count = warning_count = 0;
   process_order_file(0, 0);
@@ -527,99 +534,75 @@ int AddTestSuites(CuSuite * suite, const char * args)
 {
   char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,common,give,destroy,entertain,claim,e3,alliance,plant,ship");
   char * name = strtok(names, ",");
-  CuSuite * cs;
 
   while (name) {
     setup_test();
 
     if (strcmp(name, "echeck")==0) {
-      cs = CuSuiteNew();
-      SUITE_ADD_TEST(cs, test_getbuf);
-      SUITE_ADD_TEST(cs, test_igetstr);
-      SUITE_ADD_TEST(cs, test_cont);
-      SUITE_ADD_TEST(cs, test_nothing);
-      CuSuiteAddSuite(suite, cs);
+      SUITE_ADD_TEST(suite, test_getbuf);
+      SUITE_ADD_TEST(suite, test_igetstr);
+      SUITE_ADD_TEST(suite, test_cont);
+      SUITE_ADD_TEST(suite, test_nothing);
     }
     else if (strcmp(name, "process")==0) {
-      cs = CuSuiteNew();
-      SUITE_ADD_TEST(cs, test_process_nothing);
-      SUITE_ADD_TEST(cs, test_process_faction);
-      SUITE_ADD_TEST(cs, test_process_feressea);
-      SUITE_ADD_TEST(cs, test_orderstart2);
-      SUITE_ADD_TEST(cs, test_wrong_next);
-      SUITE_ADD_TEST(cs, test_two_factions);
-      SUITE_ADD_TEST(cs, test_process_unit);
-      SUITE_ADD_TEST(cs, test_locale);
-      SUITE_ADD_TEST(cs, test_locale_mismatch);
-      CuSuiteAddSuite(suite, cs);
+      SUITE_ADD_TEST(suite, test_process_nothing);
+      SUITE_ADD_TEST(suite, test_process_faction);
+      SUITE_ADD_TEST(suite, test_process_feressea);
+      SUITE_ADD_TEST(suite, test_orderstart2);
+      SUITE_ADD_TEST(suite, test_wrong_next);
+      SUITE_ADD_TEST(suite, test_two_factions);
+      SUITE_ADD_TEST(suite, test_process_unit);
+      SUITE_ADD_TEST(suite, test_locale);
+      SUITE_ADD_TEST(suite, test_locale_mismatch);
     }
     else if (strcmp(name, "give")==0) {
-      cs = CuSuiteNew();
-      SUITE_ADD_TEST(cs, test_give_each);
-      SUITE_ADD_TEST(cs, test_make_temp);
-      CuSuiteAddSuite(suite, cs);
+      SUITE_ADD_TEST(suite, test_give_each);
+      SUITE_ADD_TEST(suite, test_make_temp);
     }
     else if (strcmp(name, "destroy")==0) {
-      cs = CuSuiteNew();
-      SUITE_ADD_TEST(cs, test_destroy);
-      SUITE_ADD_TEST(cs, test_destroy_level);
-      SUITE_ADD_TEST(cs, test_destroy_unhappy);
-      SUITE_ADD_TEST(cs, test_destroy_street);
-      SUITE_ADD_TEST(cs, test_destroy_street_direction);
-      CuSuiteAddSuite(suite, cs);
+      SUITE_ADD_TEST(suite, test_destroy);
+      SUITE_ADD_TEST(suite, test_destroy_level);
+      SUITE_ADD_TEST(suite, test_destroy_unhappy);
+      SUITE_ADD_TEST(suite, test_destroy_street);
+      SUITE_ADD_TEST(suite, test_destroy_street_direction);
     }
     else if (strcmp(name, "claim")==0) {
-      cs = CuSuiteNew();
-      SUITE_ADD_TEST(cs, test_claim_nothing);
-      CuSuiteAddSuite(suite, cs);
+      SUITE_ADD_TEST(suite, test_claim_nothing);
     }
     else if (strcmp(name, "plant")==0) {
-      cs = CuSuiteNew();
-      SUITE_ADD_TEST(cs, test_plant);
-      CuSuiteAddSuite(suite, cs);
+      SUITE_ADD_TEST(suite, test_plant);
     }
     else if (strcmp(name, "common")==0) {
-      cs = CuSuiteNew();
-      SUITE_ADD_TEST(cs, test_check_additional_parameters);
-      SUITE_ADD_TEST(cs, test_origin);
-      SUITE_ADD_TEST(cs, test_check_quotes);
-      SUITE_ADD_TEST(cs, test_language);
-      SUITE_ADD_TEST(cs, test_use);
-      CuSuiteAddSuite(suite, cs);
+      SUITE_ADD_TEST(suite, test_check_additional_parameters);
+      SUITE_ADD_TEST(suite, test_origin);
+      SUITE_ADD_TEST(suite, test_check_quotes);
+      SUITE_ADD_TEST(suite, test_language);
+      SUITE_ADD_TEST(suite, test_use);
     }
     else if (strcmp(name, "ship")==0) {
-      cs = CuSuiteNew();
-      SUITE_ADD_TEST(cs, test_itob);
-      SUITE_ADD_TEST(cs, test_leave_ship_on);
-      SUITE_ADD_TEST(cs, test_leave_ship_off);
-      CuSuiteAddSuite(suite, cs);
+      SUITE_ADD_TEST(suite, test_itob);
+      SUITE_ADD_TEST(suite, test_leave_ship_on);
+      SUITE_ADD_TEST(suite, test_leave_ship_off);
     }
     /************* e2 only tests **************/
     else if (strcmp(echeck_rules, "e2") == 0) {
       if (strcmp(name, "entertain") == 0) {
-        cs = CuSuiteNew();
-        SUITE_ADD_TEST(cs, test_entertain);
-        CuSuiteAddSuite(suite, cs);
+        SUITE_ADD_TEST(suite, test_entertain);
       }
     /************* e3 only tests **************/
     } else if (strcmp(echeck_rules, "e3") == 0) {
       if (strcmp(name, "e3") == 0) {
-        cs = CuSuiteNew();
-        SUITE_ADD_TEST(cs, test_e3);
-        CuSuiteAddSuite(suite, cs);
+        SUITE_ADD_TEST(suite, test_e3);
       }
       else if (strcmp(name, "alliance") == 0) {
-        cs = CuSuiteNew();
-        SUITE_ADD_TEST(cs, test_alliance_happy);
-        SUITE_ADD_TEST(cs, test_alliance_missing);
-        SUITE_ADD_TEST(cs, test_alliance_toomuch);
-        CuSuiteAddSuite(suite, cs);
+        SUITE_ADD_TEST(suite, test_alliance_happy);
+        SUITE_ADD_TEST(suite, test_alliance_missing);
+        SUITE_ADD_TEST(suite, test_alliance_toomuch);
       }
     }
     name = strtok(0, ",");
   }
-  cs = CuSuiteNew();
-  SUITE_ADD_TEST(cs, test_tear_down);
-  CuSuiteAddSuite(suite, cs);
+  SUITE_ADD_TEST(suite, test_tear_down);
+  free(names);
   return 0;
 }

@@ -2543,12 +2543,18 @@ void copy_unit(unit * from, unit * to)
   to->lives = from->lives;
   to->start_of_orders_line = from->start_of_orders_line;
   to->long_order_line = from->long_order_line;
-  if (from->start_of_orders_line)
+  if (from->start_of_orders_line) {
+    free(to->start_of_orders);
     to->start_of_orders = strdup(from->start_of_orders);
-  if (from->long_order_line)
+  }
+  if (from->long_order_line) {
+    free(to->long_order);
     to->long_order = strdup(from->long_order);
-  if (from->order)
+  }
+  if (from->order) {
+    free(to->order);
     to->order = strdup(from->order);
+  }
   to->lernt = from->lernt;
 }
 
@@ -2727,10 +2733,12 @@ void orders_for_temp_unit(unit * u)
   u->lives = 1;
   if (u->order) {
     free(u->order);
+    u->order = 0;
   }
   u->order = strdup(order_buf);
   if (u->start_of_orders) {
     free(u->start_of_orders);
+    u->start_of_orders = 0;
   }
   u->start_of_orders = strdup(order_buf);
   u->start_of_orders_line = line_no;
@@ -4668,6 +4676,12 @@ void checkanorder(char *Orders)
     u->long_order_line = 0;
     u->start_of_orders_line = 0;
     u->temp = 0;
+    free (u->order);
+    u->order = 0;
+    free (u->long_order);
+    u->long_order = 0;
+    free (u->start_of_orders);
+    u->start_of_orders = 0;
     break;
 
   case K_COMMENT:
@@ -5299,12 +5313,43 @@ static void check_start(int f, int *start_warning) {
   }
 }
 
+static void cleanup() {
+  t_region *r;
+  teach *t;
+  unit *u;
+
+  while (Regionen) {
+    r = Regionen->next;
+    if (Regionen->name)
+      free(Regionen->name);
+    free(Regionen);
+    Regionen = r;
+  }
+  while (units) {
+    u = units->next;
+    free(units->start_of_orders);
+    free(units->long_order);
+    free(units->order);
+    free(units);
+    units = u;
+  }
+  while (teachings) {
+    t = teachings->next;
+    free(teachings);
+    teachings = t;
+  }
+  teachings = NULL;
+  Regionen = NULL;
+  units = NULL;
+  order_unit = NULL;
+  cmd_unit = NULL;
+  order_unit = NULL;
+}
+
 void process_order_file(int *faction_count, int *unit_count)
 {
   int f = 0, next = 0, start_warning = 1;
   t_region *r;
-  teach *t;
-  unit *u;
   char *x;
 
   line_no = befehle_ende = 0;
@@ -5457,32 +5502,7 @@ void process_order_file(int *faction_count, int *unit_count)
         check_living();         /* Ernährung mit allem Silber der Region */
       }
       check_teachings();
-      while (Regionen) {
-        r = Regionen->next;
-        if (Regionen->name)
-          free(Regionen->name);
-        free(Regionen);
-        Regionen = r;
-      }
-      while (units) {
-        u = units->next;
-        free(units->start_of_orders);
-        free(units->long_order);
-        free(units->order);
-        free(units);
-        units = u;
-      }
-      while (teachings) {
-        t = teachings->next;
-        free(teachings);
-        teachings = t;
-      }
-      teachings = NULL;
-      Regionen = NULL;
-      units = NULL;
-      order_unit = NULL;
-      cmd_unit = NULL;
-      order_unit = NULL;
+      cleanup();
 
       get_order();
       break;
@@ -5681,6 +5701,7 @@ int main(int argc, char *argv[])
 
   if (run_tests) {
 #ifdef WITH_CUTEST
+    int fails = 0;
     CuSuite *suite = CuSuiteNew();
     CuString *output = CuStringNew();
 
@@ -5689,9 +5710,15 @@ int main(int argc, char *argv[])
     CuSuiteSummary(suite, output);
     CuSuiteDetails(suite, output);
     printf("%s\n", output->buffer);
+    CuStringDelete(output);
 
-    return suite->failCount;
+    fails = suite->failCount;
+    CuSuiteDelete(suite);
+
+    cleanup();
+    return fails;
 #else
+    cleanup();
     return 0;
 #endif
   }
