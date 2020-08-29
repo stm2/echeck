@@ -3936,9 +3936,13 @@ void checkanorder(char *Orders)
       /* ZÜCHTE PFERDE */
       Scat(printparam(i));
     } else if (s && (*s)) {
-      anerror(_("This cannot be bred"));
+      sprintf(warn_buf, _("Illegal argument for %s"),
+          printkeyword(K_BREED));
+      anerror(warn_buf);
     } else {
-      /* ZÜCHTE */
+      sprintf(warn_buf, _("Missing argument for %s"),
+          printkeyword(K_BREED));
+      anerror(warn_buf);
     }
     long_order();
     break;

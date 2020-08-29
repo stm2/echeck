@@ -265,6 +265,18 @@ static void test_plant(CuTest *tc)
   test_orders(tc, "PFLANZE 1 BAEUME Samen", 1, 0);
 }
 
+static void test_breed(CuTest *tc)
+{
+  test_orders(tc, "ZUECHTE PFERDE", 0, 0);
+  assert_long_order(tc, 1);
+  test_orders(tc, "ZUECHTE KRAEUTER", 0, 0);
+  assert_long_order(tc, 1);
+  test_orders(tc, "ZUECHTE 3 KRAEUTER", 0, 0);
+
+  test_orders(tc, "ZUECHTE 3 PFERDE", 0, 1);
+  test_orders(tc, "ZUECHTE", 0, 1);
+}
+
 static void test_origin(CuTest *tc)
 {
   test_orders(tc, "URSPRUNG 1 -1", 0, 0);
@@ -344,6 +356,7 @@ int AddTestSuites(CuSuite * suite, const char * args)
     else if (strcmp(name, "plant")==0) {
       cs = CuSuiteNew();
       SUITE_ADD_TEST(cs, test_plant);
+      SUITE_ADD_TEST(cs, test_breed);
       CuSuiteAddSuite(suite, cs);
     }
     else if (strcmp(name, "common")==0) {
