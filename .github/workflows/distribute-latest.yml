@@ -2,7 +2,7 @@ name: Automatic build and release
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, magellan ]
 
 jobs:
   build_win:
