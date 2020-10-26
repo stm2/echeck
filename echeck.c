@@ -13,6 +13,9 @@
 
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
+#define STAT _stat
+#else
+#define STAT stat
 #endif
 
 #include <assert.h>
@@ -164,7 +167,7 @@ char order_buf[BUFSIZE],        /* current order line */
   *echeck_locale = "de", *echeck_rules = "e2", *filename;
 int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
   Rx, Ry;                       /* Koordinaten der aktuellen Region */
-static char *path;
+static const char *path;
 FILE *F;
 
 enum {
@@ -2288,12 +2291,13 @@ char *getbuf(void)
     }
     cont = false;
     while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE && *bp) {
-      if (isspace(*bp)) {
+      int c = *bp;
+      if (isspace(c)) {
         if (eatwhite) {
           do {
             ++bp;
           }
-          while (bp != lbuf + MAXLINE && isspace(*bp));
+          while (bp != lbuf + MAXLINE && isspace(c));
           if (!quote && !start)
             *(cp++) = ' ';
         } else {
@@ -2302,7 +2306,7 @@ char *getbuf(void)
             ++bp;
           }
           while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE
-            && isspace(*bp));
+            && isspace(c));
         }
       } else {
         cont = false;
@@ -4745,8 +4749,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
           if (argv[i][2] == 0) {        /* -P path */
             i++;
             if (argv[i]) {
-              free(path);
-              path = strdup(argv[i]);
+              path = argv[i];
             }
             else {
               fputs
@@ -4754,8 +4757,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
               exit(1);
             }
           } else /* -Ppath */ if (*(argv[i] + 2)) {
-            free(path);
-            path = strdup((char *)(argv[i] + 2));
+            path = argv[i] + 2;
           }
         }
         break;
@@ -5346,6 +5348,27 @@ void inittokens(void)
     addtoken(&tokens[UT_OPTION], l->name, i);
 }
 
+const char * findpath(void) {
+  char zPath[_MAX_PATH];
+  const char *hints[] = {
+    "/usr/share/games/echeck",
+    "/usr/share/echeck",
+    "/usr/local/share/echeck",
+    "C:\\Users\\Enno\\source\\repos\\echeck",
+    ".",
+    NULL
+  };
+  int i;
+  for (i = 0; hints[i]; ++i) {
+    snprintf(zPath, sizeof(zPath), "%s/%s/%s", hints[i], echeck_rules, echeck_locale);
+    struct STAT stats;
+    if (0 == STAT(zPath, &stats)) {
+      return hints[i];
+    }
+  }
+  return NULL;
+}
+
 int main(int argc, char *argv[])
 {
   int i, faction_count = 0, unit_count = 0, nextarg = 1;
@@ -5362,9 +5385,6 @@ int main(int argc, char *argv[])
    * Path-Handling 
    */
   path = getenv("ECHECKPATH");
-  if (!path)
-    path = DEFAULT_PATH;
-  path = strdup(path);
   ERR = stdout;
 
   filename = getenv("ECHECKOPTS");
@@ -5376,6 +5396,10 @@ int main(int argc, char *argv[])
 
   if (argc > 1)
     nextarg = check_options(argc, argv, 1, 1);
+
+  if (!path) {
+    path = findpath();
+  }
 
   readfiles(1);
 
