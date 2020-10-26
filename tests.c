@@ -1,9 +1,10 @@
-#include <CuTest.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "config.h"
+
+#include "CuTest.h"
 
 struct unit;
 extern int error_count;

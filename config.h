@@ -1,18 +1,3 @@
-/* which version of C? */
-#if defined(__STDC__)
-# define C89
-# if defined(__STDC_VERSION__)
-#  define C90
-#  if (__STDC_VERSION__ >= 199409L)
-#   define C94
-#  endif
-#  if (__STDC_VERSION__ >= 199901L)
-#   define C99
-#   define HAVE__BOOL
-#  endif
-# endif
-#endif
-
 /* platform-specific defines */
 #ifdef WIN32
 # define PATH_DELIM ";"
@@ -22,13 +7,11 @@
 
 /* define your compiler capabilities */
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 # define HAVE__STRDUP
 # define HAVE__STRICMP
 # define HAVE__SNPRINTF
-#endif
-
-#ifdef __GNUC__
+#elif defined(__GNUC__)
 # ifdef __STRICT_ANSI__
 #  include <strings.h>
 # else
@@ -38,24 +21,6 @@
 # define HAVE_STRCASECMP
 # define HAVE_STDBOOL_H
 # define HAVE_SYS_PARAM_H
-#endif
-
-/* define some common macros that your compiler may name otherwise */
-
-#ifdef HAVE_STDBOOL_H
-# include <stdbool.h>
-#else
-# ifndef HAVE__BOOL
-#  ifdef __cplusplus
-typedef bool _Bool;
-#  else
-typedef unsigned char _Bool;
-#  endif
-# endif
-# define bool _Bool
-# define false 0
-# define true 1
-# define __bool_true_false_are_defined 1
 #endif
 
 #if !defined(HAVE_STRDUP) && defined(HAVE__STRDUP)

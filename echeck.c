@@ -11,17 +11,22 @@
  * Please send any changes or bugfixes to the authors.
  */
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <wchar.h>
 #include <wctype.h>
 
-#ifdef WITH_CUTEST
-#include <CuTest.h>
+#ifdef TESTING
+#include "CuTest.h"
 int AddTestSuites(CuSuite * suite, const char *names);
 #endif
 
@@ -130,7 +135,6 @@ static int compact = 0;
 
 FILE *ERR, *OUT = 0;
 
-const char *run_tests = 0;
 int line_no,                    /* count line number */
  filesread = 0;
 
@@ -1652,7 +1656,7 @@ void set_order_unit(unit * u)
   order_unit = u;
 }
 
-#ifdef WITH_CUTEST
+#ifdef TESTING
 
 void mock_input(const char *input)
 {
@@ -1665,7 +1669,7 @@ void mock_input(const char *input)
 static char *fgetbuffer(char *buf, int size, FILE * F)
 {
   if (mocked_input) {
-    size_t bytes;
+    ptrdiff_t bytes;
     char *nextbr;
     if (!*mock_pos)
       return 0;
@@ -4723,6 +4727,10 @@ void printhelp(int argc, char *argv[], int index)
   exit(1);
 }
 
+#ifdef TESTING
+const char *run_tests = 0;
+#endif
+
 int check_options(int argc, char *argv[], char dostop, char command_line)
 {
   int i;
@@ -4810,11 +4818,11 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
       case 'm':
         compile = OUT_MAGELLAN;
         break;
-
+#ifdef TESTING
       case 'T':
         run_tests = argv[i][2] == '=' ? argv[i] + 3 : "all";
         break;
-
+#endif
       case 'E':
         if (dostop) {           /* bei Optionen via "; ECHECK" nicht mehr  machen */
           echo_it = 1;
@@ -5406,22 +5414,20 @@ int main(int argc, char *argv[])
 
   inittokens();
 
-  if (run_tests) {
-#ifdef WITH_CUTEST
+#ifdef TESTING
+  {
     CuSuite *suite = CuSuiteNew();
     CuString *output = CuStringNew();
 
-    AddTestSuites(suite, run_tests);
+    AddTestSuites(suite, run_tests ? run_tests : "all");
     CuSuiteRun(suite);
     CuSuiteSummary(suite, output);
     CuSuiteDetails(suite, output);
     printf("%s\n", output->buffer);
 
     return suite->failCount;
-#else
-    return 0;
-#endif
   }
+#endif
 
   F = stdin;
 
