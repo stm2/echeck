@@ -31,14 +31,17 @@ echeck.exe: echeck.c unicode.c unicode.h config.h
 	$(MINGW_CC) $(RELEASE_CFLAGS) -o echeck.exe echeck.c unicode.c
 	$(MINGW_STRIP) echeck.exe
 
-echeck: echeck.c unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
-	$(CC) $(DEBUG_CFLAGS) -DWITH_CUTEST -o echeck echeck.c unicode.c $(TEST_SRC)
+echeck: echeck.c unicode.c unicode.h config.h
+	$(CC) $(DEBUG_CFLAGS) -o echeck echeck.c unicode.c
+
+tests: echeck.c unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
+	$(CC) $(DEBUG_CFLAGS) -DTESTING -o tests echeck.c unicode.c $(TEST_SRC)
 
 clean:
 	@rm -f *.o core *.bak echeck echeck.exe echeck.zip
 
-test: echeck
-	@./echeck -T=all -Lde -Re2 -b
+check: tests
+	@./tests -T=all -Lde -Re2 -b
 
 echeck.zip: echeck.exe changelog.txt LIESMICH.txt README.txt
 	zip -r echeck.zip echeck.exe e2 e3 changelog.txt LIESMICH.txt README.txt
