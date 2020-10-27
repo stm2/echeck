@@ -44,3 +44,7 @@ _ReSharper*/
 ipch/
 /.vs
 /CMakeSettings.json
+tests
+build/
+*.cbp
+*.depend

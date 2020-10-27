@@ -7,15 +7,24 @@
  * based on:
  * - Atlantis v1.0 Copyright 1993 by Russell Wallace
  * - Atlantis v1.7 Copyright 1996 by Alex Schröder
- * This program is freeware. It may not be sold or used commercially. 
+ * This program is freeware. It may not be sold or used commercially.
  * Please send any changes or bugfixes to the authors.
  */
+
+#ifdef __unix__
+#include <unistd.h>
+
+#include <sys/stat.h>
+#define STAT stat
+
+#ifdef _POSIX_VERSION
+#include <libgen.h>
+#endif
+#endif /* __unix__ */
 
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #define STAT _stat
-#else
-#define STAT stat
 #endif
 
 #include <assert.h>
@@ -79,7 +88,7 @@ static char *Keys[UT_MAX] = {
 };
 
 /*
- * Diese Dinge müssen geladen sein, damit es überhaupt klappt 
+ * Diese Dinge müssen geladen sein, damit es überhaupt klappt
  */
 #define HAS_PARAM       0x01
 #define HAS_ITEM        0x02
@@ -111,7 +120,7 @@ const t_ech_file ECheck_Files[] = {
   {"directions.txt", UT_DIRECTION},
 
   /*
-   * generische Datei, kann alles enthalten, mit KEYWORD-Erkennung 
+   * generische Datei, kann alles enthalten, mit KEYWORD-Erkennung
    */
   {"tokens.txt", -1}
 };
@@ -927,7 +936,7 @@ enum {
 };
 
 /*
- * --------------------------------------------------------------------- 
+ * ---------------------------------------------------------------------
  */
 
 typedef struct list {
@@ -957,7 +966,7 @@ typedef struct unit {
   int drive;                    /* hier steht drin, welche Einheit mich  CARRYIEREn soll */
   /*
    * wenn drive!=0, muß transport==drive sein, sonst irgendwo
-   * Tippfehler 
+   * Tippfehler
    */
   int start_of_orders_line;
   int long_order_line;
@@ -1391,7 +1400,7 @@ int readparams(char *s)
   char buffer[128];
   char *x;
   int i;
-  t_params *p; 
+  t_params *p;
 
   x = strchr(s, ';');
   if (!x)
@@ -1733,13 +1742,13 @@ void readfiles(int doall)
 
   if (doall)
     /*
-     * alle Files aus der Liste der Reihe nach zu lesen versuchen 
+     * alle Files aus der Liste der Reihe nach zu lesen versuchen
      */
     for (i = 0; i < filecount; i++)
       readafile(ECheck_Files[i].name, ECheck_Files[i].type);
   else
     /*
-     * nur die Help-Files und tokens.txt 
+     * nur die Help-Files und tokens.txt
      */
     for (i = 0; i < filecount; i++)
       if (ECheck_Files[i].type == UT_HELP || ECheck_Files[i].type < 0)
@@ -1931,14 +1940,14 @@ void checkstring(char *s, size_t l, int type)
 int current_temp_no;
 
   /*
-   * Enthält die TEMP No, falls eine TEMP Einheit angesprochen wurde. 
+   * Enthält die TEMP No, falls eine TEMP Einheit angesprochen wurde.
    */
 
 int from_temp_unit_no;
 
   /*
    * Enthält die TEMP No, falls Befehle von einer TEMP Einheit gelesen
-   * werden. 
+   * werden.
    */
 
 #define val(x)  (x!=0)
@@ -2075,7 +2084,7 @@ char *igetstr(char *s1)
   buf[i] = 0;
   if (i > 0 && buf[i - 1] == ';')
     /*
-     * Steht ein Semikolon direkt hinten dran, dies löschen 
+     * Steht ein Semikolon direkt hinten dran, dies löschen
      */
     buf[i - 1] = 0;
 
@@ -2281,7 +2290,7 @@ char *getbuf(void)
     } else {
       /*
        * wenn die Zeile länger als erlaubt war, wird der Rest
-       * weggeworfen: 
+       * weggeworfen:
        */
       while (bp && !lbuf[MAXLINE - 1] && lbuf[MAXLINE - 2] != '\n')
         bp = fgetbuffer(warn_buf, 1024, F);
@@ -2515,7 +2524,7 @@ void checkemail(void)
 }
 
 /*
- * Check auf langen Befehl usw. - aus ACheck.c 4.1 
+ * Check auf langen Befehl usw. - aus ACheck.c 4.1
  */
 
 void end_unit_orders(void)
@@ -2638,14 +2647,14 @@ void orders_for_temp_unit(unit * u)
 {
   if (u->start_of_orders_line && u->region == Regionen) {
     /*
-     * in Regionen steht die aktuelle Region drin 
+     * in Regionen steht die aktuelle Region drin
      */
     sprintf(warn_buf, errtxt[ALREADYUSEDINLINE],
       itob(u->no), u->start_of_orders_line);
     anerror(warn_buf);
     /*
      * return; Trotzdem kein return, damit die Befehle ordnungsgemäß
-     * zugeordnet werden! 
+     * zugeordnet werden!
      */
   }
   u->line_no = line_no;
@@ -2681,14 +2690,14 @@ void long_order(void)
       /*
        * ZAUBERE ist zwar kein langer Befehl, aber man darf auch
        * keine anderen langen haben - darum ist bei denen
-       * long_order() 
+       * long_order()
        */
     case K_SELL:
     case K_BUY:
       if (this_command == K_SELL || this_command == K_BUY)
         return;
       /*
-       * Es sind mehrere VERKAUFE und KAUFE pro Einheit möglich 
+       * Es sind mehrere VERKAUFE und KAUFE pro Einheit möglich
        */
     }
     if ((i == K_FOLLOW && this_command != K_FOLLOW) ||
@@ -2698,7 +2707,7 @@ void long_order(void)
     if (strlen(order_unit->long_order) > DESCRIBESIZE + NAMESIZE)
       order_unit->long_order[DESCRIBESIZE + NAMESIZE] = 0;
     /*
-     * zu lange Befehle kappen 
+     * zu lange Befehle kappen
      */
     sprintf(warn_buf, errtxt[UNITALREADYHASLONGORDERS],
       uid(order_unit), order_unit->long_order_line, order_unit->long_order);
@@ -3239,7 +3248,7 @@ void checkmake(void)
 
   /*
    * Man kann MACHE ohne Parameter verwenden, wenn man in einer Burg
-   * oder einem Schiff ist. Ist aber trotzdem eine Warnung wert. 
+   * oder einem Schiff ist. Ist aber trotzdem eine Warnung wert.
    */
   if (s[0])
     anerror(errtxt[CANTMAKETHAT]);
@@ -3247,7 +3256,7 @@ void checkmake(void)
     awarning(errtxt[UNITMUSTBEONSHIP], 4);
   long_order();
   /*
-   * es kam ja eine Meldung - evtl. kennt ECheck das nur nicht? 
+   * es kam ja eine Meldung - evtl. kennt ECheck das nur nicht?
    */
 }
 
@@ -3502,7 +3511,7 @@ int studycost(t_skills * talent)
     int i;
 
     /*
-     * Lerne Magie [gebiet] 2000 -> Lernkosten=2000 Silber 
+     * Lerne Magie [gebiet] 2000 -> Lernkosten=2000 Silber
      */
     char *s = getstr();
 
@@ -3626,7 +3635,7 @@ void check_money(bool do_move)
         u->region->geld += u->money;
         /*
          * Reservierung < Silber der Unit? Silber von anderen
-         * Units holen 
+         * Units holen
          */
         if (u->reserviert > u->money) {
           i = u->reserviert - u->money;
@@ -3756,7 +3765,7 @@ void check_money(bool do_move)
           t = find_unit(u->transport, 1);
         assert(t);
         /*
-         * muß es geben, hat ja schließlich u->transport gesetzt 
+         * muß es geben, hat ja schließlich u->transport gesetzt
          */
         u->hasmoved = 1;
         u->newx = t->newx;
@@ -3788,7 +3797,7 @@ void check_living(void)
 
   /*
    * Für die Nahrungsversorgung ist auch ohne Silberpool alles Silber
-   * der Region zuständig 
+   * der Region zuständig
    */
 
   for (u = units; u; u = u->next) {     /* Silber der Einheiten in den  Silberpool "einzahlen" */
@@ -3813,7 +3822,7 @@ void remove_temp(void)
 {
   /*
    * Markiert das TEMP-Flag von Einheiten der letzten Region -> falsche
-   * TEMP-Nummern bei GIB oder so fallen auf 
+   * TEMP-Nummern bei GIB oder so fallen auf
    */
   unit *u;
 
@@ -3901,7 +3910,7 @@ void checkanorder(char *Orders)
   if (Orders != order_buf) {
     /*
      * strcpy für überlappende strings - auch für gleiche - ist
-     * undefiniert 
+     * undefiniert
      */
     strcpy(order_buf, Orders);
   }
@@ -3983,7 +3992,7 @@ void checkanorder(char *Orders)
       anerror(errtxt[CANTATTACKTEMP]);
     if (!attack_warning) {
       /*
-       * damit längere Angriffe nicht in Warnungs-Tiraden ausarten 
+       * damit längere Angriffe nicht in Warnungs-Tiraden ausarten
        */
       awarning(errtxt[LONGCOMBATNOLONGORDER], 5);
       attack_warning = 1;
@@ -4030,7 +4039,7 @@ void checkanorder(char *Orders)
       scat(printparam(i));
     } else if (s && (*s)) {
       anerror(errtxt[BREEDHORSESORHERBS]);
-    } else { 
+    } else {
       /* ZÜCHTE */
     }
     long_order();
@@ -4475,7 +4484,7 @@ void checkanorder(char *Orders)
     order_unit->start_of_orders_line = 0;
     order_unit->temp = 0;
     /*
-     * der DEFAULT gilt ja erst nächste Runde! 
+     * der DEFAULT gilt ja erst nächste Runde!
      */
     s = getstr();
     does_default = 1;
@@ -4575,7 +4584,7 @@ void readaunit(void)
   u->line_no = line_no;
   /*
    * Sonst ist die Zeilennummer die Zeile, wo die Einheit zuerst von
-   * einer anderen Einheit angesprochen wurde... 
+   * einer anderen Einheit angesprochen wurde...
    */
   orders_for_unit(i, u);
 
@@ -4593,7 +4602,7 @@ void readaunit(void)
     /*
      * Erst wenn wir sicher sind, daß kein Befehl eingegeben wurde,
      * checken wir, ob nun eine neue Einheit oder ein neuer Spieler
-     * drankommt 
+     * drankommt
      */
 
     i = igetkeyword(order_buf);
@@ -5045,7 +5054,7 @@ void check_OPTION(void)
           strnicmp(order_buf, "; ECHECK", 8) == 0) {
           parse_options((char *)(order_buf + 2), 0);
           /*
-           * "; " überspringen; zeigt dann auf "OPTION" 
+           * "; " überspringen; zeigt dann auf "OPTION"
            */
         } else if (strnicmp(order_buf, "; VERSION", 9) == 0)
           fprintf(ERR, "%s\n", order_buf);
@@ -5076,7 +5085,7 @@ void process_order_file(int *faction_count, int *unit_count)
 
   /*
    * Auffinden der ersten Partei, und danach abarbeiten bis zur letzten
-   * Partei 
+   * Partei
    */
 
   while (!befehle_ende) {
@@ -5098,7 +5107,7 @@ void process_order_file(int *faction_count, int *unit_count)
       if (*x) {
         if (!isdigit(*x) && (*x != '-'))
           /*
-           * REGION ohne Koordinaten - z.B. Astralebene 
+           * REGION ohne Koordinaten - z.B. Astralebene
            */
           Rx = Ry = -9999;
         else {
@@ -5180,13 +5189,13 @@ void process_order_file(int *faction_count, int *unit_count)
 
       /*
        * Falls in readunit abgebrochen wird, steht dort entweder
-       * eine neue Partei, eine neue Einheit oder das File-Ende. Das 
+       * eine neue Partei, eine neue Einheit oder das File-Ende. Das
        * switch wird erneut durchlaufen, und die entsprechende
        * Funktion aufgerufen. Man darf order_buf auf alle Fälle
        * nicht überschreiben! Bei allen anderen Einträgen hier
        * muß order_buf erneut gefüllt werden, da die betreffende
        * Information in nur einer Zeile steht, und nun die nächste
-       * gelesen werden muß. 
+       * gelesen werden muß.
        */
 
     case P_NEXT:
@@ -5348,21 +5357,29 @@ void inittokens(void)
     addtoken(&tokens[UT_OPTION], l->name, i);
 }
 
+const char * findfiles(const char *dir) {
+  struct STAT stats;
+  char zPath[FILENAME_MAX];
+  snprintf(zPath, sizeof(zPath), "%s/%s/%s", dir, echeck_rules, echeck_locale);
+  if (0 == STAT(zPath, &stats)) {
+    return dir;
+  }
+  return NULL;
+}
+
 const char * findpath(void) {
-  char zPath[_MAX_PATH];
   const char *hints[] = {
+#ifndef WIN32
     "/usr/share/games/echeck",
     "/usr/share/echeck",
     "/usr/local/share/echeck",
-    "C:\\Users\\Enno\\source\\repos\\echeck",
+#endif
     ".",
     NULL
   };
   int i;
   for (i = 0; hints[i]; ++i) {
-    snprintf(zPath, sizeof(zPath), "%s/%s/%s", hints[i], echeck_rules, echeck_locale);
-    struct STAT stats;
-    if (0 == STAT(zPath, &stats)) {
+    if (findfiles(hints[i])) {
       return hints[i];
     }
   }
@@ -5382,7 +5399,7 @@ int main(int argc, char *argv[])
     errtxt[i] = Errors[i];      /* mit Defaults besetzten, weil NULL ->  crash */
 
   /*
-   * Path-Handling 
+   * Path-Handling
    */
   path = getenv("ECHECKPATH");
   ERR = stdout;
@@ -5391,15 +5408,29 @@ int main(int argc, char *argv[])
   if (filename)
     parse_options(filename, 1);
 
-  if (argc <= 1)
-    printhelp(argc, argv, 0);
-
   if (argc > 1)
     nextarg = check_options(argc, argv, 1, 1);
 
+#ifdef _POSIX_VERSION
+  if (!path) {
+    char here[FILENAME_MAX];
+    char *dir;
+    strncpy(here, argv[0], sizeof(here));
+    dir = dirname(here);
+    path = findfiles(dir);
+    if (!path) {
+      dir = dirname(dir);
+      strcat(dir, "/..");
+      path = findfiles(dir);
+    }
+  }
+#endif
   if (!path) {
     path = findpath();
   }
+
+  if (argc <= 1)
+    printhelp(argc, argv, 0);
 
   readfiles(1);
 
@@ -5474,7 +5505,7 @@ int main(int argc, char *argv[])
   }
   /*
    * Falls es keine input Dateien gab, ist F immer noch auf stdin
-   * gesetzt 
+   * gesetzt
    */
   if (F == stdin)
     process_order_file(&faction_count, &unit_count);

@@ -1,0 +1,13 @@
+Source: echeck
+Maintainer: Enno Rehling <enno@eressea.de>
+Section: games
+Priority: optional
+Build-Depends: debhelper (>= 11)
+Standards-Version: 4.1.3
+Homepage: https://www.eressea.de
+
+Package: echeck
+Architecture: any
+Description: Eressea syntax checker
+ Syntax checker for the E-Mail Role Playing Game Eressea
+
