@@ -2304,7 +2304,7 @@ char *getbuf(void)
       if (isspace(c)) {
         if (eatwhite) {
           do {
-            ++bp;
+            c = *(++bp);
           }
           while (bp != lbuf + MAXLINE && isspace(c));
           if (!quote && !start)
@@ -5429,9 +5429,10 @@ int main(int argc, char *argv[])
     path = findpath();
   }
 
+#ifndef TESTING
   if (argc <= 1)
     printhelp(argc, argv, 0);
-
+#endif
   readfiles(1);
 
   if (!(filesread & HAS_MESSAGES)) {
