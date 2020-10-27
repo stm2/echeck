@@ -41,8 +41,8 @@ tests: echeck.c unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
 clean:
 	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip
 
-#check: tests
-#	@./tests -T=all -Lde -Re2 -b
+check: tests
+	@./tests -T=all -Lde -Re2 -b
 
 echeck.zip: echeck.exe changelog.txt LIESMICH.txt README.txt
 	zip -r echeck.zip echeck.exe e2 e3 changelog.txt LIESMICH.txt README.txt
