@@ -1,3 +1,8 @@
+echeck (4.4.9) UNRELEASED; urgency=low
+
+  * Fixed a parser bug related to quote marks and unicode
+
+  -- Enno Rehling <enno@eressea.de> Sat, 28 Oct. 2020 19:24:00 +0200
 echeck (4.4.8) UNRELEASED; urgency=low
 
   * Initial release
