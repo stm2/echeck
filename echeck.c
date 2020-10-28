@@ -2301,32 +2301,32 @@ char *getbuf(void)
     cont = false;
     while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE && *bp) {
       int c = *bp;
-      if (isspace(c)) {
+      if (c > 0 && isspace(c)) {
         if (eatwhite) {
           do {
             c = *(++bp);
           }
-          while (bp != lbuf + MAXLINE && isspace(c));
+          while (bp != lbuf + MAXLINE && isspace(*bp));
           if (!quote && !start)
             *(cp++) = ' ';
         } else {
           do {
             *(cp++) = SPACE_REPLACEMENT;
-            ++bp;
+            c = *(++bp);
           }
           while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE
-            && isspace(c));
+            && c > 0 && isspace(c));
         }
       } else {
         cont = false;
-        if (*bp == '"') {
+        if (c == '"') {
           quote = (bool) ! quote;
           eatwhite = true;
         } else {
-          if (*bp == '\\')
+          if (c == '\\')
             cont = true;
-          else if (!iscntrl(*bp)) {
-            *(cp++) = *bp;
+          else if (c < 0 || !iscntrl(c)) {
+            *(cp++) = c;
             eatwhite = (bool) ! quote;
           }
         }
