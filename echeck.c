@@ -11,7 +11,7 @@
  * Please send any changes or bugfixes to the authors.
  */
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include <unistd.h>
 
 #include <sys/stat.h>
@@ -46,7 +46,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.8";
+static const char *echeck_version = "4.4.9";
 
 #define DEFAULT_PATH "."
 
