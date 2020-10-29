@@ -46,7 +46,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "config.h"
 #include "unicode.h"
 
-static const char *echeck_version = "4.4.9";
+static const char *echeck_version = "4.4.10";
 
 #define DEFAULT_PATH "."
 
@@ -5360,7 +5360,8 @@ void inittokens(void)
 const char * findfiles(const char *dir) {
   struct STAT stats;
   char zPath[FILENAME_MAX];
-  snprintf(zPath, sizeof(zPath), "%s/%s/%s", dir, echeck_rules, echeck_locale);
+  snprintf(zPath, sizeof(zPath), "%s/%s/%s/%s",
+      dir, echeck_rules, echeck_locale, ECheck_Files[0].name);
   if (0 == STAT(zPath, &stats)) {
     return dir;
   }
