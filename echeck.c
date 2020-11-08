@@ -5412,24 +5412,9 @@ int main(int argc, char *argv[])
   if (argc > 1)
     nextarg = check_options(argc, argv, 1, 1);
 
-#ifdef _POSIX_VERSION
-  if (!path) {
-    char here[FILENAME_MAX];
-    char *dir;
-    strncpy(here, argv[0], sizeof(here));
-    dir = dirname(here);
-    path = findfiles(dir);
-    if (!path) {
-      dir = dirname(dir);
-      strcat(dir, "/..");
-      path = findfiles(dir);
-    }
-  }
-#endif
   if (!path) {
     path = findpath();
   }
-
 #ifndef TESTING
   if (argc <= 1)
     printhelp(argc, argv, 0);

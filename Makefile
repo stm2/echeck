@@ -4,6 +4,7 @@ CFLAGS = -Wall -std=c99 -Werror -I.
 RELEASE_CFLAGS = -Os
 DEBUG_CFLAGS = -g
 CFLAGS += $(RELEASE_CFLAGS)
+#CFLAGS += $(DEBUG_CFLAGS)
 TEST_SRC = tests.c CuTest.c
 TEST_HDR = CuTest.h
 PREFIX ?= /usr
