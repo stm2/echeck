@@ -67,7 +67,6 @@ enum {
   UT_OPTION,
   UT_DIRECTION,
   UT_ERRORS,
-  UT_HELP,
   UT_MAX
 };
 
@@ -86,7 +85,6 @@ static char *Keys[UT_MAX] = {
   "OPTION",
   "DIRECTION",
   "MSG",
-  "HELP",
 };
 
 /*
@@ -106,7 +104,6 @@ typedef struct _ech_file {
 } t_ech_file;
 
 const t_ech_file ECheck_Files[] = {
-  {"help.txt", UT_HELP},
   {"messages.txt", UT_ERRORS},
   {"parameters.txt", UT_PARAM},
   {"items.txt", UT_ITEM},
@@ -875,22 +872,6 @@ static char *Errors[MAX_ERRORS] = {
 
 char *errtxt[MAX_ERRORS];
 
-enum {
-  HELP_CAPTION,
-  HELP_PATH,
-  HELP_TEXT,
-  MAX_HELP
-};
-
-static char *Help[MAX_HELP] = {
-  "CAPTION",
-  "PATH",
-  "TEXT"
-};
-
-t_liste *help = NULL;
-char *help_caption = NULL, *help_path = NULL;
-
 typedef struct _names {
   struct _names *next;
   char *txt;
@@ -1498,52 +1479,6 @@ int readerror(char *s)
   return 1;
 }
 
-int readhelp(char *s)
-{
-  int i;
-  char *x;
-  t_liste *h;
-
-  x = strchr(s, ',');
-  if (!x)
-    return 0;
-  *x = 0;
-  x++;
-  if (!(*x))
-    return 0;
-  x++;                          /* erstes Leerzeichen hinter dem ,  überlesen */
-  if (!(*x))
-    return 0;
-  i = findstr(Help, s, MAX_HELP);
-  if (i < 0)
-    return 0;
-  s = x;
-  do {
-    s = strchr(s, '\\');
-    if (!s)
-      break;
-    *s = '\n';                  /* nur \n erlaubt... */
-    s++;
-    memmove(s, s + 1, strlen(s));       /* Rest ein Zeichen "ranziehen" */
-  }
-  while (*s);
-
-  switch (i) {
-  case HELP_CAPTION:
-    help_caption = strdup(x);
-    break;
-  case HELP_PATH:
-    help_path = strdup(x);
-    break;
-  default:
-    h = (t_liste *) calloc(1, sizeof(t_liste));
-    h->name = strdup(x);
-    addlist(&help, h);
-    break;
-  }
-  return 1;
-}
-
 int parsefile(char *s, int typ)
 {                               /* ruft passende Routine auf */
   int ok;                       /* nicht alle Zeilenparser geben Wert  zurück */
@@ -1611,10 +1546,6 @@ int parsefile(char *s, int typ)
 
   case UT_ERRORS:
     ok = readerror(s);
-    break;
-
-  case UT_HELP:
-    ok = readhelp(s);
     break;
 
   default:                     /* tokens.txt */
@@ -1751,10 +1682,10 @@ void readfiles(int doall)
       readafile(ECheck_Files[i].name, ECheck_Files[i].type);
   } else {
     /*
-     * nur die Help-Files und tokens.txt
+     * nur die tokens.txt
      */
     for (i = 0; i < filecount; i++)
-      if (ECheck_Files[i].type == UT_HELP || ECheck_Files[i].type < 0)
+      if (ECheck_Files[i].type < 0)
         readafile(ECheck_Files[i].name, ECheck_Files[i].type);
   }
 }
@@ -4664,7 +4595,7 @@ int readafaction(void)
 
 void help_keys(char key)
 {
-  int i, j;
+  int i;
 
   switch (key) {
   case 's':                    /* Schlüsselworte */
@@ -4692,19 +4623,8 @@ void help_keys(char key)
     for (i = 0; i < MAX_ERRORS; i++)
       fprintf(ERR, "%s\n", Errors[i]);
     break;
-
   case 'f':
-    fprintf(ERR, "Dateien / files:\n\n");
-    for (j = UT_NONE + 1; j < UT_MAX; j++) {
-      fprintf(ERR, "%s:", Keys[j]);
-      for (i = 0; i < filecount; i++)
-        if (ECheck_Files[i].type == j)
-          fprintf(ERR, "  %s", ECheck_Files[i].name);
-      putc('\n', ERR);
-    }
-    putc('\n', ERR);
     break;
-
   default:
     return;
   }
@@ -4713,9 +4633,10 @@ void help_keys(char key)
 
 void recurseprinthelp(t_liste * h)
 {
-  if (h->next)
+  if (h) {
     recurseprinthelp(h->next);
-  fprintf(ERR, "%s\n", h->name);
+    fprintf(ERR, "%s\n", h->name);
+  }
 }
 
 void files_not_found(FILE *F)
@@ -4730,26 +4651,40 @@ void files_not_found(FILE *F)
 
 void printhelp(int argc, char *argv[], int index)
 {
-
-  if (!help_caption)
-    readfiles(0);               /* evtl. ist anderes echeck_locale  gesetzt; darum _jetzt_ lesen */
-
-  if (!help_caption) {
-    files_not_found(ERR);
-    help_keys('f');
-  }
-
-  fprintf(ERR, help_caption, echeck_version, __DATE__, argv[0]);
-  if (index > 0 && argv[index][1] == 'h') {
-    if (argv[index][2] != 0)
-      help_keys(argv[index][2]);
-    if (argc > index + 1)
-      help_keys(*argv[index + 1]);
-  }
-
-  fprintf(ERR, help_path, echeck_locale);
-  putc('\n', ERR);
-  recurseprinthelp(help);
+  fprintf(ERR, gettext(
+"-Ppath  search path for the additional files; locale %s will be appended\n"
+"-       use stdin instead of an input file\n"
+"-b      suppress warnings and errors (brief)\n"
+"-q      do not expect hints regarding men/silver within [] after UNIT\n"
+"-rnnn   set recruit costs to nnn silver\n"
+"-c      compiler-like output\n"
+"-m      magellan-useable output\n"
+"-e      send checked file to stdout, errors to stderr\n"
+"-E      send checked file to stdout, errors to stdout\n"
+"-ofile  write checked file into 'file'\n"
+"-Ofile  write errors into 'file'\n"
+"-h      show this little help\n"
+"-hk     show list of keywords for tokens.txt\n"
+"-hc     show list of commands for commands.txt\n"
+"-hp     show list of parameters for parameters.txt\n"
+"-hd     show list of directions for directions.txt\n"
+"-hm     show list of messages for messages.txt\n"
+"-hf     show list of files ECheck tries to read\n"
+"-s      use stderr for warnings, errors, etc. instead of stdout\n"
+"-p      abbreviate some output for piping\n"
+"-l      simulate silverpool\n"
+"-n      do not count lines with NameMe comments (;;)\n"
+"-noxxx  no xxx warnings. xx can be:\n"
+"  ship   unit steers a ship but may lack control\n"
+"  route  do not check for cyclic ROUTE\n"
+"  lost   unit loses silver and items\n"
+"-w[n]   warnings of level n (default:   4)\n"
+"-x      line counting starts with FACTION\n"
+"-Lloc   select locale loc\n"
+"-vm.l   mainversion.level - to check for correct ECheck-Version\n"
+"-Q      quiet\n"
+"-C      compact output\n"
+), echeck_locale);
   exit(1);
 }
 
@@ -5369,12 +5304,16 @@ void inittokens(void)
     addtoken(&tokens[UT_OPTION], l->name, i);
 }
 
-const char * findfiles(const char *dir) {
+int fileexists(const char *name) {
   struct STAT stats;
+  return STAT(name, &stats);
+}
+
+const char * findfiles(const char *dir) {
   char zPath[FILENAME_MAX];
   snprintf(zPath, sizeof(zPath), "%s/%s/%s/%s",
       dir, echeck_rules, echeck_locale, ECheck_Files[0].name);
-  if (0 == STAT(zPath, &stats)) {
+  if (0 == fileexists(zPath)) {
     return dir;
   }
   return NULL;
@@ -5403,7 +5342,11 @@ int main(int argc, char *argv[])
 {
   int i, faction_count = 0, unit_count = 0, nextarg = 1;
   setlocale(LC_ALL,"");
-  bindtextdomain("echeck", "/usr/share/locale");
+  if (0 == fileexists("locale/de/LC_MESSAGES")) {
+    bindtextdomain("echeck", "locale");
+  } else {
+    bindtextdomain("echeck", "/usr/share/locale");
+  }
   textdomain("echeck");
 #if macintosh
   argc = ccommand(&argv);       /* consolenabruf der parameter fuer  macintosh added 15.6.00 chartus */

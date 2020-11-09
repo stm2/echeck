@@ -15,7 +15,7 @@ default: echeck mofiles
 
 all: echeck.zip echeck
 
-mofiles: po/de/echeck.mo
+mofiles: locale/de/LC_MESSAGES/echeck.mo
 
 install: echeck mofiles
 	install -d $(EXECDIR)
@@ -28,19 +28,19 @@ install: echeck mofiles
 	install -t $(SHAREDIR)/e2/en e2/en/*.txt
 	install -t $(SHAREDIR)/e3/de e3/de/*.txt
 	install -t $(SHAREDIR)/e3/en e3/en/*.txt
-	install -t $(LOCALEDIR)/de/LC_MESSAGES po/de/echeck.mo
+	install -t $(LOCALEDIR)/de/LC_MESSAGES locale/de/LC_MESSAGES/echeck.mo
 
 tags:
 	@ctags *.c *.h
 
-po/echeck.pot: echeck.c
-	xgettext -d echeck -o po/echeck.pot -s echeck.c
+locale/echeck.pot: echeck.c
+	xgettext -d echeck -o $@ -s $^
 
-po/de/echeck.po: po/echeck.pot
-	msgmerge -o po/de/echeck.po po/de/echeck.po po/echeck.pot 
+locale/de/echeck.po: locale/echeck.pot
+	msgmerge -o $@ $@ $< 
 
-po/de/echeck.mo: po/de/echeck.po
-	msgfmt po/de/echeck.po -o po/de/echeck.mo
+locale/%/LC_MESSAGES/echeck.mo: locale/%/echeck.po
+	msgfmt $< -o $@
 
 echeck.exe: echeck.c unicode.c unicode.h config.h
 	$(MINGW_CC) $(CFLAGS) -o echeck.exe echeck.c unicode.c

@@ -5,7 +5,6 @@ The are are the following files:
   - buildings.txt
   - commands.txt
   - directions.txt
-  - help.txt
   - herbs.txt
   - items.txt
   - messages.txt
