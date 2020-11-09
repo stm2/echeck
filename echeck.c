@@ -27,6 +27,8 @@
 #define STAT _stat
 #endif
 
+#include <libintl.h>
+#include <locale.h>
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -1739,20 +1741,22 @@ void readafile(const char *fn, int typ)
 void readfiles(int doall)
 {                               /* liest externen Files */
   int i;
-
-  if (doall)
+  
+  if (!path) return;
+  if (doall) {
     /*
      * alle Files aus der Liste der Reihe nach zu lesen versuchen
      */
     for (i = 0; i < filecount; i++)
       readafile(ECheck_Files[i].name, ECheck_Files[i].type);
-  else
+  } else {
     /*
      * nur die Help-Files und tokens.txt
      */
     for (i = 0; i < filecount; i++)
       if (ECheck_Files[i].type == UT_HELP || ECheck_Files[i].type < 0)
         readafile(ECheck_Files[i].name, ECheck_Files[i].type);
+  }
 }
 
 void porder(void)
@@ -4714,6 +4718,16 @@ void recurseprinthelp(t_liste * h)
   fprintf(ERR, "%s\n", h->name);
 }
 
+void files_not_found(FILE *F)
+{
+  fputs("\n  **  ", F);
+  fprintf(F, "ECheck V%s, %s", echeck_version, __DATE__);
+  fputs("   **\n\n", F);
+  fprintf(F, gettext("cannot read configuration files from %s/%s"),
+    path, echeck_locale);
+  fputs("\n\n", F);
+}
+
 void printhelp(int argc, char *argv[], int index)
 {
 
@@ -4721,9 +4735,7 @@ void printhelp(int argc, char *argv[], int index)
     readfiles(0);               /* evtl. ist anderes echeck_locale  gesetzt; darum _jetzt_ lesen */
 
   if (!help_caption) {
-    fprintf(ERR, "\n  **  ECheck V%s, %s  **\n\n"
-      " kann keine Datei lesen!  -  can't read any file!\n\n Pfad / Path: '%s/%s'\n\n",
-      echeck_version, __DATE__, path, echeck_locale);
+    files_not_found(ERR);
     help_keys('f');
   }
 
@@ -5390,7 +5402,9 @@ const char * findpath(void) {
 int main(int argc, char *argv[])
 {
   int i, faction_count = 0, unit_count = 0, nextarg = 1;
-
+  setlocale(LC_ALL,"");
+  bindtextdomain("echeck", "/usr/share/locale");
+  textdomain("echeck");
 #if macintosh
   argc = ccommand(&argv);       /* consolenabruf der parameter fuer  macintosh added 15.6.00 chartus */
 #endif
@@ -5422,9 +5436,7 @@ int main(int argc, char *argv[])
   readfiles(1);
 
   if (!(filesread & HAS_MESSAGES)) {
-    fprintf(ERR, "\n  **  ECheck V%s, %s  **\n\n"
-      " kann keine Datei lesen!  -  can't read any file!\n\n Pfad / Path: '%s/%s'\n\n",
-      echeck_version, __DATE__, path, echeck_locale);
+    files_not_found(ERR);
     help_keys('f');             /* help_keys() macht exit() */
   }
 

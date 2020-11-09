@@ -1,0 +1,23 @@
+# ECheck Localization.
+# Copyright (C) 2020 Enno Rehling
+# This file is distributed under the same license as the echeck package.
+# Enno Rehling <enno@eressea.de>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: echeck 4.4.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-09 17:45+0100\n"
+"PO-Revision-Date: 2020-11-09 17:45+0100\n"
+"Last-Translator: Enno Rehling <enno@eressea.de>\n"
+"Language-Team: German (Deutsch) <echeck@eressea.de>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: echeck.c:4724
+#, c-format
+msgid "cannot read configuration files from %s/%s"
+msgstr "Konfigurationsdateien nicht gefunden in %s/%s"
