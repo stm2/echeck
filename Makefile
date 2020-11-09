@@ -1,3 +1,4 @@
+OS_NAME := $(shell uname -s | tr A-Z a-z)
 MINGW_STRIP = i686-w64-mingw32-strip
 MINGW_CC = i686-w64-mingw32-gcc
 CFLAGS = -Wall -std=c99 -I.
@@ -12,7 +13,10 @@ SHAREDIR ?= $(PREFIX)/share/games/echeck
 EXECDIR ?= $(PREFIX)/games
 LOCALEDIR ?= $(PREFIX)/share/locale
 default: echeck mofiles
-
+LFLAGS = -lintl
+ifeq ($(OS_NAME),darwin)
+#	LFLAGS += -Lintl
+endif	
 all: echeck.zip echeck
 
 mofiles: locale/de/LC_MESSAGES/echeck.mo
@@ -39,7 +43,10 @@ locale/echeck.pot: echeck.c
 locale/de/echeck.po: locale/echeck.pot
 	msgmerge -o $@ $@ $< 
 
-locale/%/LC_MESSAGES/echeck.mo: locale/%/echeck.po
+locale/%/LC_MESSAGES/echeck.mo: locale/%/echeck.po 
+	@rm -f $@
+	@mkdir -p $@
+	@rmdir $@
 	msgfmt $< -o $@
 
 echeck.exe: echeck.c unicode.c unicode.h config.h
@@ -47,7 +54,7 @@ echeck.exe: echeck.c unicode.c unicode.h config.h
 	$(MINGW_STRIP) echeck.exe
 
 echeck: echeck.c unicode.c unicode.h config.h
-	$(CC) $(CFLAGS) -o echeck echeck.c unicode.c
+	$(CC) $(LFLAGS) $(CFLAGS) -o echeck echeck.c unicode.c
 
 tests: echeck.c unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
 	$(CC) $(CFLAGS) -DTESTING -o tests echeck.c unicode.c $(TEST_SRC)

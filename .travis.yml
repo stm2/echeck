@@ -1,4 +1,8 @@
 language: c
+addons:
+  homebrew:
+    packages:
+      - gettext
 compiler:
   - gcc
   - clang
