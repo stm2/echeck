@@ -6,6 +6,7 @@ echeck
 *.slo
 *.lo
 *.o
+*.mo
 
 # Compiled Dynamic libraries
 *.so

@@ -10,11 +10,14 @@ TEST_HDR = CuTest.h
 PREFIX ?= /usr
 SHAREDIR ?= $(PREFIX)/share/games/echeck
 EXECDIR ?= $(PREFIX)/games
-default: echeck
+LOCALEDIR ?= $(PREFIX)/share/locale
+default: echeck mofiles
 
 all: echeck.zip echeck
 
-install: echeck
+mofiles: po/de/echeck.mo
+
+install: echeck mofiles
 	install -d $(EXECDIR)
 	install -t $(EXECDIR) echeck
 	install -d $(SHAREDIR)/e2/de
@@ -25,9 +28,19 @@ install: echeck
 	install -t $(SHAREDIR)/e2/en e2/en/*.txt
 	install -t $(SHAREDIR)/e3/de e3/de/*.txt
 	install -t $(SHAREDIR)/e3/en e3/en/*.txt
+	install -t $(LOCALEDIR)/de/LC_MESSAGES po/de/echeck.mo
 
 tags:
 	@ctags *.c *.h
+
+po/echeck.pot: echeck.c
+	xgettext -d echeck -o po/echeck.pot -s echeck.c
+
+po/de/echeck.po: po/echeck.pot
+	msgmerge -o po/de/echeck.po po/de/echeck.po po/echeck.pot 
+
+po/de/echeck.mo: po/de/echeck.po
+	msgfmt po/de/echeck.po -o po/de/echeck.mo
 
 echeck.exe: echeck.c unicode.c unicode.h config.h
 	$(MINGW_CC) $(CFLAGS) -o echeck.exe echeck.c unicode.c
