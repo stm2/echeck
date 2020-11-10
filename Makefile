@@ -13,9 +13,8 @@ SHAREDIR ?= $(PREFIX)/share/games/echeck
 EXECDIR ?= $(PREFIX)/games
 LOCALEDIR ?= $(PREFIX)/share/locale
 default: echeck mofiles
-LFLAGS = -lintl
 ifeq ($(OS_NAME),darwin)
-#	LFLAGS += -Lintl
+LFLAGS += -lintl
 endif	
 all: echeck.zip echeck
 
