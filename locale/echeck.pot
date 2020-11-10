@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-10 21:11+0100\n"
+"POT-Creation-Date: 2020-11-11 00:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,8 +16,23 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: echeck.c:4592
+#: echeck.c:5409
+#, c-format
+msgid "%d faction"
+msgid_plural "%d factions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: echeck.c:5412
+#, c-format
+msgid "%d unit"
+msgid_plural "%d units"
+msgstr[0] ""
+msgstr[1] ""
+
+#: echeck.c:4591
 #, c-format
 msgid ""
 "-Ppath  search path for the additional files; locale %s will be appended\n"
@@ -54,63 +69,72 @@ msgid ""
 "-C      compact output\n"
 msgstr ""
 
-#: echeck.c:1655
+#: echeck.c:1654
 msgid "<--MISSING-->"
 msgstr ""
 
-#: echeck.c:2822
+#: echeck.c:2821
 msgid "New units cannot GIVE anything!"
 msgstr ""
 
-#: echeck.c:3301
+#: echeck.c:3300
 msgid "New units cannot use RESERVE, try using GIVE instead."
 msgstr ""
 
-#: echeck.c:1806
+#: echeck.c:5414
+#, c-format
+msgid "Orders have been read for %s and %s."
+msgstr ""
+
+#: echeck.c:1805
 #, c-format
 msgid "Text too long (max. %d characters)"
 msgstr ""
 
-#: echeck.c:3765
+#: echeck.c:5423
+msgid "The orders look good."
+msgstr ""
+
+#: echeck.c:3764
 #, c-format
 msgid "Unit %s Unit could benefit from %d more teachers."
 msgstr ""
 
-#: echeck.c:3761
+#: echeck.c:3760
 #, c-format
 msgid "Unit %s can teach %d more students."
 msgstr ""
 
-#: echeck.c:3726
+#: echeck.c:3725
 #, c-format
 msgid "Unit %s has 0 men and is taught by unit %s."
 msgstr ""
 
-#: echeck.c:3730
+#: echeck.c:3729
 #, c-format
 msgid "Unit %s has 0 men and teaches unit %s."
 msgstr ""
 
-#: echeck.c:3745
+#: echeck.c:3744
 #, c-format
 msgid "Unit %s is taught by unit %s but doesn't learn."
 msgstr ""
 
-#: echeck.c:3504
+#: echeck.c:3503
 #, c-format
 msgid "Unit TEMP %s has no men and has not recruited any."
 msgstr ""
 
-#: echeck.c:3491
+#: echeck.c:3490
 #, c-format
 msgid "Unit TEMP %s was never created with MAKE TEMP"
 msgstr ""
 
-#: echeck.c:4584
+#: echeck.c:4583
 #, c-format
 msgid "cannot read configuration files from %s/%s"
 msgstr ""
 
-#: echeck.c:4097
+#: echeck.c:4096
 msgid "who should be taught?"
 msgstr ""

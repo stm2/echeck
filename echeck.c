@@ -32,6 +32,7 @@
 #include <locale.h>
 #else
 #define gettext(X) (X)
+#define ngettext(S, P, N) (((N)==1)?S:P)
 #endif
 
 #include <assert.h>
@@ -590,7 +591,6 @@ enum {
   OBJECTNUMBERMISSING,
   ONLYSABOTAGESHIP,
   ORDERNUMBER,
-  ORDERSOK,
   ORDERSREAD,
   PASSWORDCLEARED,
   PASSWORDMSG1,
@@ -765,7 +765,6 @@ static const char *Errors[MAX_ERRORS] = {
   "OBJECTNUMBERMISSING",
   "ONLYSABOTAGESHIP",
   "ORDERNUMBER",
-  "ORDERSOK",
   "ORDERSREAD",
   "PASSWORDCLEARED",
   "PASSWORDMSG1",
@@ -5324,7 +5323,7 @@ int main(int argc, char *argv[])
 #endif
   readfiles(1);
 
-  if (!(filesread & HAS_MESSAGES)) {
+  if (!filesread) {
     files_not_found(ERR);
     help_keys('f');             /* help_keys() macht exit() */
   }
@@ -5404,10 +5403,16 @@ int main(int argc, char *argv[])
     return 0;
   }
 
-  fprintf(ERR, Errors[ORDERSREAD],
-          faction_count,
-          faction_count != 1 ? Errors[FACTIONS] : Errors[FACTION],
-          unit_count, unit_count != 1 ? Errors[UNITS] : Errors[UNIT]);
+  char factions[32];
+  char units[32];
+  snprintf(factions, sizeof(factions), 
+      ngettext("%d faction", "%d factions", faction_count),
+      faction_count);
+  snprintf(units, sizeof(units), 
+      ngettext("%d unit", "%d units", unit_count),
+      unit_count);
+  fprintf(ERR, gettext("Orders have been read for %s and %s."),
+      factions, units);
 
   if (unit_count == 0) {
     fputs(Errors[CHECKYOURORDERS], ERR);
@@ -5415,7 +5420,7 @@ int main(int argc, char *argv[])
   }
 
   if (!error_count && !warning_count && faction_count && unit_count)
-    fputs(Errors[ORDERSOK], ERR);
+    fputs(gettext("The orders look good."), ERR);
 
   if (error_count > 1)
     fprintf(ERR, Errors[FOUNDERRORS], error_count);

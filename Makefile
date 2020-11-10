@@ -1,11 +1,11 @@
 OS_NAME := $(shell uname -s | tr A-Z a-z)
 MINGW_STRIP = i686-w64-mingw32-strip
 MINGW_CC = i686-w64-mingw32-gcc
-CFLAGS = -Wall -std=c99 -I.
+CFLAGS = -Wall -std=c99 -I. -DHAVE_GETTEXT
 RELEASE_CFLAGS = -Os -Werror
 DEBUG_CFLAGS = -g
-#CFLAGS += $(RELEASE_CFLAGS)
-CFLAGS += $(DEBUG_CFLAGS)
+CFLAGS += $(RELEASE_CFLAGS)
+#CFLAGS += $(DEBUG_CFLAGS)
 TEST_SRC = tests.c CuTest.c
 TEST_HDR = CuTest.h
 PREFIX ?= /usr
