@@ -57,7 +57,7 @@ echeck: echeck.c unicode.c unicode.h config.h
 	$(CC) $(LFLAGS) $(CFLAGS) -o echeck echeck.c unicode.c
 
 tests: echeck.c unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
-	$(CC) $(CFLAGS) -DTESTING -o tests echeck.c unicode.c $(TEST_SRC)
+	$(CC) $(LFLAGS) $(CFLAGS) -DTESTING -o tests echeck.c unicode.c $(TEST_SRC)
 
 clean:
 	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip
