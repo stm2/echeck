@@ -257,7 +257,7 @@ enum {
   MAXKEYWORDS
 };
 
-static char *Keywords[MAXKEYWORDS] = {
+static const char *Keywords[MAXKEYWORDS] = {
   "ALLIANCE",
   "PAY",
   "WORK",
@@ -332,7 +332,7 @@ t_keyword *keywords = NULL;
 
 #define igetkeyword(s)  findtoken(igetstr(s), UT_KEYWORD)
 
-static char *magiegebiet[] = {
+static const char *magiegebiet[] = {
   "Illaun",
   "Tybied",
   "Cerddor",
@@ -431,7 +431,7 @@ typedef struct _params {
 
 t_params *parameters = NULL;
 
-static char *reports[] = {      /* Fehler und Meldungen im Report */
+static const char *reports[] = {      /* Fehler und Meldungen im Report */
   "Kampf",
   "Ereignisse",
   "Bewegung",
@@ -444,7 +444,7 @@ static char *reports[] = {      /* Fehler und Meldungen im Report */
 
 static const int MAXREPORTS = sizeof(reports) / sizeof(reports[0]);
 
-static char *message_levels[] = {
+static const char *message_levels[] = {
   "Wichtig",
   "Debug",
   "Fehler",
@@ -3501,7 +3501,7 @@ void check_money(bool do_move)
           if (u->money > 0)
             sprintf(warn_buf, Errors[UNITHASNTPERSONS], itob(u->no));
           else
-            sprintf(warn_buf, gettext("Unit TEM %s has no men and has not recruited any."), itob(u->no));
+            sprintf(warn_buf, gettext("Unit TEMP %s has no men and has not recruited any."), itob(u->no));
           warn(warn_buf, u->line_no, 2);
         } else if (no_comment <= 0) {
           sprintf(warn_buf, Errors[UNITLOSESITEMS], itob(u->no));

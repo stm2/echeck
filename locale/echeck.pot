@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-09 22:20+0100\n"
+"POT-Creation-Date: 2020-11-10 21:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: echeck.c:4655
+#: echeck.c:4592
 #, c-format
 msgid ""
 "-Ppath  search path for the additional files; locale %s will be appended\n"
@@ -54,7 +54,63 @@ msgid ""
 "-C      compact output\n"
 msgstr ""
 
-#: echeck.c:4647
+#: echeck.c:1655
+msgid "<--MISSING-->"
+msgstr ""
+
+#: echeck.c:2822
+msgid "New units cannot GIVE anything!"
+msgstr ""
+
+#: echeck.c:3301
+msgid "New units cannot use RESERVE, try using GIVE instead."
+msgstr ""
+
+#: echeck.c:1806
+#, c-format
+msgid "Text too long (max. %d characters)"
+msgstr ""
+
+#: echeck.c:3765
+#, c-format
+msgid "Unit %s Unit could benefit from %d more teachers."
+msgstr ""
+
+#: echeck.c:3761
+#, c-format
+msgid "Unit %s can teach %d more students."
+msgstr ""
+
+#: echeck.c:3726
+#, c-format
+msgid "Unit %s has 0 men and is taught by unit %s."
+msgstr ""
+
+#: echeck.c:3730
+#, c-format
+msgid "Unit %s has 0 men and teaches unit %s."
+msgstr ""
+
+#: echeck.c:3745
+#, c-format
+msgid "Unit %s is taught by unit %s but doesn't learn."
+msgstr ""
+
+#: echeck.c:3504
+#, c-format
+msgid "Unit TEMP %s has no men and has not recruited any."
+msgstr ""
+
+#: echeck.c:3491
+#, c-format
+msgid "Unit TEMP %s was never created with MAKE TEMP"
+msgstr ""
+
+#: echeck.c:4584
 #, c-format
 msgid "cannot read configuration files from %s/%s"
+msgstr ""
+
+#: echeck.c:4097
+msgid "who should be taught?"
 msgstr ""

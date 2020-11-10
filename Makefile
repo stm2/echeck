@@ -43,7 +43,7 @@ locale/de/echeck.po: locale/echeck.pot
 	msgmerge -o $@ $@ $< 
 
 locale/%/LC_MESSAGES/echeck.mo: locale/%/echeck.po 
-	@rm -f $@
+	@rm -rf $@
 	@mkdir -p $@
 	@rmdir $@
 	msgfmt $< -o $@

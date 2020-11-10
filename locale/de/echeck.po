@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: echeck 4.4.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-09 22:20+0100\n"
+"POT-Creation-Date: 2020-11-10 21:11+0100\n"
 "PO-Revision-Date: 2020-11-09 17:45+0100\n"
 "Last-Translator: Enno Rehling <enno@eressea.de>\n"
 "Language-Team: German (Deutsch) <echeck@eressea.de>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: echeck.c:4655
+#: echeck.c:4592
 #, c-format
 msgid ""
 "-Ppath  search path for the additional files; locale %s will be appended\n"
@@ -86,7 +86,63 @@ msgstr ""
 "-Q      Leise\n"
 "-C      Kompakte Ausgabe\n"
 
-#: echeck.c:4647
+#: echeck.c:1655
+msgid "<--MISSING-->"
+msgstr "<--FEHLT-->"
+
+#: echeck.c:2822
+msgid "New units cannot GIVE anything!"
+msgstr "Neue Einheiten können nichts übergeben."
+
+#: echeck.c:3301
+msgid "New units cannot use RESERVE, try using GIVE instead."
+msgstr "Neue Einheiten könenn nichts reservieren."
+
+#: echeck.c:1806
+#, c-format
+msgid "Text too long (max. %d characters)"
+msgstr "Text zu lang (max %d Zeichen)."
+
+#: echeck.c:3765
+#, c-format
+msgid "Unit %s Unit could benefit from %d more teachers."
+msgstr "Einheit %s kann noch %d Lehrer gebrauchen."
+
+#: echeck.c:3761
+#, c-format
+msgid "Unit %s can teach %d more students."
+msgstr "Einheit %s kann noch %d Schüler lehren."
+
+#: echeck.c:3726
+#, c-format
+msgid "Unit %s has 0 men and is taught by unit %s."
+msgstr "Einheit %s hat 0 Personen und wird von Einheit %s gelehrt."
+
+#: echeck.c:3730
+#, c-format
+msgid "Unit %s has 0 men and teaches unit %s."
+msgstr "Einheit %s hat 0 Personen und lehrt Einheit %s."
+
+#: echeck.c:3745
+#, c-format
+msgid "Unit %s is taught by unit %s but doesn't learn."
+msgstr "Einheit %s wird gelehrt, lernt aber nicht."
+
+#: echeck.c:3504
+#, c-format
+msgid "Unit TEMP %s has no men and has not recruited any."
+msgstr "Einheit TEMP %s hat nicht rekrutiert und keine Personen bekommen."
+
+#: echeck.c:3491
+#, c-format
+msgid "Unit TEMP %s was never created with MAKE TEMP"
+msgstr "Einheit TEMP %s wurde nicht mit MACHE TEMP erschaffen."
+
+#: echeck.c:4584
 #, c-format
 msgid "cannot read configuration files from %s/%s"
 msgstr "Konfigurationsdateien nicht gefunden in %s/%s"
+
+#: echeck.c:4097
+msgid "who should be taught?"
+msgstr "Wen lehren?"
