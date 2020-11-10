@@ -27,8 +27,13 @@
 #define STAT _stat
 #endif
 
+#ifdef HAVE_GETTEXT
 #include <libintl.h>
 #include <locale.h>
+#else
+#define gettext(X) (X)
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -5341,6 +5346,7 @@ const char * findpath(void) {
 int main(int argc, char *argv[])
 {
   int i, faction_count = 0, unit_count = 0, nextarg = 1;
+#ifdef HAVE_GETTEXT
   setlocale(LC_ALL,"");
   if (0 == fileexists("locale/de/LC_MESSAGES")) {
     bindtextdomain("echeck", "locale");
@@ -5348,6 +5354,7 @@ int main(int argc, char *argv[])
     bindtextdomain("echeck", "/usr/share/locale");
   }
   textdomain("echeck");
+#endif
 #if macintosh
   argc = ccommand(&argv);       /* consolenabruf der parameter fuer  macintosh added 15.6.00 chartus */
 #endif
