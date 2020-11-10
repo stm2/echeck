@@ -1,3 +1,9 @@
+echeck (4.5.0) UNRELEASED; urgency=low
+
+  * Fix segmentation faults
+  * i18n support for version and usage messages
+
+  -- Enno Rehling <enno@eressea.de> Sat, 28 Oct. 2020 19:24:00 +0200
 echeck (4.4.9) UNRELEASED; urgency=low
 
   * Fixed a parser bug related to quote marks and unicode
