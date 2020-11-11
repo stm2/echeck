@@ -99,8 +99,7 @@ static char *Keys[UT_MAX] = {
 #define HAS_SKILL       0x04
 #define HAS_KEYWORD     0x08
 #define HAS_DIRECTION   0x10
-#define HAS_MESSAGES    0x20
-#define HAS_ALL         0x3F
+#define HAS_ALL         0x1F
 
 typedef struct _ech_file {
   const char *name;
@@ -504,7 +503,6 @@ enum {
   ENDWITHOUTTEMP,
   ERRORCOORDINATES,
   ERRORHELP,
-  ERRORINLINE,
   ERRORLEVELPARAMETERS,
   ERROROPINION,
   ERRORREGION,
@@ -519,7 +517,6 @@ enum {
   FOLLOW,
   FOUNDERROR,
   FOUNDERRORS,
-  FOUNDORDERS,
   GIVEWHAT,
   INTERNALCHECK,
   INVALIDEMAIL,
@@ -531,13 +528,11 @@ enum {
   LONGCOMBATNOLONGORDER,
   LONGORDERMISSING,
   MAGIC,
-  MISSINGFILES,
   MISSFILEPARAM,
   MISSFILECMD,
   MISSFILEITEM,
   MISSFILESKILL,
   MISSFILEDIR,
-  MISSFILEMSG,
   MISSINGQUOTES,
   MISSINGDISGUISEPARAMETERS,
   MISSINGEND,
@@ -657,7 +652,6 @@ static const char *Errors[MAX_ERRORS] = {
   "ENDWITHOUTTEMP",
   "ERRORCOORDINATES",
   "ERRORHELP",
-  "ERRORINLINE",
   "ERRORLEVELPARAMETERS",
   "ERROROPINION",
   "ERRORREGION",
@@ -672,7 +666,6 @@ static const char *Errors[MAX_ERRORS] = {
   "FOLLOW",
   "FOUNDERROR",
   "FOUNDERRORS",
-  "FOUNDORDERS",
   "GIVEWHAT",
   "INTERNALCHECK",
   "INVALIDEMAIL",
@@ -684,13 +677,11 @@ static const char *Errors[MAX_ERRORS] = {
   "LONGCOMBATNOLONGORDER",
   "LONGORDERMISSING",
   "MAGIC",
-  "MISSINGFILES",
   "MISSFILEPARAM",
   "MISSFILECMD",
   "MISSFILEITEM",
   "MISSFILESKILL",
   "MISSFILEDIR",
-  "MISSFILEMSG",
   "MISSINGQUOTES",
   "MISSINGDISGUISEPARAMETERS",
   "MISSINGEND",
@@ -1617,7 +1608,8 @@ void Error(const char *text, int line, const char *order)
   if (!brief) {
     switch (compile) {
     case OUT_NORMAL:
-      fprintf(ERR, "%s %d: %s.\n  `%s'\n", Errors[ERRORINLINE], line, text, bf);
+      fprintf(ERR, gettext("Error in line %d"), line);
+      fprintf(ERR, ": %s.\n  `%s'\n", text, bf);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)|0|%s. `%s'\n", filename, line, text, bf);
@@ -1743,13 +1735,14 @@ void warning(const char *s, int line, char *order, char level)
   if (show_warnings && !brief) {
     switch (compile) {
     case OUT_NORMAL:
-      fprintf(ERR, "%s %d: %s.\n  `%s'\n", Errors[WARNINGLINE], line, s, bf);
+      fprintf(ERR, gettext("Warning in line %d:"), line);
+      fprintf(ERR, " %s\n  '%s'\n", s, bf);
       break;
     case OUT_COMPILE:
-      fprintf(ERR, "%s(%d)%d|%s. `%s'\n", filename, line, level, s, bf);
+      fprintf(ERR, "%s(%d)%d|%s `%s'\n", filename, line, level, s, bf);
       break;
     case OUT_MAGELLAN:
-      fprintf(ERR, "%s|%d|%d|%s. `%s'\n", filename, line, level, s, bf);
+      fprintf(ERR, "%s|%d|%d|%s `%s'\n", filename, line, level, s, bf);
       break;
     }
   }
@@ -1764,7 +1757,7 @@ void checkstring(char *s, size_t l, int type)
     awarning(warn_buf, 2);
   }
   if (s[0] == 0 && type == NECESSARY)
-    awarning(Errors[NOTEXT], 1);
+    awarning(gettext("No text."), 1);
 
   strncpy(warn_buf, s, l);
 
@@ -2413,7 +2406,7 @@ void orders_for_unit(int i, unit * u)
 
   k = strchr(order_buf, '[');
   if (!k) {
-    awarning(gettext("Cannot parse this comment."), 4);
+    awarning(gettext("Cannot parse this unit's comment."), 4);
     no_comment++;
     return;
   }
@@ -2421,7 +2414,7 @@ void orders_for_unit(int i, unit * u)
   while (!atoi(k)) {            /* Hier ist eine [ im Namen; 0 Personen  ist nicht in der Zugvorlage */
     k = strchr(k, '[');
     if (!k) {
-      awarning(gettext("Cannot parse this comment."), 4);
+      awarning(gettext("Cannot parse this unit's comment."), 4);
       no_comment++;
       return;
     }
@@ -2433,7 +2426,7 @@ void orders_for_unit(int i, unit * u)
   if (!j)
     j = strchr(k, ';');
   if (!j || j > e) {
-    awarning(gettext("Cannot parse this comment."), 4);
+    awarning(gettext("Cannot parse this unit's comment."), 4);
     no_comment++;
     return;
   }
@@ -4399,7 +4392,7 @@ void checkanorder(char *Orders)
     scat(printkeyword(i));
     break;
   default:
-    anerror(Errors[UNRECOGNIZEDORDER]);
+    anerror(gettext("Unrecognized order"));
   }
   if (does_default != 1) {
     porder();
@@ -4997,15 +4990,19 @@ void process_order_file(int *faction_count, int *unit_count)
       break;
 
     case P_FACTION:
-      if (f && !next)
-        awarning(Errors[MISSINGNEXT], 0);
+      if (f && !next) {
+        awarning(gettext("Missing NEXT"), 0);
+      }
       scat(printparam(P_FACTION));
       befehle_ende = 0;
       f = readafaction();
-      if (compile)
-        fprintf(ERR, "%s:faction:%s\n", filename, itob(f));
-      else
-        fprintf(ERR, Errors[FOUNDORDERS], itob(f));
+      if (compile) {
+        fprintf(ERR, "%s:faction:%s", filename, itob(f));
+      }
+      else {
+        fprintf(ERR, gettext("Found orders for faction %s."), itob(f));
+      }
+      fputc('\n', ERR);
       check_OPTION();           /* Nach PARTEI auf "; OPTION" bzw. ";  ECHECK" testen */
       if (faction_count)
         ++ * faction_count;
@@ -5013,10 +5010,11 @@ void process_order_file(int *faction_count, int *unit_count)
         return;
       if (!compile) {
         if (verbose) {
-          fprintf(ERR, Errors[RECRUITCOSTSSET], rec_cost);
-          fprintf(ERR, Errors[WARNINGLEVEL], show_warnings);
-          if (silberpool)
-            fputs(Errors[SILVERPOOL], ERR);
+          fprintf(ERR, gettext("Recruit costs have been set to %d silver, warning level %d."), rec_cost, show_warnings);
+          fputc('\n', ERR);
+          if (silberpool) {
+            fputs(gettext("Silver pool is active."), ERR);
+          }
           fputs("\n\n", ERR);
         }
       }
@@ -5292,10 +5290,10 @@ int main(int argc, char *argv[])
   }
 
   if (!compile)
-    fprintf(ERR, Errors[ECHECK], echeck_version, __DATE__);
+    fprintf(ERR, gettext("ECheck (Version %s, %s), order file checker for Eressea - freeware!\n\n"), echeck_version, __DATE__);
 
   if (filesread != HAS_ALL) {
-    strcpy(checked_buf, Errors[MISSINGFILES]);
+    strcpy(checked_buf, gettext("Missing files containing: "));
     if (!(filesread & HAS_PARAM)) {
       Scat(Errors[MISSFILEPARAM]);
     }
@@ -5310,9 +5308,6 @@ int main(int argc, char *argv[])
     }
     if (!(filesread & HAS_DIRECTION)) {
       Scat(Errors[MISSFILEDIR]);
-    }
-    if (!(filesread & HAS_MESSAGES)) {
-      Scat(Errors[MISSFILEMSG]);
     }
     fputs(checked_buf, ERR);
     return 5;
@@ -5346,7 +5341,7 @@ int main(int argc, char *argv[])
     } else {
       filename = argv[i];
       if (!compile) {
-        fprintf(ERR, Errors[PROCESSINGFILE], argv[i]);
+        fprintf(ERR, gettext("Processing file '%s'."), argv[i]);
         if (!compact)
           fputc('\n', ERR);
       } else
@@ -5377,9 +5372,9 @@ int main(int argc, char *argv[])
       unit_count);
   fprintf(ERR, gettext("Orders have been read for %s and %s."),
       factions, units);
+    fputc('\n', ERR);
 
   if (unit_count == 0) {
-    fputc('\n', ERR);
     fputs(gettext("Please make sure you have sent in your orders properly.\nRemember that orders must not be sent as HTML or word-documents."), ERR);
     fputc('\n', ERR);
     return -42;
@@ -5388,29 +5383,22 @@ int main(int argc, char *argv[])
   if (!error_count && !warning_count && faction_count && unit_count)
     fputs(gettext("The orders look good."), ERR);
 
-  if (error_count > 1)
-    fprintf(ERR, Errors[FOUNDERRORS], error_count);
-  else if (error_count == 1)
-    fputs(Errors[FOUNDERROR], ERR);
-
-  if (warning_count) {
-    if (error_count)
-      fputs(Errors[AND], ERR);
-    else
-      fputs(Errors[THERE], ERR);
+  if (warning_count > 0) {
+    fprintf(ERR, 
+      ngettext("Detected %d warning", "Detected %d warnings", warning_count),
+      warning_count);
+    if (error_count > 0) {
+      fputs(", ", ERR);
+      fprintf(ERR, 
+        ngettext("%d error", "%d errors", error_count),
+        error_count);
+    }
+    fputc('.', ERR);
   }
-
-  if (warning_count > 1) {
-    if (!error_count)
-      fputs(Errors[WERE], ERR);
-    fprintf(ERR, Errors[WARNINGS], warning_count);
-  } else if (warning_count == 1) {
-    if (!error_count)
-      fputs(Errors[WAS], ERR);
-    fputs(Errors[AWARNING], ERR);
+  else {
+    fprintf(ERR, 
+      ngettext("Detected %d error.", "Detected %d errors.", error_count),
+      error_count);
   }
-
-  if (warning_count || error_count)
-    fputs(Errors[DISCOVERED], ERR);
   return 0;
 }
