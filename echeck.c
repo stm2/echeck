@@ -493,29 +493,8 @@ t_liste *shiptypes = NULL;
 t_liste *herbdata = NULL;
 
 enum {
-  ONEATTACKPERUNIT,
-  ONECARRYPERUNIT,
-  ONEPERSONPERMAGEUNIT,
-  ALREADYUSEDINLINE,
   AND,
-  ASSUMING200STUDYCOSTS,
   AWARNING,
-  BEFOREINCOME,
-  BREEDHORSESORHERBS,
-  BUILDINGNEEDSSILVER,
-  BUYALLNOTPOSSIBLE,
-  CANTATTACKTEMP,
-  CANTDESCRIBEOBJECT,
-  CANTENTEROBJECT,
-  CANTFINDUNIT,
-  CANTHANDLEPERSONCOMMENT,
-  CANTHANDLESILVERCOMMENT,
-  CANTMAINTAINBUILDING,
-  CANTMAKETHAT,
-  CANTREADFILE,
-  CANTRENAMEOBJECT,
-  CHECKYOURORDERS,
-  COMBATSPELLSET,
   DELIVERYTO,
   DIRECTION,
   DISCOVERED,
@@ -667,29 +646,8 @@ enum {
 };
 
 static const char *Errors[MAX_ERRORS] = {
-  "1ATTACKPERUNIT",
-  "1CARRYPERUNIT",
-  "1PERSONPERMAGEUNIT",
-  "ALREADYUSEDINLINE",
   "AND",
-  "ASSUMING200STUDYCOSTS",
   "AWARNING",
-  "BEFOREINCOME",
-  "BREEDHORSESORHERBS",
-  "BUILDINGNEEDSSILVER",
-  "BUYALLNOTPOSSIBLE",
-  "CANTATTACKTEMP",
-  "CANTDESCRIBEOBJECT",
-  "CANTENTEROBJECT",
-  "CANTFINDUNIT",
-  "CANTHANDLEPERSONCOMMENT",
-  "CANTHANDLESILVERCOMMENT",
-  "CANTMAINTAINBUILDING",
-  "CANTMAKETHAT",
-  "CANTREADFILE",
-  "CANTRENAMEOBJECT",
-  "CHECKYOURORDERS",
-  "COMBATSPELLSET",
   "DELIVERYTO",
   "DIRECTION",
   "DISCOVERED",
@@ -1741,7 +1699,7 @@ const char *Uid(int i)
   if (!u)
     u = find_unit(i, 1);
   if (!u) {
-    sprintf(warn_buf, Errors[CANTFINDUNIT], itob(i));
+    sprintf(warn_buf, gettext("Unit %s not found."), itob(i));
     Error(warn_buf, line_no, Errors[INTERNALCHECK]);
     u = newunit(-1, 0);
   }
@@ -2455,7 +2413,7 @@ void orders_for_unit(int i, unit * u)
 
   k = strchr(order_buf, '[');
   if (!k) {
-    awarning(Errors[CANTHANDLEPERSONCOMMENT], 4);
+    awarning(gettext("Cannot parse this comment."), 4);
     no_comment++;
     return;
   }
@@ -2463,7 +2421,7 @@ void orders_for_unit(int i, unit * u)
   while (!atoi(k)) {            /* Hier ist eine [ im Namen; 0 Personen  ist nicht in der Zugvorlage */
     k = strchr(k, '[');
     if (!k) {
-      awarning(Errors[CANTHANDLEPERSONCOMMENT], 4);
+      awarning(gettext("Cannot parse this comment."), 4);
       no_comment++;
       return;
     }
@@ -2475,7 +2433,7 @@ void orders_for_unit(int i, unit * u)
   if (!j)
     j = strchr(k, ';');
   if (!j || j > e) {
-    awarning(Errors[CANTHANDLESILVERCOMMENT], 4);
+    awarning(gettext("Cannot parse this comment."), 4);
     no_comment++;
     return;
   }
@@ -2530,7 +2488,7 @@ void orders_for_temp_unit(unit * u)
     /*
      * in Regionen steht die aktuelle Region drin
      */
-    sprintf(warn_buf, Errors[ALREADYUSEDINLINE],
+    sprintf(warn_buf, gettext("TEMP %s was already used in line %d."),
       itob(u->no), u->start_of_orders_line);
     anerror(warn_buf);
     /*
@@ -2632,7 +2590,7 @@ void checknaming(void)
     break;
 
   default:
-    anerror(Errors[CANTRENAMEOBJECT]);
+    anerror(gettext("his object cannot be renamed."));
   }
 }
 
@@ -2659,7 +2617,7 @@ void checkdisplay(void)
     break;
 
   default:
-    anerror(Errors[CANTDESCRIBEOBJECT]);
+    anerror(gettext("This object cannot be described."));
   }
 }
 
@@ -2711,7 +2669,7 @@ void checkenter(void)
       bcat(n);
     break;
   default:
-    anerror(Errors[CANTENTEROBJECT]);
+    anerror(gettext("This object cannot be entered."));
     return;
   }
   check_leave();
@@ -2792,7 +2750,7 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
         strcat(warn_buf, Errors[PRE]);
         break;
       }
-      strcat(warn_buf, Errors[COMBATSPELLSET]);
+      strcat(warn_buf, gettext("comabt magix set."));
       if (show_warnings > 0)    /* nicht bei -w0 */
         awarning(warn_buf, 1);
     }
@@ -2973,7 +2931,7 @@ void getluxuries(int cmd)
   if (n < 1) {
     if (findparam(s) == P_ALLES) {
       if (cmd == K_BUY) {
-        anerror(Errors[BUYALLNOTPOSSIBLE]);
+        anerror(gettext("BUY and ALL cannot be combined."));
         return;
       } else
         scat(printparam(P_ALLES));
@@ -3132,7 +3090,7 @@ void checkmake(void)
    * oder einem Schiff ist. Ist aber trotzdem eine Warnung wert.
    */
   if (s[0])
-    anerror(Errors[CANTMAKETHAT]);
+    anerror(gettext("This cannot be made."));
   else
     awarning(Errors[UNITMUSTBEONSHIP], 4);
   long_order();
@@ -3404,7 +3362,7 @@ int studycost(t_skills * talent)
       i = atoi(s);
     if (i < 100) {
       i = 200;
-      awarning(Errors[ASSUMING200STUDYCOSTS], 2);
+      awarning(gettext("Assuming learning costs of 200 silver"), 2);
     }
     return i;
   }
@@ -3563,14 +3521,18 @@ void check_money(bool do_move)
         }
       }
       if (u->money < 0) {
-        sprintf(warn_buf, Errors[UNITHASSILVER],
-          uid(u), do_move ? Errors[BEFOREINCOME] : "", u->money);
+        sprintf(warn_buf, 
+          do_move ? gettext("Unit %s has %d silver before income.") :
+          gettext("Unit %s has %d silver."),
+          uid(u), u->money);
         warn(warn_buf, u->line_no, 3);
         if (u->unterhalt) {
           if (do_move)
-            sprintf(warn_buf, Errors[BUILDINGNEEDSSILVER], uid(u), -u->money);
+            sprintf(warn_buf, gettext("Unit %s needs %d more silver to maintain a building."),
+              uid(u), -u->money);
           else
-            sprintf(warn_buf, Errors[CANTMAINTAINBUILDING], uid(u), -u->money);
+            sprintf(warn_buf, gettext("Unit %s lacks %d silver to maintain a building."),
+             uid(u), -u->money);
           warn(warn_buf, u->line_no, 1);
         }
       }
@@ -3863,8 +3825,9 @@ void checkanorder(char *Orders)
 
   case K_ATTACK:
     scat(printkeyword(K_ATTACK));
-    if (getaunit(NECESSARY) == 3)
-      anerror(Errors[CANTATTACKTEMP]);
+    if (getaunit(NECESSARY) == 3) {
+      anerror(gettext("Cannot attack a newly formed unit."));
+    }
     if (!attack_warning) {
       /*
        * damit längere Angriffe nicht in Warnungs-Tiraden ausarten
@@ -3873,7 +3836,7 @@ void checkanorder(char *Orders)
       attack_warning = 1;
     }
     if (getaunit(42) == 42) {
-      strcpy(warn_buf, Errors[ONEATTACKPERUNIT]);
+      strcpy(warn_buf, gettext("There must be one ATTACK-order per unit."));
       anerror(warn_buf);
     }
     break;
@@ -3913,7 +3876,7 @@ void checkanorder(char *Orders)
       /* ZÜCHTE PFERDE */
       scat(printparam(i));
     } else if (s && (*s)) {
-      anerror(Errors[BREEDHORSESORHERBS]);
+      anerror(gettext("BREED HORSES or BREED HERBS?"));
     } else {
       /* ZÜCHTE */
     }
@@ -4093,7 +4056,7 @@ void checkanorder(char *Orders)
   case K_TEACH:
     scat(printkeyword(K_TEACH));
     if (!getmoreunits(false))
-      anerror(gettext("who should be taught?"));
+      anerror(gettext("Who should be taught?"));
     long_order();
     break;
 
@@ -4127,7 +4090,7 @@ void checkanorder(char *Orders)
       Scat(sk->name);
       if (unicode_utf8_strcasecmp(sk->name, Errors[MAGIC]) == 0)
         if (order_unit->people > 1)
-          anerror(Errors[ONEPERSONPERMAGEUNIT]);
+          anerror(gettext("Mage units may have only one person."));
     }
     if (sk && !does_default) {
       x = studycost(sk) * order_unit->people;
@@ -4324,7 +4287,7 @@ void checkanorder(char *Orders)
         awarning(Errors[NOCARRIER], 3);
     }
     if (getaunit(42) == 42)
-      anerror(Errors[ONECARRYPERUNIT]);
+      anerror(gettext("There must be one CARRY-order per unit."));
     break;
 
   case K_PIRACY:
@@ -5377,7 +5340,8 @@ int main(int argc, char *argv[])
   for (i = nextarg; i < argc; i++) {
     F = fopen(argv[i], "r");
     if (!F) {
-      fprintf(ERR, Errors[CANTREADFILE], argv[i]);
+      fprintf(ERR, gettext("Cannot read file %s."), argv[i]);
+      fputc('\n', ERR);
       return 2;
     } else {
       filename = argv[i];
@@ -5415,7 +5379,9 @@ int main(int argc, char *argv[])
       factions, units);
 
   if (unit_count == 0) {
-    fputs(Errors[CHECKYOURORDERS], ERR);
+    fputc('\n', ERR);
+    fputs(gettext("Please make sure you have sent in your orders properly.\nRemember that orders must not be sent as HTML or word-documents."), ERR);
+    fputc('\n', ERR);
     return -42;
   }
 

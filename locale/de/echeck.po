@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: echeck 4.4.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-11 00:42+0100\n"
+"POT-Creation-Date: 2020-11-11 19:35+0100\n"
 "PO-Revision-Date: 2020-11-09 17:45+0100\n"
 "Last-Translator: Enno Rehling <enno@eressea.de>\n"
 "Language-Team: German (Deutsch) <echeck@eressea.de>\n"
@@ -17,21 +17,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: echeck.c:5409
+#: echeck.c:5373
 #, c-format
 msgid "%d faction"
 msgid_plural "%d factions"
 msgstr[0] "%d Partei"
 msgstr[1] "%d Parteien"
 
-#: echeck.c:5412
+#: echeck.c:5376
 #, c-format
 msgid "%d unit"
 msgid_plural "%d units"
 msgstr[0] "%d Einheit"
 msgstr[1] "%d Einheiten"
 
-#: echeck.c:4591
+#: echeck.c:4554
 #, c-format
 msgid ""
 "-Ppath  search path for the additional files; locale %s will be appended\n"
@@ -100,72 +100,166 @@ msgstr ""
 "-Q      Leise\n"
 "-C      Kompakte Ausgabe\n"
 
-#: echeck.c:1654
+#: echeck.c:1612
 msgid "<--MISSING-->"
 msgstr "<--FEHLT-->"
 
-#: echeck.c:2821
+#: echeck.c:3365
+msgid "Assuming learning costs of 200 silver"
+msgstr ""
+
+#: echeck.c:3879
+msgid "BREED HORSES or BREED HERBS?"
+msgstr ""
+
+#: echeck.c:2934
+msgid "BUY and ALL cannot be combined."
+msgstr ""
+
+#: echeck.c:3829
+msgid "Cannot attack a newly formed unit."
+msgstr ""
+
+#: echeck.c:2416 echeck.c:2424 echeck.c:2436
+msgid "Cannot parse this comment."
+msgstr ""
+
+#: echeck.c:5343
+#, c-format
+msgid "Cannot read file %s."
+msgstr ""
+
+#: echeck.c:4093
+msgid "Mage units may have only one person."
+msgstr ""
+
+#: echeck.c:2779
 msgid "New units cannot GIVE anything!"
 msgstr "Neue Einheiten können nichts übergeben."
 
-#: echeck.c:3300
+#: echeck.c:3258
 msgid "New units cannot use RESERVE, try using GIVE instead."
 msgstr "Neue Einheiten könenn nichts reservieren."
 
-#: echeck.c:5414
+#: echeck.c:5378
 #, c-format
 msgid "Orders have been read for %s and %s."
 msgstr ""
 
-#: echeck.c:1805
+#: echeck.c:5383
+msgid ""
+"Please make sure you have sent in your orders properly.\n"
+"Remember that orders must not be sent as HTML or word-documents."
+msgstr ""
+
+#: echeck.c:2491
+#, c-format
+msgid "TEMP %s was already used in line %d."
+msgstr ""
+
+#: echeck.c:1763
 #, c-format
 msgid "Text too long (max. %d characters)"
 msgstr "Text zu lang (max %d Zeichen)."
 
-#: echeck.c:5423
+#: echeck.c:5389
 msgid "The orders look good."
 msgstr ""
 
-#: echeck.c:3764
+#: echeck.c:3839
+msgid "There must be one ATTACK-order per unit."
+msgstr ""
+
+#: echeck.c:4290
+msgid "There must be one CARRY-order per unit."
+msgstr ""
+
+#: echeck.c:3093
+msgid "This cannot be made."
+msgstr ""
+
+#: echeck.c:2620
+msgid "This object cannot be described."
+msgstr ""
+
+#: echeck.c:2672
+msgid "This object cannot be entered."
+msgstr ""
+
+#: echeck.c:3726
 #, c-format
 msgid "Unit %s Unit could benefit from %d more teachers."
 msgstr "Einheit %s kann noch %d Lehrer gebrauchen."
 
-#: echeck.c:3760
+#: echeck.c:3722
 #, c-format
 msgid "Unit %s can teach %d more students."
 msgstr "Einheit %s kann noch %d Schüler lehren."
 
-#: echeck.c:3725
+#: echeck.c:3525
+#, c-format
+msgid "Unit %s has %d silver before income."
+msgstr ""
+
+#: echeck.c:3526
+#, c-format
+msgid "Unit %s has %d silver."
+msgstr ""
+
+#: echeck.c:3687
 #, c-format
 msgid "Unit %s has 0 men and is taught by unit %s."
 msgstr "Einheit %s hat 0 Personen und wird von Einheit %s gelehrt."
 
-#: echeck.c:3729
+#: echeck.c:3691
 #, c-format
 msgid "Unit %s has 0 men and teaches unit %s."
 msgstr "Einheit %s hat 0 Personen und lehrt Einheit %s."
 
-#: echeck.c:3744
+#: echeck.c:3706
 #, c-format
 msgid "Unit %s is taught by unit %s but doesn't learn."
 msgstr "Einheit %s wird gelehrt, lernt aber nicht."
 
-#: echeck.c:3503
+#: echeck.c:3534
+#, c-format
+msgid "Unit %s lacks %d silver to maintain a building."
+msgstr ""
+
+#: echeck.c:3531
+#, c-format
+msgid "Unit %s needs %d more silver to maintain a building."
+msgstr ""
+
+#: echeck.c:1702
+#, c-format
+msgid "Unit %s not found."
+msgstr ""
+
+#: echeck.c:3461
 #, c-format
 msgid "Unit TEMP %s has no men and has not recruited any."
 msgstr "Einheit TEMP %s hat nicht rekrutiert und keine Personen bekommen."
 
-#: echeck.c:3490
+#: echeck.c:3448
 #, c-format
 msgid "Unit TEMP %s was never created with MAKE TEMP"
 msgstr "Einheit TEMP %s wurde nicht mit MACHE TEMP erschaffen."
 
-#: echeck.c:4583
+#: echeck.c:4059
+#, fuzzy
+msgid "Who should be taught?"
+msgstr "Wen lehren?"
+
+#: echeck.c:4546
 #, c-format
 msgid "cannot read configuration files from %s/%s"
 msgstr "Konfigurationsdateien nicht gefunden in %s/%s"
 
-#: echeck.c:4096
-msgid "who should be taught?"
-msgstr "Wen lehren?"
+#: echeck.c:2753
+msgid "comabt magix set."
+msgstr ""
+
+#: echeck.c:2593
+msgid "his object cannot be renamed."
+msgstr ""
