@@ -21,8 +21,8 @@ msgstr ""
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Fehler"
+msgstr[1] "%d Fehler"
 
 #: echeck.c:5368
 #, c-format
@@ -140,15 +140,15 @@ msgstr ""
 #, c-format
 msgid "Detected %d error."
 msgid_plural "Detected %d errors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Fehler gefunden."
+msgstr[1] "%d Fehler gefunden."
 
 #: echeck.c:5388
 #, c-format
 msgid "Detected %d warning"
 msgid_plural "Detected %d warnings"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Warnung gefunden."
+msgstr[1] "%d Warnungen gefunden."
 
 #: echeck.c:5293
 #, c-format
@@ -160,16 +160,16 @@ msgstr ""
 #: echeck.c:1611
 #, c-format
 msgid "Error in line %d"
-msgstr ""
+msgstr "Fehler in Zeile %d"
 
 #: echeck.c:5003
 #, c-format
 msgid "Found orders for faction %s."
-msgstr ""
+msgstr "Befehle für Partei %s gefunden."
 
 #: echeck.c:4086
 msgid "Mage units may have only one person."
-msgstr ""
+msgstr "Magier dürfen nur eine Person haben."
 
 #: echeck.c:4994
 msgid "Missing NEXT"
@@ -189,7 +189,7 @@ msgstr "Neue Einheiten könenn nichts reservieren."
 
 #: echeck.c:1760
 msgid "No text."
-msgstr ""
+msgstr "Kein Text."
 
 #: echeck.c:5373
 #, c-format
@@ -214,7 +214,7 @@ msgstr ""
 
 #: echeck.c:5016
 msgid "Silver pool is active."
-msgstr ""
+msgstr "Silberpool ist aktiv."
 
 #: echeck.c:2484
 #, c-format
@@ -228,7 +228,7 @@ msgstr "Text zu lang (max %d Zeichen)."
 
 #: echeck.c:5384
 msgid "The orders look good."
-msgstr ""
+msgstr "Die Befehle scheinen in Ordnung zu sein."
 
 #: echeck.c:3832
 msgid "There must be one ATTACK-order per unit."
@@ -240,7 +240,7 @@ msgstr ""
 
 #: echeck.c:3086
 msgid "This cannot be made."
-msgstr ""
+msgstr "Das kann man nicht machen."
 
 #: echeck.c:2613
 msgid "This object cannot be described."
@@ -298,7 +298,7 @@ msgstr ""
 #: echeck.c:1694
 #, c-format
 msgid "Unit %s not found."
-msgstr ""
+msgstr "Einheit %s nicht gefunden."
 
 #: echeck.c:3454
 #, c-format
@@ -312,12 +312,12 @@ msgstr "Einheit TEMP %s wurde nicht mit MACHE TEMP erschaffen."
 
 #: echeck.c:4395
 msgid "Unrecognized order"
-msgstr ""
+msgstr "Unbekannter Befehl"
 
 #: echeck.c:1738
 #, c-format
 msgid "Warning in line %d:"
-msgstr ""
+msgstr "Warnung in Zeile %d:"
 
 #: echeck.c:4052
 #, fuzzy
@@ -330,7 +330,7 @@ msgid "cannot read configuration files from %s/%s"
 msgstr "Konfigurationsdateien nicht gefunden in %s/%s"
 
 #: echeck.c:2746
-msgid "comabt magix set."
+msgid "combat magic set."
 msgstr ""
 
 #: echeck.c:2586

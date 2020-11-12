@@ -2743,7 +2743,7 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
         strcat(warn_buf, Errors[PRE]);
         break;
       }
-      strcat(warn_buf, gettext("comabt magix set."));
+      strcat(warn_buf, gettext("combat magic set."));
       if (show_warnings > 0)    /* nicht bei -w0 */
         awarning(warn_buf, 1);
     }
