@@ -504,11 +504,8 @@ enum {
   ERRORCOORDINATES,
   ERRORHELP,
   ERRORLEVELPARAMETERS,
-  ERROROPINION,
   ERRORREGION,
   ERRORREGIONPARAMETER,
-  ERRORSPELLSYNTAX,
-  ERRORSURVEY,
   FACTION,
   FACTIONS,
   FACTION0USED,
@@ -653,11 +650,8 @@ static const char *Errors[MAX_ERRORS] = {
   "ERRORCOORDINATES",
   "ERRORHELP",
   "ERRORLEVELPARAMETERS",
-  "ERROROPINION",
   "ERRORREGION",
   "ERRORREGIONPARAMETER",
-  "ERRORSPELLSYNTAX",
-  "ERRORSURVEY",
   "FACTION",
   "FACTIONS",
   "FACTION0USED",
@@ -1636,7 +1630,7 @@ int btoi(char *s)
   *s = 0;
   s = x;
   if (strlen(s) > 4) {
-    sprintf(message_buf, "%s: `%s'. %s", Errors[NTOOBIG], s, Errors[USED1]);
+    sprintf(message_buf, gettext("Number too big: '%s'. Using 1 instead."), s);
     anerror(message_buf);
     return 1;
   }
@@ -2210,11 +2204,12 @@ void getafaction(char *s)
   int i;
 
   i = btoi(s);
-  if (!s[0])
-    anerror(Errors[FACTIONMISSING]);
+  if (!s[0]) {
+    anerror(gettext("Faction missing."));
+  }
   else {
     if (!i)
-      awarning(Errors[FACTION0USED], 1);
+      awarning(gettext("Faction 0 used."), 1);
     icat(i);
   }
 }
@@ -2234,7 +2229,7 @@ int getmoreunits(bool partei)
     if (partei) {
       i = btoi(s);
       if (i < 1) {
-        sprintf(warn_buf, Errors[FACTIONINVALID], s);
+        sprintf(warn_buf, gettext("Faction '%s' invalid"), s);
         anerror(warn_buf);
       } else
         bcat(i);
@@ -2681,7 +2676,7 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
   int p;
 
   if (*s == '[' || *s == '<') {
-    anerror(Errors[ERRORSPELLSYNTAX]);
+    anerror(gettext("Do not use [ ] and < >."));
     return 0;
   }
   if (findparam(s) == P_REGION) {
@@ -2695,11 +2690,11 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
         p = atoi(s);
         icat(p);
       } else {
-        anerror(Errors[ERRORCOORDINATES]);
+        anerror(gettext("Error with region coordinates."));
         return 0;
       }
     } else {
-      anerror(Errors[ERRORREGIONPARAMETER]);
+      anerror(gettext("Error with REGION parameter."));
       return 0;
     }
     s = getstr();
@@ -2708,7 +2703,7 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
     scat(printparam(P_LEVEL));
     s = getstr();
     if (!*s || atoi(s) < 1) {
-      anerror(Errors[ERRORLEVELPARAMETERS]);
+      anerror(gettext("Error with LEVEL parameter."));
       return 0;
     }
     p = atoi(s);
@@ -3325,7 +3320,7 @@ void check_ally(void)
     Scat(printparam(i));
     break;
   default:
-    anerror(Errors[ERRORHELP]);
+    anerror(gettext("Illegal argument for HELP."));
     return;
   }
 
@@ -3907,8 +3902,9 @@ void checkanorder(char *Orders)
     break;
 
   case K_END:
-    if (from_temp_unit_no == 0)
-      awarning(Errors[ENDWITHOUTTEMP], 2);
+    if (from_temp_unit_no == 0) {
+      awarning(gettext("No matching MAKE TEMP for END."), 2);
+    }
     scat(printkeyword(K_END));
     indent = next_indent = INDENT_ORDERS;
     end_unit_orders();
@@ -4967,7 +4963,7 @@ void process_order_file(int *faction_count, int *unit_count)
       } else
         Rx = Ry = -10000;
       if (Rx < -9999 || Ry < -9999)
-        awarning(Errors[ERRORREGION], 0);
+        awarning(gettext("Error with REGION."), 0);
       r = addregion(Rx, Ry, 0);
       r->line_no = line_no;
       x = strchr(order_buf, ';');
