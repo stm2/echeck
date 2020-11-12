@@ -521,7 +521,6 @@ enum {
   ISUSEDIN2REGIONS,
   ISNOTCOMBATSPELL,
   ITEM,
-  LINETOOLONG,
   LONGCOMBATNOLONGORDER,
   LONGORDERMISSING,
   MAGIC,
@@ -530,7 +529,6 @@ enum {
   MISSFILEITEM,
   MISSFILESKILL,
   MISSFILEDIR,
-  MISSINGQUOTES,
   MISSINGDISGUISEPARAMETERS,
   MISSINGEND,
   MISSINGFACTIONNUMBER,
@@ -606,7 +604,6 @@ enum {
   UNITMOVESTOOFAR,
   UNITMUSTBEONSHIP,
   UNITNOTONSHIPBUTONSHIP,
-  UNITNOTPOSSIBLEHERE,
   UNITONSHIPHASMOVED,
   UNRECOGNIZEDDIRECTION,
   UNRECOGNIZEDOBJECT,
@@ -633,7 +630,6 @@ enum {
   WRONGPARAMETER,
   CANTCHANGELOCALE,
   MAINTAINANCEMOVED,
-  NOSPACEHERE,
   MAX_ERRORS
 };
 
@@ -667,7 +663,6 @@ static const char *Errors[MAX_ERRORS] = {
   "ISUSEDIN2REGIONS",
   "ISNOTCOMBATSPELL",
   "ITEM",
-  "LINETOOLONG",
   "LONGCOMBATNOLONGORDER",
   "LONGORDERMISSING",
   "MAGIC",
@@ -676,7 +671,6 @@ static const char *Errors[MAX_ERRORS] = {
   "MISSFILEITEM",
   "MISSFILESKILL",
   "MISSFILEDIR",
-  "MISSINGQUOTES",
   "MISSINGDISGUISEPARAMETERS",
   "MISSINGEND",
   "MISSINGFACTIONNUMBER",
@@ -752,7 +746,6 @@ static const char *Errors[MAX_ERRORS] = {
   "UNITMOVESTOOFAR",
   "UNITMUSTBEONSHIP",
   "UNITNOTONSHIPBUTONSHIP",
-  "UNITNOTPOSSIBLEHERE",
   "UNITONSHIPHASMOVED",
   "UNRECOGNIZEDDIRECTION",
   "UNRECOGNIZEDOBJECT",
@@ -779,7 +772,6 @@ static const char *Errors[MAX_ERRORS] = {
   "WRONGPARAMETER",
   "CANTCHANGELOCALE",
   "MAINTAINANCEMOVED",
-  "NOSPACEHERE"
 };
 
 typedef struct _names {
@@ -1630,7 +1622,7 @@ int btoi(char *s)
   *s = 0;
   s = x;
   if (strlen(s) > 4) {
-    sprintf(message_buf, gettext("Number too big: '%s'. Using 1 instead."), s);
+    sprintf(message_buf, gettext("Number too big: '%s'. Using 1 instead"), s);
     anerror(message_buf);
     return 1;
   }
@@ -1686,7 +1678,7 @@ const char *Uid(int i)
     u = find_unit(i, 1);
   if (!u) {
     sprintf(warn_buf, gettext("Unit %s not found."), itob(i));
-    Error(warn_buf, line_no, Errors[INTERNALCHECK]);
+    Error(warn_buf, line_no, "<internal check>");
     u = newunit(-1, 0);
   }
   sprintf(bf, "%s%s", u->temp != 0 ? "TEMP " : "", itob(u->no));
@@ -1703,7 +1695,8 @@ void warn(char *s, int line, char level)
   if (show_warnings && !brief) {
     switch (compile) {
     case OUT_NORMAL:
-      fprintf(ERR, "%s %d: %s\n", Errors[WARNINGLINE], line, s);
+      fprintf(ERR, gettext("Warning in line %d"), line);
+      fprintf(ERR, ": %s\n", s);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)|%d|%s\n", filename, line, level, s);
@@ -1730,13 +1723,13 @@ void warning(const char *s, int line, char *order, char level)
     switch (compile) {
     case OUT_NORMAL:
       fprintf(ERR, gettext("Warning in line %d:"), line);
-      fprintf(ERR, " %s\n  '%s'\n", s, bf);
+      fprintf(ERR, " %s.\n  '%s'\n", s, bf);
       break;
     case OUT_COMPILE:
-      fprintf(ERR, "%s(%d)%d|%s `%s'\n", filename, line, level, s, bf);
+      fprintf(ERR, "%s(%d)%d|%s `%s.'\n", filename, line, level, s, bf);
       break;
     case OUT_MAGELLAN:
-      fprintf(ERR, "%s|%d|%d|%s `%s'\n", filename, line, level, s, bf);
+      fprintf(ERR, "%s|%d|%d|%s `%s.'\n", filename, line, level, s, bf);
       break;
     }
   }
@@ -1751,7 +1744,7 @@ void checkstring(char *s, size_t l, int type)
     awarning(warn_buf, 2);
   }
   if (s[0] == 0 && type == NECESSARY)
-    awarning(gettext("No text."), 1);
+    awarning(gettext("No text"), 1);
 
   strncpy(warn_buf, s, l);
 
@@ -1859,7 +1852,7 @@ unit *newunit(int n, int t)
   }
 
   if (u->temp < 0) {
-    sprintf(warn_buf, Errors[ISUSEDIN2REGIONS], itob(u->no), Rx, Ry,
+    sprintf(warn_buf, gettext("TEMP %s is used in region %d, %d and region %d, %d (line %d)"), itob(u->no), Rx, Ry,
       u->newx, u->newy, u->start_of_orders_line);
     anerror(warn_buf);
     u->long_order_line = 0;
@@ -1990,7 +1983,7 @@ int findtoken(const char *token, int type)
         else break;
       }
       if ((at_cmd || bang_cmd) && *str < 65) {
-        anerror(Errors[NOSPACEHERE]);
+        anerror(gettext("No space allowed here"));
         return -2;
       }
     }
@@ -2121,7 +2114,7 @@ char *getbuf(void)
       while (bp && !lbuf[MAXLINE - 1] && lbuf[MAXLINE - 2] != '\n')
         bp = fgetbuffer(warn_buf, 1024, F);
       sprintf(warn_buf, "%.30s", lbuf);
-      Error(Errors[LINETOOLONG], line_no, warn_buf);
+      Error(gettext("Line too long"), line_no, warn_buf);
       bp = lbuf;
     }
     cont = false;
@@ -2165,7 +2158,7 @@ char *getbuf(void)
       if (!report) {
         report = true;
         sprintf(lbuf, "%.30s", warn_buf);
-        Error(Errors[LINETOOLONG], line_no, lbuf);
+        Error(gettext("Line too long"), line_no, lbuf);
       }
     }
     *cp = 0;
@@ -2173,7 +2166,7 @@ char *getbuf(void)
   while (cont || cp == warn_buf);
 
   if (quote)
-    Error(Errors[MISSINGQUOTES], line_no, lbuf);
+    Error(gettext("Missing \"."), line_no, lbuf);
 
   return warn_buf;
 }
@@ -2205,11 +2198,11 @@ void getafaction(char *s)
 
   i = btoi(s);
   if (!s[0]) {
-    anerror(gettext("Faction missing."));
+    anerror(gettext("Faction missing"));
   }
   else {
     if (!i)
-      awarning(gettext("Faction 0 used."), 1);
+      awarning(gettext("Faction 0 used"), 1);
     icat(i);
   }
 }
@@ -2243,7 +2236,7 @@ int getmoreunits(bool partei)
       i = btoi(s);
 
       if (!i) {
-        sprintf(warn_buf, Errors[UNITNOTPOSSIBLEHERE], s);
+        sprintf(warn_buf, gettext("Unit '%s' is not possible here"), s);
         anerror(warn_buf);
       } else {
         bcat(i);
@@ -2269,7 +2262,7 @@ int getaunit(int type)
   s = getstr();
   if (s[0] == 0) {
     if (type == NECESSARY) {
-      anerror(Errors[UNITMISSING]);
+      anerror(gettext("Missing unit"));
       return 0;
     }
     return 1;
@@ -2336,17 +2329,17 @@ void checkemail(void)
   checkstring(addr, DESCRIBESIZE, NECESSARY);
 
   if (!addr) {
-    awarning(Errors[USEEMAIL], 3);
-    sprintf(bf, "; %s!", Errors[USEEMAIL]);
+    awarning(gettext("Please set email with EMAIL"), 3);
+    sprintf(bf, "; %s!", gettext("Please set email with EMAIL"));
     scat(bf);
     return;
   }
   s = strchr(addr, '@');
   if (!s) {
-    anerror(Errors[INVALIDEMAIL]);
+    anerror(gettext("invalid email address"));
     return;
   }
-  scat(Errors[DELIVERYTO]);
+  scat(gettext("; Delivery to"));
   scat(addr);
 }
 
@@ -5083,7 +5076,7 @@ void process_order_file(int *faction_count, int *unit_count)
         check_comment();
       } else {
         if (f && order_buf[0])
-          awarning(Errors[NOTEXECUTED], 1);
+          awarning(gettext("Not carried out by any unit"), 1);
       }
       get_order();
     }
@@ -5092,7 +5085,7 @@ void process_order_file(int *faction_count, int *unit_count)
   if (igetparam(order_buf) == P_NEXT)   /* diese Zeile wurde ggf. gelesen  und dann kam */
     next = 1;                   /* EOF -> kein Check mehr, next=0... */
   if (f && !next)
-    anerror(Errors[MISSINGNEXT]);
+    anerror(gettext("Missing NEXT"));
 }
 
 void addtoken(tnode * root, const char *str, int id)
