@@ -18,7 +18,9 @@ LFLAGS += -lintl
 endif	
 all: echeck.zip echeck
 
-mofiles: locale/de/LC_MESSAGES/echeck.mo
+pofiles: locale/de/echeck.po 
+
+mofiles: pofiles locale/de/LC_MESSAGES/echeck.mo
 
 install: echeck mofiles
 	install -d $(EXECDIR)
@@ -39,7 +41,7 @@ tags:
 locale/echeck.pot: echeck.c
 	xgettext -d echeck -o $@ -s $^
 
-locale/de/echeck.po: locale/echeck.pot
+locale/%/echeck.po: locale/echeck.pot
 	msgmerge -o $@ $@ $< 
 
 locale/%/LC_MESSAGES/echeck.mo: locale/%/echeck.po 
