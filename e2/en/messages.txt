@@ -56,7 +56,6 @@ ISNOTCOMBATSPELL, ~no
 ITEM, item
 LINETOOLONG, Line too long
 LONGCOMBATNOLONGORDER, Longer combats exclude long orders
-LONGORDERMISSING, Unit %s hasn't got a long order
 MAGIC, Magic
 MISSINGFILES, Missing files containing: 
 MISSFILEPARAM, parameters
@@ -81,7 +80,6 @@ NAMECONTAINSBRACKETS, Names must not contain brackets
 NEEDBOTHCOORDINATES, Both coordinated must be supplied
 NOCARRIER, Can't find unit to carry
 NOFIND, FIND has been replaced by OPTION ADDRESSES
-NOLUXURY, No luxury
 NORMALUNITSONLY, %s is possible with normal units only
 NOSEND, SEND has been renamed into OPTION
 NOSPACEHERE, No space allowed here
@@ -109,7 +107,6 @@ PROCESSINGFILE, Processing file '%s'.
 QUITMSG, Attention! QUIT found! Your faction will be cancelled!
 RECRUITCOSTSSET, Recruit costs have been set to %d silver, 
 REGIONMISSSILVER, There is not enough silver in %s (%d,%d) for upkeep; %d silver is missing.
-RESEARCHHERBSONLY, There is RESEARCH HERBS
 RESERVE0SENSELESS, RESERVE 0 xxx doesn't make any sense
 RESERVEDTOOMUCH, In %s (%d,%d) there was reserved more silver (%d) than available (%d).
 RESERVEWHAT, RESERVE what?
@@ -176,6 +173,5 @@ WRONGFACTIONNUMBER, Wrong faction number
 WRONGFIGHTSTATE, Wrong fight state
 WRONGNUMBER, Wrong number
 WRONGOUTPUTLEVEL, Wrong output level
-WRONGPARAMETER, Wrong parameter
 CANTCHANGELOCALE, Sorry, I can't change the locale-settings while running.\nPlease restart with approriate "-L" parameter
 MAINTAINANCEMOVED, Moved maintainance for building from unit %s to unit %s

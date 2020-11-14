@@ -522,7 +522,6 @@ enum {
   ISNOTCOMBATSPELL,
   ITEM,
   LONGCOMBATNOLONGORDER,
-  LONGORDERMISSING,
   MAGIC,
   MISSFILEPARAM,
   MISSFILECMD,
@@ -544,7 +543,6 @@ enum {
   NEEDBOTHCOORDINATES,
   NOCARRIER,
   NOFIND,
-  NOLUXURY,
   NORMALUNITSONLY,
   NOSEND,
   NOTEMPNUMBER,
@@ -552,10 +550,7 @@ enum {
   NOTEXT,
   NOTFOUND,
   NTOOBIG,
-  NUMBER0SENSELESS,
-  NUMBERNOTPOSSIBLE,
   NUMCASTLEMISSING,
-  NUMLUXURIESMISSING,
   NUMMISSING,
   OBJECTNUMBERMISSING,
   ONLYSABOTAGESHIP,
@@ -571,7 +566,6 @@ enum {
   QUITMSG,
   RECRUITCOSTSSET,
   REGIONMISSSILVER,
-  RESEARCHHERBSONLY,
   RESERVE0SENSELESS,
   RESERVEDTOOMUCH,
   RESERVEWHAT,
@@ -589,24 +583,20 @@ enum {
   UNIT0NOTPOSSIBLE,
   UNIT0USED,
   UNITALREADYHAS,
-  UNITALREADYHASLONGORDERS,
   UNITALREADYHASMOVED,
   UNITALREADYHASORDERS,
   UNITHASNTPERSONS,
   UNITHASPERSONS,
   UNITHASSILVER,
   UNITLOSESITEMS,
-  UNITMISSCONTROL,
   UNITMISSING,
   UNITMISSPERSON,
   UNITMISSSILVER,
   UNITMOVESSHIP,
   UNITMOVESTOOFAR,
   UNITMUSTBEONSHIP,
-  UNITNOTONSHIPBUTONSHIP,
   UNITONSHIPHASMOVED,
   UNRECOGNIZEDDIRECTION,
-  UNRECOGNIZEDOBJECT,
   UNRECOGNIZEDOPTION,
   UNRECOGNIZEDORDER,
   UNRECOGNIZEDPOTION,
@@ -627,7 +617,6 @@ enum {
   WRONGFIGHTSTATE,
   WRONGNUMBER,
   WRONGOUTPUTLEVEL,
-  WRONGPARAMETER,
   CANTCHANGELOCALE,
   MAINTAINANCEMOVED,
   MAX_ERRORS
@@ -664,7 +653,6 @@ static const char *Errors[MAX_ERRORS] = {
   "ISNOTCOMBATSPELL",
   "ITEM",
   "LONGCOMBATNOLONGORDER",
-  "LONGORDERMISSING",
   "MAGIC",
   "MISSFILEPARAM",
   "MISSFILECMD",
@@ -686,7 +674,6 @@ static const char *Errors[MAX_ERRORS] = {
   "NEEDBOTHCOORDINATES",
   "NOCARRIER",
   "NOFIND",
-  "NOLUXURY",
   "NORMALUNITSONLY",
   "NOSEND",
   "NOTEMPNUMBER",
@@ -694,10 +681,7 @@ static const char *Errors[MAX_ERRORS] = {
   "NOTEXT",
   "NOTFOUND",
   "NTOOBIG",
-  "NUMBER0SENSELESS",
-  "NUMBERNOTPOSSIBLE",
   "NUMCASTLEMISSING",
-  "NUMLUXURIESMISSING",
   "NUMMISSING",
   "OBJECTNUMBERMISSING",
   "ONLYSABOTAGESHIP",
@@ -713,7 +697,6 @@ static const char *Errors[MAX_ERRORS] = {
   "QUITMSG",
   "RECRUITCOSTSSET",
   "REGIONMISSSILVER",
-  "RESEARCHHERBSONLY",
   "RESERVE0SENSELESS",
   "RESERVEDTOOMUCH",
   "RESERVEWHAT",
@@ -731,24 +714,20 @@ static const char *Errors[MAX_ERRORS] = {
   "UNIT0NOTPOSSIBLE",
   "UNIT0USED",
   "UNITALREADYHAS",
-  "UNITALREADYHASLONGORDERS",
   "UNITALREADYHASMOVED",
   "UNITALREADYHASORDERS",
   "UNITHASNTPERSONS",
   "UNITHASPERSONS",
   "UNITHASSILVER",
   "UNITLOSESITEMS",
-  "UNITMISSCONTROL",
   "UNITMISSING",
   "UNITMISSPERSON",
   "UNITMISSSILVER",
   "UNITMOVESSHIP",
   "UNITMOVESTOOFAR",
   "UNITMUSTBEONSHIP",
-  "UNITNOTONSHIPBUTONSHIP",
   "UNITONSHIPHASMOVED",
   "UNRECOGNIZEDDIRECTION",
-  "UNRECOGNIZEDOBJECT",
   "UNRECOGNIZEDOPTION",
   "UNRECOGNIZEDORDER",
   "UNRECOGNIZEDPOTION",
@@ -769,7 +748,6 @@ static const char *Errors[MAX_ERRORS] = {
   "WRONGFIGHTSTATE",
   "WRONGNUMBER",
   "WRONGOUTPUTLEVEL",
-  "WRONGPARAMETER",
   "CANTCHANGELOCALE",
   "MAINTAINANCEMOVED",
 };
@@ -2354,7 +2332,7 @@ void end_unit_orders(void)
 
   if (order_unit->lives > 0 && !order_unit->long_order_line
     && order_unit->people > 0) {
-    sprintf(warn_buf, Errors[LONGORDERMISSING], uid(order_unit));
+    sprintf(warn_buf, gettext("Unit %s has no long order"), uid(order_unit));
     warning(warn_buf, order_unit->start_of_orders_line,
       order_unit->start_of_orders, 2);
   }
@@ -2370,7 +2348,7 @@ void orders_for_unit(int i, unit * u)
   set_order_unit(mother_unit = u);
 
   if (u->start_of_orders_line) {
-    sprintf(warn_buf, Errors[UNITALREADYHASORDERS],
+    sprintf(warn_buf, gettext("Unit %s already has a long order in line %d"),
       uid(u), u->start_of_orders_line);
     do {
       i++;
@@ -2379,8 +2357,7 @@ void orders_for_unit(int i, unit * u)
       u = newunit(i, 0);
     }
     while (u->start_of_orders_line);
-    strcat(warn_buf, Errors[USINGUNITINSTEAD]);
-    strcat(warn_buf, itob(i));
+    sprintf(warn_buf, gettext("Using unit %s"), itob(i));
     awarning(warn_buf, 1);
     set_order_unit(u);
   }
@@ -2529,7 +2506,7 @@ void long_order(void)
     /*
      * zu lange Befehle kappen
      */
-    sprintf(warn_buf, Errors[UNITALREADYHASLONGORDERS],
+    sprintf(warn_buf, gettext("Unit %s already has a long order in line %d ('%s')"),
       uid(order_unit), order_unit->long_order_line, order_unit->long_order);
     awarning(warn_buf, 1);
   } else {
@@ -2552,11 +2529,11 @@ void checknaming(void)
     s = getstr();
   }
   if (strchr(s, '('))
-    awarning(Errors[NAMECONTAINSBRACKETS], 1);
+    awarning(gettext("Names must not contain brackets"), 1);
 
   switch (i) {
   case -1:
-    anerror(Errors[UNRECOGNIZEDOBJECT]);
+    anerror(gettext("Unrecognized object"));
     break;
 
   case P_ALLIANCE:
@@ -2584,7 +2561,7 @@ void checkdisplay(void)
 
   switch (i) {
   case -1:
-    anerror(Errors[UNRECOGNIZEDOBJECT]);
+    anerror(gettext("Unrecognized object"));
     break;
 
   case P_REGION:
@@ -2636,7 +2613,7 @@ void checkenter(void)
 
   switch (i) {
   case -1:
-    anerror(Errors[UNRECOGNIZEDOBJECT]);
+    anerror(gettext("Unrecognized object"));
     return;
   case P_BUILDING:
   case P_CASTLE:
@@ -2852,7 +2829,7 @@ void checkgiving(void)
               qcat(printliste(i, potionnames));
             }
           } else {
-            awarning(Errors[UNRECOGNIZEDOBJECT], 1);
+            awarning(gettext("Unrecognized object"), 1);
           }
         } else {
           if (piping) {
@@ -2881,12 +2858,12 @@ void checkgiving(void)
   } else if (findparam(s) == P_CONTROL) {
     if (order_unit->ship && !does_default) {
       if (order_unit->ship > 0) {
-        sprintf(warn_buf, Errors[UNITMISSCONTROL], uid(order_unit),
+        sprintf(warn_buf, gettext("Unit %s may lack control over ship %s"), uid(order_unit),
           itob(order_unit->ship));
         awarning(warn_buf, 4);
       } else if (cmd_unit) {
         if (cmd_unit->ship != 0 && abs(cmd_unit->ship) != -order_unit->ship) {
-          sprintf(warn_buf, Errors[UNITNOTONSHIPBUTONSHIP],
+          sprintf(warn_buf, gettext("Unit %s may be on ship %s instead of ship %s"),
             uid(cmd_unit), itob(-order_unit->ship), itob(abs(cmd_unit->ship)));
           awarning(warn_buf, 4);
         }
@@ -2917,7 +2894,7 @@ void getluxuries(int cmd)
       } else
         scat(printparam(P_ALLES));
     } else {
-      anerror(Errors[NUMLUXURIESMISSING]);
+      anerror(gettext("Number of luxury items missing"));
     }
     n = 1;
   }
@@ -2927,7 +2904,7 @@ void getluxuries(int cmd)
   i = finditem(s);
 
   if (ItemPrice(i) < 1)
-    anerror(Errors[NOLUXURY]);
+    anerror(gettext("Not a luxury item"));
   else {
     Scat(ItemName(i, n != 1));
     if (cmd == K_BUY) {         /* Silber abziehen; nur Grundpreis! */
@@ -2950,7 +2927,7 @@ void checkmake(void)
   if (isdigit(*s)) {            /* MACHE anzahl "Gegenstand" */
     j = atoi(s);
     if (j == 0)
-      awarning(Errors[NUMBER0SENSELESS], 2);
+      awarning(gettext("Number 0 does not make sense here"), 2);
     s = getstr();
   }
 
@@ -2966,7 +2943,7 @@ void checkmake(void)
 
   case P_TEMP:
     if (j)
-      anerror(Errors[NUMBERNOTPOSSIBLE]);
+      anerror(gettext("Number is not possible here"));
     next_indent = INDENT_NEW_ORDERS;
     scat(" TEMP");
     j = getb();
@@ -3781,7 +3758,7 @@ void checkanorder(char *Orders)
     if (isdigit(*s)) {          /* BENUTZE anzahl "Trank" */
       i = atoi(s);
       if (i == 0)
-        awarning(Errors[NUMBER0SENSELESS], 2);
+        awarning(gettext("Number 0 does not make sense here"), 2);
       s = getstr();
     }
 
@@ -3844,13 +3821,13 @@ void checkanorder(char *Orders)
     if (isdigit(*s)) {          /* ZÜCHTE anzahl KRÄUTER */
       x = atoi(s);
       if (x <= 0)
-        awarning(Errors[NUMBER0SENSELESS], 2);
+        awarning(gettext("Number 0 does not make sense here"), 2);
       s = getstr();
     }
 
     i = findparam(s);
     if (x > 0 && i != P_HERBS)
-      anerror(Errors[NUMBERNOTPOSSIBLE]);
+      anerror(gettext("Number is not possible here"));
 
     if (i == P_HERBS || i == P_HORSE) {
       /* ZÜCHTE [anzahl] KRÄUTER */
@@ -3913,8 +3890,9 @@ void checkanorder(char *Orders)
     i = getparam();
     if (i == P_HERBS) {
       scat(printparam(P_HERBS));        /* momentan nur FORSCHE KRÄUTER */
-    } else
-      anerror(Errors[RESEARCHHERBSONLY]);
+    } else {
+      anerror(gettext("Only RESEARCH HERBS is allowed"));
+    }
     long_order();
     break;
 
@@ -3942,7 +3920,7 @@ void checkanorder(char *Orders)
             else */
           icat(i);
         } else
-          anerror(Errors[WRONGPARAMETER]);
+          anerror(gettext("Wrong parameter"));
       }
       break;
     }
@@ -4020,7 +3998,7 @@ void checkanorder(char *Orders)
         getafaction(getstr());
         break;
     default:
-        anerror(Errors[WRONGPARAMETER]);
+        anerror(gettext("Wrong parameter"));
     }
 
     break;
