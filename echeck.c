@@ -1617,7 +1617,7 @@ const char *Uid(int i)
   if (!u)
     u = find_unit(i, 1);
   if (!u) {
-    sprintf(warn_buf, gettext("Unit %s not found."), itob(i));
+    sprintf(warn_buf, gettext("Unit %s not found"), itob(i));
     Error(warn_buf, line_no, "<internal check>");
     u = newunit(-1, 0);
   }
@@ -2106,7 +2106,7 @@ char *getbuf(void)
   while (cont || cp == warn_buf);
 
   if (quote)
-    Error(gettext("Missing \"."), line_no, lbuf);
+    Error(gettext("Missing \""), line_no, lbuf);
 
   return warn_buf;
 }
@@ -2333,7 +2333,7 @@ void orders_for_unit(int i, unit * u)
 
   k = strchr(order_buf, '[');
   if (!k) {
-    awarning(gettext("Cannot parse this unit's comment."), 4);
+    awarning(gettext("Cannot parse this unit's comment"), 4);
     no_comment++;
     return;
   }
@@ -2341,7 +2341,7 @@ void orders_for_unit(int i, unit * u)
   while (!atoi(k)) {            /* Hier ist eine [ im Namen; 0 Personen  ist nicht in der Zugvorlage */
     k = strchr(k, '[');
     if (!k) {
-      awarning(gettext("Cannot parse this unit's comment."), 4);
+      awarning(gettext("Cannot parse this unit's comment"), 4);
       no_comment++;
       return;
     }
@@ -2353,7 +2353,7 @@ void orders_for_unit(int i, unit * u)
   if (!j)
     j = strchr(k, ';');
   if (!j || j > e) {
-    awarning(gettext("Cannot parse this unit's comment."), 4);
+    awarning(gettext("Cannot parse this unit's comment"), 4);
     no_comment++;
     return;
   }
@@ -2408,7 +2408,7 @@ void orders_for_temp_unit(unit * u)
     /*
      * in Regionen steht die aktuelle Region drin
      */
-    sprintf(warn_buf, gettext("TEMP %s was already used in line %d."),
+    sprintf(warn_buf, gettext("TEMP %s was already used in line %d"),
       itob(u->no), u->start_of_orders_line);
     anerror(warn_buf);
     /*
@@ -2510,7 +2510,7 @@ void checknaming(void)
     break;
 
   default:
-    anerror(gettext("his object cannot be renamed."));
+    anerror(gettext("This object cannot be renamed"));
   }
 }
 
@@ -2537,7 +2537,7 @@ void checkdisplay(void)
     break;
 
   default:
-    anerror(gettext("This object cannot be described."));
+    anerror(gettext("This object cannot be described"));
   }
 }
 
@@ -2589,7 +2589,7 @@ void checkenter(void)
       bcat(n);
     break;
   default:
-    anerror(gettext("This object cannot be entered."));
+    anerror(gettext("This object cannot be entered"));
     return;
   }
   check_leave();
@@ -2608,7 +2608,7 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
   int p;
 
   if (*s == '[' || *s == '<') {
-    anerror(gettext("Do not use [ ] and < >."));
+    anerror(gettext("Do not use [ ] and < >"));
     return 0;
   }
   if (findparam(s) == P_REGION) {
@@ -2622,11 +2622,11 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
         p = atoi(s);
         icat(p);
       } else {
-        anerror(gettext("Error with region coordinates."));
+        anerror(gettext("Error with region coordinates"));
         return 0;
       }
     } else {
-      anerror(gettext("Error with REGION parameter."));
+      anerror(gettext("Error with REGION parameter"));
       return 0;
     }
     s = getstr();
@@ -2635,7 +2635,7 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
     scat(printparam(P_LEVEL));
     s = getstr();
     if (!*s || atoi(s) < 1) {
-      anerror(gettext("Error with LEVEL parameter."));
+      anerror(gettext("Error with LEVEL parameter"));
       return 0;
     }
     p = atoi(s);
@@ -2670,7 +2670,7 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
         strcat(warn_buf, Errors[PRE]);
         break;
       }
-      strcat(warn_buf, gettext("combat magic set."));
+      strcat(warn_buf, gettext("combat magic set"));
       if (show_warnings > 0)    /* nicht bei -w0 */
         awarning(warn_buf, 1);
     }
@@ -2851,7 +2851,7 @@ void getluxuries(int cmd)
   if (n < 1) {
     if (findparam(s) == P_ALLES) {
       if (cmd == K_BUY) {
-        anerror(gettext("BUY and ALL cannot be combined."));
+        anerror(gettext("BUY and ALL cannot be combined"));
         return;
       } else
         scat(printparam(P_ALLES));
@@ -3010,7 +3010,7 @@ void checkmake(void)
    * oder einem Schiff ist. Ist aber trotzdem eine Warnung wert.
    */
   if (s[0])
-    anerror(gettext("This cannot be made."));
+    anerror(gettext("This cannot be made"));
   else
     awarning(Errors[UNITMUSTBEONSHIP], 4);
   long_order();
@@ -3175,7 +3175,7 @@ void reserve(void)
   scat(printkeyword(K_RESERVE));
 
   if (from_temp_unit_no) {
-    anerror(gettext("New units cannot use RESERVE, try using GIVE instead."));
+    anerror(gettext("New units cannot use RESERVE, try using GIVE instead"));
     return;
   }
 
@@ -3252,7 +3252,7 @@ void check_ally(void)
     Scat(printparam(i));
     break;
   default:
-    anerror(gettext("Illegal argument for HELP."));
+    anerror(gettext("Illegal argument for HELP"));
     return;
   }
 
@@ -3378,7 +3378,7 @@ void check_money(bool do_move)
           if (u->money > 0)
             sprintf(warn_buf, Errors[UNITHASNTPERSONS], itob(u->no));
           else
-            sprintf(warn_buf, gettext("Unit TEMP %s has no men and has not recruited any."), itob(u->no));
+            sprintf(warn_buf, gettext("Unit TEMP %s has no men and has not recruited any"), itob(u->no));
           warn(warn_buf, u->line_no, 2);
         } else if (no_comment <= 0) {
           sprintf(warn_buf, Errors[UNITLOSESITEMS], itob(u->no));
@@ -3442,16 +3442,16 @@ void check_money(bool do_move)
       }
       if (u->money < 0) {
         sprintf(warn_buf, 
-          do_move ? gettext("Unit %s has %d silver before income.") :
-          gettext("Unit %s has %d silver."),
+          do_move ? gettext("Unit %s has %d silver before income") :
+          gettext("Unit %s has %d silver"),
           uid(u), u->money);
         warn(warn_buf, u->line_no, 3);
         if (u->unterhalt) {
           if (do_move)
-            sprintf(warn_buf, gettext("Unit %s needs %d more silver to maintain a building."),
+            sprintf(warn_buf, gettext("Unit %s needs %d more silver to maintain a building"),
               uid(u), -u->money);
           else
-            sprintf(warn_buf, gettext("Unit %s lacks %d silver to maintain a building."),
+            sprintf(warn_buf, gettext("Unit %s lacks %d silver to maintain a building"),
              uid(u), -u->money);
           warn(warn_buf, u->line_no, 1);
         }
@@ -3604,11 +3604,11 @@ void check_teachings(void)
     if (t->teacher) {
       t->teacher->lehrer = t->teacher->people * 10;
       if (t->teacher->lehrer == 0) {
-        sprintf(warn_buf, gettext("Unit %s has 0 men and is taught by unit %s."), uid1(t->student), uid2(t->teacher));
+        sprintf(warn_buf, gettext("Unit %s has 0 men and is taught by unit %s"), uid1(t->student), uid2(t->teacher));
         warn(warn_buf, t->teacher->line_no, 4);
       }
       if (t->student->schueler == 0 && t->student->lives > 0) {
-        sprintf(warn_buf, gettext("Unit %s has 0 men and teaches unit %s."), uid1(t->teacher), uid2(t->student));
+        sprintf(warn_buf, gettext("Unit %s has 0 men and teaches unit %s"), uid1(t->teacher), uid2(t->student));
         warn(warn_buf, t->student->line_no, 4);
       }
     }
@@ -3623,7 +3623,7 @@ void check_teachings(void)
     if (!t->student->lernt) {
       if (t->student->temp)     /* unbekannte TEMP-Einheit, wird * eh  schon angemeckert */
         continue;
-      sprintf(warn_buf, gettext("Unit %s is taught by unit %s but doesn't learn."), uid1(t->student), uid2(t->teacher));
+      sprintf(warn_buf, gettext("Unit %s is taught by unit %s but doesn't learn"), uid1(t->student), uid2(t->teacher));
       warn(warn_buf, t->student->line_no, 2);
       t->student->schueler = 0;
       continue;
@@ -3639,11 +3639,11 @@ void check_teachings(void)
     if (u->lives < 1)
       continue;
     if (u->lehrer > 0) {
-      sprintf(warn_buf, gettext("Unit %s can teach %d more students."), uid(u), u->lehrer);
+      sprintf(warn_buf, gettext("Unit %s can teach %d more students"), uid(u), u->lehrer);
       warn(warn_buf, u->line_no, 5);
     }
     if (u->schueler > 0) {
-      sprintf(warn_buf, gettext("Unit %s Unit could benefit from %d more teachers."),
+      sprintf(warn_buf, gettext("Unit %s Unit could benefit from %d more teachers"),
         uid(u), (u->schueler + 9) / 10);
       warn(warn_buf, u->line_no, 5);
     }
@@ -3746,7 +3746,7 @@ void checkanorder(char *Orders)
   case K_ATTACK:
     scat(printkeyword(K_ATTACK));
     if (getaunit(NECESSARY) == 3) {
-      anerror(gettext("Cannot attack a newly formed unit."));
+      anerror(gettext("Cannot attack a newly formed unit"));
     }
     if (!attack_warning) {
       /*
@@ -3756,7 +3756,7 @@ void checkanorder(char *Orders)
       attack_warning = 1;
     }
     if (getaunit(42) == 42) {
-      strcpy(warn_buf, gettext("There must be one ATTACK-order per unit."));
+      strcpy(warn_buf, gettext("There must be one ATTACK-order per unit"));
       anerror(warn_buf);
     }
     break;
@@ -3835,7 +3835,7 @@ void checkanorder(char *Orders)
 
   case K_END:
     if (from_temp_unit_no == 0) {
-      awarning(gettext("No matching MAKE TEMP for END."), 2);
+      awarning(gettext("No matching MAKE TEMP for END"), 2);
     }
     scat(printkeyword(K_END));
     indent = next_indent = INDENT_ORDERS;
@@ -4008,7 +4008,7 @@ void checkanorder(char *Orders)
       Scat(sk->name);
       if (unicode_utf8_strcasecmp(sk->name, Errors[MAGIC]) == 0)
         if (order_unit->people > 1)
-          anerror(gettext("Mage units may have only one person."));
+          anerror(gettext("Mage units may have only one person"));
     }
     if (sk && !does_default) {
       x = studycost(sk) * order_unit->people;
@@ -4205,7 +4205,7 @@ void checkanorder(char *Orders)
         awarning(Errors[NOCARRIER], 3);
     }
     if (getaunit(42) == 42)
-      anerror(gettext("There must be one CARRY-order per unit."));
+      anerror(gettext("There must be one CARRY-order per unit"));
     break;
 
   case K_PIRACY:
@@ -4892,7 +4892,7 @@ void process_order_file(int *faction_count, int *unit_count)
       } else
         Rx = Ry = -10000;
       if (Rx < -9999 || Ry < -9999)
-        awarning(gettext("Error with REGION."), 0);
+        awarning(gettext("Error with REGION"), 0);
       r = addregion(Rx, Ry, 0);
       r->line_no = line_no;
       x = strchr(order_buf, ';');
@@ -4935,7 +4935,7 @@ void process_order_file(int *faction_count, int *unit_count)
         return;
       if (!compile) {
         if (verbose) {
-          fprintf(ERR, gettext("Recruit costs have been set to %d silver, warning level %d."), rec_cost, show_warnings);
+          fprintf(ERR, gettext("Recruit costs have been set to %d silver, warning level %d"), rec_cost, show_warnings);
           fputc('\n', ERR);
           if (silberpool) {
             fputs(gettext("Silver pool is active."), ERR);
