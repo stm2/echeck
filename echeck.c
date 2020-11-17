@@ -600,25 +600,6 @@ enum {
   UNRECOGNIZEDOPTION,
   UNRECOGNIZEDORDER,
   UNRECOGNIZEDPOTION,
-  UNRECOGNIZEDRACE,
-  UNRECOGNIZEDREPORTOPTION,
-  UNRECOGNIZEDSCHOOL,
-  UNRECOGNIZEDSKILL,
-  UNRECOGNIZEDSPELL,
-  USED1,
-  USEEMAIL,
-  USINGUNITINSTEAD,
-  WARNINGS,
-  WARNINGLEVEL,
-  WARNINGLINE,
-  WAS,
-  WERE,
-  WRONGFACTIONNUMBER,
-  WRONGFIGHTSTATE,
-  WRONGNUMBER,
-  WRONGOUTPUTLEVEL,
-  CANTCHANGELOCALE,
-  MAINTAINANCEMOVED,
   MAX_ERRORS
 };
 
@@ -731,25 +712,6 @@ static const char *Errors[MAX_ERRORS] = {
   "UNRECOGNIZEDOPTION",
   "UNRECOGNIZEDORDER",
   "UNRECOGNIZEDPOTION",
-  "UNRECOGNIZEDRACE",
-  "UNRECOGNIZEDREPORTOPTION",
-  "UNRECOGNIZEDSCHOOL",
-  "UNRECOGNIZEDSKILL",
-  "UNRECOGNIZEDSPELL",
-  "USED1",
-  "USEEMAIL",
-  "USINGUNITINSTEAD",
-  "WARNINGS",
-  "WARNINGLEVEL",
-  "WARNINGLINE",
-  "WAS",
-  "WERE",
-  "WRONGFACTIONNUMBER",
-  "WRONGFIGHTSTATE",
-  "WRONGNUMBER",
-  "WRONGOUTPUTLEVEL",
-  "CANTCHANGELOCALE",
-  "MAINTAINANCEMOVED",
 };
 
 typedef struct _names {
@@ -2590,7 +2552,7 @@ void check_leave(void)
     if (t->region == order_unit->region) {
       t->unterhalt += order_unit->unterhalt;
       strcpy(message_buf, uid(order_unit));
-      sprintf(warn_buf, Errors[MAINTAINANCEMOVED], message_buf, uid(t));
+      sprintf(warn_buf, gettext("Moved maintainance for building from unit %s to unit %s"), message_buf, uid(t));
       break;
     }
   order_unit->unterhalt = 0;    /* ACHTUNG! hierdurch geht die  Unterhaltsinfo verloren! */
@@ -2684,7 +2646,7 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
   if (!sp) {
     if (u) {                    /* sonst ist das der Test von GIB */
       if (show_warnings > 0)    /* nicht bei -w0 */
-        anerror(Errors[UNRECOGNIZEDSPELL]);
+        anerror(gettext("Unrecognized spell"));
       if (*s >= '0' && *s <= '9')
         anerror(Errors[MISSINGPARAMETERS]);
       qcat(s);
@@ -2734,7 +2696,7 @@ void checkgiving(void)
   int i, n;
 
   if (from_temp_unit_no) {
-    anerror(gettext("New units cannot GIVE anything!"));
+    anerror(gettext("New units cannot GIVE anything"));
     return;
   }
   scat(printkeyword(K_GIVE));
@@ -3724,7 +3686,7 @@ void checkanorder(char *Orders)
     }
     Scat(printparam(i));
     if (getaunit(POSSIBLE) != 1)        /* "TEMP xx" oder "0" geht nicht */
-      anerror(Errors[WRONGNUMBER]);
+      anerror(gettext("Wrong number"));
     break;
 
   case K_BANNER:
@@ -3914,10 +3876,6 @@ void checkanorder(char *Orders)
         } else if (findparam(s) == P_NUMBER) {
           Scat(printparam(P_NUMBER));
           i = getb();
-/** siehe http://eressea.upb.de/mantis/view.php?id=887
-            if (!i)
-              anerror(Errors[WRONGFACTIONNUMBER]);
-            else */
           icat(i);
         } else
           anerror(gettext("Wrong parameter"));
@@ -3962,10 +3920,10 @@ void checkanorder(char *Orders)
             if (findparam(s) == P_NOT) {
               Scat(printparam(P_NOT));
             } else
-              anerror(Errors[WRONGFIGHTSTATE]);
+              anerror(gettext("Wrong fight state"));
           }
         } else
-          anerror(Errors[WRONGFIGHTSTATE]);
+          anerror(gettext("Wrong fight state"));
         Scat(s);
       } else
         Scat(printparam(P_FRONT));
@@ -4024,7 +3982,7 @@ void checkanorder(char *Orders)
     scat(printkeyword(K_FORGET));
     sk = getskill();
     if (!sk)
-      anerror(Errors[UNRECOGNIZEDSKILL]);
+      anerror(gettext("Unrecognized skill"));
     else {
       Scat(sk->name);
     }
@@ -4044,7 +4002,7 @@ void checkanorder(char *Orders)
         }
     }
     if (!sk) {
-      anerror(Errors[UNRECOGNIZEDSKILL]);
+      anerror(gettext("Unrecognized skill"));
     }
     else {
       Scat(sk->name);
@@ -4176,7 +4134,7 @@ void checkanorder(char *Orders)
     i = findreport(s);
     if (i == -1) {
       if (unicode_utf8_strncasecmp(s, printkeyword(K_SHOW), strlen(s)))
-        anerror(Errors[UNRECOGNIZEDREPORTOPTION]);
+        anerror(gettext("Unrecognized report option"));
       else {
         Scat(printkeyword(K_SHOW));
       }
@@ -4186,7 +4144,7 @@ void checkanorder(char *Orders)
     s = getstr();
     i = findstr(message_levels, s, ML_MAX);
     if (i == -1) {
-      anerror(Errors[WRONGOUTPUTLEVEL]);
+      anerror(gettext("Wrong output level"));
       break;
     }
     Scat(message_levels[i]);
@@ -4259,7 +4217,7 @@ void checkanorder(char *Orders)
     s = getstr();
     i = findstr(magiegebiet, s, 5);
     if (i < 0) {
-      sprintf(warn_buf, Errors[UNRECOGNIZEDSCHOOL], s);
+      sprintf(warn_buf, gettext("School '%s' does not exist"), s);
       anerror(warn_buf);
     } else {
       scat(printkeyword(K_SCHOOL));
@@ -4313,7 +4271,7 @@ void checkanorder(char *Orders)
   case K_RESTART:
     i = findtoken(getstr(), UT_RACE);
     if (i < 0) {
-      anerror(Errors[UNRECOGNIZEDRACE]);
+      anerror(gettext("Unrecognized race"));
       break;
     } else
       Scat(printliste(i, Rassen));

@@ -156,22 +156,3 @@ UNRECOGNIZEDOBJECT, Unrecognized object
 UNRECOGNIZEDOPTION, Unrecognized option
 UNRECOGNIZEDORDER, Unrecognized order
 UNRECOGNIZEDPOTION, Unrecognized potion
-UNRECOGNIZEDRACE, Unrecognized race
-UNRECOGNIZEDREPORTOPTION, Unrecognized report option
-UNRECOGNIZEDSCHOOL, School "%s" does not exist
-UNRECOGNIZEDSKILL, Unrecognized skill
-UNRECOGNIZEDSPELL, Unrecognized spell
-USED1, Used 1 instead
-USEEMAIL, Please set email with EMAIL
-USINGUNITINSTEAD, Using unit 
-WARNINGS, ~%d warnings.
-WARNINGLEVEL, warning level %d.\n
-WARNINGLINE, Warning in line
-WAS, was
-WERE, were
-WRONGFACTIONNUMBER, Wrong faction number
-WRONGFIGHTSTATE, Wrong fight state
-WRONGNUMBER, Wrong number
-WRONGOUTPUTLEVEL, Wrong output level
-CANTCHANGELOCALE, Sorry, I can't change the locale-settings while running.\nPlease restart with approriate "-L" parameter
-MAINTAINANCEMOVED, Moved maintainance for building from unit %s to unit %s
