@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: echeck 4.4.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-17 02:40+0100\n"
+"POT-Creation-Date: 2020-11-17 02:45+0100\n"
 "PO-Revision-Date: 2020-11-09 17:45+0100\n"
 "Last-Translator: Enno Rehling <enno@eressea.de>\n"
 "Language-Team: German (Deutsch) <echeck@eressea.de>\n"
@@ -296,7 +296,7 @@ msgstr ""
 
 #: echeck.c:5298
 #, c-format
-msgid "Orders have been read for %s and %s"
+msgid "Orders have been read for %s and %s."
 msgstr ""
 
 #: echeck.c:5303
@@ -399,6 +399,11 @@ msgstr "Einheit %s kann noch %d Schüler lehren"
 #: echeck.c:3446
 #, fuzzy, c-format
 msgid "Unit %s has %d silver"
+msgstr "Einheit %s hat %d Silber"
+
+#: echeck.c:3445
+#, fuzzy, c-format
+msgid "Unit %s has %d silver before income"
 msgstr "Einheit %s hat %d Silber"
 
 #: echeck.c:3607

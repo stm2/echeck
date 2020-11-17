@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-17 02:40+0100\n"
+"POT-Creation-Date: 2020-11-17 02:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,7 +170,7 @@ msgstr ""
 
 #: echeck.c:4928
 #, c-format
-msgid "Found orders for faction %s"
+msgid "Found orders for faction %s."
 msgstr ""
 
 #: echeck.c:3255
@@ -290,7 +290,7 @@ msgid "School '%s' does not exist"
 msgstr ""
 
 #: echeck.c:4941
-msgid "Silver pool is active"
+msgid "Silver pool is active."
 msgstr ""
 
 #: echeck.c:1795

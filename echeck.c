@@ -1676,6 +1676,174 @@ void warning(const char *s, int line, char *order, char level)
 }
 
 #define awarning(s, level) warning(s, line_no, order_buf, level)
+#define dwarning(s, level) warning_deprecated(s, line_no, order_buf, level)
+
+static const struct warning {
+  const char *token;
+  const char *message;
+} warnings[] = {
+{"0PERSONSLEARN", " Unit %s has 0 men and is taught by unit "},
+{"0PERSONSTEACH", " Unit %s has 0 men and teaches unit "},
+{"1ATTACKPERUNIT", " There must be one ATTACK-order per unit"},
+{"1CARRYPERUNIT", " There must be one CARRY-order per unit"},
+{"1PERSONPERMAGEUNIT", " Mage units may have only one man"},
+{"ACTIVATED", " ~activated."},
+{"ALREADYUSEDINLINE", "TEMP %s has already been used in line %d"},
+{"AND", " ~and"},
+{"ASSUMING200STUDYCOSTS", " Assuming learnng costs of 200 silver"},
+{"AWARNING", " ~a warning"},
+{"BEFOREINCOME", " before income "},
+{"BREEDHORSESORHERBS", " BREED HORSES or BREED HERBS"},
+{"BUILDINGNEEDSSILVER", " Unit %s needs %d more silver to maintain a building"},
+{"BUTDOESNTLEARN", " ~but doesn't learn"},
+{"BUYALLNOTPOSSIBLE", " BUY and ALL cannot be combined"},
+{"CANTATTACKTEMP", " Temporary units cannot be ATTACKEd"},
+{"CANTDESCRIBEOBJECT", " This object cannot be described"},
+{"CANTENTEROBJECT", " This object cannot be entered"},
+{"CANTFINDUNIT", " Unit %s not found"},
+{"CANTHANDLEPERSONCOMMENT", " Cannot handle comment regarding men"},
+{"CANTHANDLESILVERCOMMENT", " Cannot handle comment regarding silver"},
+{"CANTMAINTAINBUILDING", " Unit %s lacks %d silver to maintain a building"},
+{"CANTMAKETHAT", " This cannot be made"},
+{"CANTREADFILE", " Can't read file '%s'\n"},
+{"CANTRENAMEOBJECT", " This object cannot be renamed"},
+{"CHECKYOURORDERS", " \nPlease check if you have sent in your orders properly.\nKeep in mind that orders must not be sent as HTML, word-documents\nor attachments.\n"},
+{"COMBATSPELLSET", " combat magic set"},
+{"DIRECTION", " <direction>"},
+{"DISCOVERED", " ~\n"},
+{"DOESNTCARRY", " Unit %s rides with unit %s, but the latter doesn't carry the former"},
+{"DOESNTRIDE", " Unit \narries unit %s, but the latter doesn't ride with the former"},
+{"FOLLOW", " FOLLOW UNIT xx, FOLLOW SHIP xx or FOLLOW"},
+{"FOUNDERROR", " There was one error"},
+{"FOUNDERRORS", " There were %d errors"},
+{"FOUNDORDERS", " Found orders for faction %s.\n"},
+{"GIVEWHAT", " Give what?"},
+{"INTERNALCHECK", " <internal check>"},
+{"INVALIDEMAIL", " invalid email address"},
+{"ISCOMBATSPELL", " '%s' is \nombat magic"},
+{"ISUSEDIN2REGIONS", " TEMP %s is used in region %d,%d and region %d,%d (line %d)"},
+{"ISNOTCOMBATSPELL", " ~no"},
+{"ITEM", " item"},
+{"LINETOOLONG", " Line too long"},
+{"LONGCOMBATNOLONGORDER", " Longer combats exclude long orders"},
+{"MAGIC", " Magic"},
+{"MISSINGFILES", " Missing files containing: "},
+{"MISSFILEPARAM", " parameters"},
+{"MISSFILECMD", " commands"},
+{"MISSFILEITEM", " items"},
+{"MISSFILESKILL", " skills"},
+{"MISSFILEDIR", " directions"},
+{"MISSFILEMSG", " messages"},
+{"MISSINGQUOTES", " Missing \""},
+{"MISSINGDISGUISEPARAMETERS", " DISGUISE without parameters"},
+{"MISSINGEND", " TEMPORARY %s lacks closing END"},
+{"MISSINGFACTIONNUMBER", " Missing faction number"},
+{"MISSINGNEXT", " Missing NEXT"},
+{"MISSINGNUMRECRUITS", " Number of recruits missing"},
+{"MISSINGOFFER", " Missing offer"},
+{"MISSINGPARAMETERS", " LEVEL or REGION missing"},
+{"MISSINGPASSWORD", " Missing password"},
+{"MISSINGUNITNUMBER", " Missing unit number"},
+{"MOVENOTPOSSIBLEWITHPAUSE", " MOVE and PAUSE cannot be combined"},
+{"MSGTO", " MESSAGE TO FACTION, MESSAGE TO UNIT or MESSAGE TO REGION"},
+{"NAMECONTAINSBRACKETS", " Names must not contain brackets"},
+{"NEEDBOTHCOORDINATES", " Both coordinated must be supplied"},
+{"NOCARRIER", " Can't find unit to carry"},
+{"NOFIND", " FIND has been replaced by OPTION ADDRESSES"},
+{"NORMALUNITSONLY", " %s is possible with normal units only"},
+{"NOSEND", " SEND has been renamed into OPTION"},
+{"NOSPACEHERE", " No space allowed here"},
+{"NOTEMPNUMBER", " No TEMPORARY number"},
+{"NOTEXECUTED", " Isn't carried out by any unit"},
+{"NOTEXT", " No text"},
+{"NOTFOUND", " not found"},
+{"NUMBER0SENSELESS", " Number 0 doesn't make sense"},
+{"NUMBERNOTPOSSIBLE", " Number is not possible here"},
+{"NUMCASTLEMISSING", " Number of castle missing"},
+{"NUMLUXURIESMISSING", " Number of luxuries missing"},
+{"NUMMISSING", " Number of items/men/silver missing"},
+{"OBJECTNUMBERMISSING", " number of object missing"},
+{"ONLYSABOTAGESHIP", " For now, there is only SABOTAGE SHIP"},
+{"ORDERNUMBER", " NUMBER SHIP, NUMBER CASTLE, NUMBER FACTION or NUMBER UNIT"},
+{"ORDERSOK", " The orders look good.\n"},
+{"ORDERSREAD", " \nOrders have been read for %d %s and %d %s.\n"},
+{"PASSWORDCLEARED", " Password cleared"},
+{"PASSWORDMSG1", " Incorrect passowrd"},
+{"PASSWORDMSG2", " \n\n  ****  A T T E N T I O N !  ****\n\n  ****  Password missing!  ****\n\n"},
+{"PASSWORDMSG3", " ~** ERROR!! **"},
+{"POST", " post-"},
+{"PRE", " pre-"},
+{"PROCESSINGFILE", " Processing file '%s'."},
+{"QUITMSG", " Attention! QUIT found! Your faction will be cancelled!"},
+{"RECRUITCOSTSSET", " Recruit costs have been set to %d silver, "},
+{"REGIONMISSSILVER", " There is not enough silver in %s (%d,%d) for upkeep; %d silver is missing."},
+{"RESERVE0SENSELESS", " RESERVE 0 xxx doesn't make any sense"},
+{"RESERVEDTOOMUCH", " In %s (%d,%d) there was reserved more silver (%d) than available (%d)."},
+{"RESERVEWHAT", " RESERVE what?"},
+{"RESTARTMSG", " RESTART found!"},
+{"RIDESWRONGUNIT", " Unit %s is carried by unit %s but rides with "},
+{"ROUTENOTCYCLIC", " ROUTE is not cyclic; (%d,%d) -> (%d,%d)"},
+{"ROUTESTARTSWITHPAUSE", " ROUTE starts with PAUSE"},
+{"SCHOOLCHOSEN", " School '%s' chosen.\n"},
+{"SEARCHPATHIS", " Search path is"},
+{"SILVERPOOL", " Silver pool is active."},
+{"SORT", " SORT BEFORE or BEHIND <unit>"},
+{"SUPPLYISOBSOLETE", " SUPPLY is obsolete, use @GIVE instead"},
+{"TEACHED", " ."},
+{"TEACHWHO", " Teach who?"},
+{"TEMPHASNTPERSONS", " Unit TEMPORARY %s hasn't got men and hasn't recruited anyone"},
+{"TEMPNOTTEMP", " Unit TEMPORARY %s hasn't been generated with MAKE TEMPORARY"},
+{"TEMPUNITSCANTRESERVE", " TEMPORARY units can't use RESERVE! Use GIVE instead!"},
+{"TEMPUNITSCANTGIVE", " TEMPORARY units can't use GIVE, it happens before MAKE!"},
+{"TEXTTOOLONG", " Text too long (max. %d)"},
+{"THERE", " There "},
+{"UNIT", " unit"},
+{"UNITS", " units"},
+{"UNIT0NOTPOSSIBLE", " Unit 0/Peasants not possible here"},
+{"UNIT0USED", " Unit 0 used"},
+{"UNITALREADYHAS", " Unit %s already has a "},
+{"UNITALREADYHASLONGORDERS", " Unit %s already has a long order in line %d (%s)"},
+{"UNITALREADYHASMOVED", " Unit %s already has moved"},
+{"UNITALREADYHASORDERS", " Unit %s already has got orders in line %d. "},
+{"UNITCANSTILLTEACH", " Unit %s can teach %d more trainees."},
+{"UNITHASNTPERSONS", " Unit TEMPORARY %s hasn't recruited and hasn't got any men! It may lose silver and/or items"},
+{"UNITHASPERSONS", " Unit %s has %d men!"},
+{"UNITHASSILVER", " Unit %s has %s%d silver!"},
+{"UNITISTEACHED", " Unit %s is taught by unit "},
+{"UNITLOSESITEMS", " Unit %s may lose silver and/or items"},
+{"UNITMISSCONTROL", " Unit %s may lack control over ship %s"},
+{"UNITMISSING", " Missing unit"},
+{"UNITMISSPERSON", " Unit %s may have not enough men"},
+{"UNITMISSSILVER", " Unit %s may have not enough silver"},
+{"UNITMOVESSHIP", " Unit %s moves ship %s and may lack control"},
+{"UNITMOVESTOOFAR", " Unit %s may move too far"},
+{"UNITMUSTBEONSHIP", " Unit must be in a castle, in a building or on a ship"},
+{"UNITNEEDSTEACHERS", " Unit \nould make use of %d more teachers"},
+{"UNITNOTONSHIPBUTONSHIP", " Unit %s may be on ship %s instead of ship %s"},
+{"UNITONSHIPHASMOVED", " Unit %s on ship %s has already moved"},
+{"UNRECOGNIZEDDIRECTION", " Unrecognized direction"},
+{"UNRECOGNIZEDOBJECT", " Unrecognized object"},
+{"UNRECOGNIZEDOPTION", " Unrecognized option"},
+{"UNRECOGNIZEDORDER", " Unrecognized order"},
+{"UNRECOGNIZEDPOTION", " Unrecognized potion"},
+  {NULL, NULL }
+};
+
+void warning_deprecated(const char *token, int line_no, char *order_buf, int level)
+{
+  int i;
+  for (i = 0; warnings[i].token; ++i) {
+    int diff = strcmp(warnings[i].token, token);
+    if (diff > 0) {
+      break;
+    }
+    if (diff == 0) {
+      warning(warnings[i].message, line_no, order_buf, level);
+      return;
+    }
+  }
+  warning(token, line_no, order_buf, level);
+}
 
 void checkstring(char *s, size_t l, int type)
 {
@@ -3012,7 +3180,7 @@ void checkmake(void)
   if (s[0])
     anerror(gettext("This cannot be made"));
   else
-    awarning(Errors[UNITMUSTBEONSHIP], 4);
+    dwarning(Errors[UNITMUSTBEONSHIP], 4);
   long_order();
   /*
    * es kam ja eine Meldung - evtl. kennt ECheck das nur nicht?
@@ -3035,7 +3203,7 @@ void checkdirections(int key)
       anerror(Errors[UNRECOGNIZEDDIRECTION]);
     } else {
       if (key == K_ROUTE && i == D_PAUSE && count == 0)
-        awarning(Errors[ROUTESTARTSWITHPAUSE], 2);
+        dwarning(Errors[ROUTESTARTSWITHPAUSE], 2);
       if (key == K_MOVE && i == D_PAUSE) {
         anerror(Errors[MOVENOTPOSSIBLEWITHPAUSE]);
         return;
@@ -3752,7 +3920,7 @@ void checkanorder(char *Orders)
       /*
        * damit längere Angriffe nicht in Warnungs-Tiraden ausarten
        */
-      awarning(Errors[LONGCOMBATNOLONGORDER], 5);
+      dwarning(Errors[LONGCOMBATNOLONGORDER], 5);
       attack_warning = 1;
     }
     if (getaunit(42) == 42) {
@@ -3887,7 +4055,7 @@ void checkanorder(char *Orders)
       icat(i);
       break;
     }
-    awarning(Errors[MISSINGDISGUISEPARAMETERS], 5);
+    dwarning(Errors[MISSINGDISGUISEPARAMETERS], 5);
     break;
 
   case K_GIVE:
@@ -4036,7 +4204,7 @@ void checkanorder(char *Orders)
     scat(printkeyword(K_PASSWORD));
     s = getstr();
     if (!s[0])
-      awarning(Errors[PASSWORDCLEARED], 0);
+      dwarning(Errors[PASSWORDCLEARED], 0);
     else
       checkstring(s, NAMESIZE, POSSIBLE);
     break;
@@ -4067,7 +4235,7 @@ void checkanorder(char *Orders)
       anerror(Errors[MISSINGPASSWORD]);
     else
       checkstring(s, NAMESIZE, POSSIBLE);
-    awarning(Errors[QUITMSG], 0);
+    dwarning(Errors[QUITMSG], 0);
     break;
 
   case K_TAX:
@@ -4202,7 +4370,7 @@ void checkanorder(char *Orders)
         cmd_unit->transport = order_unit->no;
         cmd_unit->hasmoved = -1;
       } else
-        awarning(Errors[NOCARRIER], 3);
+        dwarning(Errors[NOCARRIER], 3);
     }
     if (getaunit(42) == 42)
       anerror(gettext("There must be one CARRY-order per unit"));
@@ -4281,7 +4449,7 @@ void checkanorder(char *Orders)
       break;
     } else
       qcat(s);
-    awarning(Errors[RESTARTMSG], 0);
+    dwarning(Errors[RESTARTMSG], 0);
     break;
 
   case K_GROUP:
@@ -5321,9 +5489,10 @@ int main(int argc, char *argv[])
     fputc('.', ERR);
   }
   else {
-    fprintf(ERR, 
+    fprintf(ERR,
       ngettext("Detected %d error.", "Detected %d errors.", error_count),
       error_count);
   }
+  fputc('\n', ERR);
   return 0;
 }
