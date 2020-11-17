@@ -39,7 +39,7 @@ tags:
 	@ctags *.c *.h
 
 locale/echeck.pot: echeck.c
-	xgettext -d echeck -o $@ -s $^
+	xgettext -k_ -d echeck -o $@ -s $^
 
 locale/%/echeck.po: locale/echeck.pot
 	msgmerge -o $@ $@ $< 
