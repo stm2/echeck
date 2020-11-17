@@ -46,19 +46,9 @@ DOESNTCARRY, Einheit %s fährt mit Einheit %s, diese transportiert aber nicht
 DOESNTRIDE, Einheit %s transportiert Einheit %s, diese fährt aber nicht
 ECHECK, ECheck (Version %s, %s), Zug-Checker für Eressea - Freeware!\n\n
 ENDWITHOUTTEMP, ENDE ohne MACHE TEMP
-ERRORCOORDINATES, Fehler bei Regions-Koordinaten
 ERRORHELP, Helfe-Status falsch
 ERRORINLINE, Fehler in Zeile
 ERRORLEVELPARAMETERS, Fehler bei STUFE-Parameter
-ERRORNAMEFOREIGN, BENENNE FREMD nicht mit %s
-ERROROPINION, Nummer der Meinung muß größer 0 sein
-ERRORREGION, REGION fehlerhaft
-ERRORREGIONPARAMETER, Fehler bei REGION-Parameter
-ERRORSPELLSYNTAX, [ ] und  < >  dürfen nicht mit eingegeben werden!
-ERRORSURVEY, Nummer der Umfrage muß größer 0 sein
-FACTION0USED, Partei 0 verwendet
-FACTIONINVALID, Partei "%s" ungültig
-FACTIONMISSING, Partei fehlt
 FACTIONS, Parteien
 FACTION, Partei
 FOLLOW, FOLGE EINHEIT xx, FOLGE SCHIFF xx oder FOLGE
@@ -66,17 +56,13 @@ FOUNDERROR, Es wurde ein Fehler
 FOUNDERRORS, Es wurden %d Fehler
 FOUNDORDERS, Befehle für Partei %s gefunden.\n
 GIVEWHAT, Was übergeben?
-INTERNALCHECK, <interner Check>
-INVALIDEMAIL, Ungültige eMail-Adresse
 ISCOMBATSPELL, "%s" ist %sein Kampfzauber
 ISUSEDIN2REGIONS, "TEMP %s" wird in Region %d,%d und Region %d,%d (Zeile %d) gebraucht
 ISNOTCOMBATSPELL, k
 ITEM, Gegenstand
-LINETOOLONG, Zeile zu lang
 LONGCOMBATNOLONGORDER, Längere Kämpfe schließen den langen Befehl aus
 LONGORDERMISSING, Einheit %s hat keinen langen Befehl bekommen
 MAGIC, Magie
-MISSINGFILES, Es fehlen Dateien für:
 MISSFILEPARAM, Parameter
 MISSFILECMD, Befehle
 MISSFILEITEM, Gegenstände
@@ -87,15 +73,12 @@ MISSINGQUOTES, Fehlende "
 MISSINGDISGUISEPARAMETERS, TARNE ohne Parameter
 MISSINGEND, TEMP-Einheit %s wird nicht durch ENDE abgeschlossen
 MISSINGFACTIONNUMBER, Keine Parteinummer
-MISSINGNEXT, NÄCHSTER fehlt
 MISSINGNUMRECRUITS, Anzahl Rekruten fehlt
 MISSINGOFFER, Geldgebot fehlt
 MISSINGPARAMETERS, Parameter STUFE oder REGION fehlt
 MISSINGPASSWORD, Kein Passwort angeben
-MISSINGUNITNUMBER, Keine Einheitsnummer
 MOVENOTPOSSIBLEWITHPAUSE, NACH geht nicht mit PAUSE
 MSGTO, BOTSCHAFT AN PARTEI, BOTSCHAFT AN EINHEIT oder BOTSCHAFT AN REGION
-NAMECONTAINSBRACKETS, Namen dürfen keine Klammern enthalten
 NEEDBOTHCOORDINATES, Beide Koordinaten müssen angegeben werden
 NOCARRIER, Kann zu transportierende Einheit nicht ermitteln
 NOFIND, FINDE wurde gegen OPTION ADRESSEN ersetzt
@@ -189,13 +172,8 @@ USEEMAIL, eMail bitte mit EMAIL setzen
 USINGUNITINSTEAD, Benutze stattdessen Einheit 
 WARNINGS, ~%d Warnungen
 WARNINGLEVEL, Warning Level %d.\n
-WARNINGLINE, Warnung zur Zeile
 WAS, wurde
 WERE, wurden
 WRONGFACTIONNUMBER, Falsche Parteinummer
-WRONGFIGHTSTATE, Falscher Kampfstatus
-WRONGNUMBER, Falsche Nummer
-WRONGOUTPUTLEVEL, falscher Ausgabe-Level
-WRONGPARAMETER, Falscher Parameter
 CANTCHANGELOCALE, Kann die Sprache nicht im laufenden Programm ändern.\nBitte mit entsprechendem "-L"-Parameter neu starten
 MAINTAINANCEMOVED, Gebäudeunterhalt von Einheit %s nach Einheit %s verschoben

@@ -494,12 +494,6 @@ t_liste *shiptypes = NULL;
 t_liste *herbdata = NULL;
 
 enum {
-  AND,
-  DELIVERYTO,
-  DIRECTION,
-  DISCOVERED,
-  DOESNTCARRY,
-  DOESNTRIDE,
   ECHECK,
   ENDWITHOUTTEMP,
   ERRORCOORDINATES,
@@ -605,12 +599,6 @@ enum {
 };
 
 static const char *Errors[MAX_ERRORS] = {
-  "AND",
-  "DELIVERYTO",
-  "DIRECTION",
-  "DISCOVERED",
-  "DOESNTCARRY",
-  "DOESNTRIDE",
   "ECHECK",
   "ENDWITHOUTTEMP",
   "ERRORCOORDINATES",
@@ -1682,15 +1670,6 @@ static const struct warning {
   const char *token;
   const char *message;
 } warnings[] = {
-{"AND", t(" ~and")},
-{"CANTREADFILE", t(" Can't read file '%s'\n")},
-{"CANTRENAMEOBJECT", t(" This object cannot be renamed")},
-{"CHECKYOURORDERS", t(" \nPlease check if you have sent in your orders properly.\nKeep in mind that orders must not be sent as HTML, word-documents\nor attachments.\n")},
-{"COMBATSPELLSET", t(" combat magic set")},
-{"DIRECTION", t(" <direction>")},
-{"DISCOVERED", t(" ~\n")},
-{"DOESNTCARRY", t(" Unit %s rides with unit %s, but the latter doesn't carry the former")},
-{"DOESNTRIDE", t(" Unit \narries unit %s, but the latter doesn't ride with the former")},
 {"FOLLOW", t(" FOLLOW UNIT xx, FOLLOW SHIP xx or FOLLOW")},
 {"FOUNDERROR", t(" There was one error")},
 {"FOUNDERRORS", t(" There were %d errors")},
@@ -1715,7 +1694,7 @@ static const struct warning {
 {"MISSINGQUOTES", t(" Missing \"")},
 {"MISSINGDISGUISEPARAMETERS", t(" DISGUISE without parameters")},
 {"MISSINGEND", t(" TEMPORARY %s lacks closing END")},
-{"MISSINGFACTIONNUMBER", t(" Missing faction number")},
+{"MISSINGFACTIONNUMBER", t("Missing faction number")},
 {"MISSINGNEXT", t(" Missing NEXT")},
 {"MISSINGNUMRECRUITS", t(" Number of recruits missing")},
 {"MISSINGOFFER", t(" Missing offer")},
@@ -1744,7 +1723,6 @@ static const struct warning {
 {"ONLYSABOTAGESHIP", t(" For now, there is only SABOTAGE SHIP")},
 {"ORDERNUMBER", t(" NUMBER SHIP, NUMBER CASTLE, NUMBER FACTION or NUMBER UNIT")},
 {"ORDERSOK", t(" The orders look good.\n")},
-{"ORDERSREAD", t(" \nOrders have been read for %d %s and %d %s.\n")},
 {"PASSWORDCLEARED", t(" Password cleared")},
 {"PASSWORDMSG1", t(" Incorrect passowrd")},
 {"PASSWORDMSG2", t(" \n\n  ****  A T T E N T I O N !  ****\n\n  ****  Password missing!  ****\n\n")},
@@ -3088,8 +3066,8 @@ void checkmake(void)
     Scat(printparam(i));
     k = getdirection();
     if (k < 0) {
-      sprintf(bf, "%s %s %s", printkeyword(K_MAKE),
-        printparam(P_ROAD), Errors[DIRECTION]);
+      sprintf(bf, "%s %s <%s>", printkeyword(K_MAKE),
+        printparam(P_ROAD), _("direction"));
       anerror(bf);
     } else
       Scat(printdirection(k));
@@ -3661,7 +3639,7 @@ void check_money(bool do_move)
         if (!t)
           t = find_unit(u->drive, 1);
         if (t && t->lives) {
-          sprintf(warn_buf, Errors[DOESNTCARRY], uid(u), Uid(u->drive));
+          sprintf(warn_buf, _(" Unit %s rides with unit %s, but the latter doesn't carry the former"), uid(u), Uid(u->drive));
           Error(warn_buf, u->line_no, u->long_order);
         } else {                /* unbekannte Einheit -> unbekanntes Ziel */
           u->hasmoved = 1;
@@ -3685,7 +3663,7 @@ void check_money(bool do_move)
       if (!t)
         t = find_unit(u->transport, 1);
       if (t && t->lives && t->drive != u->no) {
-        sprintf(warn_buf, Errors[DOESNTRIDE], Uid(u->transport), uid(u));
+        sprintf(warn_buf, _(" Unit \narries unit %s, but the latter doesn't ride with the former"), Uid(u->transport), uid(u));
         Error(warn_buf, u->line_no, u->long_order);
       }
     }
@@ -5323,7 +5301,7 @@ int main(int argc, char *argv[])
 {
   int faction_count = 0, unit_count = 0, nextarg = 1, i;
 #ifdef HAVE_GETTEXT
-  setlocale(LC_ALL,"");
+  char *lc = setlocale(LC_ALL, "");
   if (0 == fileexists("locale/de/LC_MESSAGES")) {
     bindtextdomain("echeck", "locale");
   } else {
@@ -5364,7 +5342,7 @@ int main(int argc, char *argv[])
     fprintf(ERR, _("ECheck (Version %s, %s), order file checker for Eressea - freeware!\n\n"), echeck_version, __DATE__);
 
   if (filesread != HAS_ALL) {
-    strcpy(checked_buf, _("Missing files containing: "));
+    sprintf(checked_buf, "%s: ", _("Missing files containing"));
     if (!(filesread & HAS_PARAM)) {
       Scat(Errors[MISSFILEPARAM]);
     }
