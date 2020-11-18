@@ -37,7 +37,6 @@ CANTMAINTAINBUILDING, Einheit %s kann ein Gebäude nicht erhalten, es fehlen noc
 CANTMAKETHAT, Sowas kann man nicht machen
 CANTREADFILE, Kann Datei '%s' nicht lesen\n
 CANTRENAMEOBJECT, Objekt kann nicht umbenannt werden
-CHECKYOURORDERS, \nBitte überprüfe, ob Du die Befehle korrekt eingesandt hast.\nBeachte dabei besonders, daß die Befehle nicht als HTML, Word-Dokument\noder als Attachment (Anlage) eingeschickt werden dürfen.\n
 COMBATSPELLSET, Kampfzauber gesetzt
 DELIVERYTO, ; Zustellung an 
 DIRECTION, <richtung>
@@ -45,8 +44,6 @@ DISCOVERED, ~entdeckt.\n
 DOESNTCARRY, Einheit %s fährt mit Einheit %s, diese transportiert aber nicht
 DOESNTRIDE, Einheit %s transportiert Einheit %s, diese fährt aber nicht
 ECHECK, ECheck (Version %s, %s), Zug-Checker für Eressea - Freeware!\n\n
-ENDWITHOUTTEMP, ENDE ohne MACHE TEMP
-ERRORHELP, Helfe-Status falsch
 ERRORINLINE, Fehler in Zeile
 ERRORLEVELPARAMETERS, Fehler bei STUFE-Parameter
 FACTIONS, Parteien
@@ -100,14 +97,12 @@ OBJECTNUMBERMISSING, Nummer des Objektes fehlt
 ONLYSABOTAGESHIP, Bislang gibt es nur SABOTIERE SCHIFF
 ORDERNUMBER, NUMMER SCHIFF, NUMMER BURG, NUMMER PARTEI oder NUMMER EINHEIT
 ORDERSOK, Die Befehle scheinen in Ordnung zu sein.\n
-ORDERSREAD, \nEs wurden Befehle für %d %s und %d %s gelesen.\n
 PASSWORDCLEARED, Passwort gelöscht
 PASSWORDMSG1, Nicht das korrekte Passwort eingesetzt
 PASSWORDMSG2, \n\n  ****  A C H T U N G !  ****\n\n  ****  Passwort fehlt!  ****\n\n
 PASSWORDMSG3, ~** FEHLER!! ** 
 POST, Post-
 PRE, Prä-
-PROCESSINGFILE, Verarbeite Datei '%s'.
 QUITMSG, Achtung! STIRB gegeben! Die Partei wird aufgelöst!
 RECRUITCOSTSSET, Rekrutierungskosten auf %d Silber gesetzt, 
 REGIONMISSSILVER, Das Silber in %s (%d,%d) reicht evtl. nicht zum Leben; es fehlen %d Silber.
@@ -168,7 +163,6 @@ UNRECOGNIZEDSCHOOL, Magiegebiet '%s' gibt es nicht
 UNRECOGNIZEDSKILL, Talent nicht erkannt
 UNRECOGNIZEDSPELL, Zauberspruch nicht erkannt
 USED1, Stattdessen 1 benutzt
-USEEMAIL, eMail bitte mit EMAIL setzen
 USINGUNITINSTEAD, Benutze stattdessen Einheit 
 WARNINGS, ~%d Warnungen
 WARNINGLEVEL, Warning Level %d.\n

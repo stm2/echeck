@@ -2,13 +2,13 @@
 # Copyright (C) 2020 Enno Rehling
 # This file is distributed under the same license as the echeck package.
 # Enno Rehling <enno@eressea.de>, 2020.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: echeck 4.4.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-18 08:50+0100\n"
+"POT-Creation-Date: 2020-11-18 20:14+0100\n"
 "PO-Revision-Date: 2020-11-09 17:45+0100\n"
 "Last-Translator: Enno Rehling <enno@eressea.de>\n"
 "Language-Team: German (Deutsch) <echeck@eressea.de>\n"
@@ -486,7 +486,7 @@ msgstr "Richtung"
 #: echeck.c:1679
 #, fuzzy
 msgid " invalid email address"
-msgstr "Ungültige eMail-Adresse"
+msgstr "Ungültige Email-Adresse"
 
 #: echeck.c:1683
 msgid " item"
@@ -735,7 +735,7 @@ msgstr "Befehle für Partei %s gefunden."
 
 #: echeck.c:3379
 msgid "Illegal argument for HELP"
-msgstr ""
+msgstr "Helfe-Status falsch"
 
 #: echeck.c:2181 echeck.c:2225
 msgid "Line too long"
@@ -748,7 +748,7 @@ msgstr "Magier dürfen nur eine Person haben"
 
 #: echeck.c:2233
 msgid "Missing \""
-msgstr ""
+msgstr "Fehlendes \""
 
 #: echeck.c:5043 echeck.c:5148
 msgid "Missing NEXT"
@@ -788,11 +788,11 @@ msgstr "Neue Einheiten könenn nichts reservieren"
 
 #: echeck.c:3962
 msgid "No matching MAKE TEMP for END"
-msgstr ""
+msgstr "ENDE ohne MACHE TEMP"
 
 #: echeck.c:2050
 msgid "No space allowed here"
-msgstr ""
+msgstr "Leerzeichen hier nicht erlaubt"
 
 #: echeck.c:1811
 #, fuzzy
@@ -831,22 +831,25 @@ msgstr ""
 #: echeck.c:5422
 #, c-format
 msgid "Orders have been read for %s and %s."
-msgstr ""
+msgstr "Es wurden Befehle für %s und %s gelesen."
 
 #: echeck.c:5427
 msgid ""
 "Please make sure you have sent in your orders properly.\n"
 "Remember that orders must not be sent as HTML or word-documents."
 msgstr ""
+"Bitte überprüfe, ob Du die Befehle korrekt eingesandt hast.\n"
+"Beachte dabei besonders, daß die Befehle nicht als HTML oder\n"
+"Word-Dokumente eingeschickt werden dürfen.\n"
 
 #: echeck.c:2396 echeck.c:2397
 msgid "Please set email with EMAIL"
-msgstr ""
+msgstr "Email bitte mit EMAIL setzen"
 
 #: echeck.c:5393
 #, c-format
 msgid "Processing file '%s'."
-msgstr ""
+msgstr "Verarbeite Datei '%s'."
 
 #: echeck.c:5062
 #, c-format
@@ -1081,4 +1084,4 @@ msgstr "Richtung"
 
 #: echeck.c:2403
 msgid "invalid email address"
-msgstr "Ungültige eMail-Adresse"
+msgstr "Ungültige Email-Adresse"
