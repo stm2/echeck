@@ -3663,7 +3663,7 @@ void check_money(bool do_move)
       if (!t)
         t = find_unit(u->transport, 1);
       if (t && t->lives && t->drive != u->no) {
-        sprintf(warn_buf, _(" Unit \narries unit %s, but the latter doesn't ride with the former"), Uid(u->transport), uid(u));
+        sprintf(warn_buf, _(" Unit %s carries unit %s, but the latter does not ride with the former"), Uid(u->transport), uid(u));
         Error(warn_buf, u->line_no, u->long_order);
       }
     }
@@ -5301,7 +5301,7 @@ int main(int argc, char *argv[])
 {
   int faction_count = 0, unit_count = 0, nextarg = 1, i;
 #ifdef HAVE_GETTEXT
-  char *lc = setlocale(LC_ALL, "");
+  setlocale(LC_ALL, "");
   if (0 == fileexists("locale/de/LC_MESSAGES")) {
     bindtextdomain("echeck", "locale");
   } else {

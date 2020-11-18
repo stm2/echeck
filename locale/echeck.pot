@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-17 18:44+0100\n"
+"POT-Creation-Date: 2020-11-18 08:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -304,13 +304,6 @@ msgstr ""
 msgid " There were %d errors"
 msgstr ""
 
-#: echeck.c:3666
-#, c-format
-msgid ""
-" Unit \n"
-"arries unit %s, but the latter doesn't ride with the former"
-msgstr ""
-
 #: echeck.c:1777
 #, c-format
 msgid ""
@@ -341,6 +334,11 @@ msgstr ""
 #: echeck.c:1764
 #, c-format
 msgid " Unit %s can teach %d more trainees."
+msgstr ""
+
+#: echeck.c:3666
+#, c-format
+msgid " Unit %s carries unit %s, but the latter does not ride with the former"
 msgstr ""
 
 #: echeck.c:1766
