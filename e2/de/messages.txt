@@ -52,7 +52,6 @@ FOLLOW, FOLGE EINHEIT xx, FOLGE SCHIFF xx oder FOLGE
 FOUNDERROR, Es wurde ein Fehler
 FOUNDERRORS, Es wurden %d Fehler
 FOUNDORDERS, Befehle für Partei %s gefunden.\n
-GIVEWHAT, Was übergeben?
 ISCOMBATSPELL, "%s" ist %sein Kampfzauber
 ISUSEDIN2REGIONS, "TEMP %s" wird in Region %d,%d und Region %d,%d (Zeile %d) gebraucht
 ISNOTCOMBATSPELL, k
@@ -80,7 +79,6 @@ NEEDBOTHCOORDINATES, Beide Koordinaten müssen angegeben werden
 NOCARRIER, Kann zu transportierende Einheit nicht ermitteln
 NOFIND, FINDE wurde gegen OPTION ADRESSEN ersetzt
 NOLUXURY, Kein Luxusgut
-NORMALUNITSONLY, %s geht nur mit normalen Einheiten
 NOSEND, SENDE wurde in OPTION umbenannt
 NOSPACEHERE, Leerzeichen hier nicht erlaubt
 NOTEMPNUMBER, Keine TEMP-Nummer
@@ -108,7 +106,6 @@ RECRUITCOSTSSET, Rekrutierungskosten auf %d Silber gesetzt,
 REGIONMISSSILVER, Das Silber in %s (%d,%d) reicht evtl. nicht zum Leben; es fehlen %d Silber.
 RESEARCHHERBSONLY, Es gibt nur FORSCHE KRÄUTER
 RESERVE0SENSELESS, RESERVIERE 0 xxx macht keinen Sinn
-RESERVEDTOOMUCH, In %s (%d,%d) wurde mehr Silber reserviert (%d) als vorhanden (%d).
 RESERVEWHAT, RESERVIERE was?
 RESTARTMSG, NEUSTART befohlen!
 RIDESWRONGUNIT, Einheit %s wird von Einheit %s transportiert, fährt aber mit 
@@ -169,5 +166,3 @@ WARNINGLEVEL, Warning Level %d.\n
 WAS, wurde
 WERE, wurden
 WRONGFACTIONNUMBER, Falsche Parteinummer
-CANTCHANGELOCALE, Kann die Sprache nicht im laufenden Programm ändern.\nBitte mit entsprechendem "-L"-Parameter neu starten
-MAINTAINANCEMOVED, Gebäudeunterhalt von Einheit %s nach Einheit %s verschoben

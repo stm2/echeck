@@ -507,9 +507,6 @@ enum {
   FACTIONINVALID,
   FACTIONMISSING,
   FOLLOW,
-  FOUNDERROR,
-  FOUNDERRORS,
-  GIVEWHAT,
   INTERNALCHECK,
   INVALIDEMAIL,
   ISCOMBATSPELL,
@@ -538,7 +535,6 @@ enum {
   NEEDBOTHCOORDINATES,
   NOCARRIER,
   NOFIND,
-  NORMALUNITSONLY,
   NOSEND,
   NOTEMPNUMBER,
   NOTEXECUTED,
@@ -562,7 +558,6 @@ enum {
   RECRUITCOSTSSET,
   REGIONMISSSILVER,
   RESERVE0SENSELESS,
-  RESERVEDTOOMUCH,
   RESERVEWHAT,
   RESTARTMSG,
   RIDESWRONGUNIT,
@@ -612,9 +607,6 @@ static const char *Errors[MAX_ERRORS] = {
   "FACTIONINVALID",
   "FACTIONMISSING",
   "FOLLOW",
-  "FOUNDERROR",
-  "FOUNDERRORS",
-  "GIVEWHAT",
   "INTERNALCHECK",
   "INVALIDEMAIL",
   "ISCOMBATSPELL",
@@ -643,7 +635,6 @@ static const char *Errors[MAX_ERRORS] = {
   "NEEDBOTHCOORDINATES",
   "NOCARRIER",
   "NOFIND",
-  "NORMALUNITSONLY",
   "NOSEND",
   "NOTEMPNUMBER",
   "NOTEXECUTED",
@@ -667,7 +658,6 @@ static const char *Errors[MAX_ERRORS] = {
   "RECRUITCOSTSSET",
   "REGIONMISSSILVER",
   "RESERVE0SENSELESS",
-  "RESERVEDTOOMUCH",
   "RESERVEWHAT",
   "RESTARTMSG",
   "RIDESWRONGUNIT",
@@ -1650,8 +1640,8 @@ void warning(const char *s, int line, char *order, char level)
   if (show_warnings && !brief) {
     switch (compile) {
     case OUT_NORMAL:
-      fprintf(ERR, _("Warning in line %d:"), line);
-      fprintf(ERR, " %s.\n  '%s'\n", s, bf);
+      fprintf(ERR, _("Warning in line %d"), line);
+      fprintf(ERR, ": %s.\n  '%s'\n", s, bf);
       break;
     case OUT_COMPILE:
       fprintf(ERR, "%s(%d)%d|%s `%s.'\n", filename, line, level, s, bf);
@@ -1671,20 +1661,14 @@ static const struct warning {
   const char *message;
 } warnings[] = {
 {"FOLLOW", t(" FOLLOW UNIT xx, FOLLOW SHIP xx or FOLLOW")},
-{"FOUNDERROR", t(" There was one error")},
-{"FOUNDERRORS", t(" There were %d errors")},
-{"FOUNDORDERS", t(" Found orders for faction %s.\n")},
-{"GIVEWHAT", t(" Give what?")},
 {"INTERNALCHECK", t(" <internal check>")},
 {"INVALIDEMAIL", t(" invalid email address")},
 {"ISCOMBATSPELL", t(" '%s' is \nombat magic")},
 {"ISUSEDIN2REGIONS", t(" TEMP %s is used in region %d,%d and region %d,%d (line %d)")},
 {"ISNOTCOMBATSPELL", t(" ~no")},
 {"ITEM", t(" item")},
-{"LINETOOLONG", t(" Line too long")},
 {"LONGCOMBATNOLONGORDER", t(" Longer combats exclude long orders")},
 {"MAGIC", t(" Magic")},
-{"MISSINGFILES", t(" Missing files containing: ")},
 {"MISSFILEPARAM", t(" parameters")},
 {"MISSFILECMD", t(" commands")},
 {"MISSFILEITEM", t(" items")},
@@ -1707,7 +1691,6 @@ static const struct warning {
 {"NEEDBOTHCOORDINATES", t(" Both coordinated must be supplied")},
 {"NOCARRIER", t(" Can't find unit to carry")},
 {"NOFIND", t(" FIND has been replaced by OPTION ADDRESSES")},
-{"NORMALUNITSONLY", t(" %s is possible with normal units only")},
 {"NOSEND", t(" SEND has been renamed into OPTION")},
 {"NOSPACEHERE", t(" No space allowed here")},
 {"NOTEMPNUMBER", t(" No TEMPORARY number")},
@@ -1734,7 +1717,6 @@ static const struct warning {
 {"RECRUITCOSTSSET", t(" Recruit costs have been set to %d silver, t(")},
 {"REGIONMISSSILVER", t(" There is not enough silver in %s (%d,%d) for upkeep; %d silver is missing.")},
 {"RESERVE0SENSELESS", t(" RESERVE 0 xxx doesn't make any sense")},
-{"RESERVEDTOOMUCH", t(" In %s (%d,%d) there was reserved more silver (%d) than available (%d).")},
 {"RESERVEWHAT", t(" RESERVE what?")},
 {"RESTARTMSG", t(" RESTART found!")},
 {"RIDESWRONGUNIT", t(" Unit %s is carried by unit %s but rides with ")},
@@ -2865,7 +2847,7 @@ void checkgiving(void)
     }
 
     if (!(*s)) {
-      anerror(Errors[GIVEWHAT]);
+      anerror(_("Give what?"));
       return;
     }
     i = findparam(s);
@@ -3540,7 +3522,7 @@ void check_money(bool do_move)
     if (do_move)
       for (r = Regionen; r; r = r->next) {
         if (r->reserviert > 0 && r->reserviert > r->geld) {     /* nur  explizit   mit  RESERVIERE  */
-          sprintf(warn_buf, Errors[RESERVEDTOOMUCH], r->name,
+          sprintf(warn_buf, "In %s (%d,%d) there was reserved more silver (%d) than available (%d).", r->name,
             r->x, r->y, r->reserviert, r->geld);
           warn(warn_buf, r->line_no, 3);
         }

@@ -54,7 +54,6 @@ ISCOMBATSPELL, "%s" is \nombat magic
 ISUSEDIN2REGIONS, "TEMPORARY %s" is used in region %d,%d and region %d,%d (line %d)
 ISNOTCOMBATSPELL, ~no
 ITEM, item
-LINETOOLONG, Line too long
 LONGCOMBATNOLONGORDER, Longer combats exclude long orders
 MAGIC, Magic
 MISSINGFILES, Missing files containing: 
@@ -80,7 +79,6 @@ NAMECONTAINSBRACKETS, Names must not contain brackets
 NEEDBOTHCOORDINATES, Both coordinated must be supplied
 NOCARRIER, Can't find unit to carry
 NOFIND, FIND has been replaced by OPTION ADDRESSES
-NORMALUNITSONLY, %s is possible with normal units only
 NOSEND, SEND has been renamed into OPTION
 NOSPACEHERE, No space allowed here
 NOTEMPNUMBER, No TEMPORARY number
@@ -108,7 +106,6 @@ QUITMSG, Attention! QUIT found! Your faction will be cancelled!
 RECRUITCOSTSSET, Recruit costs have been set to %d silver, 
 REGIONMISSSILVER, There is not enough silver in %s (%d,%d) for upkeep; %d silver is missing.
 RESERVE0SENSELESS, RESERVE 0 xxx doesn't make any sense
-RESERVEDTOOMUCH, In %s (%d,%d) there was reserved more silver (%d) than available (%d).
 RESERVEWHAT, RESERVE what?
 RESTARTMSG, RESTART found!
 RIDESWRONGUNIT, Unit %s is carried by unit %s but rides with 
