@@ -4,8 +4,8 @@ MINGW_CC = i686-w64-mingw32-gcc
 CFLAGS = -Wall -std=c99 -I. -DHAVE_GETTEXT
 RELEASE_CFLAGS = -Os -Werror
 DEBUG_CFLAGS = -g
-CFLAGS += $(RELEASE_CFLAGS)
-#CFLAGS += $(DEBUG_CFLAGS)
+#CFLAGS += $(RELEASE_CFLAGS)
+CFLAGS += $(DEBUG_CFLAGS)
 TEST_SRC = tests.c CuTest.c
 TEST_HDR = CuTest.h
 PREFIX ?= /usr
@@ -16,7 +16,8 @@ default: echeck mofiles
 ifeq ($(OS_NAME),darwin)
 LFLAGS += -lintl
 endif	
-all: echeck.zip echeck
+
+all: echeck mofiles
 
 pofiles: locale/de/echeck.po 
 
@@ -61,7 +62,7 @@ tests: echeck.c unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
 	$(CC) $(LFLAGS) $(CFLAGS) -DTESTING -o tests echeck.c unicode.c $(TEST_SRC)
 
 clean:
-	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip
+	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip locale/de/LC_MESSAGES/echeck.mo
 
 check: tests
 	@./tests -T=all -Lde -Re2 -b
