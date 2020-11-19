@@ -43,13 +43,13 @@ locale/echeck.pot: echeck.c
 	xgettext -k_ -kt -d echeck -o $@ -s $^
 
 locale/%/echeck.po: locale/echeck.pot
-	msgmerge -o $@ $@ $< 
+	msgmerge -N -o $@ $@ $< 
 
 locale/%/LC_MESSAGES/echeck.mo: locale/%/echeck.po 
 	@rm -rf $@
 	@mkdir -p $@
 	@rmdir $@
-	msgfmt -c $< -o $@
+	msgfmt -f -c $< -o $@
 
 echeck.exe: echeck.c unicode.c unicode.h config.h
 	$(MINGW_CC) $(CFLAGS) -o echeck.exe echeck.c unicode.c

@@ -68,9 +68,7 @@ FOUNDORDERS, Befehle für Partei %s gefunden.\n
 GIVEWHAT, Was übergeben?
 INTERNALCHECK, <interner Check>
 INVALIDEMAIL, Ungültige eMail-Adresse
-ISCOMBATSPELL, "%s" ist %sein Kampfzauber
 ISUSEDIN2REGIONS, "TEMP %s" wird in Region %d,%d und Region %d,%d (Zeile %d) gebraucht
-ISNOTCOMBATSPELL, k
 ITEM, Gegenstand
 LINETOOLONG, Zeile zu lang
 LONGCOMBATNOLONGORDER, Längere Kämpfe schließen den langen Befehl aus
@@ -126,7 +124,6 @@ POST, Post-
 PRE, Prä-
 PROCESSINGFILE, Verarbeite Datei '%s'.
 QUITMSG, Achtung! STIRB gegeben! Die Partei wird aufgelöst!
-RECRUITCOSTSSET, Rekrutierungskosten auf %d Silber gesetzt, 
 REGIONMISSSILVER, Das Silber in %s (%d,%d) reicht evtl. nicht zum Leben; es fehlen %d Silber.
 RESEARCHHERBSONLY, Es gibt nur FORSCHE KRÄUTER
 RESERVE0SENSELESS, RESERVIERE 0 xxx macht keinen Sinn

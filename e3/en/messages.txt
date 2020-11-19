@@ -67,9 +67,7 @@ FOUNDERRORS, There were %d errors
 GIVEWHAT, Give what?
 INTERNALCHECK, <internal check>
 INVALIDEMAIL, invalid email address
-ISCOMBATSPELL, "%s" is \nombat magic
 ISUSEDIN2REGIONS, "TEMPORARY %s" is used in region %d,%d and region %d,%d (line %d)
-ISNOTCOMBATSPELL, ~no
 ITEM, item
 LINETOOLONG, Line too long
 LONGCOMBATNOLONGORDER, Longer combats exclude long orders
@@ -125,7 +123,6 @@ POST, post-
 PRE, pre-
 PROCESSINGFILE, Processing file '%s'.
 QUITMSG, Attention! QUIT found! Your faction will be cancelled!
-RECRUITCOSTSSET, Recruit costs have been set to %d silver, 
 REGIONMISSSILVER, There is not enough silver in %s (%d,%d) for upkeep; %d silver is missing.
 RESEARCHHERBSONLY, There is RESEARCH HERBS
 RESERVE0SENSELESS, RESERVE 0 xxx doesn't make any sense
