@@ -137,7 +137,6 @@ UNITHASNTPERSONS, Unit TEMPORARY %s hasn't recruited and hasn't got any men! It 
 UNITHASPERSONS, Unit %s has %d men!
 UNITHASSILVER, Unit %s has %s%d silver!
 UNITISTEACHED, Unit %s is taught by unit 
-UNITLOSESITEMS, Unit %s may lose silver and/or items
 UNITMISSCONTROL, Unit %s may lack control over ship %s
 UNITMISSING, Missing unit
 UNITMISSPERSON, Unit %s may have not enough men

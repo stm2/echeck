@@ -578,7 +578,6 @@ enum {
   UNITHASNTPERSONS,
   UNITHASPERSONS,
   UNITHASSILVER,
-  UNITLOSESITEMS,
   UNITMISSING,
   UNITMISSPERSON,
   UNITMISSSILVER,
@@ -678,7 +677,6 @@ static const char *Errors[MAX_ERRORS] = {
   "UNITHASNTPERSONS",
   "UNITHASPERSONS",
   "UNITHASSILVER",
-  "UNITLOSESITEMS",
   "UNITMISSING",
   "UNITMISSPERSON",
   "UNITMISSSILVER",
@@ -1748,8 +1746,6 @@ static const struct warning {
 {"UNITHASPERSONS", t(" Unit %s has %d men!")},
 {"UNITHASSILVER", t(" Unit %s has %s%d silver!")},
 {"UNITISTEACHED", t(" Unit %s is taught by unit ")},
-{"UNITLOSESITEMS", t(" Unit %s may lose silver and/or items")},
-{"UNITMISSCONTROL", t(" Unit %s may lack control over ship %s")},
 {"UNITMISSING", t(" Missing unit")},
 {"UNITMISSPERSON", t(" Unit %s may have not enough men")},
 {"UNITMISSSILVER", t(" Unit %s may have not enough silver")},
@@ -3487,7 +3483,7 @@ void check_money(bool do_move)
             sprintf(warn_buf, _("Unit TEMP %s has no men and has not recruited any"), itob(u->no));
           warn(warn_buf, u->line_no, 2);
         } else if (no_comment <= 0) {
-          sprintf(warn_buf, Errors[UNITLOSESITEMS], itob(u->no));
+          sprintf(warn_buf, _("Unit %s may lose silver and/or items"), itob(u->no));
           warn(warn_buf, u->line_no, 3);
         }
       }
@@ -3522,7 +3518,7 @@ void check_money(bool do_move)
     if (do_move)
       for (r = Regionen; r; r = r->next) {
         if (r->reserviert > 0 && r->reserviert > r->geld) {     /* nur  explizit   mit  RESERVIERE  */
-          sprintf(warn_buf, "In %s (%d,%d) there was reserved more silver (%d) than available (%d).", r->name,
+          sprintf(warn_buf, _("In %s (%d,%d) there was reserved more silver (%d) than available (%d)."), r->name,
             r->x, r->y, r->reserviert, r->geld);
           warn(warn_buf, r->line_no, 3);
         }
