@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-19 22:29+0100\n"
+"POT-Creation-Date: 2020-11-19 22:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,7 +118,7 @@ msgstr ""
 msgid "<--MISSING-->"
 msgstr ""
 
-#: echeck.c:1656
+#: echeck.c:1591 echeck.c:1656
 msgid "<internal check>"
 msgstr ""
 
@@ -599,7 +599,7 @@ msgstr ""
 
 #: echeck.c:1732
 #, c-format
-msgid "Unit %s already has got orders in line %d. "
+msgid "Unit %s already has got orders in line %d"
 msgstr ""
 
 #: echeck.c:1731
@@ -607,19 +607,14 @@ msgstr ""
 msgid "Unit %s already has moved"
 msgstr ""
 
-#: echeck.c:3737
+#: echeck.c:1733 echeck.c:3737
 #, c-format
 msgid "Unit %s can teach %d more students"
 msgstr ""
 
-#: echeck.c:1733
-#, c-format
-msgid "Unit %s can teach %d more trainees."
-msgstr ""
-
 #: echeck.c:1735
 #, c-format
-msgid "Unit %s has %d men!"
+msgid "Unit %s has %d men"
 msgstr ""
 
 #: echeck.c:3541

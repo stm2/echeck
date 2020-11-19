@@ -1588,7 +1588,7 @@ const char *Uid(int i)
     u = find_unit(i, 1);
   if (!u) {
     sprintf(warn_buf, _("Unit %s not found"), itob(i));
-    Error(warn_buf, line_no, "<internal check>");
+    Error(warn_buf, line_no, _("<internal check>"));
     u = newunit(-1, 0);
   }
   sprintf(bf, "%s%s", u->temp != 0 ? "TEMP " : "", itob(u->no));
@@ -1729,10 +1729,10 @@ static const struct warning {
   {"UNITALREADYHAS", t("Unit %s already has a ")},
   {"UNITALREADYHASLONGORDERS", t("Unit %s already has a long order in line %d (%s)")},
   {"UNITALREADYHASMOVED", t("Unit %s already has moved")},
-  {"UNITALREADYHASORDERS", t("Unit %s already has got orders in line %d. ")},
-  {"UNITCANSTILLTEACH", t("Unit %s can teach %d more trainees.")},
+  {"UNITALREADYHASORDERS", t("Unit %s already has got orders in line %d")},
+  {"UNITCANSTILLTEACH", t("Unit %s can teach %d more students")},
   {"UNITHASNTPERSONS", t("Unit TEMPORARY %s hasn't recruited and hasn't got any men! It may lose silver and/or items")},
-  {"UNITHASPERSONS", t("Unit %s has %d men!")},
+  {"UNITHASPERSONS", t("Unit %s has %d men")},
   {"UNITHASSILVER", t("Unit %s has %s%d silver!")},
   {"UNITISTEACHED", t("Unit %s is taught by unit ")},
   {"UNITMISSING", t("Missing unit")},

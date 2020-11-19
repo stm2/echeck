@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: echeck 4.4.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-19 22:29+0100\n"
+"POT-Creation-Date: 2020-11-19 22:42+0100\n"
 "PO-Revision-Date: 2020-11-19 15:24+0100\n"
 "Last-Translator: Enno Rehling <enno@eressea.de>\n"
 "Language-Team: German (Deutsch) <echeck@eressea.de>\n"
@@ -150,17 +150,17 @@ msgstr ""
 msgid "<--MISSING-->"
 msgstr "<--FEHLT-->"
 
-#: echeck.c:1656
+#: echeck.c:1591 echeck.c:1656
 msgid "<internal check>"
-msgstr ""
+msgstr "<interner test>"
 
 #: echeck.c:3380
 msgid "Assuming learning costs of 200 silver"
-msgstr ""
+msgstr "Lernkosten mit 200 Silber angenommen"
 
 #: echeck.c:1706
 msgid "Attention! QUIT found! Your faction will be cancelled!"
-msgstr ""
+msgstr "Achtung! STIRB gegeben! Die Partei wird aufgelöst!"
 
 #: echeck.c:3894
 msgid "BREED HORSES or BREED HERBS?"
@@ -626,39 +626,34 @@ msgid "Unit %s already has a "
 msgstr ""
 
 #: echeck.c:2404
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %s already has a long order in line %d"
 msgstr "Einheit %s hat in Zeile %d bereits einen langen Befehl bekommen"
 
 #: echeck.c:1730 echeck.c:2562
 #, c-format
 msgid "Unit %s already has a long order in line %d (%s)"
-msgstr ""
+msgstr "Einheit %s hat in Zeile %d bereits einen langen Befehl (%s)"
 
 #: echeck.c:1732
 #, c-format
-msgid "Unit %s already has got orders in line %d. "
-msgstr ""
+msgid "Unit %s already has got orders in line %d"
+msgstr "Einhiet %s hat bereits in Zeile %d Befehle bekommen"
 
 #: echeck.c:1731
 #, c-format
 msgid "Unit %s already has moved"
-msgstr ""
+msgstr "Einheit %s hat sich bereits bewegt"
 
-#: echeck.c:3737
+#: echeck.c:1733 echeck.c:3737
 #, c-format
 msgid "Unit %s can teach %d more students"
-msgstr "Einheit %s kann noch %d Schüler lehren"
-
-#: echeck.c:1733
-#, c-format
-msgid "Unit %s can teach %d more trainees."
-msgstr ""
+msgstr "Einheit %s kann noch %d weitere Schüler lehren"
 
 #: echeck.c:1735
 #, c-format
-msgid "Unit %s has %d men!"
-msgstr ""
+msgid "Unit %s has %d men"
+msgstr "Einheit %s hat %d Personen"
 
 #: echeck.c:3541
 #, c-format
@@ -681,14 +676,14 @@ msgid "Unit %s has 0 men and is taught by unit %s"
 msgstr "Einheit %s hat 0 Personen und wird von Einheit %s gelehrt"
 
 #: echeck.c:3706
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %s has 0 men and teaches unit %s"
 msgstr "Einheit %s hat 0 Personen und lehrt Einheit %s"
 
 #: echeck.c:2388
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %s has no long order"
-msgstr "Einheit %s nicht gefunden"
+msgstr "Einheit %s hat keinen langen Befehl"
 
 #: echeck.c:1710
 #, c-format
@@ -731,7 +726,7 @@ msgid "Unit %s may lack control over ship %s"
 msgstr ""
 
 #: echeck.c:3479
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %s may lose silver and/or items"
 msgstr "Einheit %s verliert Silber und evtl. Gegenstände"
 
@@ -751,9 +746,9 @@ msgid "Unit %s needs %d more silver to maintain a building"
 msgstr ""
 
 #: echeck.c:1590
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %s not found"
-msgstr "Einheit %s nicht gefunden."
+msgstr "Einheit %s nicht gefunden"
 
 #: echeck.c:1746
 #, c-format
@@ -761,7 +756,7 @@ msgid "Unit %s on ship %s has already moved"
 msgstr ""
 
 #: echeck.c:2270
-#, fuzzy, c-format
+#, c-format
 msgid "Unit '%s' is not possible here"
 msgstr "Einheit '%s' geht hier nicht"
 
@@ -809,13 +804,12 @@ msgid "Unrecognized direction"
 msgstr ""
 
 #: echeck.c:1748 echeck.c:2589 echeck.c:2617 echeck.c:2669 echeck.c:2889
-#, fuzzy
 msgid "Unrecognized object"
-msgstr "Unbekannter Befehl"
+msgstr "Unbekanntes Objekt"
 
 #: echeck.c:1749
 msgid "Unrecognized option"
-msgstr ""
+msgstr "Unbekannte Option"
 
 #: echeck.c:1750 echeck.c:4415
 msgid "Unrecognized order"
@@ -826,29 +820,25 @@ msgid "Unrecognized potion"
 msgstr ""
 
 #: echeck.c:4369
-#, fuzzy
 msgid "Unrecognized race"
-msgstr "Unbekannter Befehl"
+msgstr "Unbekannte Rasse"
 
 #: echeck.c:4232
-#, fuzzy
 msgid "Unrecognized report option"
-msgstr "Unbekannter Befehl"
+msgstr "Unbekannte Reportoption"
 
 #: echeck.c:4080 echeck.c:4100
-#, fuzzy
 msgid "Unrecognized skill"
-msgstr "Unbekannter Befehl"
+msgstr "Unbekanntes Talent"
 
 #: echeck.c:2740
-#, fuzzy
 msgid "Unrecognized spell"
-msgstr "Unbekannter Befehl"
+msgstr "Unbekannter Zauber"
 
 #: echeck.c:2413
 #, c-format
 msgid "Using unit %s"
-msgstr ""
+msgstr "Benutze Einheit %s"
 
 #: echeck.c:1608 echeck.c:1635
 #, c-format
@@ -856,7 +846,6 @@ msgid "Warning in line %d"
 msgstr "Warnung in Zeile %d"
 
 #: echeck.c:4072
-#, fuzzy
 msgid "Who should be taught?"
 msgstr "Wen lehren?"
 
@@ -890,13 +879,12 @@ msgid "commands"
 msgstr ""
 
 #: echeck.c:3041
-#, fuzzy
 msgid "direction"
 msgstr "Richtung"
 
 #: echeck.c:1666
 msgid "directions"
-msgstr ""
+msgstr "Richtungen"
 
 #: echeck.c:1657 echeck.c:2370
 msgid "invalid email address"
@@ -949,160 +937,3 @@ msgstr ""
 #: echeck.c:1702
 msgid "~** ERROR!! **"
 msgstr ""
-
-#~ msgid "Unit %s is taught by unit %s"
-#~ msgstr "Einhiet %s wird von Einheit %s gelehrt"
-
-#, fuzzy
-#~ msgid "Unit %s already has a long order in line %d ('%s')"
-#~ msgstr "Einheit %s nicht gefunden"
-
-#, fuzzy
-#~ msgid " Missing unit"
-#~ msgstr "Keine Einheitsnummer"
-
-#, fuzzy
-#~ msgid " Missing unit number"
-#~ msgstr "Keine Einheitsnummer"
-
-#, fuzzy
-#~ msgid " Names must not contain brackets"
-#~ msgstr "Namen dürfen keine Klammern enthalten"
-
-#, fuzzy
-#~ msgid " No text"
-#~ msgstr "Kein Text"
-
-#, fuzzy
-#~ msgid " Number is not possible here"
-#~ msgstr "Einheit %s hat %d Silber"
-
-#, fuzzy
-#~ msgid " TEMPORARY units can't use RESERVE! Use GIVE instead!"
-#~ msgstr "Neue Einheiten könenn nichts reservieren"
-
-#, fuzzy
-#~ msgid " Text too long (max. %d)"
-#~ msgstr "Text zu lang (max %d Zeichen)"
-
-#, fuzzy
-#~ msgid " The orders look good.\n"
-#~ msgstr "Die Befehle scheinen in Ordnung zu sein."
-
-#, fuzzy
-#~ msgid ""
-#~ " Unit \n"
-#~ "ould make use of %d more teachers"
-#~ msgstr "Einheit %s kann noch %d Lehrer gebrauchen"
-
-#, fuzzy
-#~ msgid " Unit %s already has a "
-#~ msgstr "Einheit %s nicht gefunden"
-
-#, fuzzy
-#~ msgid " Unit %s already has a long order in line %d (%s)"
-#~ msgstr "Einheit %s nicht gefunden"
-
-#, fuzzy
-#~ msgid " Unit %s already has got orders in line %d. "
-#~ msgstr "Einheit %s nicht gefunden"
-
-#, fuzzy
-#~ msgid " Unit %s already has moved"
-#~ msgstr "Einheit %s nicht gefunden"
-
-#, fuzzy
-#~ msgid " Unit %s can teach %d more trainees."
-#~ msgstr "Einheit %s kann noch %d Schüler lehren"
-
-#, fuzzy
-#~ msgid " Unit %s has %d men!"
-#~ msgstr "Einheit %s hat %d Silber"
-
-#, fuzzy
-#~ msgid " Unit %s has %s%d silver!"
-#~ msgstr "Einheit %s hat %d Silber"
-
-#, fuzzy
-#~ msgid " Unit %s is carried by unit %s but rides with "
-#~ msgstr "Einheit %s wird gelehrt, lernt aber nicht"
-
-#, fuzzy
-#~ msgid " Unit %s is taught by unit "
-#~ msgstr "Einheit %s hat 0 Personen und wird von Einheit %s gelehrt"
-
-#, fuzzy
-#~ msgid " Unit %s may have not enough men"
-#~ msgstr "Einheit %s nicht gefunden"
-
-#, fuzzy
-#~ msgid " Unit %s may have not enough silver"
-#~ msgstr "Einheit %s hat %d Silber"
-
-#, fuzzy
-#~ msgid " Unit %s may move too far"
-#~ msgstr "Einheit %s nicht gefunden"
-
-#, fuzzy
-#~ msgid " Unit 0 used"
-#~ msgstr "Partei 0 verwendet"
-
-#, fuzzy
-#~ msgid " Unit 0/Peasants not possible here"
-#~ msgstr "Einheit %s hat %d Silber"
-
-#, fuzzy
-#~ msgid " Unit TEMPORARY %s hasn't been generated with MAKE TEMPORARY"
-#~ msgstr "Einheit TEMP %s wurde nicht mit MACHE TEMP erschaffen"
-
-#, fuzzy
-#~ msgid " Unit TEMPORARY %s hasn't got men and hasn't recruited anyone"
-#~ msgstr "Einheit TEMP %s hat nicht rekrutiert und keine Personen bekommen"
-
-#, fuzzy
-#~ msgid " Unrecognized direction"
-#~ msgstr "Unbekannter Befehl"
-
-#, fuzzy
-#~ msgid " Unrecognized object"
-#~ msgstr "Unbekannter Befehl"
-
-#, fuzzy
-#~ msgid " Unrecognized option"
-#~ msgstr "Unbekannter Befehl"
-
-#, fuzzy
-#~ msgid " Unrecognized order"
-#~ msgstr "Unbekannter Befehl"
-
-#, fuzzy
-#~ msgid " Unrecognized potion"
-#~ msgstr "Unbekannter Befehl"
-
-#, fuzzy
-#~ msgid " directions"
-#~ msgstr "Richtung"
-
-#, fuzzy
-#~ msgid " invalid email address"
-#~ msgstr "Ungültige Email-Adresse"
-
-#, fuzzy
-#~ msgid " not found"
-#~ msgstr "Einheit %s nicht gefunden."
-
-#, fuzzy
-#~ msgid " parameters"
-#~ msgstr "Falscher Parameter"
-
-#, fuzzy
-#~ msgid " unit"
-#~ msgstr "%d Einheit"
-
-#, fuzzy
-#~ msgid " units"
-#~ msgstr "%d Einheit"
-
-#, fuzzy
-#~ msgid " There were %d errors"
-#~ msgstr "%d Fehler gefunden."
