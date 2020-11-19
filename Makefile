@@ -49,7 +49,7 @@ locale/%/LC_MESSAGES/echeck.mo: locale/%/echeck.po
 	@rm -rf $@
 	@mkdir -p $@
 	@rmdir $@
-	msgfmt $< -o $@
+	msgfmt -c $< -o $@
 
 echeck.exe: echeck.c unicode.c unicode.h config.h
 	$(MINGW_CC) $(CFLAGS) -o echeck.exe echeck.c unicode.c

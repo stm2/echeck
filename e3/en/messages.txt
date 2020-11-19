@@ -64,7 +64,6 @@ FACTION, faction
 FOLLOW, FOLLOW UNIT xx, FOLLOW SHIP xx or FOLLOW
 FOUNDERROR, There was one error
 FOUNDERRORS, There were %d errors
-FOUNDORDERS, Found orders for faction %s.\n
 GIVEWHAT, Give what?
 INTERNALCHECK, <internal check>
 INVALIDEMAIL, invalid email address

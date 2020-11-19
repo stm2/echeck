@@ -556,7 +556,6 @@ enum {
   PROCESSINGFILE,
   QUITMSG,
   RECRUITCOSTSSET,
-  REGIONMISSSILVER,
   RESERVE0SENSELESS,
   RESERVEWHAT,
   RESTARTMSG,
@@ -655,7 +654,6 @@ static const char *Errors[MAX_ERRORS] = {
   "PROCESSINGFILE",
   "QUITMSG",
   "RECRUITCOSTSSET",
-  "REGIONMISSSILVER",
   "RESERVE0SENSELESS",
   "RESERVEWHAT",
   "RESTARTMSG",
@@ -1713,7 +1711,6 @@ static const struct warning {
 {"PROCESSINGFILE", t(" Processing file '%s'.")},
 {"QUITMSG", t(" Attention! QUIT found! Your faction will be cancelled!")},
 {"RECRUITCOSTSSET", t(" Recruit costs have been set to %d silver, t(")},
-{"REGIONMISSSILVER", t(" There is not enough silver in %s (%d,%d) for upkeep; %d silver is missing.")},
 {"RESERVE0SENSELESS", t(" RESERVE 0 xxx doesn't make any sense")},
 {"RESERVEWHAT", t(" RESERVE what?")},
 {"RESTARTMSG", t(" RESTART found!")},
@@ -3676,7 +3673,7 @@ void check_living(void)
       if (u->region == r && u->lives > 0)
         r->geld -= u->people * 10;
     if (r->geld < 0) {
-      sprintf(warn_buf, Errors[REGIONMISSSILVER],
+      sprintf(warn_buf, _("There is not enough silver in %s (%d,%d) for upkeep; %d silver is missing."),
         r->name, r->x, r->y, -(r->geld));
       warn(warn_buf, r->line_no, 4);
     }
@@ -5281,7 +5278,7 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GETTEXT
   setlocale(LC_ALL, "");
   if (0 == fileexists("locale/de/LC_MESSAGES")) {
-    bindtextdomain("echeck", "locale");
+    bindtextdomain("echeck", "./locale");
   } else {
     bindtextdomain("echeck", "/usr/share/locale");
   }
