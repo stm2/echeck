@@ -137,8 +137,6 @@ UNITHASNTPERSONS, Einheit TEMP %s hat nicht rekrutiert und keine Personen bekomm
 UNITHASPERSONS, Einheit %s hat %d Personen!
 UNITHASSILVER, Einheit %s hat %s%d Silber!
 UNITISTEACHED, Einheit %s wird von Einheit 
-UNITLOSESITEMS, Einheit %s verliert Silber und evtl. Gegenstände
-UNITMISSCONTROL, Einheit %s hat evtl. nicht das Kommando über Schiff %s
 UNITMISSING, Einheit fehlt
 UNITMISSPERSON, Einheit %s hat evtl. zu wenig Personen
 UNITMISSSILVER, Einheit %s hat evtl. zu wenig Silber
