@@ -4,6 +4,7 @@ addons:
     packages:
       - gettext
     update: true 
+osx_image: xcode12.2
 compiler:
   - gcc
   - clang
