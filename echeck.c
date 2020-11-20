@@ -511,7 +511,6 @@ enum {
   INVALIDEMAIL,
   ISUSEDIN2REGIONS,
   ITEM,
-  LONGCOMBATNOLONGORDER,
   MAGIC,
   MISSFILEPARAM,
   MISSFILECMD,
@@ -607,7 +606,6 @@ static const char *Errors[MAX_ERRORS] = {
   "INVALIDEMAIL",
   "ISUSEDIN2REGIONS",
   "ITEM",
-  "LONGCOMBATNOLONGORDER",
   "MAGIC",
   "MISSFILEPARAM",
   "MISSFILECMD",
@@ -1657,7 +1655,6 @@ static const struct warning {
   {"INVALIDEMAIL", t("invalid email address")},
   {"ISUSEDIN2REGIONS", t("TEMP %s is used in region %d,%d and region %d,%d (line %d)")},
   {"ITEM", t("item")},
-  {"LONGCOMBATNOLONGORDER", t("Longer combats exclude long orders")},
   {"MAGIC", t("Magic")},
   {"MISSFILEPARAM", t("parameters")},
   {"MISSFILECMD", t("commands")},
@@ -3610,7 +3607,7 @@ void check_money(bool do_move)
         if (!t)
           t = find_unit(u->drive, 1);
         if (t && t->lives) {
-          sprintf(warn_buf, _(" Unit %s rides with unit %s, but the latter doesn't carry the former"), uid(u), Uid(u->drive));
+          sprintf(warn_buf, _("Unit %s rides with unit %s, but the latter doesn't carry the former"), uid(u), Uid(u->drive));
           Error(warn_buf, u->line_no, u->long_order);
         } else {                /* unbekannte Einheit -> unbekanntes Ziel */
           u->hasmoved = 1;
@@ -3634,7 +3631,7 @@ void check_money(bool do_move)
       if (!t)
         t = find_unit(u->transport, 1);
       if (t && t->lives && t->drive != u->no) {
-        sprintf(warn_buf, _(" Unit %s carries unit %s, but the latter does not ride with the former"), Uid(u->transport), uid(u));
+        sprintf(warn_buf, _("Unit %s carries unit %s, but the latter does not ride with the former"), Uid(u->transport), uid(u));
         Error(warn_buf, u->line_no, u->long_order);
       }
     }
@@ -3845,9 +3842,9 @@ void checkanorder(char *Orders)
     }
     if (!attack_warning) {
       /*
-       * damit längere Angriffe nicht in Warnungs-Tiraden ausarten
+       * damit laengere Angriffe nicht in Warnungs-Tiraden ausarten
        */
-      dwarning(Errors[LONGCOMBATNOLONGORDER], 5);
+      dwarning(_("Longer combats exclude long orders"), 5);
       attack_warning = 1;
     }
     if (getaunit(42) == 42) {
