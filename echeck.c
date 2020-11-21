@@ -544,7 +544,6 @@ enum {
   ORDERNUMBER,
   ORDERSREAD,
   PASSWORDCLEARED,
-  PASSWORDMSG1,
   PASSWORDMSG2,
   PASSWORDMSG3,
   POST,
@@ -577,7 +576,6 @@ enum {
   UNITMISSPERSON,
   UNITMISSSILVER,
   UNITMOVESSHIP,
-  UNITMOVESTOOFAR,
   UNITMUSTBEONSHIP,
   UNITONSHIPHASMOVED,
   UNRECOGNIZEDDIRECTION,
@@ -638,7 +636,6 @@ static const char *Errors[MAX_ERRORS] = {
   "ORDERNUMBER",
   "ORDERSREAD",
   "PASSWORDCLEARED",
-  "PASSWORDMSG1",
   "PASSWORDMSG2",
   "PASSWORDMSG3",
   "POST",
@@ -671,7 +668,6 @@ static const char *Errors[MAX_ERRORS] = {
   "UNITMISSPERSON",
   "UNITMISSSILVER",
   "UNITMOVESSHIP",
-  "UNITMOVESTOOFAR",
   "UNITMUSTBEONSHIP",
   "UNITONSHIPHASMOVED",
   "UNRECOGNIZEDDIRECTION",
@@ -1691,7 +1687,6 @@ static const struct warning {
   {"ORDERNUMBER", t("NUMBER SHIP, NUMBER CASTLE, NUMBER FACTION or NUMBER UNIT")},
   {"ORDERSOK", t("The orders look good.\n")},
   {"PASSWORDCLEARED", t("Password cleared")},
-  {"PASSWORDMSG1", t("Incorrect passowrd")},
   {"PASSWORDMSG2", t("\n\n  ****  A T T E N T I O N !  ****\n\n  ****  Password missing!  ****\n\n")},
   {"PASSWORDMSG3", t("~** ERROR!! **")},
   {"POST", t("post-")},
@@ -1733,7 +1728,6 @@ static const struct warning {
   {"UNITMISSPERSON", t("Unit %s may have not enough men")},
   {"UNITMISSSILVER", t("Unit %s may have not enough silver")},
   {"UNITMOVESSHIP", t("Unit %s moves ship %s and may lack control")},
-  {"UNITMOVESTOOFAR", t("Unit %s may move too far")},
   {"UNITMUSTBEONSHIP", t("Unit must be in a castle, in a building or on a ship")},
   {"UNITNEEDSTEACHERS", t("Unit \nould make use of %d more teachers")},
   {"UNITNOTONSHIPBUTONSHIP", t("Unit %s may be on ship %s instead of ship %s")},
@@ -1746,8 +1740,7 @@ static const struct warning {
   {NULL, NULL }
 };
 
-void warning_deprecated(const char *token, int line_no, char *order_buf, int level)
-{
+const char *cgettext(const char *token) {
   int i;
   for (i = 0; warnings[i].token; ++i) {
     int diff = strcmp(warnings[i].token, token);
@@ -1755,11 +1748,15 @@ void warning_deprecated(const char *token, int line_no, char *order_buf, int lev
       break;
     }
     if (diff == 0) {
-      warning(gettext(warnings[i].message), line_no, order_buf, level);
-      return;
+      return gettext(warnings[i].message);
     }
   }
-  warning(token, line_no, order_buf, level);
+  return token;
+}
+
+void warning_deprecated(const char *token, int line_no, char *order_buf, int level)
+{
+  warning(cgettext(token), line_no, order_buf, level);
 }
 
 void checkstring(char *s, size_t l, int type)
@@ -3132,7 +3129,7 @@ void checkdirections(int key)
         Scat(printdirection(i));
         count++;
         if (!noship && order_unit->ship == 0 && key != K_ROUTE && count == 4) {
-          sprintf(warn_buf, _("Unit %s may move too far"), uid(order_unit));
+          sprintf(warn_buf, _("Unit %s may be moving too far"), uid(order_unit));
           awarning(warn_buf, 4);
         }
         switch (i) {
@@ -3171,12 +3168,12 @@ void checkdirections(int key)
   if (!count)
     anerror(Errors[UNRECOGNIZEDDIRECTION]);
   if (key == K_ROUTE && !noroute && (sx != x || sy != y)) {
-    sprintf(warn_buf, Errors[ROUTENOTCYCLIC], sx, sy, x, y);
+    sprintf(warn_buf, cgettext(Errors[ROUTENOTCYCLIC]), sx, sy, x, y);
     awarning(warn_buf, 4);
   }
   if (!does_default) {
     if (order_unit->hasmoved) {
-      sprintf(warn_buf, Errors[UNITALREADYHASMOVED], uid(order_unit));
+      sprintf(warn_buf, cgettext(Errors[UNITALREADYHASMOVED]), uid(order_unit));
       anerror(warn_buf);
       return;
     }
@@ -3365,7 +3362,7 @@ int studycost(t_skills * talent)
 
     i = findstr(magiegebiet, s, 5);
     if (i >= 0) {
-      fprintf(ERR, Errors[SCHOOLCHOSEN], magiegebiet[i]);
+      fprintf(ERR, cgettext(Errors[SCHOOLCHOSEN]), magiegebiet[i]);
       i = geti();
     } else
       i = atoi(s);
@@ -3458,14 +3455,14 @@ void check_money(bool do_move)
         Error(warn_buf, u->line_no, u->order);
       }
       if (u->people < 0) {
-        sprintf(warn_buf, Errors[UNITHASPERSONS], uid(u), u->people);
+        sprintf(warn_buf, cgettext(Errors[UNITHASPERSONS]), uid(u), u->people);
         warn(warn_buf, u->line_no, 3);
       }
 
       if (u->people == 0 && ((!nolost && !u->temp && u->money > 0) || u->temp)) {
         if (u->temp) {
           if (u->money > 0)
-            sprintf(warn_buf, Errors[UNITHASNTPERSONS], itob(u->no));
+            sprintf(warn_buf, cgettext(Errors[UNITHASNTPERSONS]), itob(u->no));
           else
             sprintf(warn_buf, _("Unit TEMP %s has no men and has not recruited any"), itob(u->no));
           warn(warn_buf, u->line_no, 2);
@@ -3562,7 +3559,7 @@ void check_money(bool do_move)
       continue;
     if (u->hasmoved > 1) {
       if (!noship && u->ship > 0) {
-        sprintf(warn_buf, Errors[UNITMOVESSHIP], uid(u), itob(u->ship));
+        sprintf(warn_buf, cgettext(Errors[UNITMOVESSHIP]), uid(u), itob(u->ship));
         warn(warn_buf, u->line_no, 4);
       }
       i = -u->ship;
@@ -3572,7 +3569,7 @@ void check_money(bool do_move)
         for (t = units; t; t = t->next) {
           if (t->ship == i) {
             if (t->hasmoved > 1) {      /* schon bewegt! */
-              sprintf(warn_buf, Errors[UNITONSHIPHASMOVED], uid(t), itob(i));
+              sprintf(warn_buf, cgettext(Errors[UNITONSHIPHASMOVED]), uid(t), itob(i));
               Error(warn_buf, t->line_no, t->long_order);
             }
             t->hasmoved = 1;
@@ -3589,14 +3586,14 @@ void check_money(bool do_move)
       continue;
 
     if (u->transport && u->drive && u->drive != u->transport) {
-      sprintf(checked_buf, Errors[RIDESWRONGUNIT], uid(u), Uid(u->transport));
+      sprintf(checked_buf, cgettext(Errors[RIDESWRONGUNIT]), uid(u), Uid(u->transport));
       scat(Uid(u->drive));
       warning(checked_buf, u->line_no, u->long_order, 1);
       continue;
     }
     if (u->drive) {             /* FAHRE; in u->transport steht die  transportierende Einheit */
       if (u->hasmoved > 0) {
-        sprintf(warn_buf, Errors[UNITALREADYHASMOVED], uid(u));
+        sprintf(warn_buf, cgettext(Errors[UNITALREADYHASMOVED]), uid(u));
         Error(warn_buf, u->line_no, u->long_order);
       }
       if (u->transport == 0) {
@@ -4488,8 +4485,8 @@ int readafaction(void)
     bcat(i);
     s = getstr();
     if (s[0] == 0 || strcmp(s, "hier_passwort_eintragen") == 0) {
-      if (compile)              /* nicht übertreiben im Compiler-Mode */
-        anerror(Errors[PASSWORDMSG1]);
+      if (compile)              /* nicht uebertreiben im Compiler-Mode */
+        anerror(_("Incorrect password"));
       else
         fputs(Errors[PASSWORDMSG2], ERR);
       qcat(Errors[PASSWORDMSG3]);
