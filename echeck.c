@@ -55,6 +55,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 
 #include "config.h"
 #include "unicode.h"
+#include "whereami.h"
 
 static const char *echeck_version = "4.5.0";
 
@@ -5259,17 +5260,40 @@ void init(void)
   filename = getenv("ECHECKOPTS");
 }
 
+#ifdef HAVE_GETTEXT
+void init_intl(void)
+{
+  const char *reldir = "/locale";
+  char *path;
+  int length, dirname_length;
+  
+  setlocale(LC_ALL, "");
+  
+  length = wai_getExecutablePath(NULL, 0, &dirname_length);
+  if (length > 0) {
+    path = malloc(length + 1 + strlen(reldir));
+    wai_getExecutablePath(path, length, &dirname_length);
+    strcpy(path+length, reldir);
+    if (0 == fileexists(reldir)) {
+      bindtextdomain("echeck", path);
+    }
+    else {
+      bindtextdomain("echeck", "/usr/share/locale");
+    }
+    free(path);
+  }
+  else {
+    bindtextdomain("echeck", "/usr/share/locale");
+  }
+  textdomain("echeck");
+}
+#endif
+
 int main(int argc, char *argv[])
 {
   int faction_count = 0, unit_count = 0, nextarg = 1, i;
 #ifdef HAVE_GETTEXT
-  setlocale(LC_ALL, "");
-  if (0 == fileexists("locale/de/LC_MESSAGES")) {
-    bindtextdomain("echeck", "./locale");
-  } else {
-    bindtextdomain("echeck", "/usr/share/locale");
-  }
-  textdomain("echeck");
+  init_intl();
 #endif
 #if macintosh
   argc = ccommand(&argv);       /* consolenabruf der parameter fuer  macintosh added 15.6.00 chartus */

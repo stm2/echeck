@@ -11,6 +11,7 @@
 #include "config.h"
 #include "unicode.h"
 
+#include <stdlib.h>
 #include <errno.h>
 #include <string.h>
 #include <wctype.h>

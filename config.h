@@ -13,8 +13,6 @@
 # define HAVE__SNPRINTF
 #elif defined(__GNUC__)
 # ifdef __STRICT_ANSI__
-#  include <strings.h>
-# else
 #  define HAVE_STRDUP
 #  define HAVE_SNPRINTF
 # endif
@@ -26,10 +24,6 @@
 #if !defined(HAVE_STRDUP) && defined(HAVE__STRDUP)
 # define strdup _strdup
 # define HAVE_STRDUP
-#endif
-
-#if !defined(HAVE_STRDUP)
-# define strdup(s) strcpy(malloc(strlen(s)+1), s)
 #endif
 
 #if !defined(HAVE_STRICMP) && defined(HAVE_STRCASECMP)

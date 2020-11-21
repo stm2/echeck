@@ -1,7 +1,7 @@
 OS_NAME := $(shell uname -s | tr A-Z a-z)
 MINGW_STRIP = i686-w64-mingw32-strip
 MINGW_CC = i686-w64-mingw32-gcc
-CFLAGS = -Wall -std=c99 -I. -DHAVE_GETTEXT
+CFLAGS = -Wall -std=c99 -I. -DHAVE_GETTEXT -D_DEFAULT_SOURCE
 RELEASE_CFLAGS = -Os -Werror
 DEBUG_CFLAGS = -g
 #CFLAGS += $(RELEASE_CFLAGS)
@@ -55,11 +55,11 @@ echeck.exe: echeck.c unicode.c unicode.h config.h
 	$(MINGW_CC) $(CFLAGS) -o echeck.exe echeck.c unicode.c
 	$(MINGW_STRIP) echeck.exe
 
-echeck: echeck.c unicode.c unicode.h config.h
-	$(CC) $(LFLAGS) $(CFLAGS) -o echeck echeck.c unicode.c
+echeck: echeck.c unicode.c unicode.h config.h whereami.c whereami.h
+	$(CC) $(LFLAGS) $(CFLAGS) -o echeck echeck.c unicode.c whereami.c
 
-tests: echeck.c unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
-	$(CC) $(LFLAGS) $(CFLAGS) -DTESTING -o tests echeck.c unicode.c $(TEST_SRC)
+tests: echeck.c whereami.c whereami.h unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
+	$(CC) $(LFLAGS) $(CFLAGS) -DTESTING -o tests echeck.c whereami.c unicode.c $(TEST_SRC)
 
 clean:
 	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip locale/de/LC_MESSAGES/echeck.mo
