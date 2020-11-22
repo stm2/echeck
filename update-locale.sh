@@ -1,6 +1,6 @@
 #!/bin/sh
-xgettext -k_ -kt -d echeck -o locale/echeck.pot -s echeck.c
-msgmerge -o locale/de/echeck.po locale/de/echeck.po locale/echeck.pot
+xgettext -k_ -kt -d echeck -o po/echeck.pot -s echeck.c
+msgmerge -o po/echeck.de.po po/echeck.de.po po/echeck.pot
 mkdir -p locale/de/LC_MESSAGES
-msgfmt locale/de/echeck.po -o locale/de/LC_MESSAGES/echeck.mo
+msgfmt po/echeck.de.po -o locale/de/LC_MESSAGES/echeck.mo
 
