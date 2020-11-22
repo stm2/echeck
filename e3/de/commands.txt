@@ -54,7 +54,6 @@ BANNER,       Banner
 NUMBER,       Nummer
 SCHOOL,       Magiegebiet
 PIRACY,       Piraterie
-RESTART,      Neustart
 GROUP,        Gruppe
 SORT,         Sortieren
 PREFIX,       Präfix

@@ -73,8 +73,6 @@ MISSINGNUMRECRUITS, Anzahl Rekruten fehlt
 MISSINGOFFER, Geldgebot fehlt
 MISSINGPARAMETERS, Parameter STUFE oder REGION fehlt
 MISSINGPASSWORD, Kein Passwort angeben
-MOVENOTPOSSIBLEWITHPAUSE, NACH geht nicht mit PAUSE
-MSGTO, BOTSCHAFT AN PARTEI, BOTSCHAFT AN EINHEIT oder BOTSCHAFT AN REGION
 NEEDBOTHCOORDINATES, Beide Koordinaten müssen angegeben werden
 NOCARRIER, Kann zu transportierende Einheit nicht ermitteln
 NOFIND, FINDE wurde gegen OPTION ADRESSEN ersetzt

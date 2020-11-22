@@ -91,7 +91,6 @@ MISSINGPARAMETERS, LEVEL or REGION missing
 MISSINGPASSWORD, Missing password
 MISSINGUNITNUMBER, Missing unit number
 MOVENOTPOSSIBLEWITHPAUSE, MOVE and PAUSE cannot be combined
-MSGTO, MESSAGE TO FACTION, MESSAGE TO UNIT or MESSAGE TO REGION
 NAMECONTAINSBRACKETS, Names must not contain brackets
 NEEDBOTHCOORDINATES, Both coordinated must be supplied
 NOCARRIER, Can't find unit to carry

@@ -252,7 +252,6 @@ enum {
   K_NUMBER,
   K_SCHOOL,
   K_PIRACY,
-  K_RESTART,
   K_GROUP,
   K_SORT,
   K_PREFIX,
@@ -318,7 +317,6 @@ static const char *Keywords[MAXKEYWORDS] = {
   "NUMBER",
   "SCHOOL",
   "PIRACY",
-  "RESTART",
   "GROUP",
   "SORT",
   "PREFIX",
@@ -513,7 +511,6 @@ enum {
   INVALIDEMAIL,
   ISUSEDIN2REGIONS,
   ITEM,
-  MAGIC,
   MISSFILEPARAM,
   MISSFILECMD,
   MISSFILEITEM,
@@ -528,7 +525,6 @@ enum {
   MISSINGPARAMETERS,
   MISSINGPASSWORD,
   MISSINGUNITNUMBER,
-  MOVENOTPOSSIBLEWITHPAUSE,
   MSGTO,
   NAMECONTAINSBRACKETS,
   NEEDBOTHCOORDINATES,
@@ -547,7 +543,6 @@ enum {
   ORDERSREAD,
   PASSWORDCLEARED,
   PASSWORDMSG2,
-  PASSWORDMSG3,
   POST,
   PRE,
   PROCESSINGFILE,
@@ -555,7 +550,6 @@ enum {
   RECRUITCOSTSSET,
   RESERVE0SENSELESS,
   RESERVEWHAT,
-  RESTARTMSG,
   RIDESWRONGUNIT,
   ROUTENOTCYCLIC,
   ROUTESTARTSWITHPAUSE,
@@ -563,9 +557,6 @@ enum {
   SEARCHPATHIS,
   SILVERPOOL,
   SORT,
-  THERE,
-  UNIT,
-  UNITS,
   UNIT0NOTPOSSIBLE,
   UNIT0USED,
   UNITALREADYHAS,
@@ -573,7 +564,6 @@ enum {
   UNITALREADYHASORDERS,
   UNITHASNTPERSONS,
   UNITHASPERSONS,
-  UNITHASSILVER,
   UNITMISSING,
   UNITMISSPERSON,
   UNITMISSSILVER,
@@ -605,7 +595,6 @@ static const char *Errors[MAX_ERRORS] = {
   "INVALIDEMAIL",
   "ISUSEDIN2REGIONS",
   "ITEM",
-  "MAGIC",
   "MISSFILEPARAM",
   "MISSFILECMD",
   "MISSFILEITEM",
@@ -620,7 +609,6 @@ static const char *Errors[MAX_ERRORS] = {
   "MISSINGPARAMETERS",
   "MISSINGPASSWORD",
   "MISSINGUNITNUMBER",
-  "MOVENOTPOSSIBLEWITHPAUSE",
   "MSGTO",
   "NAMECONTAINSBRACKETS",
   "NEEDBOTHCOORDINATES",
@@ -639,7 +627,6 @@ static const char *Errors[MAX_ERRORS] = {
   "ORDERSREAD",
   "PASSWORDCLEARED",
   "PASSWORDMSG2",
-  "PASSWORDMSG3",
   "POST",
   "PRE",
   "PROCESSINGFILE",
@@ -647,7 +634,6 @@ static const char *Errors[MAX_ERRORS] = {
   "RECRUITCOSTSSET",
   "RESERVE0SENSELESS",
   "RESERVEWHAT",
-  "RESTARTMSG",
   "RIDESWRONGUNIT",
   "ROUTENOTCYCLIC",
   "ROUTESTARTSWITHPAUSE",
@@ -655,9 +641,6 @@ static const char *Errors[MAX_ERRORS] = {
   "SEARCHPATHIS",
   "SILVERPOOL",
   "SORT",
-  "THERE",
-  "UNIT",
-  "UNITS",
   "UNIT0NOTPOSSIBLE",
   "UNIT0USED",
   "UNITALREADYHAS",
@@ -665,7 +648,6 @@ static const char *Errors[MAX_ERRORS] = {
   "UNITALREADYHASORDERS",
   "UNITHASNTPERSONS",
   "UNITHASPERSONS",
-  "UNITHASSILVER",
   "UNITMISSING",
   "UNITMISSPERSON",
   "UNITMISSSILVER",
@@ -1069,6 +1051,9 @@ void readskill(char *s)
   t_skills *sk;
 
   sk = (t_skills *) calloc(1, sizeof(t_skills));
+  if (!sk) {
+    return;
+  }
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -1651,7 +1636,6 @@ static const struct warning {
   {"INVALIDEMAIL", t("invalid email address")},
   {"ISUSEDIN2REGIONS", t("TEMP %s is used in region %d,%d and region %d,%d (line %d)")},
   {"ITEM", t("item")},
-  {"MAGIC", t("Magic")},
   {"MISSFILEPARAM", t("parameters")},
   {"MISSFILECMD", t("commands")},
   {"MISSFILEITEM", t("items")},
@@ -1668,7 +1652,6 @@ static const struct warning {
   {"MISSINGPARAMETERS", t("LEVEL or REGION missing")},
   {"MISSINGPASSWORD", t("Missing password")},
   {"MISSINGUNITNUMBER", t("Missing unit number")},
-  {"MOVENOTPOSSIBLEWITHPAUSE", t("MOVE and PAUSE cannot be combined")},
   {"MSGTO", t("MESSAGE TO FACTION, MESSAGE TO UNIT or MESSAGE TO REGION")},
   {"NAMECONTAINSBRACKETS", t("Names must not contain brackets")},
   {"NEEDBOTHCOORDINATES", t("Both coordinated must be supplied")},
@@ -1686,17 +1669,14 @@ static const struct warning {
   {"OBJECTNUMBERMISSING", t("number of object missing")},
   {"ONLYSABOTAGESHIP", t("For now, there is only SABOTAGE SHIP")},
   {"ORDERNUMBER", t("NUMBER SHIP, NUMBER CASTLE, NUMBER FACTION or NUMBER UNIT")},
-  {"ORDERSOK", t("The orders look good.\n")},
   {"PASSWORDCLEARED", t("Password cleared")},
   {"PASSWORDMSG2", t("\n\n  ****  A T T E N T I O N !  ****\n\n  ****  Password missing!  ****\n\n")},
-  {"PASSWORDMSG3", t("~** ERROR!! **")},
   {"POST", t("post-")},
   {"PRE", t("pre-")},
   {"PROCESSINGFILE", t("Processing file '%s'.")},
   {"QUITMSG", t("Attention! QUIT found! Your faction will be cancelled!")},
   {"RESERVE0SENSELESS", t("RESERVE 0 xxx doesn't make any sense")},
   {"RESERVEWHAT", t("RESERVE what?")},
-  {"RESTARTMSG", t("RESTART found!")},
   {"RIDESWRONGUNIT", t("Unit %s is carried by unit %s but rides with ")},
   {"ROUTENOTCYCLIC", t("ROUTE is not cyclic; (%d,%d) -> (%d,%d)")},
   {"ROUTESTARTSWITHPAUSE", t("ROUTE starts with PAUSE")},
@@ -1704,15 +1684,10 @@ static const struct warning {
   {"SEARCHPATHIS", t("Search path is")},
   {"SORT", t("SORT BEFORE or BEHIND <unit>")},
   {"SUPPLYISOBSOLETE", t("SUPPLY is obsolete, use @GIVE instead")},
-  {"TEACHWHO", t("Teach who?")},
   {"TEMPHASNTPERSONS", t("Unit TEMPORARY %s hasn't got men and hasn't recruited anyone")},
   {"TEMPNOTTEMP", t("Unit TEMPORARY %s hasn't been generated with MAKE TEMPORARY")},
   {"TEMPUNITSCANTRESERVE", t("TEMPORARY units can't use RESERVE! Use GIVE instead!")},
   {"TEMPUNITSCANTGIVE", t("TEMPORARY units can't use GIVE, it happens before MAKE!")},
-  {"TEXTTOOLONG", t("Text too long (max. %d)")},
-  {"THERE", t("There ")},
-  {"UNIT", t("unit")},
-  {"UNITS", t("units")},
   {"UNIT0NOTPOSSIBLE", t("Unit 0/Peasants not possible here")},
   {"UNIT0USED", t("Unit 0 used")},
   {"UNITALREADYHAS", t("Unit %s already has a ")},
@@ -1722,7 +1697,6 @@ static const struct warning {
   {"UNITCANSTILLTEACH", t("Unit %s can teach %d more students")},
   {"UNITHASNTPERSONS", t("Unit TEMPORARY %s hasn't recruited and hasn't got any men! It may lose silver and/or items")},
   {"UNITHASPERSONS", t("Unit %s has %d men")},
-  {"UNITHASSILVER", t("Unit %s has %s%d silver!")},
   {"UNITISTEACHED", t("Unit %s is taught by unit ")},
   {"UNITMISSING", t("Missing unit")},
   {"UNITMISSPERSON", t("Unit %s may have not enough men")},
@@ -3123,7 +3097,7 @@ void checkdirections(int key)
       if (key == K_ROUTE && i == D_PAUSE && count == 0)
         dwarning(Errors[ROUTESTARTSWITHPAUSE], 2);
       if (key == K_MOVE && i == D_PAUSE) {
-        anerror(cgettext(Errors[MOVENOTPOSSIBLEWITHPAUSE]));
+        anerror(_("MOVE and PAUSE cannot be combined"));
         return;
       } else {
         Scat(printdirection(i));
@@ -3869,7 +3843,7 @@ void checkanorder(char *Orders)
     if (isdigit(*s)) {          /* ZÜCHTE anzahl KRÄUTER */
       x = atoi(s);
       if (x <= 0)
-        awarning(_("Number 0 does not make sense here"), 2);
+        awarning(_("Positive value expected"), 2);
       s = getstr();
     }
 
@@ -3882,7 +3856,7 @@ void checkanorder(char *Orders)
       /* ZÜCHTE PFERDE */
       scat(printparam(i));
     } else if (s && (*s)) {
-      anerror(_("BREED HORSES or BREED HERBS?"));
+      anerror(_("This cannot be bred"));
     } else {
       /* ZÜCHTE */
     }
@@ -3939,7 +3913,7 @@ void checkanorder(char *Orders)
     if (i == P_HERBS) {
       scat(printparam(P_HERBS));        /* momentan nur FORSCHE KRÄUTER */
     } else {
-      anerror(_("Only RESEARCH HERBS is allowed"));
+      anerror(_("Only herbs can be researched"));
     }
     long_order();
     break;
@@ -4060,7 +4034,7 @@ void checkanorder(char *Orders)
   case K_TEACH:
     scat(printkeyword(K_TEACH));
     if (!getmoreunits(false))
-      anerror(_("Who should be taught?"));
+      anerror(_("Teacher needs students"));
     long_order();
     break;
 
@@ -4092,9 +4066,11 @@ void checkanorder(char *Orders)
     }
     else {
       Scat(sk->name);
-      if (unicode_utf8_strcasecmp(sk->name, cgettext(Errors[MAGIC])) == 0)
-        if (order_unit->people > 1)
-          anerror(_("Mage units may have only one person"));
+      if (sk->kosten < 0) {
+        if (order_unit->people > 1) {
+          anerror(_("Magicians may have only one person"));
+        }
+      }
     }
     if (sk && !does_default) {
       x = studycost(sk) * order_unit->people;
@@ -4354,22 +4330,6 @@ void checkanorder(char *Orders)
     claim();
     break;
 
-  case K_RESTART:
-    i = findtoken(getstr(), UT_RACE);
-    if (i < 0) {
-      anerror(_("Unrecognized race"));
-      break;
-    } else
-      Scat(printliste(i, Rassen));
-    s = getstr();
-    if (!*s) {
-      anerror(cgettext(Errors[MISSINGPASSWORD]));
-      break;
-    } else
-      qcat(s);
-    dwarning(Errors[RESTARTMSG], 0);
-    break;
-
   case K_GROUP:
     s = getstr();
     if (*s)
@@ -4489,7 +4449,6 @@ int readafaction(void)
         anerror(_("Incorrect password"));
       else
         fputs(cgettext(Errors[PASSWORDMSG2]), ERR);
-      qcat(cgettext(Errors[PASSWORDMSG3]));
     } else
       qcat(s);
   } else
@@ -5280,7 +5239,7 @@ void init_intl(void)
     path = malloc(length + strlen(reldir) + 1);
     if (path) {
       char* pos;
-      wai_getExecutablePath(path, length, &dirname_length);
+      wai_getExecutablePath(path, (int)length, &dirname_length);
       path[length] = 0;
       pos = strrchr(path, PATH_SEP);
       if (pos) {

@@ -53,7 +53,6 @@ BANNER,   Banner
 NUMBER,   Number
 SCHOOL,   School
 PIRACY,   Piracy
-RESTART,  Restart
 GROUP,    Group
 SORT,   Sort
 PREFIX,   Prefix
