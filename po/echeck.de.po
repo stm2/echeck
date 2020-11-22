@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: echeck 4.4.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-21 21:30+0100\n"
-"PO-Revision-Date: 2020-11-20 09:16+0100\n"
+"PO-Revision-Date: 2020-11-22 12:58+0100\n"
 "Last-Translator: Enno Rehling <enno@eressea.de>\n"
 "Language-Team: German (Deutsch) <echeck@eressea.de>\n"
 "Language: de\n"
@@ -27,6 +27,12 @@ msgid ""
 "  ****  Password missing!  ****\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"  ****  A C H T U N G !  ****\n"
+"\n"
+"  ****  Passwort fehlt!  ****\n"
+"\n"
 
 #: echeck.c:5428
 #, c-format
@@ -134,7 +140,7 @@ msgstr ""
 
 #: echeck.c:2365
 msgid "; Delivery to"
-msgstr ""
+msgstr "; Zustellung an"
 
 #: echeck.c:1492
 msgid "<--MISSING-->"
@@ -154,7 +160,7 @@ msgstr "Achtung! STIRB gegeben! Die Partei wird aufgelöst!"
 
 #: echeck.c:3886
 msgid "BREED HORSES or BREED HERBS?"
-msgstr ""
+msgstr "ZÜCHTE PFERDE oder ZÜCHTE KRÄUTER"
 
 #: echeck.c:2941
 msgid "BUY and ALL cannot be combined"
@@ -183,7 +189,7 @@ msgstr "Kann die Datei %s nicht lesen."
 
 #: echeck.c:1661
 msgid "DISGUISE without parameters"
-msgstr ""
+msgstr "TARNE ohne Parameter"
 
 #: echeck.c:5435
 #, c-format
@@ -235,11 +241,11 @@ msgstr "Fehler bei Regions-Koordinaten"
 
 #: echeck.c:1675
 msgid "FIND has been replaced by OPTION ADDRESSES"
-msgstr ""
+msgstr "FINDE wurde gegen OPTION ADRESSEN ersetzt"
 
 #: echeck.c:1648
 msgid "FOLLOW UNIT xx, FOLLOW SHIP xx or FOLLOW"
-msgstr ""
+msgstr "FOLGE EINHEIT xx, FOLGE SCHIFF xx oder FOLGE"
 
 #: echeck.c:2248
 #, c-format
@@ -256,7 +262,7 @@ msgstr "Partei fehlt"
 
 #: echeck.c:1687
 msgid "For now, there is only SABOTAGE SHIP"
-msgstr ""
+msgstr "Bislang gibt es nur SABOTIERE SCHIFF"
 
 #: echeck.c:5015
 #, c-format
@@ -282,7 +288,7 @@ msgstr "Nicht das korrekte Passwort eingesetzt"
 
 #: echeck.c:1667
 msgid "LEVEL or REGION missing"
-msgstr ""
+msgstr "Parameter STUFE oder REGION fehlt"
 
 #: echeck.c:2140 echeck.c:2184
 msgid "Line too long"
@@ -294,11 +300,11 @@ msgstr "Längere Kämpfe schließen den langen Befehl aus"
 
 #: echeck.c:1671
 msgid "MESSAGE TO FACTION, MESSAGE TO UNIT or MESSAGE TO REGION"
-msgstr ""
+msgstr "BOTSCHAFT AN PARTEI, BOTSCHAFT AN EINHEIT oder BOTSCHAFT AN REGION"
 
 #: echeck.c:1670
 msgid "MOVE and PAUSE cannot be combined"
-msgstr ""
+msgstr "NACH geht nicht mit PAUSE"
 
 #: echeck.c:4098
 msgid "Mage units may have only one person"
@@ -347,7 +353,7 @@ msgstr "Gebäudeunterhalt von Einheit %s nach Einheit %s verschoben"
 
 #: echeck.c:1688
 msgid "NUMBER SHIP, NUMBER CASTLE, NUMBER FACTION or NUMBER UNIT"
-msgstr ""
+msgstr "NUMMER SCHIFF, NUMMER BURG, NUMMER PARTEI oder NUMMER EINHEIT"
 
 #: echeck.c:1672 echeck.c:2577
 msgid "Names must not contain brackets"
@@ -363,7 +369,7 @@ msgstr "Neue Einheiten könenn nichts reservieren"
 
 #: echeck.c:1678
 msgid "No TEMPORARY number"
-msgstr ""
+msgstr "Keine TEMP-Nummer"
 
 #: echeck.c:3925
 msgid "No matching MAKE TEMP for END"
@@ -383,15 +389,15 @@ msgstr "Kein Luxusgut"
 
 #: echeck.c:5102
 msgid "Not carried out by any unit"
-msgstr ""
+msgstr "Wird von keiner Einheit ausgeführt"
 
 #: echeck.c:2979 echeck.c:3810 echeck.c:3873
 msgid "Number 0 does not make sense here"
-msgstr ""
+msgstr "Anzahl 0 macht keinen Sinn"
 
 #: echeck.c:1681
 msgid "Number 0 doesn't make sense"
-msgstr ""
+msgstr "Anzahl 0 macht keinen Sinn"
 
 #: echeck.c:1682 echeck.c:2995 echeck.c:3879
 msgid "Number is not possible here"
@@ -472,7 +478,7 @@ msgstr "ROUTE ist kein Kreis; (%d,%d) -> (%d,%d)"
 
 #: echeck.c:1702
 msgid "ROUTE starts with PAUSE"
-msgstr ""
+msgstr "ROUTE beginnt mit PAUSE"
 
 #: echeck.c:5025
 #, c-format
