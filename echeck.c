@@ -37,6 +37,7 @@
 
 #define _(str) gettext(str)
 #define t(str) (str)
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -2748,13 +2749,13 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
       anerror(warn_buf);
   } else {
     if (u && (sp->typ & SP_BATTLE) && (u->spell & sp->typ)) {
-      sprintf(warn_buf, Errors[UNITALREADYHAS], uid(u));
+      sprintf(warn_buf, cgettext(Errors[UNITALREADYHAS]), uid(u));
       switch (sp->typ) {
       case SP_POST:
-        strcat(warn_buf, Errors[POST]);
+        strcat(warn_buf, cgettext(Errors[POST]));
         break;
       case SP_PRAE:
-        strcat(warn_buf, Errors[PRE]);
+        strcat(warn_buf, cgettext(Errors[PRE]));
         break;
       }
       strcat(warn_buf, _("combat magic set"));
@@ -4093,7 +4094,7 @@ void checkanorder(char *Orders)
     }
     else {
       Scat(sk->name);
-      if (unicode_utf8_strcasecmp(sk->name, Errors[MAGIC]) == 0)
+      if (unicode_utf8_strcasecmp(sk->name, cgettext(Errors[MAGIC])) == 0)
         if (order_unit->people > 1)
           anerror(_("Mage units may have only one person"));
     }
