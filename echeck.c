@@ -58,7 +58,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 #include "unicode.h"
 #include "whereami.h"
 
-static const char *echeck_version = "4.5.0";
+static const char *echeck_version = "4.5.1";
 
 #define DEFAULT_PATH "."
 
