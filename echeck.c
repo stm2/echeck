@@ -5261,25 +5261,44 @@ void init(void)
 }
 
 #ifdef HAVE_GETTEXT
+#ifdef WIN32
+#define PATH_SEP '\\'
+#else
+#define PATH_SEP '/'
+#endif
 void init_intl(void)
 {
-  const char *reldir = "/locale";
-  char *path;
-  int length, dirname_length;
+  char* path = NULL;
+  const char *reldir = "locale";
+  size_t length;
+  int dirname_length;
   
   setlocale(LC_ALL, "");
   
-  length = wai_getExecutablePath(NULL, 0, &dirname_length);
+  length = (size_t)wai_getExecutablePath(NULL, 0, &dirname_length);
   if (length > 0) {
-    path = malloc(length + 1 + strlen(reldir));
-    wai_getExecutablePath(path, length, &dirname_length);
-    strcpy(path+length, reldir);
-    if (0 == fileexists(reldir)) {
-      bindtextdomain("echeck", path);
+    /* TODO: this is a worst-case allocation */
+    path = malloc(length + strlen(reldir) + 1);
+    if (path) {
+      char* pos;
+      wai_getExecutablePath(path, length, &dirname_length);
+      path[length] = 0;
+      pos = strrchr(path, PATH_SEP);
+      if (pos) {
+        strcpy(pos+1, reldir);
+        if (0 != fileexists(reldir)) {
+          free(path);
+          path = NULL;
+        }
+      }
+      else {
+        free(path);
+        path = NULL;
+      }
     }
-    else {
-      bindtextdomain("echeck", "/usr/share/locale");
-    }
+  }
+  if (path) {
+    bindtextdomain("echeck", path);
     free(path);
   }
   else {
