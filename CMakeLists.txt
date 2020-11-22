@@ -23,3 +23,7 @@ target_link_libraries(tests ${Intl_LIBRARIES})
 else (Intl_FOUND)
 message(STATUS "libintl not found")
 endif (Intl_FOUND)
+
+include("Localization.cmake")
+SET (PACKAGE_NAME echeck)
+PROGRAM_LOCALIZATION()

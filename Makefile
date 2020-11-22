@@ -19,7 +19,7 @@ endif
 
 all: echeck mofiles
 
-pofiles: locale/de/echeck.po 
+pofiles: po/echeck.de.po 
 
 mofiles: pofiles locale/de/LC_MESSAGES/echeck.mo
 
@@ -39,13 +39,13 @@ install: echeck mofiles
 tags:
 	@ctags *.c *.h
 
-locale/echeck.pot: echeck.c
+po/echeck.pot: echeck.c
 	xgettext -k_ -kt -d echeck -o $@ -s $^
 
-locale/%/echeck.po: locale/echeck.pot
+po/echeck.%.po: po/echeck.pot
 	msgmerge -N -o $@ $@ $< 
 
-locale/%/LC_MESSAGES/echeck.mo: locale/%/echeck.po 
+locale/%/LC_MESSAGES/echeck.mo: po/echeck.de.po 
 	@rm -rf $@
 	@mkdir -p $@
 	@rmdir $@
@@ -63,6 +63,7 @@ tests: echeck.c whereami.c whereami.h unicode.c unicode.h config.h $(TEST_SRC) $
 
 clean:
 	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip locale/de/LC_MESSAGES/echeck.mo
+	@rmdir locale/de/LC_MESSAGES locale/de locale
 
 check: tests
 	@./tests -T=all -Lde -Re2 -b
