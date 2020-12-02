@@ -1189,6 +1189,9 @@ int readkeywords(char *s)
   if (x)
     *x = 0;
   k = (t_keyword *) calloc(1, sizeof(t_keyword));
+  if (!k) {
+    return 0;
+  }
   k->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   k->keyword = i;
   k->next = keywords;
@@ -1222,6 +1225,9 @@ int readparams(char *s)
   if (x)
     *x = 0;
   p = (t_params *) calloc(1, sizeof(t_params));
+  if (!p) {
+    return 0;
+  }
   p->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   p->param = i;
   p->next = parameters;
@@ -1256,6 +1262,9 @@ int readdirection(char *s)
   if (x)
     *x = 0;
   d = (t_direction *) calloc(1, sizeof(t_direction));
+  if (!d) {
+    return 0;
+  }
   d->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   d->dir = i;
   d->next = directions;
