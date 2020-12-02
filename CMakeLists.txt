@@ -11,6 +11,7 @@ find_library(Intl_LIBRARY NAMES libintl intl
 endif (WIN32)
 if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
 target_compile_definitions (echeck PRIVATE -D_DEFAULT_SOURCE)
+target_compile_definitions (tests PRIVATE -D_DEFAULT_SOURCE)
 endif()
 find_package(Intl)
 include_directories(${Intl_INCLUDE_DIR})

@@ -51,14 +51,14 @@ locale/%/LC_MESSAGES/echeck.mo: po/echeck.de.po
 	@rmdir $@
 	msgfmt -f -c $< -o $@
 
-echeck.exe: echeck.c unicode.c unicode.h config.h
+echeck.exe: echeck.c unicode.c unicode.h
 	$(MINGW_CC) $(CFLAGS) -o echeck.exe echeck.c unicode.c
 	$(MINGW_STRIP) echeck.exe
 
-echeck: echeck.c unicode.c unicode.h config.h whereami.c whereami.h
+echeck: echeck.c unicode.c unicode.h whereami.c whereami.h
 	$(CC) $(LFLAGS) $(CFLAGS) -o echeck echeck.c unicode.c whereami.c
 
-tests: echeck.c whereami.c whereami.h unicode.c unicode.h config.h $(TEST_SRC) $(TEST_HDR)
+tests: echeck.c whereami.c whereami.h unicode.c unicode.h $(TEST_SRC) $(TEST_HDR)
 	$(CC) $(LFLAGS) $(CFLAGS) -DTESTING -o tests echeck.c whereami.c unicode.c $(TEST_SRC)
 
 clean:

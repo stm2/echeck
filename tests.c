@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "config.h"
-
 #include "CuTest.h"
 
 struct unit;

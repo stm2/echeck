@@ -12,6 +12,9 @@
  */
 
 #if defined(__unix__) || defined(__APPLE__)
+#ifndef _BSD_SOURCE
+#define _BSD_SOURCE
+#endif
 #include <unistd.h>
 
 #include <sys/stat.h>
@@ -27,6 +30,20 @@
 #define STAT _stat
 #endif
 
+#include <assert.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <limits.h>
+#include <wchar.h>
+#include <wctype.h>
+
+#include "unicode.h"
+#include "whereami.h"
+
 #ifdef HAVE_GETTEXT
 #include <libintl.h>
 #include <locale.h>
@@ -38,25 +55,37 @@
 #define _(str) gettext(str)
 #define t(str) (str)
 
-#include <assert.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <wchar.h>
-#include <wctype.h>
-
 #ifdef TESTING
 #include "CuTest.h"
 int AddTestSuites(CuSuite * suite, const char *names);
 #endif
 
-#include "config.h"
-#include "unicode.h"
-#include "whereami.h"
+/* platform-specific defines */
+#ifdef WIN32
+# define PATH_DELIM ";"
+#else
+# define PATH_DELIM ":"
+#endif
+
+/* string.h overrides */
+#if defined(_MSC_VER)
+#define STRICMP(a, b) _stricmp(a, b)
+#define STRNICMP(a, b, n) _strnicmp(a, b, n)
+#define STRDUP(a) _strdup(a)
+#define SNPRINTF _snprintf
+#else
+#if __GNUC__
+#define STRICMP(a, b) strcasecmp(a, b)
+#define STRNICMP(a, b, n) strncasecmp(a, b, n)
+#else
+#define STRICMP(a, b) stricmp(a, b)
+#define STRNICMP(a, b, n) strnicmp(a, b, n)
+#endif
+#define STRDUP(a) strdup(a)
+#define SNPRINTF snprintf
+#endif
+
+#include <string.h>
 
 static const char *echeck_version = "4.5.1";
 
@@ -925,7 +954,7 @@ char *ItemName(int i, int plural)
 
 FILE *path_fopen(const char *path_par, const char *file, const char *mode)
 {
-  char *pathw = strdup(path_par);
+  char *pathw = STRDUP(path_par);
   char *token = strtok(pathw, PATH_DELIM);
 
   while (token != NULL) {
@@ -1023,7 +1052,7 @@ void readspell(char *s)
       *x = 0;
     x = NULL;
   }
-  sp->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  sp->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   if (x) {
     s = eatwhite(x + 1);
     if (*s) {
@@ -1063,7 +1092,7 @@ void readskill(char *s)
       *x = 0;
     x = NULL;
   }
-  sk->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  sk->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   if (x) {
     s = (char *)(x + 1);
     while (isspace(*s))
@@ -1097,7 +1126,7 @@ int readitem(char *s)
       it->preis = atoi(s);
     else {
       t_names *n = (t_names *) calloc(1, sizeof(t_names));
-      n->txt = strdup(transliterate(buffer, sizeof(buffer), s));
+      n->txt = STRDUP(transliterate(buffer, sizeof(buffer), s));
       n->next = it->name;
       it->name = n;
     }
@@ -1125,7 +1154,7 @@ void readliste(char *s, t_liste ** L)
   x = strchr(s, '\n');
   if (x)
     *x = 0;
-  ls->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  ls->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   addlist(L, ls);
 }
 
@@ -1145,7 +1174,7 @@ int readkeywords(char *s)
     return 0;
 
   for (i = 0; i < MAXKEYWORDS; i++) {
-    if (stricmp(s, Keywords[i]) == 0) {
+    if (STRICMP(s, Keywords[i]) == 0) {
       break;
     }
   }
@@ -1160,7 +1189,7 @@ int readkeywords(char *s)
   if (x)
     *x = 0;
   k = (t_keyword *) calloc(1, sizeof(t_keyword));
-  k->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  k->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   k->keyword = i;
   k->next = keywords;
   keywords = k;
@@ -1182,7 +1211,7 @@ int readparams(char *s)
   else
     return 0;
   for (i = 0; i < MAXPARAMS; i++)
-    if (stricmp(s, Params[i]) == 0)
+    if (STRICMP(s, Params[i]) == 0)
       break;
   if (i == MAXPARAMS)
     return 0;
@@ -1193,7 +1222,7 @@ int readparams(char *s)
   if (x)
     *x = 0;
   p = (t_params *) calloc(1, sizeof(t_params));
-  p->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  p->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   p->param = i;
   p->next = parameters;
   parameters = p;
@@ -1216,7 +1245,7 @@ int readdirection(char *s)
     return 0;
 
   for (i = 0; i < MAXDIRECTIONS; i++)
-    if (stricmp(s, Directions[i]) == 0)
+    if (STRICMP(s, Directions[i]) == 0)
       break;
   if (i == MAXDIRECTIONS)
     return 0;
@@ -1227,7 +1256,7 @@ int readdirection(char *s)
   if (x)
     *x = 0;
   d = (t_direction *) calloc(1, sizeof(t_direction));
-  d->name = strdup(transliterate(buffer, sizeof(buffer), s));
+  d->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   d->dir = i;
   d->next = directions;
   directions = d;
@@ -1358,7 +1387,7 @@ void set_order_unit(unit * u)
 void mock_input(const char *input)
 {
   free(mocked_input);
-  mocked_input = strdup(input);
+  mocked_input = STRDUP(input);
   mock_pos = mocked_input;
 }
 #endif
@@ -1788,7 +1817,7 @@ t_region *addregion(int x, int y, int pers)
     r->personen = pers;
     r->geld = 0;
     r->reserviert = 0;
-    r->name = strdup("Region");
+    r->name = STRDUP("Region");
     r->line_no = line_no;
     if (Regionen) {
       for (R = Regionen; R->next; R = R->next) ;        /* letzte Region der Liste  */
@@ -1831,7 +1860,7 @@ unit *newunit(int n, int t)
     u = (unit *) calloc(1, sizeof(unit));
     u->no = n;
     u->line_no = line_no;
-    u->order = strdup(order_buf);
+    u->order = STRDUP(order_buf);
     u->region = addregion(Rx, Ry, 0);
     u->newx = Rx;
     u->newy = Ry;
@@ -2303,11 +2332,11 @@ void copy_unit(unit * from, unit * to)
   to->start_of_orders_line = from->start_of_orders_line;
   to->long_order_line = from->long_order_line;
   if (from->start_of_orders_line)
-    to->start_of_orders = strdup(from->start_of_orders);
+    to->start_of_orders = STRDUP(from->start_of_orders);
   if (from->long_order_line)
-    to->long_order = strdup(from->long_order);
+    to->long_order = STRDUP(from->long_order);
   if (from->order)
-    to->order = strdup(from->order);
+    to->order = STRDUP(from->order);
   to->lernt = from->lernt;
 }
 
@@ -2376,7 +2405,7 @@ void orders_for_unit(int i, unit * u)
     set_order_unit(u);
   }
 
-  u->start_of_orders = strdup(order_buf);
+  u->start_of_orders = STRDUP(order_buf);
   u->start_of_orders_line = line_no;
   u->lives = 1;
 
@@ -2473,11 +2502,11 @@ void orders_for_temp_unit(unit * u)
   if (u->order) {
     free(u->order);
   }
-  u->order = strdup(order_buf);
+  u->order = STRDUP(order_buf);
   if (u->start_of_orders) {
     free(u->start_of_orders);
   }
-  u->start_of_orders = strdup(order_buf);
+  u->start_of_orders = STRDUP(order_buf);
   u->start_of_orders_line = line_no;
   mother_unit = order_unit;
   set_order_unit(u);
@@ -2524,7 +2553,7 @@ void long_order(void)
       uid(order_unit), order_unit->long_order_line, order_unit->long_order);
     awarning(warn_buf, 1);
   } else {
-    order_unit->long_order = strdup(order_buf);
+    order_unit->long_order = STRDUP(order_buf);
     order_unit->long_order_line = line_no;
   }
 }
@@ -3174,7 +3203,7 @@ void checkmail(void)
 
   scat(printkeyword(K_MESSAGE));
   s = getstr();
-  if (stricmp(s, "an") == 0 || stricmp(s, "to") == 0)
+  if (STRICMP(s, "an") == 0 || STRICMP(s, "to") == 0)
     s = getstr();
 
   switch (findparam(s)) {
@@ -3351,28 +3380,28 @@ void check_comment(void)
   int m;
 
   s = getstr();
-  if (strnicmp(s, "ECHECK", 6))
+  if (STRNICMP(s, "ECHECK", 6))
     return;
   s = getstr();
 
-  if (strnicmp(s, "VERSION", 7) == 0) {
+  if (STRNICMP(s, "VERSION", 7) == 0) {
     fprintf(ERR, "%s\n", order_buf);
     return;
   }
-  if (strnicmp(s, "NOWARN", 6) == 0) {  /* Warnungen für nächste   Zeile aus */
+  if (STRNICMP(s, "NOWARN", 6) == 0) {  /* Warnungen für nächste   Zeile aus */
     warn_off = 2;
     return;
   }
-  if (strnicmp(s, "LOHN", 4) == 0 || strnicmp(s, "WAGE", 4) == 0) {     /* LOHN   für   Arbeit  */
+  if (STRNICMP(s, "LOHN", 4) == 0 || STRNICMP(s, "WAGE", 4) == 0) {     /* LOHN   für   Arbeit  */
     m = geti();
     lohn = (m > 10) ? m : 10;
     return;
   }
-  if (strnicmp(s, "ROUT", 4) == 0) {    /* ROUTe */
+  if (STRNICMP(s, "ROUT", 4) == 0) {    /* ROUTe */
     noroute = (char)(1 - noroute);
     return;
   }
-  if (strnicmp(s, "KOMM", 4) == 0 || strnicmp(s, "COMM", 4) == 0) {     /* KOMMando  */
+  if (STRNICMP(s, "KOMM", 4) == 0 || STRNICMP(s, "COMM", 4) == 0) {     /* KOMMando  */
     m = geti();
     if (!m) {
       m = order_unit->ship;
@@ -3382,12 +3411,12 @@ void check_comment(void)
     order_unit->ship = -abs(m);
     return;
   }
-  if (strnicmp(s, "EMPTY", 5) == 0) {
+  if (STRNICMP(s, "EMPTY", 5) == 0) {
     order_unit->money = 0;
     order_unit->reserviert = 0;
     return;
   }
-  if (strnicmp(s, "NACH", 4) == 0 || strnicmp(s, "MOVE", 4) == 0) {
+  if (STRNICMP(s, "NACH", 4) == 0 || STRNICMP(s, "MOVE", 4) == 0) {
     order_unit->hasmoved = 1;
     order_unit->newx = geti();
     order_unit->newy = geti();
@@ -4855,13 +4884,13 @@ void check_OPTION(void)
   if (order_buf[0] == COMMENT_CHAR)
     do {
       if (strlen(order_buf) > 9) {
-        if (strnicmp(order_buf, "; OPTION", 8) == 0 ||
-          strnicmp(order_buf, "; ECHECK", 8) == 0) {
+        if (STRNICMP(order_buf, "; OPTION", 8) == 0 ||
+          STRNICMP(order_buf, "; ECHECK", 8) == 0) {
           parse_options((char *)(order_buf + 2), 0);
           /*
            * "; " überspringen; zeigt dann auf "OPTION"
            */
-        } else if (strnicmp(order_buf, "; VERSION", 9) == 0)
+        } else if (STRNICMP(order_buf, "; VERSION", 9) == 0)
           fprintf(ERR, "%s\n", order_buf);
       }
       get_order();
@@ -4943,14 +4972,14 @@ void process_order_file(int *faction_count, int *unit_count)
           x++;
         if (r->name)
           free(r->name);
-        r->name = strdup(x);
+        r->name = STRDUP(x);
         x = strchr(r->name, '\n');
         if (x)
           *x = 0;
       } else {
         if (r->name)
           free(r->name);
-        r->name = strdup("");
+        r->name = STRDUP("");
       }
       get_order();
       break;
@@ -5174,7 +5203,7 @@ int fileexists(const char *name) {
 
 const char * findfiles(const char *dir) {
   char zPath[FILENAME_MAX];
-  snprintf(zPath, sizeof(zPath), "%s/%s/%s/%s",
+  SNPRINTF(zPath, sizeof(zPath), "%s/%s/%s/%s",
       dir, echeck_rules, echeck_locale, ECheck_Files[0].name);
   if (0 == fileexists(zPath)) {
     return dir;
@@ -5205,7 +5234,7 @@ void init(void)
 {
   int i;
   for (i = 0; i < MAX_ERRORS; i++) {
-    Errors[i] = strdup(Errors[i]);      /* mit Defaults besetzten, weil NULL ->  crash */
+    Errors[i] = STRDUP(Errors[i]);      /* mit Defaults besetzten, weil NULL ->  crash */
   }
   /*
    * Path-Handling
@@ -5372,10 +5401,10 @@ int main(int argc, char *argv[])
 
   char factions[32];
   char units[32];
-  snprintf(factions, sizeof(factions), 
+  SNPRINTF(factions, sizeof(factions), 
       ngettext("%d faction", "%d factions", faction_count),
       faction_count);
-  snprintf(units, sizeof(units), 
+  SNPRINTF(units, sizeof(units), 
       ngettext("%d unit", "%d units", unit_count),
       unit_count);
   fprintf(ERR, _("Orders have been read for %s and %s."),
