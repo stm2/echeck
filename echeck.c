@@ -544,16 +544,11 @@ enum {
   MISSFILEITEM,
   MISSFILESKILL,
   MISSFILEDIR,
-  MISSINGDISGUISEPARAMETERS,
-  MISSINGEND,
   MISSINGFACTIONNUMBER,
-  MISSINGNEXT,
   MISSINGNUMRECRUITS,
   MISSINGOFFER,
-  MISSINGPARAMETERS,
   MISSINGPASSWORD,
   MISSINGUNITNUMBER,
-  MSGTO,
   NAMECONTAINSBRACKETS,
   NEEDBOTHCOORDINATES,
   NOCARRIER,
@@ -566,7 +561,6 @@ enum {
   NUMCASTLEMISSING,
   NUMMISSING,
   OBJECTNUMBERMISSING,
-  ONLYSABOTAGESHIP,
   ORDERNUMBER,
   ORDERSREAD,
   PASSWORDCLEARED,
@@ -627,16 +621,11 @@ static const char *Errors[MAX_ERRORS] = {
   "MISSFILEITEM",
   "MISSFILESKILL",
   "MISSFILEDIR",
-  "MISSINGDISGUISEPARAMETERS",
-  "MISSINGEND",
   "MISSINGFACTIONNUMBER",
-  "MISSINGNEXT",
   "MISSINGNUMRECRUITS",
   "MISSINGOFFER",
-  "MISSINGPARAMETERS",
   "MISSINGPASSWORD",
   "MISSINGUNITNUMBER",
-  "MSGTO",
   "NAMECONTAINSBRACKETS",
   "NEEDBOTHCOORDINATES",
   "NOCARRIER",
@@ -649,7 +638,6 @@ static const char *Errors[MAX_ERRORS] = {
   "NUMCASTLEMISSING",
   "NUMMISSING",
   "OBJECTNUMBERMISSING",
-  "ONLYSABOTAGESHIP",
   "ORDERNUMBER",
   "ORDERSREAD",
   "PASSWORDCLEARED",
@@ -1678,16 +1666,11 @@ static const struct warning {
   {"MISSFILEDIR", t("directions")},
   {"MISSFILEMSG", t("messages")},
   {"MISSINGQUOTES", t("Missing \"")},
-  {"MISSINGDISGUISEPARAMETERS", t("DISGUISE without parameters")},
-  {"MISSINGEND", t("TEMPORARY %s lacks closing END")},
   {"MISSINGFACTIONNUMBER", t("Missing faction number")},
-  {"MISSINGNEXT", t("Missing NEXT")},
   {"MISSINGNUMRECRUITS", t("Number of recruits missing")},
   {"MISSINGOFFER", t("Missing offer")},
-  {"MISSINGPARAMETERS", t("LEVEL or REGION missing")},
   {"MISSINGPASSWORD", t("Missing password")},
   {"MISSINGUNITNUMBER", t("Missing unit number")},
-  {"MSGTO", t("MESSAGE TO FACTION, MESSAGE TO UNIT or MESSAGE TO REGION")},
   {"NAMECONTAINSBRACKETS", t("Names must not contain brackets")},
   {"NEEDBOTHCOORDINATES", t("Both coordinated must be supplied")},
   {"NOCARRIER", t("Can't find unit to carry")},
@@ -1702,7 +1685,6 @@ static const struct warning {
   {"NUMLUXURIESMISSING", t("Number of luxuries missing")},
   {"NUMMISSING", t("Number of items/men/silver missing")},
   {"OBJECTNUMBERMISSING", t("number of object missing")},
-  {"ONLYSABOTAGESHIP", t("For now, there is only SABOTAGE SHIP")},
   {"ORDERNUMBER", t("NUMBER SHIP, NUMBER CASTLE, NUMBER FACTION or NUMBER UNIT")},
   {"PASSWORDCLEARED", t("Password cleared")},
   {"PASSWORDMSG2", t("\n\n  ****  A T T E N T I O N !  ****\n\n  ****  Password missing!  ****\n\n")},
@@ -1947,7 +1929,7 @@ char *printkeyword(int key)
   while (k && k->keyword != key) {
     k = k->next;
   }
-  return (k && k->keyword == key) ? k->name : 0;
+  return (k && k->keyword == key) ? k->name : NULL;
 }
 
 char *printdirection(int dir)
@@ -2737,8 +2719,10 @@ int getaspell(char *s, char spell_typ, unit * u, int reallycast)
     if (u) {                    /* sonst ist das der Test von GIB */
       if (show_warnings > 0)    /* nicht bei -w0 */
         anerror(_("Unrecognized spell"));
-      if (*s >= '0' && *s <= '9')
-        anerror(cgettext(Errors[MISSINGPARAMETERS]));
+      if (*s >= '0' && *s <= '9') {
+        sprintf(warn_buf, _("%s or %s missing"), printparam(P_LEVEL), printparam(P_REGION));
+        anerror(warn_buf);
+      }
       qcat(s);
     }
     return 0;
@@ -3131,7 +3115,8 @@ void checkdirections(int key)
       if (key == K_ROUTE && i == D_PAUSE && count == 0)
         dwarning(Errors[ROUTESTARTSWITHPAUSE], 2);
       if (key == K_MOVE && i == D_PAUSE) {
-        anerror(_("MOVE and PAUSE cannot be combined"));
+        sprintf(warn_buf, _("%s and %s cannot be combined"), printkeyword(K_MOVE), printdirection(D_PAUSE));
+        anerror(warn_buf);
         return;
       } else {
         Scat(printdirection(i));
@@ -3199,7 +3184,7 @@ void checkdirections(int key)
 void check_sabotage(void)
 {
   if (getparam() != P_SHIP) {
-    anerror(cgettext(Errors[ONLYSABOTAGESHIP]));
+    anerror(_("Only ships can be sabotaged"));
     return;
   }
   Scat(printparam(P_SHIP));
@@ -3235,7 +3220,9 @@ void checkmail(void)
     break;
 
   default:
-    anerror(cgettext(Errors[MSGTO]));
+    sprintf(warn_buf, _("Messages must be sent to a %s, %s or %s"),
+      printparam(P_UNIT), printparam(P_FACTION), printparam(P_REGION));
+    anerror(warn_buf);
     break;
   }
   s = getstr();
@@ -3346,7 +3333,8 @@ void check_ally(void)
     Scat(printparam(i));
     break;
   default:
-    anerror(_("Illegal argument for HELP"));
+    sprintf(warn_buf, _("Illegal argument for %s"), printkeyword(K_HELP));
+    anerror(warn_buf);
     return;
   }
 
@@ -3981,7 +3969,8 @@ void checkanorder(char *Orders)
       icat(i);
       break;
     }
-    dwarning(Errors[MISSINGDISGUISEPARAMETERS], 5);
+    sprintf(warn_buf, _("%s needs parameters"), printkeyword(K_SETSTEALTH));
+    awarning(warn_buf, 5);
     break;
 
   case K_GIVE:
@@ -4455,7 +4444,8 @@ void readaunit(void)
         case P_NEXT:
         case P_REGION:
           if (from_temp_unit_no != 0) {
-            sprintf(warn_buf, Errors[MISSINGEND], itob(from_temp_unit_no));
+            sprintf(warn_buf, _("%s %s lacks closing %s"),
+              printparam(P_TEMP), itob(from_temp_unit_no), printkeyword(K_END));
             awarning(warn_buf, 2);
             from_temp_unit_no = 0;
           }
@@ -4995,7 +4985,8 @@ void process_order_file(int *faction_count, int *unit_count)
 
     case P_FACTION:
       if (f && !next) {
-        awarning(_("Missing NEXT"), 0);
+        sprintf(warn_buf, _("Missing %s"), printparam(P_NEXT));
+        anerror(warn_buf);
       }
       scat(printparam(P_FACTION));
       befehle_ende = 0;

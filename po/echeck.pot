@@ -142,7 +142,7 @@ msgid "Cannot read file %s."
 msgstr ""
 
 #: echeck.c:1672
-msgid "DISGUISE without parameters"
+msgid "%s needs parameters"
 msgstr ""
 
 #: echeck.c:5437
@@ -226,7 +226,7 @@ msgid "Give what?"
 msgstr ""
 
 #: echeck.c:3340
-msgid "Illegal argument for HELP"
+msgid "Illegal argument for %s"
 msgstr ""
 
 #: echeck.c:3504
@@ -239,7 +239,7 @@ msgid "Incorrect password"
 msgstr ""
 
 #: echeck.c:1678
-msgid "LEVEL or REGION missing"
+msgid "%s or %s missing"
 msgstr ""
 
 #: echeck.c:2138 echeck.c:2182
@@ -251,11 +251,11 @@ msgid "Longer combats exclude long orders"
 msgstr ""
 
 #: echeck.c:1681
-msgid "MESSAGE TO FACTION, MESSAGE TO UNIT or MESSAGE TO REGION"
+msgid "Messages must be sent to a %s, %s or %s"
 msgstr ""
 
 #: echeck.c:3125
-msgid "MOVE and PAUSE cannot be combined"
+msgid "%s and %s cannot be combined"
 msgstr ""
 
 #: echeck.c:4096
@@ -267,7 +267,7 @@ msgid "Missing \""
 msgstr ""
 
 #: echeck.c:1675 echeck.c:4989 echeck.c:5094
-msgid "Missing NEXT"
+msgid "Missing %s"
 msgstr ""
 
 #: echeck.c:1674
@@ -464,7 +464,7 @@ msgstr ""
 
 #: echeck.c:1673
 #, c-format
-msgid "TEMPORARY %s lacks closing END"
+msgid "%s %s lacks closing %s"
 msgstr ""
 
 #: echeck.c:1715

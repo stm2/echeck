@@ -180,8 +180,8 @@ msgid "Cannot read file %s."
 msgstr "Kann die Datei %s nicht lesen."
 
 #: echeck.c:1672
-msgid "DISGUISE without parameters"
-msgstr "TARNE ohne Parameter"
+msgid "%s needs parameters"
+msgstr "%s ohne Argumente"
 
 #: echeck.c:5437
 #, c-format
@@ -253,8 +253,8 @@ msgid "Faction missing"
 msgstr "Partei fehlt"
 
 #: echeck.c:1696
-msgid "For now, there is only SABOTAGE SHIP"
-msgstr "Bislang gibt es nur SABOTIERE SCHIFF"
+msgid "Only ships can be sabotaged"
+msgstr "Nur Schiffe können sabotiert werden"
 
 #: echeck.c:4998
 #, c-format
@@ -266,8 +266,8 @@ msgid "Give what?"
 msgstr "Was übergeben?"
 
 #: echeck.c:3340
-msgid "Illegal argument for HELP"
-msgstr "Helfe-Status falsch"
+msgid "Illegal argument for %s"
+msgstr "Ungültiger %s Status"
 
 #: echeck.c:3504
 #, c-format
@@ -279,8 +279,8 @@ msgid "Incorrect password"
 msgstr "Nicht das korrekte Passwort eingesetzt"
 
 #: echeck.c:1678
-msgid "LEVEL or REGION missing"
-msgstr "Parameter STUFE oder REGION fehlt"
+msgid "%s or %s missing"
+msgstr "Parameter %s oder %s fehlt"
 
 #: echeck.c:2138 echeck.c:2182
 msgid "Line too long"
@@ -291,12 +291,12 @@ msgid "Longer combats exclude long orders"
 msgstr "Längere Kämpfe schließen den langen Befehl aus"
 
 #: echeck.c:1681
-msgid "MESSAGE TO FACTION, MESSAGE TO UNIT or MESSAGE TO REGION"
-msgstr "BOTSCHAFT AN PARTEI, BOTSCHAFT AN EINHEIT oder BOTSCHAFT AN REGION"
+msgid "Messages must be sent to a %s, %s or %s"
+msgstr "Botschaften müssen an %s, %s oder %s gesendet werden"
 
 #: echeck.c:3125
-msgid "MOVE and PAUSE cannot be combined"
-msgstr "NACH geht nicht mit PAUSE"
+msgid "%s and %s cannot be combined"
+msgstr "%s geht nicht mit %s"
 
 #: echeck.c:4096
 msgid "Magicians may have only one person"
@@ -307,8 +307,8 @@ msgid "Missing \""
 msgstr "Fehlendes \""
 
 #: echeck.c:1675 echeck.c:4989 echeck.c:5094
-msgid "Missing NEXT"
-msgstr "NÄCHSTER fehlt"
+msgid "Missing %s"
+msgstr "%s fehlt"
 
 #: echeck.c:1674
 msgid "Missing faction number"
@@ -507,8 +507,8 @@ msgstr "TEMP %s wurde bereits in Zeile %d benutzt"
 
 #: echeck.c:1673
 #, c-format
-msgid "TEMPORARY %s lacks closing END"
-msgstr "TEMP-Einheit %s wird nicht durch ENDE abgeschlossen"
+msgid "%s %s lacks closing %s"
+msgstr "Einheit %s %s wird nirgends mit %s abgeschlossen"
 
 #: echeck.c:1715
 msgid "TEMPORARY units can't use GIVE, it happens before MAKE!"
