@@ -99,9 +99,19 @@ static void test_make_temp(CuTest * tc)
 
 int AddTestSuites(CuSuite * suite, const char * args)
 {
-  char * names = (args && strcmp(args, "all")!=0) ? strdup(args) : strdup("echeck,process,give");
-  char * name = strtok(names, ",");
-  CuSuite * cs;
+  CuSuite* cs;
+  char names[256], *name;
+  size_t len;
+  if (!args || strcmp(args, "all") == 0) {
+    args = "echeck,process,give";
+  }
+  len = strlen(args);
+  if (len >= sizeof(names)) {
+    len = sizeof(names) - 1;
+  }
+  memcpy(names, args, len);
+  names[len] = 0;
+  name = strtok(names, ",");
 
   while (name) {
     if (strcmp(name, "echeck")==0) {
