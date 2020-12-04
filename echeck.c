@@ -210,7 +210,7 @@ char order_buf[BUFSIZE],        /* current order line */
   *echeck_locale = "de", *echeck_rules = "e2", *filename;
 int rec_cost = RECRUIT_COST, this_command, this_unit,   /* wird von getaunit gesetzt */
   Rx, Ry;                       /* Koordinaten der aktuellen Region */
-static const char *path;
+static const char *g_path;
 FILE *F;
 
 enum {
@@ -1421,7 +1421,7 @@ void readafile(const char *fn, int typ)
   FILE *F;
   char *s, *x;
 
-  F = path_fopen(path, fn, "r");
+  F = path_fopen(g_path, fn, "r");
   if (!F)
     return;
   for (line = 1;; line++) {
@@ -1450,7 +1450,7 @@ void readfiles(int doall)
 {                               /* liest externen Files */
   int i;
   
-  if (!path) return;
+  if (!g_path) return;
   if (doall) {
     /*
      * alle Files aus der Liste der Reihe nach zu lesen versuchen
@@ -4531,7 +4531,7 @@ void files_not_found(FILE *F)
   fprintf(F, "ECheck V%s, %s", echeck_version, __DATE__);
   fputs("   **\n\n", F);
   fprintf(F, _("cannot read configuration files from %s/%s"),
-    path, echeck_locale);
+    g_path, echeck_locale);
   fputs("\n\n", F);
 }
 
@@ -4591,7 +4591,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
           if (argv[i][2] == 0) {        /* -P path */
             i++;
             if (argv[i]) {
-              path = argv[i];
+              g_path = argv[i];
             }
             else {
               fputs
@@ -4599,7 +4599,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
               exit(1);
             }
           } else /* -Ppath */ if (*(argv[i] + 2)) {
-            path = argv[i] + 2;
+            g_path = argv[i] + 2;
           }
         }
         break;
@@ -5239,7 +5239,7 @@ void init(void)
   /*
    * Path-Handling
    */
-  path = getenv("ECHECKPATH");
+  g_path = getenv("ECHECKPATH");
   filename = getenv("ECHECKOPTS");
 }
 
@@ -5312,8 +5312,8 @@ int main(int argc, char *argv[])
   if (argc > 1) {
     nextarg = check_options(argc, argv, 1, 1);
   }
-  if (!path) {
-    path = findpath();
+  if (!g_path) {
+    g_path = findpath();
   }
 #ifndef TESTING
   if (argc <= 1)
@@ -5422,13 +5422,12 @@ int main(int argc, char *argv[])
 
   if (warning_count > 0) {
     fprintf(ERR, 
-      ngettext("Detected %d warning", "Detected %d warnings", warning_count),
-      warning_count);
+      ngettext("Detected %d warning", "Detected %d warnings", 
+        warning_count), warning_count);
     if (error_count > 0) {
       fputs(", ", ERR);
       fprintf(ERR, 
-        ngettext("%d error", "%d errors", error_count),
-        error_count);
+        ngettext("%d error", "%d errors", error_count), error_count);
     }
     fputc('.', ERR);
   }
