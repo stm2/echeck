@@ -25,16 +25,16 @@ mofiles: pofiles locale/de/LC_MESSAGES/echeck.mo
 
 install: echeck mofiles
 	install -d $(EXECDIR)
-	install -t $(EXECDIR) echeck
+	install -C -t $(EXECDIR) echeck
 	install -d $(SHAREDIR)/e2/de
 	install -d $(SHAREDIR)/e2/en
 	install -d $(SHAREDIR)/e3/de
 	install -d $(SHAREDIR)/e3/en
-	install -t $(SHAREDIR)/e2/de e2/de/*.txt
-	install -t $(SHAREDIR)/e2/en e2/en/*.txt
-	install -t $(SHAREDIR)/e3/de e3/de/*.txt
-	install -t $(SHAREDIR)/e3/en e3/en/*.txt
-	install -t $(LOCALEDIR)/de/LC_MESSAGES locale/de/LC_MESSAGES/echeck.mo
+	install -C -m 644 -t $(SHAREDIR)/e2/de e2/de/*.txt
+	install -C -m 644 -t $(SHAREDIR)/e2/en e2/en/*.txt
+	install -C -m 644 -t $(SHAREDIR)/e3/de e3/de/*.txt
+	install -C -m 644 -t $(SHAREDIR)/e3/en e3/en/*.txt
+	install -C -m 644 -t $(LOCALEDIR)/de/LC_MESSAGES locale/de/LC_MESSAGES/echeck.mo
 
 tags:
 	@ctags *.c *.h

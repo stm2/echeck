@@ -87,7 +87,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 
 #include <string.h>
 
-static const char *echeck_version = "4.5.1";
+static const char *echeck_version = "4.5.2";
 
 #define DEFAULT_PATH "."
 
@@ -5213,12 +5213,12 @@ const char * findfiles(const char *dir) {
 
 const char * findpath(void) {
   const char *hints[] = {
+    ".",
 #ifndef WIN32
     "/usr/share/games/echeck",
     "/usr/share/echeck",
     "/usr/local/share/echeck",
 #endif
-    ".",
     NULL
   };
   int i;
@@ -5255,7 +5255,7 @@ void init_intl(void)
   const char *reldir = "locale";
   size_t length;
   int dirname_length;
-  
+ 
   setlocale(LC_ALL, "");
   
   length = (size_t)wai_getExecutablePath(NULL, 0, &dirname_length);
