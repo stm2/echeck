@@ -1719,7 +1719,6 @@ static const struct warning {
   {"UNITMISSSILVER", t("Unit %s may have not enough silver")},
   {"UNITMOVESSHIP", t("Unit %s moves ship %s and may lack control")},
   {"UNITMUSTBEONSHIP", t("Unit must be in a castle, in a building or on a ship")},
-  {"UNITNEEDSTEACHERS", t("Unit \nould make use of %d more teachers")},
   {"UNITNOTONSHIPBUTONSHIP", t("Unit %s may be on ship %s instead of ship %s")},
   {"UNITONSHIPHASMOVED", t("Unit %s on ship %s has already moved")},
   {"UNRECOGNIZEDDIRECTION", t("Unrecognized direction")},
@@ -4826,9 +4825,10 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
           i++;
           if (argv[i])
             echeck_locale = argv[i];
-          else
-            fputs("Fehlende Spracheinstellung, benutze 'de'\n"
-              "Missing locale, using 'de'\n", stderr);
+          else {
+            fprintf(stderr, _("Missing locale, using '%s'"), "de");
+            fputc('\n', stderr);
+          }
         } else {
           echeck_locale = argv[i] + 2;
         }
@@ -4836,10 +4836,11 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
 
       default:
         if (argv[i][1]) {       /* sonst ist das nur '-' => stdin lesen */
-          fprintf(ERR, "Option `%s' unbekannt.\n"
-            "Unknown option `%s'\n", argv[i], argv[i]);
-          if (dostop)           /* Nicht stoppen, wenn dies die Parameter  aus der Datei selbst sind! */
+          fprintf(ERR, _("Unknown option -%s"), argv[i]);
+          if (dostop) {
+            /* Nicht stoppen, wenn dies die Parameter aus der Datei selbst sind! */
             exit(10);
+          }
         }
       }
     } else
@@ -5090,8 +5091,10 @@ void process_order_file(int *faction_count, int *unit_count)
 
   if (igetparam(order_buf) == P_NEXT)   /* diese Zeile wurde ggf. gelesen  und dann kam */
     next = 1;                   /* EOF -> kein Check mehr, next=0... */
-  if (f && !next)
-    anerror(_("Missing NEXT"));
+  if (f && !next) {
+    sprintf(warn_buf, _("Missing %s"), printparam(P_NEXT));
+    anerror(warn_buf);
+  }
 }
 
 void addtoken(tnode * root, const char *str, int id)
