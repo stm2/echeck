@@ -346,7 +346,7 @@ msgid "No matching MAKE TEMP for END"
 msgstr ""
 
 #: echeck.c:1699 echeck.c:2020
-msgid "No space allowed here"
+msgid "Space not allowed here"
 msgstr ""
 
 #: echeck.c:1701 echeck.c:1778

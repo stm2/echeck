@@ -1696,7 +1696,6 @@ static const struct warning {
   {"NOCARRIER", t("Can't find unit to carry")},
   {"NOFIND", t("FIND has been replaced by OPTION ADDRESSES")},
   {"NOSEND", t("SEND has been renamed into OPTION")},
-  {"NOSPACEHERE", t("No space allowed here")},
   {"NOTEMPNUMBER", t("No TEMPORARY number")},
   {"NOTEXT", t("No text")},
   {"NOTFOUND", t("not found")},
@@ -2017,7 +2016,7 @@ int findtoken(const char *token, int type)
         else break;
       }
       if ((at_cmd || bang_cmd) && *str < 65) {
-        anerror(_("No space allowed here"));
+        anerror(_("Space not allowed here"));
         return -2;
       }
     }
@@ -4698,7 +4697,8 @@ int check_options(int argc, char *argv[], char dostop, char command_line)
                 ("Leere Pfad-Angabe ungültig\nEmpty path invalid\n", stderr);
               exit(1);
             }
-          } else /* -Ppath */ if (*(argv[i] + 2)) {
+          } else if (*(argv[i] + 2)) {
+            /* -Ppath */ 
             g_path = argv[i] + 2;
           }
         }
