@@ -454,7 +454,7 @@ msgid ""
 "Remember that orders must not be sent as HTML or word-documents."
 msgstr ""
 "Bitte überprüfe, ob Du die Befehle korrekt eingesandt hast.\n"
-"Beachte dabei besonders, daß die Befehle nicht als HTML oder\n"
+"Beachte dabei besonders, dass die Befehle nicht als HTML oder\n"
 "Word-Dokumente eingeschickt werden dürfen."
 
 #: echeck.c:2350 echeck.c:2351
@@ -558,12 +558,12 @@ msgstr ""
 
 #: echeck.c:3862
 msgid "There must be one ATTACK-order per unit"
-msgstr "Für jede attackierte Einheit muß ein separater Befehl gegeben werden"
+msgstr "Für jede attackierte Einheit muss ein separater Befehl gegeben werden"
 
 #: echeck.c:4314
 msgid "There must be one CARRY-order per unit"
 msgstr ""
-"Für jede transportierter Einheit muß ein separater Befehl gegeben werden"
+"Für jede transportierter Einheit muss ein separater Befehl gegeben werden"
 
 #: echeck.c:3902
 msgid "This cannot be bred"
