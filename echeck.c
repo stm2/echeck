@@ -288,6 +288,7 @@ enum {
   K_PREFIX,
   K_PROMOTION,
   K_PROMOTE,
+  K_LANGUAGE,
   MAXKEYWORDS
 };
 
@@ -352,7 +353,8 @@ static const char *Keywords[MAXKEYWORDS] = {
   "SORT",
   "PREFIX",
   "PROMOTION",
-  "PROMOTE"
+  "PROMOTE",
+  "LANGUAGE"
 };
 
 typedef struct _keyword {
@@ -4472,6 +4474,16 @@ void checkanorder(char *Orders)
   case K_PROMOTION:
     scat(printkeyword(i));
     break;
+  case K_LANGUAGE:
+    scat(printkeyword(i));
+    s = getstr();
+    if (*s)
+      Scat(s);
+    else {
+      sprintf(warn_buf, _("Missing argument for %s"), printkeyword(i));
+      anerror(warn_buf);
+    }
+    break;
   default:
     anerror(_("Unrecognized order"));
   }
@@ -4609,14 +4621,6 @@ void help_keys(char key)
     return;
   }
   exit(0);
-}
-
-void recurseprinthelp(t_liste * h)
-{
-  if (h) {
-    recurseprinthelp(h->next);
-    fprintf(ERR, "%s\n", h->name);
-  }
 }
 
 void files_not_found(FILE *F)

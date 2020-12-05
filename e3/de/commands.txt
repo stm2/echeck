@@ -49,14 +49,15 @@ BREED,        Züchten
 ORIGIN,       Ursprung
 EMAIL,        Email
 RESERVE,      Reservieren
-CLAIM, Beanspruchen
+CLAIM,        Beanspruchen
 BANNER,       Banner
 NUMBER,       Nummer
 PIRACY,       Piraterie
 GROUP,        Gruppe
 SORT,         Sortieren
 PREFIX,       Präfix
-PROMOTE,    Befördere
+PROMOTE,      Befördere
+LANGUAGE,     Sprache
 
 # NEXT, Nächster     ist KEIN BEFEHL für ECheck, sondern ein PARAMETER!
 # dies ist aus internen Gründen notwendig, also entsprechend dort eintragen

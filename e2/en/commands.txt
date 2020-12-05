@@ -63,6 +63,7 @@ GROUP,    Group
 SORT,   Sort
 PREFIX,   Prefix
 PROMOTE,  Promote
+LANGUAGE, Language
 
 # NEXT, Next  is NO COMMAND for ECheck, it's an parameter.
 # this is for internal reasons, please enter at required place

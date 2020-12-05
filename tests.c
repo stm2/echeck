@@ -272,6 +272,15 @@ static void test_origin(CuTest *tc)
   test_orders(tc, "URSPRUNG", 0, 1);
 }
 
+static void test_language(CuTest *tc)
+{
+  test_orders(tc, "SPRACHE de", 0, 0);
+  test_orders(tc, "SPRACHE de", 0, 0);
+  /* test_orders(tc, "SPRACHE 1", 0, 1); */
+  test_orders(tc, "SPRACHE", 0, 1);
+  test_orders(tc, "SPRACHE a b", 1, 0);
+}
+
 int AddTestSuites(CuSuite * suite, const char * args)
 {
   CuSuite* cs;
@@ -342,6 +351,7 @@ int AddTestSuites(CuSuite * suite, const char * args)
       SUITE_ADD_TEST(cs, test_check_additional_parameters);
       SUITE_ADD_TEST(cs, test_origin);
       SUITE_ADD_TEST(cs, test_check_quotes);
+      SUITE_ADD_TEST(cs, test_language);
       CuSuiteAddSuite(suite, cs);
     }
     name = strtok(0, ",");
