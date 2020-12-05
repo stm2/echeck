@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: echeck 4.4.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-05 11:22+0100\n"
+"POT-Creation-Date: 2020-12-05 11:28+0100\n"
 "PO-Revision-Date: 2020-11-22 18:44+0100\n"
 "Last-Translator: Enno Rehling <enno@eressea.de>\n"
 "Language-Team: German (Deutsch) <echeck@eressea.de>\n"
@@ -34,21 +34,21 @@ msgstr ""
 "  ****  Passwort fehlt!  ****\n"
 "\n"
 
-#: echeck.c:5466
+#: echeck.c:5473
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d Fehler"
 msgstr[1] "%d Fehler"
 
-#: echeck.c:5441
+#: echeck.c:5448
 #, c-format
 msgid "%d faction"
 msgid_plural "%d factions"
 msgstr[0] "%d Partei"
 msgstr[1] "%d Parteien"
 
-#: echeck.c:5444
+#: echeck.c:5451
 #, c-format
 msgid "%d unit"
 msgid_plural "%d units"
@@ -85,7 +85,7 @@ msgstr "%s ohne Argumente"
 msgid "%s or %s missing"
 msgstr "Parameter %s oder %s fehlt"
 
-#: echeck.c:4562
+#: echeck.c:4569
 #, c-format
 msgid ""
 "-Ppath  search path for the additional files; locale %s will be appended\n"
@@ -123,13 +123,13 @@ msgid ""
 "-C      compact output\n"
 msgstr ""
 "-Ppfad  Pfadangabe für die Zusatzdateien; das Locale %s wid angehängt\n"
-"-Rgame  Zusatzdateien aus Unterverzeichnis game einlesen; Standardeinstellung: e2\n"
+"-Rgame  Zusatzdateien aus Unterverzeichnis game einlesen; "
+"Standardeinstellung: e2\n"
 " -      Verwendet stdin anstelle einer Eingabedatei.\n"
 "-b      unterdrückt Warnungen und Fehler (brief)\n"
 "-q      erwartet keine Angaben zu Personen/Silber in [] bei EINHEIT\n"
 "-rnnn   Legt Rekrutierungskosten auf nnn Silber fest\n"
-"-c      schreibt die Warnungen und Fehler in einer Compiler-ähnlichen "
-"Form\n"
+"-c      schreibt die Warnungen und Fehler in einer Compiler-ähnlichen Form\n"
 "-m      schreibt die Warnungen und Fehler für Magellan\n"
 "-e      schreibt die geprüfte Datei auf stdout, Fehler nach stderr\n"
 "-E      schreibt die geprüfte Datei auf stdout, Fehler nach stdout\n"
@@ -197,19 +197,19 @@ msgstr "Neu erschaffene Einheiten können nicht attackiert werden"
 msgid "Cannot parse this unit's comment"
 msgstr "Unverständlicher Einheitenkommentar"
 
-#: echeck.c:5411
+#: echeck.c:5418
 #, c-format
 msgid "Cannot read file %s."
 msgstr "Kann die Datei %s nicht lesen."
 
-#: echeck.c:5472
+#: echeck.c:5479
 #, c-format
 msgid "Detected %d error."
 msgid_plural "Detected %d errors."
 msgstr[0] "%d Fehler gefunden."
 msgstr[1] "%d Fehler gefunden."
 
-#: echeck.c:5461
+#: echeck.c:5468
 #, c-format
 msgid "Detected %d warning"
 msgid_plural "Detected %d warnings"
@@ -220,7 +220,7 @@ msgstr[1] "%d Warnungen gefunden"
 msgid "Do not use [ ] and < >"
 msgstr "[ ] und  < >  dürfen nicht mit eingegeben werden"
 
-#: echeck.c:5366
+#: echeck.c:5373
 #, c-format
 msgid ""
 "ECheck (Version %s, %s), order file checker for Eressea - freeware!\n"
@@ -229,7 +229,7 @@ msgstr ""
 "ECheck (Version %s, %s), Befehlsprüfer für Eressea - Freeware!\n"
 "\n"
 
-#: echeck.c:5117
+#: echeck.c:5124
 msgid "ERESSEA faction-no \"Password\" not found"
 msgstr "ERESSEA partei-nummer \"Passwort\" fehlt"
 
@@ -242,7 +242,7 @@ msgstr "Fehler in Zeile %d"
 msgid "Error with LEVEL parameter"
 msgstr "Fehler bei STUFE-Parameter"
 
-#: echeck.c:4989
+#: echeck.c:4996
 msgid "Error with REGION"
 msgstr "REGION fehlerhaft"
 
@@ -275,7 +275,7 @@ msgstr "Partei 0 verwendet"
 msgid "Faction missing"
 msgstr "Partei fehlt"
 
-#: echeck.c:5023
+#: echeck.c:5030
 #, c-format
 msgid "Found orders for faction %s."
 msgstr "Befehle für Partei %s gefunden."
@@ -319,7 +319,7 @@ msgstr "Botschaften müssen an %s, %s oder %s gesendet werden"
 msgid "Missing \""
 msgstr "Fehlendes \""
 
-#: echeck.c:5013 echeck.c:5128
+#: echeck.c:5020 echeck.c:5135
 #, c-format
 msgid "Missing %s"
 msgstr "%s fehlt"
@@ -328,11 +328,11 @@ msgstr "%s fehlt"
 msgid "Missing faction number"
 msgstr "Es fehlen Dateien für"
 
-#: echeck.c:5369
+#: echeck.c:5376
 msgid "Missing files containing"
 msgstr "Es fehlen Dateien für"
 
-#: echeck.c:4853
+#: echeck.c:4860
 #, c-format
 msgid "Missing locale, using '%s'"
 msgstr "Unbekannte Sprache, benutze '%s'"
@@ -394,7 +394,7 @@ msgstr "Kein Text"
 msgid "Not a luxury item"
 msgstr "Kein Luxusgut"
 
-#: echeck.c:5114
+#: echeck.c:5121
 msgid "Not carried out by any unit"
 msgstr "Wird von keiner Einheit ausgeführt"
 
@@ -439,7 +439,7 @@ msgstr "Kann nur nach Kräutern forschen"
 msgid "Only ships can be sabotaged"
 msgstr "Nur Schiffe können sabotiert werden"
 
-#: echeck.c:5446
+#: echeck.c:5453
 #, c-format
 msgid "Orders have been read for %s and %s."
 msgstr "Es wurden Befehle für %s und %s gelesen."
@@ -448,7 +448,7 @@ msgstr "Es wurden Befehle für %s und %s gelesen."
 msgid "Password cleared"
 msgstr "Passwort gelöscht"
 
-#: echeck.c:5451
+#: echeck.c:5458
 msgid ""
 "Please make sure you have sent in your orders properly.\n"
 "Remember that orders must not be sent as HTML or word-documents."
@@ -465,7 +465,7 @@ msgstr "Email bitte mit EMAIL setzen"
 msgid "Positive value expected"
 msgstr "Positiver Wert erwartet"
 
-#: echeck.c:1700 echeck.c:5417
+#: echeck.c:1700 echeck.c:5424
 #, c-format
 msgid "Processing file '%s'."
 msgstr "Verarbeite Datei '%s'."
@@ -487,7 +487,7 @@ msgstr "ROUTE ist kein Kreis; (%d,%d) -> (%d,%d)"
 msgid "ROUTE starts with PAUSE"
 msgstr "ROUTE beginnt mit PAUSE"
 
-#: echeck.c:5033
+#: echeck.c:5040
 #, c-format
 msgid "Recruit costs have been set to %d silver, warning level %d"
 msgstr "Rekrutierungskosten auf %d Silber gesetzt, Warnungen Stufe %d"
@@ -514,7 +514,7 @@ msgstr "Magiegebiet '%s' gibt es nicht"
 msgid "Search path is"
 msgstr "Suchpfad ist"
 
-#: echeck.c:5036
+#: echeck.c:5043
 msgid "Silver pool is active."
 msgstr "Silberpool ist aktiv."
 
@@ -545,7 +545,7 @@ msgstr "Lehrer braucht Schüler"
 msgid "Text too long (max. %d characters)"
 msgstr "Text zu lang (max %d Zeichen)"
 
-#: echeck.c:5457
+#: echeck.c:5464
 msgid "The orders look good."
 msgstr "Die Befehle scheinen in Ordnung zu sein."
 
@@ -774,7 +774,7 @@ msgstr "Einheit TEMP %s verliert Silber und evtl. Gegenstände"
 msgid "Unit must be in a castle, in a building or on a ship"
 msgstr "Die Einheit muss in einem Schiff oder Gebäude sein"
 
-#: echeck.c:4863
+#: echeck.c:4870
 #, c-format
 msgid "Unknown option -%s"
 msgstr "Unbekannte Option -%s"
@@ -837,7 +837,7 @@ msgstr "Falscher Ausgabe-Level"
 msgid "Wrong parameter"
 msgstr "Falscher Parameter"
 
-#: echeck.c:4554
+#: echeck.c:4561
 #, c-format
 msgid "cannot read configuration files from %s/%s"
 msgstr "Konfigurationsdateien nicht gefunden in %s/%s"
