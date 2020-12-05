@@ -1,6 +1,7 @@
 .gdb_history
 *~
 echeck
+tags
 
 # Compiled Object files
 *.slo

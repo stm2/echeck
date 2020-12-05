@@ -1,0 +1,7 @@
+--recurse=yes
+--exclude=.git
+--exclude=po
+--exclude=locale
+--exclude=e2
+--exclude=e3
+--exclude=build
