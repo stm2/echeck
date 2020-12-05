@@ -4559,7 +4559,9 @@ void files_not_found(FILE *F)
 void printhelp(int argc, char *argv[], int index)
 {
   fprintf(ERR, _(
-"-Ppath  search path for the additional files; locale %s will be appended\n"
+"-Ppath  search path for the additional files;"
+" locale %s will be appended\n"
+"-Rgame  read files from subdirectory game; default: e2\n"
 "-       use stdin instead of an input file\n"
 "-b      suppress warnings and errors (brief)\n"
 "-q      do not expect hints regarding men/silver within [] after UNIT\n"

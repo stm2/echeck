@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-05 11:17+0100\n"
+"POT-Creation-Date: 2020-12-05 11:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,21 +28,21 @@ msgid ""
 "\n"
 msgstr ""
 
-#: echeck.c:5464
+#: echeck.c:5466
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] ""
 msgstr[1] ""
 
-#: echeck.c:5439
+#: echeck.c:5441
 #, c-format
 msgid "%d faction"
 msgid_plural "%d factions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: echeck.c:5442
+#: echeck.c:5444
 #, c-format
 msgid "%d unit"
 msgid_plural "%d units"
@@ -83,6 +83,7 @@ msgstr ""
 #, c-format
 msgid ""
 "-Ppath  search path for the additional files; locale %s will be appended\n"
+"-Rgame  read files from subdirectory game; default: e2\n"
 "-       use stdin instead of an input file\n"
 "-b      suppress warnings and errors (brief)\n"
 "-q      do not expect hints regarding men/silver within [] after UNIT\n"
@@ -156,19 +157,19 @@ msgstr ""
 msgid "Cannot parse this unit's comment"
 msgstr ""
 
-#: echeck.c:5409
+#: echeck.c:5411
 #, c-format
 msgid "Cannot read file %s."
 msgstr ""
 
-#: echeck.c:5470
+#: echeck.c:5472
 #, c-format
 msgid "Detected %d error."
 msgid_plural "Detected %d errors."
 msgstr[0] ""
 msgstr[1] ""
 
-#: echeck.c:5459
+#: echeck.c:5461
 #, c-format
 msgid "Detected %d warning"
 msgid_plural "Detected %d warnings"
@@ -179,14 +180,14 @@ msgstr[1] ""
 msgid "Do not use [ ] and < >"
 msgstr ""
 
-#: echeck.c:5364
+#: echeck.c:5366
 #, c-format
 msgid ""
 "ECheck (Version %s, %s), order file checker for Eressea - freeware!\n"
 "\n"
 msgstr ""
 
-#: echeck.c:5115
+#: echeck.c:5117
 msgid "ERESSEA faction-no \"Password\" not found"
 msgstr ""
 
@@ -199,7 +200,7 @@ msgstr ""
 msgid "Error with LEVEL parameter"
 msgstr ""
 
-#: echeck.c:4987
+#: echeck.c:4989
 msgid "Error with REGION"
 msgstr ""
 
@@ -232,7 +233,7 @@ msgstr ""
 msgid "Faction missing"
 msgstr ""
 
-#: echeck.c:5021
+#: echeck.c:5023
 #, c-format
 msgid "Found orders for faction %s."
 msgstr ""
@@ -276,7 +277,7 @@ msgstr ""
 msgid "Missing \""
 msgstr ""
 
-#: echeck.c:5011 echeck.c:5126
+#: echeck.c:5013 echeck.c:5128
 #, c-format
 msgid "Missing %s"
 msgstr ""
@@ -285,11 +286,11 @@ msgstr ""
 msgid "Missing faction number"
 msgstr ""
 
-#: echeck.c:5367
+#: echeck.c:5369
 msgid "Missing files containing"
 msgstr ""
 
-#: echeck.c:4851
+#: echeck.c:4853
 #, c-format
 msgid "Missing locale, using '%s'"
 msgstr ""
@@ -351,7 +352,7 @@ msgstr ""
 msgid "Not a luxury item"
 msgstr ""
 
-#: echeck.c:5112
+#: echeck.c:5114
 msgid "Not carried out by any unit"
 msgstr ""
 
@@ -396,7 +397,7 @@ msgstr ""
 msgid "Only ships can be sabotaged"
 msgstr ""
 
-#: echeck.c:5444
+#: echeck.c:5446
 #, c-format
 msgid "Orders have been read for %s and %s."
 msgstr ""
@@ -405,7 +406,7 @@ msgstr ""
 msgid "Password cleared"
 msgstr ""
 
-#: echeck.c:5449
+#: echeck.c:5451
 msgid ""
 "Please make sure you have sent in your orders properly.\n"
 "Remember that orders must not be sent as HTML or word-documents."
@@ -419,7 +420,7 @@ msgstr ""
 msgid "Positive value expected"
 msgstr ""
 
-#: echeck.c:1700 echeck.c:5415
+#: echeck.c:1700 echeck.c:5417
 #, c-format
 msgid "Processing file '%s'."
 msgstr ""
@@ -441,7 +442,7 @@ msgstr ""
 msgid "ROUTE starts with PAUSE"
 msgstr ""
 
-#: echeck.c:5031
+#: echeck.c:5033
 #, c-format
 msgid "Recruit costs have been set to %d silver, warning level %d"
 msgstr ""
@@ -468,7 +469,7 @@ msgstr ""
 msgid "Search path is"
 msgstr ""
 
-#: echeck.c:5034
+#: echeck.c:5036
 msgid "Silver pool is active."
 msgstr ""
 
@@ -499,7 +500,7 @@ msgstr ""
 msgid "Text too long (max. %d characters)"
 msgstr ""
 
-#: echeck.c:5455
+#: echeck.c:5457
 msgid "The orders look good."
 msgstr ""
 
@@ -726,7 +727,7 @@ msgstr ""
 msgid "Unit must be in a castle, in a building or on a ship"
 msgstr ""
 
-#: echeck.c:4861
+#: echeck.c:4863
 #, c-format
 msgid "Unknown option -%s"
 msgstr ""
