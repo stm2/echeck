@@ -3570,7 +3570,7 @@ void check_money(bool do_move)
           if (t->ship == i) {
             if (t->hasmoved > 1) {      /* schon bewegt! */
               sprintf(warn_buf, cgettext(Errors[UNITONSHIPHASMOVED]), uid(t), itob(i));
-              Error(warn_buf, t->line_no, t->long_order);
+              warning(warn_buf, t->line_no, t->long_order, 2);
             }
             t->hasmoved = 1;
             t->newx = x;
