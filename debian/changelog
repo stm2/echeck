@@ -1,3 +1,8 @@
+echeck (4.5.2) UNRELEASED; urgency=low
+
+  * warnings use input language for keywords, not current locale. 
+
+  -- Enno Rehling <enno@eressea.de> Sat, 05 Dec. 2020 9:24:00 +0200
 echeck (4.5.0) UNRELEASED; urgency=low
 
   * Fix segmentation faults
