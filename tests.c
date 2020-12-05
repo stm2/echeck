@@ -31,21 +31,27 @@ static int unit_no = 0;
 static char input_buf[BUFSIZE];
 static char msg_buf[BUFSIZE];
 
-static void test_orders(CuTest * tc, char * orders, int exp_warnings, int exp_errors) {
-  char * order;
-    
+static void test_orders(CuTest * tc, const char * input, int exp_warnings, int exp_errors) {
+  char * order, *orders;
+  size_t sz = 1 + strlen(input);
+
+  orders = malloc(sz);
+  if (orders) {
+    memcpy(orders, input, sz);
+  }
   set_order_unit(newunit(++unit_no, 0));
   line_no = 0;
   error_count = warning_count = 0;
 
-  order = strtok(strdup(orders), "\n");
+
+  order = strtok(orders, "\n");
   while (order) {
     input_buf[0] = 0;
     strcat(input_buf, order);
     strcat(input_buf, "\n");
     mock_input(input_buf);
     checkanorder(getbuf());
-    order = strtok(0, "\n");
+    order = strtok(NULL, "\n");
   }
   
   sprintf(msg_buf, exp_errors?"errors expected in '%s'":"no errors expected in '%s'", orders);
