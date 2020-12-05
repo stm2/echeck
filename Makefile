@@ -62,8 +62,8 @@ tests: echeck.c whereami.c whereami.h unicode.c unicode.h $(TEST_SRC) $(TEST_HDR
 	$(CC) $(LFLAGS) $(CFLAGS) -DTESTING -o tests echeck.c whereami.c unicode.c $(TEST_SRC)
 
 clean:
-	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip locale/de/LC_MESSAGES/echeck.mo
-	@rmdir locale/de/LC_MESSAGES locale/de locale
+	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip 
+	@rm -rf locale
 
 check: tests
 	@./tests -T=all -Lde -Re2 -b
