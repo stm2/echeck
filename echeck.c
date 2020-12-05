@@ -87,7 +87,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 
 #include <string.h>
 
-static const char *echeck_version = "4.5.3";
+static const char *echeck_version = "4.5.4";
 
 #define DEFAULT_PATH "."
 
@@ -544,7 +544,6 @@ enum {
   FOLLOW,
   INTERNALCHECK,
   INVALIDEMAIL,
-  ITEM,
   MISSFILEPARAM,
   MISSFILECMD,
   MISSFILEITEM,
@@ -577,7 +576,6 @@ enum {
   QUITMSG,
   RECRUITCOSTSSET,
   RESERVE0SENSELESS,
-  RIDESWRONGUNIT,
   ROUTENOTCYCLIC,
   SCHOOLCHOSEN,
   SORT,
@@ -610,7 +608,6 @@ static const char *Errors[MAX_ERRORS] = {
   "FOLLOW",
   "INTERNALCHECK",
   "INVALIDEMAIL",
-  "ITEM",
   "MISSFILEPARAM",
   "MISSFILECMD",
   "MISSFILEITEM",
@@ -643,7 +640,6 @@ static const char *Errors[MAX_ERRORS] = {
   "QUITMSG",
   "RECRUITCOSTSSET",
   "RESERVE0SENSELESS",
-  "RIDESWRONGUNIT",
   "ROUTENOTCYCLIC",
   "SCHOOLCHOSEN",
   "SORT",
@@ -1547,39 +1543,43 @@ int btoi(char *s)
   return i;
 }
 
-const char *uid1(const unit * u)
-{
-  static char bf[18];
-
+const char *uidbuf(const unit * u, char *bf) {
   sprintf(bf, "%s%s", u->temp != 0 ? "TEMP " : "", itob(u->no));
   return bf;
 }
 
+const char *uid1(const unit * u)
+{
+  static char bf[18];
+  return uidbuf(u, bf);
+}
+
 const char *uid2(const unit * u)
 {
-  static char buffer[18*4];
-  char *dst;
-  static int index = 0;
+  static char bf[18];
+  return uidbuf(u, bf);
+}
 
-  index = (index+1) % 4;
-  dst = buffer + index * 18;
-
-  sprintf(dst, "%s%s", u->temp != 0 ? "TEMP " : "", itob(u->no));
-  return dst;
+const char *uid3(const unit * u)
+{
+  static char bf[18];
+  return uidbuf(u, bf);
 }
 
 const char *uid(const unit * u) {
   static int toggle;
-  toggle = 1 - toggle;
-  if (toggle) {
+  toggle = 2 - toggle;
+  if (toggle==1) {
     return uid1(u);
   }
-  return uid2(u);
+  else if (toggle==2) {
+    return uid2(u);
+  }
+  return uid3(u);
 }
 
 const char *Uid(int i)
 {
-  static char bf[18];
   unit *u;
 
   u = find_unit(i, 0);
@@ -1590,8 +1590,7 @@ const char *Uid(int i)
     Error(warn_buf, line_no, _("<internal check>"));
     u = newunit(-1, 0);
   }
-  sprintf(bf, "%s%s", u->temp != 0 ? "TEMP " : "", itob(u->no));
-  return bf;
+  return uid(u);
 }
 
 void warn(char *s, int line, char level)
@@ -1654,7 +1653,6 @@ static const struct warning {
   {"FOLLOW", t("FOLLOW UNIT xx, FOLLOW SHIP xx or FOLLOW")},
   {"INTERNALCHECK", t("<internal check>")},
   {"INVALIDEMAIL", t("invalid email address")},
-  {"ITEM", t("item")},
   {"MISSFILEPARAM", t("parameters")},
   {"MISSFILECMD", t("commands")},
   {"MISSFILEITEM", t("items")},
@@ -1688,7 +1686,6 @@ static const struct warning {
   {"PROCESSINGFILE", t("Processing file '%s'.")},
   {"QUITMSG", t("Attention! QUIT found! Your faction will be cancelled!")},
   {"RESERVE0SENSELESS", t("RESERVE 0 xxx doesn't make any sense")},
-  {"RIDESWRONGUNIT", t("Unit %s is carried by unit %s but rides with ")},
   {"ROUTENOTCYCLIC", t("ROUTE is not cyclic; (%d,%d) -> (%d,%d)")},
   {"SCHOOLCHOSEN", t("School '%s' chosen.\n")},
   {"SORT", t("SORT BEFORE or BEHIND <unit>")},
@@ -1703,7 +1700,11 @@ static const struct warning {
   {"UNITCANSTILLTEACH", t("Unit %s can teach %d more students")},
   {"UNITHASNTPERSONS", t("Unit TEMPORARY %s hasn't recruited and hasn't got any men! It may lose silver and/or items")},
   {"UNITHASPERSONS", t("Unit %s has %d men")},
+<<<<<<< HEAD
   {"UNITISTEACHED", t("Unit %s is taught by unit ")},
+=======
+  {"UNITMISSING", t("Missing unit")},
+>>>>>>> Some more missing German translations
   {"UNITMISSPERSON", t("Unit %s may have not enough men")},
   {"UNITMISSSILVER", t("Unit %s may have not enough silver")},
   {"UNITMOVESSHIP", t("Unit %s moves ship %s and may lack control")},
@@ -3586,8 +3587,7 @@ void check_money(bool do_move)
       continue;
 
     if (u->transport && u->drive && u->drive != u->transport) {
-      sprintf(checked_buf, cgettext(Errors[RIDESWRONGUNIT]), uid(u), Uid(u->transport));
-      scat(Uid(u->drive));
+      sprintf(checked_buf, _("Unit %s is carried by unit %s but rides with %s"), uid(u), Uid(u->transport), Uid(u->drive));
       warning(checked_buf, u->line_no, u->long_order, 1);
       continue;
     }
