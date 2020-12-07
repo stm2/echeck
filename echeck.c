@@ -577,32 +577,20 @@ enum {
   QUITMSG,
   RECRUITCOSTSSET,
   RESERVE0SENSELESS,
-  RESERVEWHAT,
   RIDESWRONGUNIT,
   ROUTENOTCYCLIC,
-  ROUTESTARTSWITHPAUSE,
   SCHOOLCHOSEN,
-  SEARCHPATHIS,
-  SILVERPOOL,
   SORT,
-  UNIT0NOTPOSSIBLE,
-  UNIT0USED,
   UNITALREADYHAS,
   UNITALREADYHASMOVED,
   UNITALREADYHASORDERS,
   UNITHASNTPERSONS,
   UNITHASPERSONS,
-  UNITMISSING,
   UNITMISSPERSON,
   UNITMISSSILVER,
   UNITMOVESSHIP,
   UNITMUSTBEONSHIP,
   UNITONSHIPHASMOVED,
-  UNRECOGNIZEDDIRECTION,
-  UNRECOGNIZEDOBJECT,
-  UNRECOGNIZEDOPTION,
-  UNRECOGNIZEDORDER,
-  UNRECOGNIZEDPOTION,
   MAX_ERRORS
 };
 
@@ -655,32 +643,20 @@ static const char *Errors[MAX_ERRORS] = {
   "QUITMSG",
   "RECRUITCOSTSSET",
   "RESERVE0SENSELESS",
-  "RESERVEWHAT",
   "RIDESWRONGUNIT",
   "ROUTENOTCYCLIC",
-  "ROUTESTARTSWITHPAUSE",
   "SCHOOLCHOSEN",
-  "SEARCHPATHIS",
-  "SILVERPOOL",
   "SORT",
-  "UNIT0NOTPOSSIBLE",
-  "UNIT0USED",
   "UNITALREADYHAS",
   "UNITALREADYHASMOVED",
   "UNITALREADYHASORDERS",
   "UNITHASNTPERSONS",
   "UNITHASPERSONS",
-  "UNITMISSING",
   "UNITMISSPERSON",
   "UNITMISSSILVER",
   "UNITMOVESSHIP",
   "UNITMUSTBEONSHIP",
   "UNITONSHIPHASMOVED",
-  "UNRECOGNIZEDDIRECTION",
-  "UNRECOGNIZEDOBJECT",
-  "UNRECOGNIZEDOPTION",
-  "UNRECOGNIZEDORDER",
-  "UNRECOGNIZEDPOTION",
 };
 
 typedef struct _names {
@@ -1712,19 +1688,14 @@ static const struct warning {
   {"PROCESSINGFILE", t("Processing file '%s'.")},
   {"QUITMSG", t("Attention! QUIT found! Your faction will be cancelled!")},
   {"RESERVE0SENSELESS", t("RESERVE 0 xxx doesn't make any sense")},
-  {"RESERVEWHAT", t("RESERVE what?")},
   {"RIDESWRONGUNIT", t("Unit %s is carried by unit %s but rides with ")},
   {"ROUTENOTCYCLIC", t("ROUTE is not cyclic; (%d,%d) -> (%d,%d)")},
-  {"ROUTESTARTSWITHPAUSE", t("ROUTE starts with PAUSE")},
   {"SCHOOLCHOSEN", t("School '%s' chosen.\n")},
-  {"SEARCHPATHIS", t("Search path is")},
   {"SORT", t("SORT BEFORE or BEHIND <unit>")},
   {"TEMPHASNTPERSONS", t("Unit TEMPORARY %s hasn't got men and hasn't recruited anyone")},
   {"TEMPNOTTEMP", t("Unit TEMPORARY %s hasn't been generated with MAKE TEMPORARY")},
   {"TEMPUNITSCANTRESERVE", t("TEMPORARY units can't use RESERVE! Use GIVE instead!")},
   {"TEMPUNITSCANTGIVE", t("TEMPORARY units can't use GIVE, it happens before MAKE!")},
-  {"UNIT0NOTPOSSIBLE", t("Unit 0/Peasants not possible here")},
-  {"UNIT0USED", t("Unit 0 used")},
   {"UNITALREADYHAS", t("Unit %s already has a ")},
   {"UNITALREADYHASLONGORDERS", t("Unit %s already has a long order in line %d (%s)")},
   {"UNITALREADYHASMOVED", t("Unit %s already has moved")},
@@ -1733,18 +1704,12 @@ static const struct warning {
   {"UNITHASNTPERSONS", t("Unit TEMPORARY %s hasn't recruited and hasn't got any men! It may lose silver and/or items")},
   {"UNITHASPERSONS", t("Unit %s has %d men")},
   {"UNITISTEACHED", t("Unit %s is taught by unit ")},
-  {"UNITMISSING", t("Missing unit")},
   {"UNITMISSPERSON", t("Unit %s may have not enough men")},
   {"UNITMISSSILVER", t("Unit %s may have not enough silver")},
   {"UNITMOVESSHIP", t("Unit %s moves ship %s and may lack control")},
   {"UNITMUSTBEONSHIP", t("Unit must be in a castle, in a building or on a ship")},
   {"UNITNOTONSHIPBUTONSHIP", t("Unit %s may be on ship %s instead of ship %s")},
   {"UNITONSHIPHASMOVED", t("Unit %s on ship %s has already moved")},
-  {"UNRECOGNIZEDDIRECTION", t("Unrecognized direction")},
-  {"UNRECOGNIZEDOBJECT", t("Unrecognized object")},
-  {"UNRECOGNIZEDOPTION", t("Unrecognized option")},
-  {"UNRECOGNIZEDORDER", t("Unrecognized order")},
-  {"UNRECOGNIZEDPOTION", t("Unrecognized potion")},
   {NULL, NULL }
 };
 
@@ -3142,10 +3107,10 @@ void checkdirections(int key)
     if (i <= -1) {
       if (i == -2)
         break;                  /* Zeile zu ende */
-      anerror(cgettext(Errors[UNRECOGNIZEDDIRECTION]));
+      anerror(_("Unrecognized direction"));
     } else {
       if (key == K_ROUTE && i == D_PAUSE && count == 0)
-        dwarning(Errors[ROUTESTARTSWITHPAUSE], 2);
+        awarning(_("ROUTE starts with PAUSE"), 2);
       if (key == K_MOVE && i == D_PAUSE) {
         sprintf(warn_buf, _("%s and %s cannot be combined"), printkeyword(K_MOVE), printdirection(D_PAUSE));
         anerror(warn_buf);
@@ -3191,7 +3156,7 @@ void checkdirections(int key)
   while (i >= 0);
 
   if (!count)
-    anerror(cgettext(Errors[UNRECOGNIZEDDIRECTION]));
+    anerror(_("Unrecognized direction"));
   if (key == K_ROUTE && !noroute && (sx != x || sy != y)) {
     sprintf(warn_buf, cgettext(Errors[ROUTENOTCYCLIC]), sx, sy, x, y);
     awarning(warn_buf, 4);
@@ -3277,12 +3242,12 @@ void claim(void)
   }
   icat(n);
   if (!(*s)) {
-    anerror(cgettext(Errors[UNRECOGNIZEDOBJECT]));
+    anerror(_("Unrecognized object"));
     return;
   }
   i = finditem(s);
   if (i <= 0) {
-    awarning(cgettext(Errors[UNRECOGNIZEDOBJECT]), 1);
+    awarning(_("Unrecognized object"), 1);
   }
   Scat(ItemName(i, n != 1));
 }
@@ -3321,7 +3286,7 @@ void reserve(void)
   s = getstr();
 
   if (!(*s)) {
-    anerror(cgettext(Errors[RESERVEWHAT]));
+    anerror(_("RESERVE what?"));
     return;
   }
   i = finditem(s);
@@ -3857,9 +3822,9 @@ void checkanorder(char *Orders)
       if (i >= 0) {
         Scat(ItemName(i, 1));
       } else if (!(*s)) {
-        anerror(cgettext(Errors[UNRECOGNIZEDOBJECT]));
+        anerror(_("Unrecognized object"));
       } else {
-        awarning(cgettext(Errors[UNRECOGNIZEDOBJECT]), 1);
+        awarning(_("Unrecognized object"), 1);
       }
     }
     /* additional parameters may be in order */
@@ -4112,7 +4077,7 @@ void checkanorder(char *Orders)
     scat(printkeyword(K_SPY));
     i = getb();
     if (!i)
-      anerror(cgettext(Errors[UNITMISSING]));
+      anerror(_("Missing unit"));
     else
       bcat(i);
     long_order();
@@ -4302,7 +4267,7 @@ void checkanorder(char *Orders)
     scat(printkeyword(K_OPTION));
     i = getoption();
     if (i < 0) {
-      anerror(cgettext(Errors[UNRECOGNIZEDOPTION]));
+      anerror(_("Unrecognized option"));
       break;
     }
     Scat(printliste(i, options));
@@ -4336,7 +4301,7 @@ void checkanorder(char *Orders)
   case K_RIDE:
     scat(printkeyword(K_RIDE));
     if (getaunit(NECESSARY) == 2)
-      anerror(cgettext(Errors[UNIT0NOTPOSSIBLE]));
+      anerror(_("Unit 0/Peasants not possible here"));
     else if (!does_default)
       order_unit->drive = this_unit;
     long_order();
@@ -4458,9 +4423,9 @@ void checkanorder(char *Orders)
       if (i >= 0) {
         Scat(ItemName(i, n != 1));
       } else if (!(*s)) {
-        anerror(cgettext(Errors[UNRECOGNIZEDOBJECT]));
+        anerror(_("Unrecognized object"));
       } else {
-        awarning(cgettext(Errors[UNRECOGNIZEDOBJECT]), 1);
+        awarning(_("Unrecognized object"), 1);
       }
     }
     long_order();
