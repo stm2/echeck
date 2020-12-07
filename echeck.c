@@ -1698,11 +1698,6 @@ static const struct warning {
   {"UNITCANSTILLTEACH", t("Unit %s can teach %d more students")},
   {"UNITHASNTPERSONS", t("Unit TEMPORARY %s hasn't recruited and hasn't got any men! It may lose silver and/or items")},
   {"UNITHASPERSONS", t("Unit %s has %d men")},
-<<<<<<< HEAD
-  {"UNITISTEACHED", t("Unit %s is taught by unit ")},
-=======
-  {"UNITMISSING", t("Missing unit")},
->>>>>>> Some more missing German translations
   {"UNITMISSPERSON", t("Unit %s may have not enough men")},
   {"UNITMISSSILVER", t("Unit %s may have not enough silver")},
   {"UNITMOVESSHIP", t("Unit %s moves ship %s and may lack control")},
