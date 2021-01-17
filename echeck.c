@@ -87,7 +87,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 
 #include <string.h>
 
-static const char *echeck_version = "4.5.6";
+static const char *echeck_version = "4.5.7";
 
 #define DEFAULT_PATH "."
 
