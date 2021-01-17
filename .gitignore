@@ -49,6 +49,7 @@ ipch/
 /CMakeSettings.json
 tests
 build/
+out/
 *.cbp
 *.depend
 /CMakeFiles
