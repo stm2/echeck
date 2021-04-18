@@ -87,7 +87,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 
 #include <string.h>
 
-#define isxspace(c) c==194 || c==160 || isspace(c)
+#define isxspace(c) (c==194 || c==160 || isspace(c))
 
 static const char *echeck_version = "4.5.7";
 
