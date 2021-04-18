@@ -2092,9 +2092,6 @@ char *getbuf(void)
     char *bp = fgetbuffer(lbuf, MAXLINE, F);
 
     if (!bp) {
-      if (ferror(F)) {
-        perror(filename);
-      }
       return NULL;
     }
     end = bp + strlen(bp);
