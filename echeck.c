@@ -87,6 +87,8 @@ int AddTestSuites(CuSuite * suite, const char *names);
 
 #include <string.h>
 
+#define isxspace(c) c==194 || c==160 || isspace(c)
+
 static const char *echeck_version = "4.5.7";
 
 #define DEFAULT_PATH "."
@@ -783,16 +785,20 @@ int Pow(int p)
 
 char *eatwhite(char *ptr)
 {
-  int ret = 0;
-
   while (*ptr) {
     ucs4_t ucs;
     size_t size = 0;
-    ret = unicode_utf8_to_ucs4(&ucs, ptr, &size);
-    if (ret != 0 || !iswxspace((wint_t) ucs)) {
-      break;
+
+    if (isxspace(*ptr)) {
+      ++ptr;
     }
-    ptr += size;
+    else {
+      int ret = unicode_utf8_to_ucs4(&ucs, ptr, &size);
+      if (ret != 0 || !iswxspace((wint_t)ucs)) {
+        break;
+      }
+      ptr += size;
+    }
   }
   return ptr;
 }
@@ -1057,7 +1063,7 @@ void readskill(char *s)
   sk->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   if (x) {
     s = (char *)(x + 1);
-    while (isspace(*s))
+    while (isxspace(*s))
       s++;
     if (*s)
       sk->kosten = atoi(s);
@@ -1304,7 +1310,7 @@ int parsefile(char *s, int typ)
     if (!x)
       return 0;
     y = x + 1;
-    while (isspace(*(x - 1)))
+    while (isxspace(*(x - 1)))
       x--;
     *x = 0;
     for (i = 1; i < UT_MAX; i++)
@@ -2085,9 +2091,12 @@ char *getbuf(void)
     char *end;
     char *bp = fgetbuffer(lbuf, MAXLINE, F);
 
-    if (!bp)
+    if (!bp) {
+      if (ferror(F)) {
+        perror(filename);
+      }
       return NULL;
-
+    }
     end = bp + strlen(bp);
     if (end == bp || *(end - 1) == '\n') {
       line_no++;
@@ -2105,13 +2114,13 @@ char *getbuf(void)
     }
     cont = false;
     while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE && *bp) {
-      int c = *bp;
-      if (c > 0 && isspace(c)) {
+      int c = *(unsigned char *)bp;
+      if (c > 0 && isxspace(c)) {
         if (eatwhite) {
           do {
             c = *(++bp);
           }
-          while (bp != lbuf + MAXLINE && isspace(*bp));
+          while (bp != lbuf + MAXLINE && isxspace(*bp));
           if (!quote && !start)
             *(cp++) = ' ';
         } else {
@@ -2120,7 +2129,7 @@ char *getbuf(void)
             c = *(++bp);
           }
           while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE
-            && c > 0 && isspace(c));
+            && c > 0 && isxspace(c));
         }
       } else {
         cont = false;
@@ -5014,7 +5023,7 @@ void process_order_file(int *faction_count, int *unit_count)
       x = strchr(order_buf, ';');
       if (x) {
         x++;
-        while (isspace(*x))
+        while (isxspace(*x))
           x++;
         if (r->name)
           free(r->name);
@@ -5421,7 +5430,8 @@ int main(int argc, char *argv[])
   F = stdin;
 
   for (i = nextarg; i < argc; i++) {
-    F = fopen(argv[i], "r");
+    int bom;
+    F = fopen(argv[i], "rt");
     if (!F) {
       fprintf(ERR, _("Cannot read file %s."), argv[i]);
       fputc('\n', ERR);
@@ -5432,8 +5442,17 @@ int main(int argc, char *argv[])
         fprintf(ERR, _("Processing file '%s'."), argv[i]);
         if (!compact)
           fputc('\n', ERR);
-      } else
+      }
+      else {
         fprintf(ERR, "%s|version|%s|%s\n", filename, echeck_version, __DATE__);
+      }
+      bom = fgetc(F);
+      if (bom == 0xef) {
+        fseek(F, 3, SEEK_SET);
+      }
+      else {
+        fseek(F, 0, SEEK_SET);
+      }
       process_order_file(&faction_count, &unit_count);
     }
   }
@@ -5468,8 +5487,10 @@ int main(int argc, char *argv[])
     return -42;
   }
 
-  if (!error_count && !warning_count && faction_count && unit_count)
+  if (!error_count && !warning_count && faction_count && unit_count) {
     fputs(_("The orders look good."), ERR);
+    fputc('\n', ERR);
+  }
 
   if (warning_count > 0) {
     fprintf(ERR, 
