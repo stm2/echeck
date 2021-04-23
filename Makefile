@@ -4,8 +4,6 @@ MINGW_CC = i686-w64-mingw32-gcc
 CFLAGS = -Wall -std=c99 -I. -DHAVE_GETTEXT -D_DEFAULT_SOURCE
 RELEASE_CFLAGS = -Os -Werror
 DEBUG_CFLAGS = -g
-#CFLAGS += $(RELEASE_CFLAGS)
-CFLAGS += $(DEBUG_CFLAGS)
 TEST_SRC = tests.c CuTest.c
 TEST_HDR = CuTest.h
 PREFIX ?= /usr
@@ -52,14 +50,14 @@ locale/%/LC_MESSAGES/echeck.mo: po/echeck.de.po
 	msgfmt -f -c $< -o $@
 
 echeck.exe: echeck.c unicode.c unicode.h
-	$(MINGW_CC) $(CFLAGS) -o echeck.exe echeck.c unicode.c
+	$(MINGW_CC) $(CFLAGS) $(RELEASE_FLAGS) -o echeck.exe echeck.c unicode.c
 	$(MINGW_STRIP) echeck.exe
 
 echeck: echeck.c unicode.c unicode.h whereami.c whereami.h
-	$(CC) $(LFLAGS) $(CFLAGS) -o echeck echeck.c unicode.c whereami.c
+	$(CC) $(LFLAGS) $(CFLAGS) $(RELEASE_FLAGS) -o echeck echeck.c unicode.c whereami.c
 
 tests: echeck.c whereami.c whereami.h unicode.c unicode.h $(TEST_SRC) $(TEST_HDR)
-	$(CC) $(LFLAGS) $(CFLAGS) -DTESTING -o tests echeck.c whereami.c unicode.c $(TEST_SRC)
+	$(CC) $(LFLAGS) $(CFLAGS) $(DEBUG_FLAGS) -DTESTING -o tests echeck.c whereami.c unicode.c $(TEST_SRC)
 
 clean:
 	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip 
@@ -67,6 +65,3 @@ clean:
 
 check: tests
 	@./tests -T=all -Lde -Re2 -b
-
-echeck.zip: echeck.exe changelog.txt LIESMICH.txt README.txt
-	zip -r echeck.zip echeck.exe e2 e3 changelog.txt LIESMICH.txt README.txt

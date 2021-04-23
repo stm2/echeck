@@ -1408,7 +1408,7 @@ void readafile(const char *fn, int typ)
   FILE *F;
   char *s, *x;
 
-  F = path_fopen(g_path, fn, "r");
+  F = path_fopen(g_path, fn, "rt");
   if (!F)
     return;
   for (line = 1;; line++) {
