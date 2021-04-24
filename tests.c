@@ -110,9 +110,11 @@ static void test_nothing(CuTest * tc)
 
 static void test_getbuf(CuTest * tc)
 {
-  mock_input("herp derp\nherpderp\n");
+  mock_input("herp derp\nherpderp\n  herp   derp\nherp \"derp  derp\"\n");
   CuAssertStrEquals(tc, "herp derp", getbuf());
   CuAssertStrEquals(tc, "herpderp", getbuf());
+  CuAssertStrEquals(tc, "herp derp", getbuf());
+  CuAssertStrEquals(tc, "herp derp~derp", getbuf());
 }
 
 static void test_igetstr(CuTest * tc)

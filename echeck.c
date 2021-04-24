@@ -87,7 +87,7 @@ int AddTestSuites(CuSuite * suite, const char *names);
 
 #include <string.h>
 
-static const char *echeck_version = "4.5.7";
+static const char *echeck_version = "4.5.8";
 
 #define DEFAULT_PATH "."
 
@@ -2083,7 +2083,6 @@ char *getbuf(void)
   lbuf[MAXLINE - 1] = '@';
 
   do {
-    bool eat = true;
     bool start = true;
     char *end;
     utf8_t *bp = fgetbuffer(lbuf, MAXLINE, F);
@@ -2109,28 +2108,26 @@ char *getbuf(void)
     cont = false;
     while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE && *bp) {
       int c = *(unsigned char *)bp;
-      if (eat) {
-        utf8_t *skip = eatwhite(bp);
-        if (skip != bp) {
-          if (!quote && !start) {
-            /* replace this whitespace with a single space */
-            *(cp++) = ' ';
-          } else {
-            *(cp++) = SPACE_REPLACEMENT;
-          }
-          bp = skip;
+      utf8_t *skip = eatwhite(bp);
+      if (skip != bp) {
+        /* replace this whitespace with a single space */
+        if (quote) {
+          *(cp++) = SPACE_REPLACEMENT;
         }
+        else if (!start) {
+          *(cp++) = ' ';
+        }
+        bp = skip;
+        continue;
       }
       cont = false;
       if (c == '"') {
-        quote = (bool) ! quote;
-        eat = true;
+        quote = !quote;
       } else {
         if (c == '\\')
           cont = true;
         else if (c < 0 || !iscntrl(c)) {
           *(cp++) = c;
-          eat = (bool) ! quote;
         }
       }
       ++bp;
