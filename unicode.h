@@ -28,10 +28,6 @@ extern "C" {
   typedef unsigned long ucs4_t;
   typedef char utf8_t;
 
-  extern int unicode_utf8_to_cp437(char *result, const utf8_t * utf8_string,
-    size_t * length);
-  extern int unicode_utf8_to_cp1252(char *result, const utf8_t * utf8_string,
-    size_t * length);
   extern int unicode_utf8_to_ucs4(ucs4_t * result, const utf8_t * utf8_string,
     size_t * length);
   extern int unicode_ucs4_to_utf8(utf8_t * result, size_t * size,
