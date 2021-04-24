@@ -87,8 +87,6 @@ int AddTestSuites(CuSuite * suite, const char *names);
 
 #include <string.h>
 
-#define isxspace(c) (c==194 || c==160 || isspace(c))
-
 static const char *echeck_version = "4.5.7";
 
 #define DEFAULT_PATH "."
@@ -202,7 +200,7 @@ char echo_it = 0,               /* option: echo input lines */
   noship = 0, noroute = 0, nolost = 0, bang_cmd = 0, at_cmd = 0, attack_warning = 0, compile = 0;    /* option: compiler-/magellan-style  warnings */
 int error_count = 0,            /* counter: errors */
   warning_count = 0;            /* counter: warnings */
-char order_buf[BUFSIZE],        /* current order line */
+utf8_t order_buf[BUFSIZE],        /* current order line */
  checked_buf[BUFSIZE],          /* checked order line */
  message_buf[BUFSIZE],          /* messages are composed here */
  warn_buf[BUFSIZE],             /* warnings are composed here */
@@ -783,16 +781,16 @@ int Pow(int p)
 
 #define iswxspace(c) (c==160 || iswspace(c))
 
-char *eatwhite(char *ptr)
+utf8_t *
+eatwhite(utf8_t *ptr)
 {
   while (*ptr) {
-    ucs4_t ucs;
-    size_t size = 0;
-
-    if (isxspace(*ptr)) {
+    if (isspace(*ptr)) {
       ++ptr;
     }
     else {
+      ucs4_t ucs;
+      size_t size = 0;
       int ret = unicode_utf8_to_ucs4(&ucs, ptr, &size);
       if (ret != 0 || !iswxspace((wint_t)ucs)) {
         break;
@@ -1039,7 +1037,7 @@ void readspell(char *s)
   spells = sp;
 }
 
-void readskill(char *s)
+static void readskill(char *s)
 {                               /* parsed einen String nach Talenten */
   char buffer[128];
   char *x;
@@ -1063,8 +1061,7 @@ void readskill(char *s)
   sk->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   if (x) {
     s = (char *)(x + 1);
-    while (isxspace(*s))
-      s++;
+    while (isspace(*s)) ++s;
     if (*s)
       sk->kosten = atoi(s);
   }
@@ -1310,9 +1307,8 @@ int parsefile(char *s, int typ)
     if (!x)
       return 0;
     y = x + 1;
-    while (isxspace(*(x - 1)))
-      x--;
-    *x = 0;
+    while (isspace(*(x - 1))) --x;
+    *x = '\0';
     for (i = 1; i < UT_MAX; i++)
       if (strcmp(s, Keys[i]) == 0)
         break;
@@ -1376,7 +1372,7 @@ int get_long_order_line() {
 }
 #endif
 
-static char *fgetbuffer(char *buf, int size, FILE * F)
+static utf8_t *fgetbuffer(utf8_t *buf, int size, FILE * F)
 {
   if (mocked_input) {
     ptrdiff_t bytes;
@@ -1393,8 +1389,9 @@ static char *fgetbuffer(char *buf, int size, FILE * F)
     if (bytes > nextbr - mock_pos) {
       bytes = nextbr - mock_pos;
     }
-    if (bytes)
+    if (bytes) {
       memcpy(buf, mock_pos, bytes);
+    }
     buf[bytes] = 0;
     mock_pos += bytes;
     return buf;
@@ -2077,7 +2074,7 @@ int finddirection(char *s)
 
 char *getbuf(void)
 {
-  char lbuf[MAXLINE];
+  utf8_t lbuf[MAXLINE];
   bool cont = false;
   bool quote = false;
   bool report = false;
@@ -2086,10 +2083,10 @@ char *getbuf(void)
   lbuf[MAXLINE - 1] = '@';
 
   do {
-    bool eatwhite = true;
+    bool eat = true;
     bool start = true;
     char *end;
-    char *bp = fgetbuffer(lbuf, MAXLINE, F);
+    utf8_t *bp = fgetbuffer(lbuf, MAXLINE, F);
 
     if (!bp) {
       return NULL;
@@ -2112,37 +2109,31 @@ char *getbuf(void)
     cont = false;
     while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE && *bp) {
       int c = *(unsigned char *)bp;
-      if (c > 0 && isxspace(c)) {
-        if (eatwhite) {
-          do {
-            c = *(++bp);
-          }
-          while (bp != lbuf + MAXLINE && isxspace(*bp));
-          if (!quote && !start)
+      if (eat) {
+        utf8_t *skip = eatwhite(bp);
+        if (skip != bp) {
+          if (!quote && !start) {
+            /* replace this whitespace with a single space */
             *(cp++) = ' ';
-        } else {
-          do {
+          } else {
             *(cp++) = SPACE_REPLACEMENT;
-            c = *(++bp);
           }
-          while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE
-            && c > 0 && isxspace(c));
+          bp = skip;
         }
-      } else {
-        cont = false;
-        if (c == '"') {
-          quote = (bool) ! quote;
-          eatwhite = true;
-        } else {
-          if (c == '\\')
-            cont = true;
-          else if (c < 0 || !iscntrl(c)) {
-            *(cp++) = c;
-            eatwhite = (bool) ! quote;
-          }
-        }
-        ++bp;
       }
+      cont = false;
+      if (c == '"') {
+        quote = (bool) ! quote;
+        eat = true;
+      } else {
+        if (c == '\\')
+          cont = true;
+        else if (c < 0 || !iscntrl(c)) {
+          *(cp++) = c;
+          eat = (bool) ! quote;
+        }
+      }
+      ++bp;
       start = false;
     }
     if (cp == warn_buf + MAXLINE) {
@@ -4958,7 +4949,7 @@ void process_order_file(int *faction_count, int *unit_count)
   t_region *r;
   teach *t;
   unit *u;
-  char *x;
+  utf8_t *x;
 
   line_no = befehle_ende = 0;
 
@@ -5020,10 +5011,10 @@ void process_order_file(int *faction_count, int *unit_count)
       x = strchr(order_buf, ';');
       if (x) {
         x++;
-        while (isxspace(*x))
-          x++;
-        if (r->name)
+        x = eatwhite(x);
+        if (r->name) {
           free(r->name);
+        }
         r->name = STRDUP(x);
         x = strchr(r->name, '\n');
         if (x)
