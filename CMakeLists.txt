@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8...3.20)
 project (echeck C)
 
 add_executable(echeck echeck.c unicode.c whereami.c)
 add_executable(tests echeck.c unicode.c tests.c whereami.c CuTest.c)
 target_compile_definitions (tests PRIVATE TESTING=1)
+set_property(TARGET echeck PROPERTY C_STANDARD 99)
+set_property(TARGET tests PROPERTY C_STANDARD 99)
 
 if (WIN32)
 find_library(Intl_LIBRARY NAMES libintl intl

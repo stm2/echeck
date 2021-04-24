@@ -1,3 +1,10 @@
+echeck (4.5.8-1) stable; urgency=low
+
+  * fix bugs in whitespace-handling code, eliminate isxspace
+  * remove unused unicode codepage support
+
+  -- Enno Rehling <enno@eressea.de> Sun, 24 Apr 2021 12:10:00 +0200
+
 echeck (4.5.7-1) stable; urgency=low
 
   * skip BOM, hack to ignore crazy non-whitespace spaces.
