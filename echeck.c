@@ -109,8 +109,8 @@ enum {
 };
 
 static char *Keys[UT_MAX] = {
-    "",       "PARAM", "ITEM",  "SKILL", "KEYWORD", "BUILDING",  "HERB",
-    "POTION", "RACE",  "SPELL", "SHIP",  "OPTION",  "DIRECTION",
+  "",       "PARAM", "ITEM",  "SKILL", "KEYWORD", "BUILDING",  "HERB",
+  "POTION", "RACE",  "SPELL", "SHIP",  "OPTION",  "DIRECTION",
 };
 
 /*
@@ -129,23 +129,23 @@ typedef struct _ech_file {
 } t_ech_file;
 
 const t_ech_file ECheck_Files[] = {
-    {"parameters.txt", UT_PARAM},
-    {"items.txt", UT_ITEM},
-    {"skills.txt", UT_SKILL},
-    {"commands.txt", UT_KEYWORD},
-    {"buildings.txt", UT_BUILDING},
-    {"herbs.txt", UT_HERB},
-    {"potions.txt", UT_POTION},
-    {"races.txt", UT_RACE},
-    {"spells.txt", UT_SPELL},
-    {"ships.txt", UT_SHIP},
-    {"options.txt", UT_OPTION},
-    {"directions.txt", UT_DIRECTION},
+  {"parameters.txt", UT_PARAM},
+  {"items.txt", UT_ITEM},
+  {"skills.txt", UT_SKILL},
+  {"commands.txt", UT_KEYWORD},
+  {"buildings.txt", UT_BUILDING},
+  {"herbs.txt", UT_HERB},
+  {"potions.txt", UT_POTION},
+  {"races.txt", UT_RACE},
+  {"spells.txt", UT_SPELL},
+  {"ships.txt", UT_SHIP},
+  {"options.txt", UT_OPTION},
+  {"directions.txt", UT_DIRECTION},
 
-    /*
-     * generische Datei, kann alles enthalten, mit KEYWORD-Erkennung
-     */
-    {"tokens.txt", -1}};
+  /*
+   * generische Datei, kann alles enthalten, mit KEYWORD-Erkennung
+   */
+  {"tokens.txt", -1}};
 
 const int filecount = sizeof(ECheck_Files) / sizeof(ECheck_Files[0]);
 int verbose = 1;
@@ -171,36 +171,36 @@ static int compact = 0;
 FILE *ERR, *OUT = 0;
 
 int line_no, /* count line number */
-    filesread = 0;
+  filesread = 0;
 
-char echo_it = 0,      /* option: echo input lines */
-    no_comment = -3,   /* Keine Infos in [] hinter EINHEIT */
-    show_warnings = 4, /* option: print warnings (levels) */
-    warnings_cl = 0,   /* -w auf der Kommandozeile gegeben */
-    warn_off = 0,      /* ECHECK NOWARN */
-    use_stderr = 0,    /* option: use stderr for errors etc */
-    brief = 0,         /* option: don't list errors */
-    ignore_NameMe = 0, /* option: ignoriere NameMe-Kommentare ;; */
-    piping = 0,        /* option: wird output als pipe-input  benutzt? */
-    lohn = 10,         /* Lohn für Arbeit - je Region zu setzen */
-    silberpool = 1,    /* option: Silberpool-Verwaltung */
-    line_start = 0,    /* option: Beginn der Zeilenzählung */
-    noship = 0, noroute = 0, nolost = 0, bang_cmd = 0, at_cmd = 0,
+char echo_it = 0,    /* option: echo input lines */
+  no_comment = -3,   /* Keine Infos in [] hinter EINHEIT */
+  show_warnings = 4, /* option: print warnings (levels) */
+  warnings_cl = 0,   /* -w auf der Kommandozeile gegeben */
+  warn_off = 0,      /* ECHECK NOWARN */
+  use_stderr = 0,    /* option: use stderr for errors etc */
+  brief = 0,         /* option: don't list errors */
+  ignore_NameMe = 0, /* option: ignoriere NameMe-Kommentare ;; */
+  piping = 0,        /* option: wird output als pipe-input  benutzt? */
+  lohn = 10,         /* Lohn für Arbeit - je Region zu setzen */
+  silberpool = 1,    /* option: Silberpool-Verwaltung */
+  line_start = 0,    /* option: Beginn der Zeilenzählung */
+  noship = 0, noroute = 0, nolost = 0, bang_cmd = 0, at_cmd = 0,
      attack_warning = 0,
      compile = 0;          /* option: compiler-/magellan-style  warnings */
 int error_count = 0,       /* counter: errors */
-    warning_count = 0;     /* counter: warnings */
+  warning_count = 0;       /* counter: warnings */
 utf8_t order_buf[BUFSIZE], /* current order line */
-    checked_buf[BUFSIZE],  /* checked order line */
-    message_buf[BUFSIZE],  /* messages are composed here */
-    warn_buf[BUFSIZE],     /* warnings are composed here */
-    indent, next_indent,   /* indent index */
-    does_default = 0,      /* Ist DEFAULT aktiv? */
-    befehle_ende,          /* EOF der Befehlsdatei */
-        *echeck_locale = "de", *echeck_rules = "e2", *filename;
+  checked_buf[BUFSIZE],    /* checked order line */
+  message_buf[BUFSIZE],    /* messages are composed here */
+  warn_buf[BUFSIZE],       /* warnings are composed here */
+  indent, next_indent,     /* indent index */
+  does_default = 0,        /* Ist DEFAULT aktiv? */
+  befehle_ende,            /* EOF der Befehlsdatei */
+    *echeck_locale = "de", *echeck_rules = "e2", *filename;
 int rec_cost = RECRUIT_COST, this_command,
     this_unit, /* wird von getaunit gesetzt */
-    Rx, Ry;    /* Koordinaten der aktuellen Region */
+  Rx, Ry;      /* Koordinaten der aktuellen Region */
 static const char *g_path;
 FILE *F;
 
@@ -278,19 +278,17 @@ enum {
 };
 
 static const char *Keywords[MAXKEYWORDS] = {
-    "ALLIANCE", "PAY",       "WORK",       "ATTACK",   "STEAL",
-    "SIEGE",    "NAME",      "USE",        "DESCRIBE", "ENTER",
-    "GUARD",    "MESSAGE",   "END",        "RIDE",     "FOLLOW",
-    "RESEARCH", "GIVE",      "HELP",       "FIGHT",    "COMBATMAGIC",
-    "BUY",      "CONTACT",   "TEACH",      "STUDY",    "MAKE",
-    "MOVE",     "PASSWORD",  "PLANT",      "RECRUIT",  "REPORT",
-    "OPTION",   "SPY",       "SETSTEALTH", "CARRY",    "QUIT",
-    "TAX",      "ENTERTAIN", "SELL",       "LEAVE",    "CAST",
-    "SHOW",     "DESTROY",   "FORGET",     "DEFAULT",  "COMMENT",
-    "ROUTE",    "SABOTAGE",  "BREED",      "ORIGIN",   "EMAIL",
-    "RESERVE",  "CLAIM",     "BANNER",     "NUMBER",   "SCHOOL",
-    "PIRACY",   "GROUP",     "SORT",       "PREFIX",   "PROMOTION",
-    "PROMOTE",  "LANGUAGE"};
+  "ALLIANCE",  "PAY",         "WORK",       "ATTACK",   "STEAL",    "SIEGE",
+  "NAME",      "USE",         "DESCRIBE",   "ENTER",    "GUARD",    "MESSAGE",
+  "END",       "RIDE",        "FOLLOW",     "RESEARCH", "GIVE",     "HELP",
+  "FIGHT",     "COMBATMAGIC", "BUY",        "CONTACT",  "TEACH",    "STUDY",
+  "MAKE",      "MOVE",        "PASSWORD",   "PLANT",    "RECRUIT",  "REPORT",
+  "OPTION",    "SPY",         "SETSTEALTH", "CARRY",    "QUIT",     "TAX",
+  "ENTERTAIN", "SELL",        "LEAVE",      "CAST",     "SHOW",     "DESTROY",
+  "FORGET",    "DEFAULT",     "COMMENT",    "ROUTE",    "SABOTAGE", "BREED",
+  "ORIGIN",    "EMAIL",       "RESERVE",    "CLAIM",    "BANNER",   "NUMBER",
+  "SCHOOL",    "PIRACY",      "GROUP",      "SORT",     "PREFIX",   "PROMOTION",
+  "PROMOTE",   "LANGUAGE"};
 
 typedef struct _keyword {
   struct _keyword *next;
@@ -349,14 +347,14 @@ enum {
 };
 
 static const char *Params[MAXPARAMS] = {
-    "ALL",     "EACH",           "PEASANTS",  "CASTLE",  "BUILDING",
-    "UNIT",    "FLEE",           "REAR",      "FRONT",   "CONTROL",
-    "HERBS",   "TREES",          "NOT",       "NEXT",    "FACTION",
-    "PERSON",  "REGION",         "SHIP",      "SILVER",  "ROAD",
-    "TEMP",    "PRIVATE",        "FIGHT",     "OBSERVE", "GIVE",
-    "GUARD",   "FACTIONSTEALTH", "WARN",      "LEVEL",   "HORSES",
-    "FOREIGN", "AGGRESSIVE",     "DEFENSIVE", "NUMBER",  "LOCALE",
-    "BEFORE",  "AFTER",          "ALLIANCE",  "AUTO"};
+  "ALL",     "EACH",           "PEASANTS",  "CASTLE",  "BUILDING",
+  "UNIT",    "FLEE",           "REAR",      "FRONT",   "CONTROL",
+  "HERBS",   "TREES",          "NOT",       "NEXT",    "FACTION",
+  "PERSON",  "REGION",         "SHIP",      "SILVER",  "ROAD",
+  "TEMP",    "PRIVATE",        "FIGHT",     "OBSERVE", "GIVE",
+  "GUARD",   "FACTIONSTEALTH", "WARN",      "LEVEL",   "HORSES",
+  "FOREIGN", "AGGRESSIVE",     "DEFENSIVE", "NUMBER",  "LOCALE",
+  "BEFORE",  "AFTER",          "ALLIANCE",  "AUTO"};
 
 typedef struct _params {
   struct _params *next;
@@ -397,9 +395,8 @@ enum {
   MAXDIRECTIONS
 };
 
-static const char *Directions[] = {"EAST",      "WEST",      "PAUSE",
-                                   "NORTHEAST", "NORTHWEST", "SOUTHEAST",
-                                   "SOUTHWEST"};
+static const char *Directions[] = {
+  "EAST", "WEST", "PAUSE", "NORTHEAST", "NORTHWEST", "SOUTHEAST", "SOUTHWEST"};
 
 t_direction *directions = NULL;
 
@@ -472,64 +469,64 @@ enum {
 };
 
 static const char *Errors[MAX_ERRORS] = {
-    "ECHECK",
-    "ENDWITHOUTTEMP",
-    "ERRORCOORDINATES",
-    "ERRORHELP",
-    "ERRORLEVELPARAMETERS",
-    "ERRORREGION",
-    "ERRORREGIONPARAMETER",
-    "FACTION",
-    "FACTIONS",
-    "FACTION0USED",
-    "FACTIONINVALID",
-    "FACTIONMISSING",
-    "FOLLOW",
-    "INTERNALCHECK",
-    "INVALIDEMAIL",
-    "MISSFILEPARAM",
-    "MISSFILECMD",
-    "MISSFILEITEM",
-    "MISSFILESKILL",
-    "MISSFILEDIR",
-    "MISSINGFACTIONNUMBER",
-    "MISSINGNUMRECRUITS",
-    "MISSINGOFFER",
-    "MISSINGPASSWORD",
-    "MISSINGUNITNUMBER",
-    "NAMECONTAINSBRACKETS",
-    "NEEDBOTHCOORDINATES",
-    "NOCARRIER",
-    "NOFIND",
-    "NOSEND",
-    "NOTEMPNUMBER",
-    "NTOOBIG",
-    "NUMCASTLEMISSING",
-    "NUMMISSING",
-    "OBJECTNUMBERMISSING",
-    "ORDERNUMBER",
-    "ORDERSREAD",
-    "PASSWORDCLEARED",
-    "PASSWORDMSG2",
-    "POST",
-    "PRE",
-    "PROCESSINGFILE",
-    "QUITMSG",
-    "RECRUITCOSTSSET",
-    "RESERVE0SENSELESS",
-    "ROUTENOTCYCLIC",
-    "SCHOOLCHOSEN",
-    "SORT",
-    "UNITALREADYHAS",
-    "UNITALREADYHASMOVED",
-    "UNITALREADYHASORDERS",
-    "UNITHASNTPERSONS",
-    "UNITHASPERSONS",
-    "UNITMISSPERSON",
-    "UNITMISSSILVER",
-    "UNITMOVESSHIP",
-    "UNITMUSTBEONSHIP",
-    "UNITONSHIPHASMOVED",
+  "ECHECK",
+  "ENDWITHOUTTEMP",
+  "ERRORCOORDINATES",
+  "ERRORHELP",
+  "ERRORLEVELPARAMETERS",
+  "ERRORREGION",
+  "ERRORREGIONPARAMETER",
+  "FACTION",
+  "FACTIONS",
+  "FACTION0USED",
+  "FACTIONINVALID",
+  "FACTIONMISSING",
+  "FOLLOW",
+  "INTERNALCHECK",
+  "INVALIDEMAIL",
+  "MISSFILEPARAM",
+  "MISSFILECMD",
+  "MISSFILEITEM",
+  "MISSFILESKILL",
+  "MISSFILEDIR",
+  "MISSINGFACTIONNUMBER",
+  "MISSINGNUMRECRUITS",
+  "MISSINGOFFER",
+  "MISSINGPASSWORD",
+  "MISSINGUNITNUMBER",
+  "NAMECONTAINSBRACKETS",
+  "NEEDBOTHCOORDINATES",
+  "NOCARRIER",
+  "NOFIND",
+  "NOSEND",
+  "NOTEMPNUMBER",
+  "NTOOBIG",
+  "NUMCASTLEMISSING",
+  "NUMMISSING",
+  "OBJECTNUMBERMISSING",
+  "ORDERNUMBER",
+  "ORDERSREAD",
+  "PASSWORDCLEARED",
+  "PASSWORDMSG2",
+  "POST",
+  "PRE",
+  "PROCESSINGFILE",
+  "QUITMSG",
+  "RECRUITCOSTSSET",
+  "RESERVE0SENSELESS",
+  "ROUTENOTCYCLIC",
+  "SCHOOLCHOSEN",
+  "SORT",
+  "UNITALREADYHAS",
+  "UNITALREADYHASMOVED",
+  "UNITALREADYHASORDERS",
+  "UNITHASNTPERSONS",
+  "UNITHASPERSONS",
+  "UNITMISSPERSON",
+  "UNITMISSSILVER",
+  "UNITMOVESSHIP",
+  "UNITMUSTBEONSHIP",
+  "UNITONSHIPHASMOVED",
 };
 
 typedef struct _names {
@@ -630,8 +627,8 @@ teach *teachings = NULL;
 static unit *units = NULL;
 
 static unit *order_unit, /* Die Einheit, die gerade dran ist */
-    *mother_unit,        /* Die Einheit, die MACHE TEMP macht */
-    *cmd_unit; /* Die Einheit, die gerade angesprochen  wird, z.B. mit GIB */
+  *mother_unit,          /* Die Einheit, die MACHE TEMP macht */
+  *cmd_unit; /* Die Einheit, die gerade angesprochen  wird, z.B. mit GIB */
 
 t_region *Regionen = NULL;
 
@@ -1270,8 +1267,8 @@ void readafile(const char *fn, int typ) {
     do {
       s = fgets(order_buf, MAXLINE, F);
     } while (
-        !feof(F) && s &&
-        (*s == '#' || *s == '\n')); /* Leer- und  Kommentarzeilen   überlesen */
+      !feof(F) && s &&
+      (*s == '#' || *s == '\n')); /* Leer- und  Kommentarzeilen   überlesen */
     if (feof(F) || !s) {
       fclose(F);
       return;
@@ -1498,71 +1495,70 @@ static const struct warning {
   const char *token;
   const char *message;
 } warnings[] = {
-    {"FOLLOW", t("FOLLOW UNIT xx, FOLLOW SHIP xx or FOLLOW")},
-    {"INTERNALCHECK", t("<internal check>")},
-    {"INVALIDEMAIL", t("invalid email address")},
-    {"MISSFILEPARAM", t("parameters")},
-    {"MISSFILECMD", t("commands")},
-    {"MISSFILEITEM", t("items")},
-    {"MISSFILESKILL", t("skills")},
-    {"MISSFILEDIR", t("directions")},
-    {"MISSFILEMSG", t("messages")},
-    {"MISSINGQUOTES", t("Missing \"")},
-    {"MISSINGFACTIONNUMBER", t("Missing faction number")},
-    {"MISSINGNUMRECRUITS", t("Number of recruits missing")},
-    {"MISSINGOFFER", t("Missing offer")},
-    {"MISSINGPASSWORD", t("Missing password")},
-    {"MISSINGUNITNUMBER", t("Missing unit number")},
-    {"NAMECONTAINSBRACKETS", t("Names must not contain brackets")},
-    {"NEEDBOTHCOORDINATES", t("Both coordinated must be supplied")},
-    {"NOCARRIER", t("Can't find unit to carry")},
-    {"NOFIND", t("FIND has been replaced by OPTION ADDRESSES")},
-    {"NOSEND", t("SEND has been renamed into OPTION")},
-    {"NOTEMPNUMBER", t("No TEMPORARY number")},
-    {"NUMBERNOTPOSSIBLE", t("Number is not possible here")},
-    {"NUMCASTLEMISSING", t("Number of castle missing")},
-    {"NUMLUXURIESMISSING", t("Number of luxuries missing")},
-    {"NUMMISSING", t("Number of items/men/silver missing")},
-    {"OBJECTNUMBERMISSING", t("number of object missing")},
-    {"ORDERNUMBER",
-     t("NUMBER SHIP, NUMBER CASTLE, NUMBER FACTION or NUMBER UNIT")},
-    {"PASSWORDCLEARED", t("Password cleared")},
-    {"PASSWORDMSG2", t("\n\n  ****  A T T E N T I O N !  ****\n\n  ****  "
-                       "Password missing!  ****\n\n")},
-    {"POST", t("post-")},
-    {"PRE", t("pre-")},
-    {"PROCESSINGFILE", t("Processing file '%s'.")},
-    {"QUITMSG", t("Attention! QUIT found! Your faction will be cancelled!")},
-    {"RESERVE0SENSELESS", t("RESERVE 0 xxx doesn't make any sense")},
-    {"ROUTENOTCYCLIC", t("ROUTE is not cyclic; (%d,%d) -> (%d,%d)")},
-    {"SCHOOLCHOSEN", t("School '%s' chosen.\n")},
-    {"SORT", t("SORT BEFORE or BEHIND <unit>")},
-    {"TEMPHASNTPERSONS",
-     t("Unit TEMPORARY %s hasn't got men and hasn't recruited anyone")},
-    {"TEMPNOTTEMP",
-     t("Unit TEMPORARY %s hasn't been generated with MAKE TEMPORARY")},
-    {"TEMPUNITSCANTRESERVE",
-     t("TEMPORARY units can't use RESERVE! Use GIVE instead!")},
-    {"TEMPUNITSCANTGIVE",
-     t("TEMPORARY units can't use GIVE, it happens before MAKE!")},
-    {"UNITALREADYHAS", t("Unit %s already has a ")},
-    {"UNITALREADYHASLONGORDERS",
-     t("Unit %s already has a long order in line %d (%s)")},
-    {"UNITALREADYHASMOVED", t("Unit %s already has moved")},
-    {"UNITALREADYHASORDERS", t("Unit %s already has got orders in line %d")},
-    {"UNITCANSTILLTEACH", t("Unit %s can teach %d more students")},
-    {"UNITHASNTPERSONS", t("Unit TEMPORARY %s hasn't recruited and hasn't got "
-                           "any men! It may lose silver and/or items")},
-    {"UNITHASPERSONS", t("Unit %s has %d men")},
-    {"UNITMISSPERSON", t("Unit %s may have not enough men")},
-    {"UNITMISSSILVER", t("Unit %s may have not enough silver")},
-    {"UNITMOVESSHIP", t("Unit %s moves ship %s and may lack control")},
-    {"UNITMUSTBEONSHIP",
-     t("Unit must be in a castle, in a building or on a ship")},
-    {"UNITNOTONSHIPBUTONSHIP",
-     t("Unit %s may be on ship %s instead of ship %s")},
-    {"UNITONSHIPHASMOVED", t("Unit %s on ship %s has already moved")},
-    {NULL, NULL}};
+  {"FOLLOW", t("FOLLOW UNIT xx, FOLLOW SHIP xx or FOLLOW")},
+  {"INTERNALCHECK", t("<internal check>")},
+  {"INVALIDEMAIL", t("invalid email address")},
+  {"MISSFILEPARAM", t("parameters")},
+  {"MISSFILECMD", t("commands")},
+  {"MISSFILEITEM", t("items")},
+  {"MISSFILESKILL", t("skills")},
+  {"MISSFILEDIR", t("directions")},
+  {"MISSFILEMSG", t("messages")},
+  {"MISSINGQUOTES", t("Missing \"")},
+  {"MISSINGFACTIONNUMBER", t("Missing faction number")},
+  {"MISSINGNUMRECRUITS", t("Number of recruits missing")},
+  {"MISSINGOFFER", t("Missing offer")},
+  {"MISSINGPASSWORD", t("Missing password")},
+  {"MISSINGUNITNUMBER", t("Missing unit number")},
+  {"NAMECONTAINSBRACKETS", t("Names must not contain brackets")},
+  {"NEEDBOTHCOORDINATES", t("Both coordinated must be supplied")},
+  {"NOCARRIER", t("Can't find unit to carry")},
+  {"NOFIND", t("FIND has been replaced by OPTION ADDRESSES")},
+  {"NOSEND", t("SEND has been renamed into OPTION")},
+  {"NOTEMPNUMBER", t("No TEMPORARY number")},
+  {"NUMBERNOTPOSSIBLE", t("Number is not possible here")},
+  {"NUMCASTLEMISSING", t("Number of castle missing")},
+  {"NUMLUXURIESMISSING", t("Number of luxuries missing")},
+  {"NUMMISSING", t("Number of items/men/silver missing")},
+  {"OBJECTNUMBERMISSING", t("number of object missing")},
+  {"ORDERNUMBER",
+   t("NUMBER SHIP, NUMBER CASTLE, NUMBER FACTION or NUMBER UNIT")},
+  {"PASSWORDCLEARED", t("Password cleared")},
+  {"PASSWORDMSG2", t("\n\n  ****  A T T E N T I O N !  ****\n\n  ****  "
+                     "Password missing!  ****\n\n")},
+  {"POST", t("post-")},
+  {"PRE", t("pre-")},
+  {"PROCESSINGFILE", t("Processing file '%s'.")},
+  {"QUITMSG", t("Attention! QUIT found! Your faction will be cancelled!")},
+  {"RESERVE0SENSELESS", t("RESERVE 0 xxx doesn't make any sense")},
+  {"ROUTENOTCYCLIC", t("ROUTE is not cyclic; (%d,%d) -> (%d,%d)")},
+  {"SCHOOLCHOSEN", t("School '%s' chosen.\n")},
+  {"SORT", t("SORT BEFORE or BEHIND <unit>")},
+  {"TEMPHASNTPERSONS",
+   t("Unit TEMPORARY %s hasn't got men and hasn't recruited anyone")},
+  {"TEMPNOTTEMP",
+   t("Unit TEMPORARY %s hasn't been generated with MAKE TEMPORARY")},
+  {"TEMPUNITSCANTRESERVE",
+   t("TEMPORARY units can't use RESERVE! Use GIVE instead!")},
+  {"TEMPUNITSCANTGIVE",
+   t("TEMPORARY units can't use GIVE, it happens before MAKE!")},
+  {"UNITALREADYHAS", t("Unit %s already has a ")},
+  {"UNITALREADYHASLONGORDERS",
+   t("Unit %s already has a long order in line %d (%s)")},
+  {"UNITALREADYHASMOVED", t("Unit %s already has moved")},
+  {"UNITALREADYHASORDERS", t("Unit %s already has got orders in line %d")},
+  {"UNITCANSTILLTEACH", t("Unit %s can teach %d more students")},
+  {"UNITHASNTPERSONS", t("Unit TEMPORARY %s hasn't recruited and hasn't got "
+                         "any men! It may lose silver and/or items")},
+  {"UNITHASPERSONS", t("Unit %s has %d men")},
+  {"UNITMISSPERSON", t("Unit %s may have not enough men")},
+  {"UNITMISSSILVER", t("Unit %s may have not enough silver")},
+  {"UNITMOVESSHIP", t("Unit %s moves ship %s and may lack control")},
+  {"UNITMUSTBEONSHIP",
+   t("Unit must be in a castle, in a building or on a ship")},
+  {"UNITNOTONSHIPBUTONSHIP", t("Unit %s may be on ship %s instead of ship %s")},
+  {"UNITONSHIPHASMOVED", t("Unit %s on ship %s has already moved")},
+  {NULL, NULL}};
 
 const char *cgettext(const char *token) {
   int i;
@@ -2438,7 +2434,7 @@ void check_leave(void) {
       break;
     }
   order_unit->unterhalt =
-      0;       /* ACHTUNG! hierdurch geht die  Unterhaltsinfo verloren! */
+    0;         /* ACHTUNG! hierdurch geht die  Unterhaltsinfo verloren! */
   if (s < 0) { /* wir waren Kapitän, neuen suchen */
     for (t = units; t; t = t->next)
       if (t->ship == -s) /* eine Unit auf dem selben Schiff */
@@ -3237,8 +3233,8 @@ void check_comment(void) {
 }
 
 void check_money(
-    bool do_move) { /* do_move=true: vor der Bewegung,  anschließend */
-  unit *u, *t;      /* Bewegung ausführen, damit das Silber  bewegt wird */
+  bool do_move) { /* do_move=true: vor der Bewegung,  anschließend */
+  unit *u, *t;    /* Bewegung ausführen, damit das Silber  bewegt wird */
   t_region *r;
   int i, x, y, um;
 
@@ -3336,7 +3332,7 @@ void check_money(
           if (um > 0) {
             u->money += um;
             u->reserviert +=
-                um; /* das so erworbene Silber muß  auch reserviert sein */
+              um; /* das so erworbene Silber muß  auch reserviert sein */
             t->money -= um;
           }
         }
@@ -3481,7 +3477,7 @@ void check_living(void) {
     if (u->lives < 1) /* jetzt nach der Umverteilung von Silber */
       continue;
     u->region->geld +=
-        u->money; /* jetzt wird reserviertes Silber  nicht festgehalten */
+      u->money; /* jetzt wird reserviertes Silber  nicht festgehalten */
   }
 
   for (r = Regionen; r; r = r->next) {
@@ -4902,9 +4898,9 @@ void process_order_file(int *faction_count, int *unit_count) {
       if (!compile) {
         if (verbose) {
           fprintf(
-              ERR,
-              _("Recruit costs have been set to %d silver, warning level %d"),
-              rec_cost, show_warnings);
+            ERR,
+            _("Recruit costs have been set to %d silver, warning level %d"),
+            rec_cost, show_warnings);
           fputc('\n', ERR);
           if (silberpool) {
             fputs(_("Silver pool is active."), ERR);
@@ -4947,7 +4943,7 @@ void process_order_file(int *faction_count, int *unit_count) {
                             Bewegung ausführen */
       if (Regionen) {
         check_money(
-            false);     /* Silber nochmal in den Pool, fehlendes  aus Pool */
+          false);       /* Silber nochmal in den Pool, fehlendes  aus Pool */
         check_living(); /* Ernährung mit allem Silber der Region */
       }
       check_teachings();
@@ -5124,7 +5120,7 @@ void init(void) {
   int i;
   for (i = 0; i < MAX_ERRORS; i++) {
     Errors[i] =
-        STRDUP(Errors[i]); /* mit Defaults besetzten, weil NULL ->  crash */
+      STRDUP(Errors[i]); /* mit Defaults besetzten, weil NULL ->  crash */
   }
   /*
    * Path-Handling
@@ -5321,9 +5317,9 @@ int main(int argc, char *argv[]) {
 
   if (warning_count > 0) {
     fprintf(
-        ERR,
-        ngettext("Detected %d warning", "Detected %d warnings", warning_count),
-        warning_count);
+      ERR,
+      ngettext("Detected %d warning", "Detected %d warnings", warning_count),
+      warning_count);
     if (error_count > 0) {
       fputs(", ", ERR);
       fprintf(ERR, ngettext("%d error", "%d errors", error_count), error_count);

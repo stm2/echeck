@@ -204,7 +204,7 @@ int unicode_ucs4_to_utf8(utf8_t *utf8_character, size_t *size,
     utf8_bytes = 4;
     utf8_character[0] = (char)((ucs4_character >> 18) | B11110000);
     utf8_character[1] =
-        (char)(((ucs4_character >> 12) & B00111111) | B10000000);
+      (char)(((ucs4_character >> 12) & B00111111) | B10000000);
     utf8_character[2] = (char)(((ucs4_character >> 6) & B00111111) | B10000000);
     utf8_character[3] = (char)((ucs4_character & B00111111) | B10000000);
   } else if (ucs4_character <= 0x03FFFFFF) {
@@ -212,9 +212,9 @@ int unicode_ucs4_to_utf8(utf8_t *utf8_character, size_t *size,
     utf8_bytes = 5;
     utf8_character[0] = (char)((ucs4_character >> 24) | B11111000);
     utf8_character[1] =
-        (char)(((ucs4_character >> 18) & B00111111) | B10000000);
+      (char)(((ucs4_character >> 18) & B00111111) | B10000000);
     utf8_character[2] =
-        (char)(((ucs4_character >> 12) & B00111111) | B10000000);
+      (char)(((ucs4_character >> 12) & B00111111) | B10000000);
     utf8_character[3] = (char)(((ucs4_character >> 6) & B00111111) | B10000000);
     utf8_character[4] = (char)((ucs4_character & B00111111) | B10000000);
   } else if (ucs4_character <= 0x7FFFFFFF) {
@@ -222,11 +222,11 @@ int unicode_ucs4_to_utf8(utf8_t *utf8_character, size_t *size,
     utf8_bytes = 6;
     utf8_character[0] = (char)((ucs4_character >> 30) | B11111100);
     utf8_character[1] =
-        (char)(((ucs4_character >> 24) & B00111111) | B10000000);
+      (char)(((ucs4_character >> 24) & B00111111) | B10000000);
     utf8_character[2] =
-        (char)(((ucs4_character >> 18) & B00111111) | B10000000);
+      (char)(((ucs4_character >> 18) & B00111111) | B10000000);
     utf8_character[3] =
-        (char)(((ucs4_character >> 12) & B00111111) | B10000000);
+      (char)(((ucs4_character >> 12) & B00111111) | B10000000);
     utf8_character[4] = (char)(((ucs4_character >> 6) & B00111111) | B10000000);
     utf8_character[5] = (char)((ucs4_character & B00111111) | B10000000);
   } else {
@@ -255,7 +255,7 @@ int unicode_utf8_to_ucs4(ucs4_t *ucs4_character, const utf8_t *utf8_string,
     }
 
     *ucs4_character =
-        ((utf8_string[1] & 0x3F) << 0) + ((utf8_character & 0x1F) << 6);
+      ((utf8_string[1] & 0x3F) << 0) + ((utf8_character & 0x1F) << 6);
     *length = 2;
   } else if ((utf8_character & 0xF0) == 0xE0) {
     /* A three-byte UTF-8 sequence. Make sure the other bytes are
@@ -279,8 +279,8 @@ int unicode_utf8_to_ucs4(ucs4_t *ucs4_character, const utf8_t *utf8_string,
     }
 
     *ucs4_character =
-        ((utf8_string[3] & 0x3F) << 0) + ((utf8_string[2] & 0x3F) << 6) +
-        ((utf8_string[1] & 0x3F) << 12) + ((utf8_character & 0x07) << 18);
+      ((utf8_string[3] & 0x3F) << 0) + ((utf8_string[2] & 0x3F) << 6) +
+      ((utf8_string[1] & 0x3F) << 12) + ((utf8_character & 0x07) << 18);
     *length = 4;
   } else if ((utf8_character & 0xFC) == 0xF8) {
     /* A five-byte UTF-8 sequence. Make sure the other bytes are
@@ -293,9 +293,9 @@ int unicode_utf8_to_ucs4(ucs4_t *ucs4_character, const utf8_t *utf8_string,
     }
 
     *ucs4_character =
-        ((utf8_string[4] & 0x3F) << 0) + ((utf8_string[3] & 0x3F) << 6) +
-        ((utf8_string[2] & 0x3F) << 12) + ((utf8_string[1] & 0x3F) << 18) +
-        ((utf8_character & 0x03) << 24);
+      ((utf8_string[4] & 0x3F) << 0) + ((utf8_string[3] & 0x3F) << 6) +
+      ((utf8_string[2] & 0x3F) << 12) + ((utf8_string[1] & 0x3F) << 18) +
+      ((utf8_character & 0x03) << 24);
     *length = 5;
   } else if ((utf8_character & 0xFE) == 0xFC) {
     /* A six-byte UTF-8 sequence. Make sure the other bytes are
@@ -309,9 +309,9 @@ int unicode_utf8_to_ucs4(ucs4_t *ucs4_character, const utf8_t *utf8_string,
     }
 
     *ucs4_character =
-        ((utf8_string[5] & 0x3F) << 0) + ((utf8_string[4] & 0x3F) << 6) +
-        ((utf8_string[3] & 0x3F) << 12) + ((utf8_string[2] & 0x3F) << 18) +
-        ((utf8_string[1] & 0x3F) << 24) + ((utf8_character & 0x01) << 30);
+      ((utf8_string[5] & 0x3F) << 0) + ((utf8_string[4] & 0x3F) << 6) +
+      ((utf8_string[3] & 0x3F) << 12) + ((utf8_string[2] & 0x3F) << 18) +
+      ((utf8_string[1] & 0x3F) << 24) + ((utf8_character & 0x01) << 30);
     *length = 6;
   } else {
     return EILSEQ;
