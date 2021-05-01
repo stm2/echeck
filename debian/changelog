@@ -1,3 +1,12 @@
+echeck (4.6.0-1) stable; urgency=low
+
+  * add a windows target for a binary with no console.
+  * change "compile" output, include unit id in errors.
+  * exit code equals number of errors.
+  * make output less verbose (no version info unless -V specified).
+
+  -- Enno Rehling <enno@eressea.de> Sat, 01 May 2021 20:00:00 +0200
+
 echeck (4.5.8-1) stable; urgency=low
 
   * fix bugs in whitespace-handling code, eliminate isxspace
