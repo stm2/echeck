@@ -656,14 +656,14 @@ int Pow(int p) {
 
 #define iswxspace(c) (c == 160 || iswspace(c))
 
-utf8_t *eatwhite(utf8_t *ptr) {
+char *eatwhite(char *ptr) {
   while (*ptr) {
     if (isspace(*ptr)) {
       ++ptr;
     } else {
       ucs4_t ucs;
       size_t size = 0;
-      int ret = unicode_utf8_to_ucs4(&ucs, ptr, &size);
+      int ret = unicode_utf8_to_ucs4(&ucs, (utf8_t *)ptr, &size);
       if (ret != 0 || !iswxspace((wint_t)ucs)) {
         break;
       }
@@ -814,13 +814,13 @@ FILE *path_fopen(const char *path_par, const char *file, const char *mode) {
 }
 
 char *transliterate(char *out, size_t size, const char *in) {
-  const char *src = in;
+  const utf8_t *src = (const utf8_t *)in;
   char *dst = out;
 
   --size; /* need space for a final 0-byte */
   while (*src && size) {
     size_t len;
-    const char *p = src;
+    const utf8_t *p = src;
     while ((p + size > src) && *src && (~*src & 0x80)) {
       *dst++ = (char)tolower(*src++);
     }
@@ -828,20 +828,20 @@ char *transliterate(char *out, size_t size, const char *in) {
     size -= len;
     while (size > 0 && *src && (*src & 0x80)) {
       unsigned int advance = 2;
-      if (src[0] == '\xc3') {
-        if (src[1] == '\xa4' || src[1] == '\x84') {
+      if (src[0] == (utf8_t)'\xc3') {
+        if (src[1] == (utf8_t)'\xa4' || src[1] == (utf8_t)'\x84') {
           memcpy(dst, "ae", 2);
-        } else if (src[1] == '\xb6' || src[1] == '\x96') {
+        } else if (src[1] == (utf8_t)'\xb6' || src[1] == (utf8_t)'\x96') {
           memcpy(dst, "oe", 2);
-        } else if (src[1] == '\xbc' || src[1] == '\x9c') {
+        } else if (src[1] == (utf8_t)'\xbc' || src[1] == (utf8_t)'\x9c') {
           memcpy(dst, "ue", 2);
-        } else if (src[1] == '\x9f') {
+        } else if (src[1] == (utf8_t)'\x9f') {
           memcpy(dst, "ss", 2);
         } else {
           advance = 0;
         }
-      } else if (src[0] == '\xe1') {
-        if (src[1] == '\xba' && src[2] == '\x9e') {
+      } else if (src[0] == (utf8_t)'\xe1') {
+        if (src[1] == (utf8_t)'\xba' && src[2] == (utf8_t)'\x9e') {
           memcpy(dst, "ss", 2);
           ++src;
         } else {
@@ -888,7 +888,7 @@ void readspell(char *s) {
   }
   sp->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   if (x) {
-    s = eatwhite(x + 1);
+    s = (char *) eatwhite(x + 1);
     if (*s) {
       sp->kosten = atoi(s);
       x = strchr(s, ';');
@@ -927,8 +927,8 @@ static void readskill(char *s) { /* parsed einen String nach Talenten */
   }
   sk->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
   if (x) {
-    s = (char *)(x + 1);
-    while (isspace(*s))
+    s = x + 1;
+    while (*s > 0 && isspace(*s))
       ++s;
     if (*s)
       sk->kosten = atoi(s);
@@ -939,17 +939,17 @@ static void readskill(char *s) { /* parsed einen String nach Talenten */
 
 int readitem(char *s) { /* parsed einen String nach Items */
   char buffer[128];
-  utf8_t *x = (utf8_t *)s;
+  char *x = s;
   t_item *it = (t_item *)calloc(1, sizeof(t_item));
 
   do {
-    x = (utf8_t *)strchr(s, ';');
+    x = strchr(s, ';');
     if (!x)
-      x = (utf8_t *)strchr(s, ',');
+      x = strchr(s, ',');
     if (x)
       *x = 0;
     else {
-      x = (utf8_t *)strchr(s, '\n');
+      x = strchr(s, '\n');
       if (x)
         *x = 0;
       x = NULL;
@@ -1226,7 +1226,7 @@ int get_long_order_line()
     return -1;
 }
 
-static utf8_t *fgetbuffer(utf8_t *buf, int size, FILE *F) {
+static char *fgetbuffer(char *buf, int size, FILE *F) {
   if (mocked_input) {
     ptrdiff_t bytes;
     char *nextbr;
@@ -1771,7 +1771,7 @@ int findstr(const char *v[], const char *s, int max) {
   if (!s[0])
     return -1;
   for (i = 0; i < max; i++)
-    if (v[i] && unicode_utf8_strncasecmp(s, v[i], ss) == 0)
+    if (v[i] && unicode_utf8_strncasecmp((utf8_t *)s, (utf8_t *)v[i], ss) == 0)
       return i;
   return -1;
 }
@@ -1851,7 +1851,7 @@ t_spell *findspell(char *s) {
   if (!s[0] || !spells)
     return NULL;
   for (sp = spells; sp; sp = sp->next)
-    if (sp->name && !unicode_utf8_strncasecmp(sp->name, s, strlen(s)))
+    if (sp->name && !unicode_utf8_strncasecmp((utf8_t *)sp->name, (utf8_t *)s, strlen(s)))
       return sp;
   return NULL;
 }
@@ -1895,7 +1895,7 @@ int finddirection(char *s) {
 #define findkeyword(s) findtoken(s, UT_KEYWORD)
 
 char *getbuf(void) {
-  utf8_t lbuf[MAXLINE];
+  char lbuf[MAXLINE];
   bool cont = false;
   bool quote = false;
   bool report = false;
@@ -1906,7 +1906,7 @@ char *getbuf(void) {
   do {
     bool start = true;
     char *end;
-    utf8_t *bp = fgetbuffer(lbuf, MAXLINE, F);
+    char *bp = fgetbuffer(lbuf, MAXLINE, F);
 
     if (!bp) {
       return NULL;
@@ -1929,7 +1929,7 @@ char *getbuf(void) {
     cont = false;
     while (cp != warn_buf + MAXLINE && bp != lbuf + MAXLINE && *bp) {
       int c = *(unsigned char *)bp;
-      utf8_t *skip = eatwhite(bp);
+      char *skip = eatwhite(bp);
       if (skip != bp) {
         /* replace this whitespace with a single space */
         if (quote) {
@@ -4043,7 +4043,7 @@ void checkanorder(char *Orders) {
     s = getstr();
     i = findreport(s);
     if (i == -1) {
-      if (unicode_utf8_strncasecmp(s, printkeyword(K_SHOW), strlen(s)))
+      if (unicode_utf8_strncasecmp((utf8_t *)s, (utf8_t *)printkeyword(K_SHOW), strlen(s)))
         anerror(_("Unrecognized report option"));
       else {
         Scat(printkeyword(K_SHOW));
@@ -4189,8 +4189,8 @@ void checkanorder(char *Orders) {
     scat(printkeyword(K_SORT));
     s = getstr();
     if (*s) {
-      if (unicode_utf8_strncasecmp(s, printparam(P_BEFORE), strlen(s)) == 0 ||
-          unicode_utf8_strncasecmp(s, printparam(P_AFTER), strlen(s)) == 0) {
+      if (unicode_utf8_strncasecmp((utf8_t *)s, (utf8_t *)printparam(P_BEFORE), strlen(s)) == 0 ||
+          unicode_utf8_strncasecmp((utf8_t *)s, (utf8_t *)printparam(P_AFTER), strlen(s)) == 0) {
         Scat(s);
         i = getaunit(NECESSARY);
         if (i == 1 || i == 3) /* normale oder TEMP-Einheit: ok */
@@ -4761,7 +4761,7 @@ void process_order_file(int *faction_count, int *unit_count) {
   t_region *r;
   teach *t;
   unit *u;
-  utf8_t *x;
+  char *x;
 
   line_no = befehle_ende = 0;
 
