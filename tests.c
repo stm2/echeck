@@ -5,24 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "echeck.h"
 #include "CuTest.h"
-
-struct unit;
-extern int error_count;
-extern int warning_count;
-extern int verbose;
-extern int brief;
-extern char show_warnings;
-extern int line_no;
-extern int get_long_order_line();
-extern void mock_input(const char *input);
-extern char *getbuf(void);
-extern char *igetstr(char *);
-extern void checkgiving(void);
-extern void checkanorder(char *);
-extern struct unit *newunit(int n, int t);
-extern void set_order_unit(struct unit *u);
-void process_order_file(int *faction_count, int *unit_count);
 
 #define BUFSIZE 65000
 
@@ -314,4 +298,26 @@ int AddTestSuites(CuSuite *suite, const char *args) {
     name = strtok(0, ",");
   }
   return 0;
+}
+
+const char *run_tests = 0;
+
+int usage(void) {
+  return 0;
+}
+
+int main(int argc, char *argv[])
+{
+  CuSuite *suite = CuSuiteNew();
+  CuString *output = CuStringNew();
+
+  echeck_init();
+  readfiles();
+  AddTestSuites(suite, "all");
+  CuSuiteRun(suite);
+  CuSuiteSummary(suite, output);
+  CuSuiteDetails(suite, output);
+  printf("%s\n", output->buffer);
+
+  return suite->failCount;
 }

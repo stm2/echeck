@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8...3.20)
 project (echeck C)
 
-add_executable(echeck echeck.c unicode.c whereami.c)
-add_executable(tests echeck.c unicode.c tests.c whereami.c CuTest.c)
+add_executable(echeck main.c echeck.c unicode.c whereami.c)
+add_executable(tests tests.c echeck.c unicode.c whereami.c CuTest.c)
 target_compile_definitions (tests PRIVATE TESTING=1)
 set_property(TARGET echeck PROPERTY C_STANDARD 99)
 set_property(TARGET tests PROPERTY C_STANDARD 99)
@@ -30,3 +30,7 @@ endif (Intl_FOUND)
 include("Localization.cmake")
 SET (PACKAGE_NAME echeck)
 PROGRAM_LOCALIZATION()
+
+if (WIN32)
+add_executable(echeckw WIN32 echeckw.c echeck.c unicode.c whereami.c)
+endif(WIN32)

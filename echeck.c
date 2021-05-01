@@ -1,5 +1,5 @@
 /*
- * Eressea PBeM Order Syntax Checker Copyright 1997-2012
+ * Eressea PBeM Order Syntax Checker Copyright 1997-2021
  * - Enno Rehling (enno@eressea.de)
  * - Christian Schlittchen (corwin@amber.kn-bremen.de)
  * - Katja Zedel (katze@felidae.kn-bremen.de)
@@ -54,11 +54,6 @@
 
 #define _(str) gettext(str)
 #define t(str) (str)
-
-#ifdef TESTING
-#include "CuTest.h"
-int AddTestSuites(CuSuite *suite, const char *names);
-#endif
 
 /* platform-specific defines */
 #ifdef WIN32
@@ -173,7 +168,7 @@ FILE *ERR, *OUT = 0;
 int line_no, /* count line number */
   filesread = 0;
 
-char echo_it = 0,    /* option: echo input lines */
+int echo_it = 0,    /* option: echo input lines */
   no_comment = -3,   /* Keine Infos in [] hinter EINHEIT */
   show_warnings = 4, /* option: print warnings (levels) */
   warnings_cl = 0,   /* -w auf der Kommandozeile gegeben */
@@ -190,15 +185,19 @@ char echo_it = 0,    /* option: echo input lines */
      compile = 0;          /* option: compiler-/magellan-style  warnings */
 int error_count = 0,       /* counter: errors */
   warning_count = 0;       /* counter: warnings */
-utf8_t order_buf[BUFSIZE], /* current order line */
+
+const char *echeck_locale = "de", *echeck_rules = "e2";
+char *filename;
+
+static char order_buf[BUFSIZE], /* current order line */
   checked_buf[BUFSIZE],    /* checked order line */
   message_buf[BUFSIZE],    /* messages are composed here */
   warn_buf[BUFSIZE],       /* warnings are composed here */
   indent, next_indent,     /* indent index */
   does_default = 0,        /* Ist DEFAULT aktiv? */
-  befehle_ende,            /* EOF der Befehlsdatei */
-    *echeck_locale = "de", *echeck_rules = "e2", *filename;
-int rec_cost = RECRUIT_COST, this_command,
+  befehle_ende;            /* EOF der Befehlsdatei */
+int rec_cost = RECRUIT_COST,
+                       this_command,
     this_unit, /* wird von getaunit gesetzt */
   Rx, Ry;      /* Koordinaten der aktuellen Region */
 static const char *g_path;
@@ -940,17 +939,17 @@ static void readskill(char *s) { /* parsed einen String nach Talenten */
 
 int readitem(char *s) { /* parsed einen String nach Items */
   char buffer[128];
-  char *x = s;
+  utf8_t *x = (utf8_t *)s;
   t_item *it = (t_item *)calloc(1, sizeof(t_item));
 
   do {
-    x = strchr(s, ';');
+    x = (utf8_t *)strchr(s, ';');
     if (!x)
-      x = strchr(s, ',');
+      x = (utf8_t *)strchr(s, ',');
     if (x)
       *x = 0;
     else {
-      x = strchr(s, '\n');
+      x = (utf8_t *)strchr(s, '\n');
       if (x)
         *x = 0;
       x = NULL;
@@ -964,7 +963,7 @@ int readitem(char *s) { /* parsed einen String nach Items */
       it->name = n;
     }
     if (x) {
-      s = eatwhite(x + 1);
+      s = (char *)eatwhite(x + 1);
     }
   } while (x && *s);
   if (!it->name) {
@@ -1213,21 +1212,19 @@ static char *mock_pos = 0;
 
 void set_order_unit(unit *u) { order_unit = u; }
 
-#ifdef TESTING
-
 void mock_input(const char *input) {
   free(mocked_input);
   mocked_input = STRDUP(input);
   mock_pos = mocked_input;
 }
 
-int get_long_order_line() {
+int get_long_order_line()
+{
   if (order_unit)
     return order_unit->long_order_line;
   else
     return -1;
 }
-#endif
 
 static utf8_t *fgetbuffer(utf8_t *buf, int size, FILE *F) {
   if (mocked_input) {
@@ -1273,9 +1270,6 @@ void readafile(const char *fn, int typ) {
       fclose(F);
       return;
     }
-#ifdef MACOSX
-    macify(s);
-#endif
     x = strchr(s, '\n');
     if (x)
       *x = 0; /* \n am Zeilenende löschen */
@@ -1285,27 +1279,6 @@ void readafile(const char *fn, int typ) {
               "Fehler in Datei %s Zeile %d: `%s'\n"
               "Error in file %s line %d: `%s'\n",
               fn, line, s, fn, line, s);
-  }
-}
-
-void readfiles(int doall) { /* liest externen Files */
-  int i;
-
-  if (!g_path)
-    return;
-  if (doall) {
-    /*
-     * alle Files aus der Liste der Reihe nach zu lesen versuchen
-     */
-    for (i = 0; i < filecount; i++)
-      readafile(ECheck_Files[i].name, ECheck_Files[i].type);
-  } else {
-    /*
-     * nur die tokens.txt
-     */
-    for (i = 0; i < filecount; i++)
-      if (ECheck_Files[i].type < 0)
-        readafile(ECheck_Files[i].name, ECheck_Files[i].type);
   }
 }
 
@@ -1440,7 +1413,7 @@ const char *Uid(int i) {
   return uid(u);
 }
 
-void warn(char *s, int line, char level) {
+void warn(char *s, int line, int level) {
   if (warn_off)
     return;
   if (level > show_warnings)
@@ -4462,10 +4435,6 @@ void printhelp(int argc, char *argv[], int index) {
   exit(1);
 }
 
-#ifdef TESTING
-const char *run_tests = 0;
-#endif
-
 int check_options(int argc, char *argv[], char dostop, char command_line) {
   int i;
   char *x;
@@ -4550,11 +4519,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line) {
       case 'm':
         compile = OUT_MAGELLAN;
         break;
-#ifdef TESTING
-      case 'T':
-        run_tests = argv[i][2] == '=' ? argv[i] + 3 : "all";
-        break;
-#endif
+
       case 'E':
         if (dostop) { /* bei Optionen via "; ECHECK" nicht mehr  machen */
           echo_it = 1;
@@ -5085,6 +5050,24 @@ void inittokens(void) {
     addtoken(&tokens[UT_OPTION], l->name, i);
 }
 
+int readfiles(void) { /* liest externen Files */
+  int i;
+
+  if (!g_path) {
+    return 0;
+  }
+  /*
+   * alle Files aus der Liste der Reihe nach zu lesen versuchen
+   */
+  for (i = 0; i < filecount; i++) {
+    readafile(ECheck_Files[i].name, ECheck_Files[i].type);
+  }
+  if (filesread == HAS_ALL) {
+    inittokens();
+  }
+  return filesread;
+}
+
 int fileexists(const char *name) {
   struct STAT stats;
   return STAT(name, &stats);
@@ -5100,7 +5083,7 @@ const char *findfiles(const char *dir) {
   return NULL;
 }
 
-const char *findpath(void) {
+static const char *findpath(void) {
   const char *hints[] = {".",
 #ifndef WIN32
                          "/usr/share/games/echeck", "/usr/share/echeck",
@@ -5116,7 +5099,7 @@ const char *findpath(void) {
   return NULL;
 }
 
-void init(void) {
+void echeck_init(void) {
   int i;
   for (i = 0; i < MAX_ERRORS; i++) {
     Errors[i] =
@@ -5125,8 +5108,11 @@ void init(void) {
   /*
    * Path-Handling
    */
-  g_path = getenv("ECHECKPATH");
   filename = getenv("ECHECKOPTS");
+  g_path = getenv("ECHECKPATH");
+  if (!g_path) {
+    g_path = findpath();
+  }
 }
 
 #ifdef HAVE_GETTEXT
@@ -5174,7 +5160,7 @@ void init_intl(void) {
 }
 #endif
 
-int main(int argc, char *argv[]) {
+int echeck_main(int argc, char *argv[]) {
   int faction_count = 0, unit_count = 0, nextarg = 1, i;
 #ifdef HAVE_GETTEXT
   init_intl();
@@ -5185,8 +5171,14 @@ int main(int argc, char *argv[]) {
 #endif
 
   ERR = stderr;
-  init();
+  echeck_init();
   ERR = stdout;
+
+  if (!compile)
+    fprintf(ERR,
+            _("ECheck (Version %s, %s), order file checker for Eressea - "
+              "freeware!\n\n"),
+            echeck_version, __DATE__);
 
   if (filename) {
     parse_options(filename, 1);
@@ -5195,25 +5187,14 @@ int main(int argc, char *argv[]) {
   if (argc > 1) {
     nextarg = check_options(argc, argv, 1, 1);
   }
-  if (!g_path) {
-    g_path = findpath();
-  }
-#ifndef TESTING
   if (argc <= 1)
     printhelp(argc, argv, 0);
-#endif
-  readfiles(1);
+  filesread = readfiles();
 
   if (!filesread) {
     files_not_found(ERR);
     help_keys('f'); /* help_keys() macht exit() */
   }
-
-  if (!compile)
-    fprintf(ERR,
-            _("ECheck (Version %s, %s), order file checker for Eressea - "
-              "freeware!\n\n"),
-            echeck_version, __DATE__);
 
   if (filesread != HAS_ALL) {
     sprintf(checked_buf, "%s: ", _("Missing files containing"));
@@ -5235,23 +5216,6 @@ int main(int argc, char *argv[]) {
     fputs(checked_buf, ERR);
     return 5;
   }
-
-  inittokens();
-
-#ifdef TESTING
-  {
-    CuSuite *suite = CuSuiteNew();
-    CuString *output = CuStringNew();
-
-    AddTestSuites(suite, run_tests ? run_tests : "all");
-    CuSuiteRun(suite);
-    CuSuiteSummary(suite, output);
-    CuSuiteDetails(suite, output);
-    printf("%s\n", output->buffer);
-
-    return suite->failCount;
-  }
-#endif
 
   F = stdin;
 
