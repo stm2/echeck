@@ -33,4 +33,9 @@ PROGRAM_LOCALIZATION()
 
 if (WIN32)
 add_executable(echeckw WIN32 echeckw.c echeck.c unicode.c whereami.c)
+if (Intl_FOUND)
+target_compile_definitions (echeckw PRIVATE HAVE_GETTEXT=1)
+target_link_libraries(echeckw ${Intl_LIBRARIES})
+endif (Intl_FOUND)
+
 endif(WIN32)
