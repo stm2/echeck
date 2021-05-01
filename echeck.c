@@ -658,7 +658,7 @@ int Pow(int p) {
 
 char *eatwhite(char *ptr) {
   while (*ptr) {
-    if (isspace(*ptr)) {
+    if (*ptr > 0 && isspace(*ptr)) {
       ++ptr;
     } else {
       ucs4_t ucs;
@@ -1169,7 +1169,7 @@ int parsefile(char *s, int typ) { /* ruft passende Routine auf */
     if (!x)
       return 0;
     y = x + 1;
-    while (isspace(*(x - 1)))
+    while (*(x - 1) > 0 && isspace(*(x - 1)))
       --x;
     *x = '\0';
     for (i = 1; i < UT_MAX; i++)
@@ -1321,13 +1321,14 @@ void Error(const char *text, int line, const char *order) {
     switch (compile) {
     case OUT_NORMAL:
       fprintf(ERR, _("Error in line %d"), line);
-      fprintf(ERR, ": %s.\n  `%s'\n", text, bf);
+      fprintf(ERR, ": %s.\n  '%s'\n", text, bf);
       break;
     case OUT_COMPILE:
-      fprintf(ERR, "%s(%d)|0|%s. `%s'\n", filename, line, text, bf);
+      fprintf(ERR, "%s:%d|%s|%s. '%s'\n", filename, line, 
+        order_unit ? itob(order_unit->no) : "", text, bf);
       break;
     case OUT_MAGELLAN:
-      fprintf(ERR, "%s|%d|0|%s. `%s'\n", filename, line, text, bf);
+      fprintf(ERR, "%s|%d|0|%s. '%s'\n", filename, line, text, bf);
       break;
     }
   }
@@ -4678,8 +4679,11 @@ int check_options(int argc, char *argv[], char dostop, char command_line) {
         }
         break;
       case 'V':
-        fprintf(stdout, "echeck version %s\n", echeck_version);
-        exit(0);
+        fprintf(stdout,
+                _("ECheck (Version %s, %s), order file checker for Eressea - "
+                  "freeware!\n\n"),
+                echeck_version, __DATE__);
+        break;
       case 'L':
         if (argv[i][2] == 0) { /* -L loc */
           i++;
@@ -4848,9 +4852,7 @@ void process_order_file(int *faction_count, int *unit_count) {
       befehle_ende = 0;
       f = readafaction();
       if (brief <= 1) {
-        if (compile) {
-          fprintf(ERR, "%s:faction:%s", filename, itob(f));
-        } else {
+        if (!compile) {
           fprintf(ERR, _("Found orders for faction %s."), itob(f));
         }
         fputc('\n', ERR);
@@ -5174,12 +5176,6 @@ int echeck_main(int argc, char *argv[]) {
   echeck_init();
   ERR = stdout;
 
-  if (!compile)
-    fprintf(ERR,
-            _("ECheck (Version %s, %s), order file checker for Eressea - "
-              "freeware!\n\n"),
-            echeck_version, __DATE__);
-
   if (filename) {
     parse_options(filename, 1);
   }
@@ -5232,8 +5228,6 @@ int echeck_main(int argc, char *argv[]) {
         fprintf(ERR, _("Processing file '%s'."), argv[i]);
         if (!compact)
           fputc('\n', ERR);
-      } else {
-        fprintf(ERR, "%s|version|%s|%s\n", filename, echeck_version, __DATE__);
       }
       bom = fgetc(F);
       if (bom == 0xef) {
@@ -5252,9 +5246,7 @@ int echeck_main(int argc, char *argv[]) {
     process_order_file(&faction_count, &unit_count);
 
   if (compile) {
-    fprintf(ERR, "%s|warnings|%d\n%s|errors|%d\n", filename, warning_count,
-            filename, error_count);
-    return 0;
+    return error_count;
   }
 
   char factions[32];
@@ -5295,5 +5287,5 @@ int echeck_main(int argc, char *argv[]) {
             error_count);
   }
   fputc('\n', ERR);
-  return 0;
+  return error_count;
 }
