@@ -4395,8 +4395,16 @@ void files_not_found(FILE *F) {
   fputs("\n\n", F);
 }
 
+void printversion() {
+  fprintf(stdout,
+          _("ECheck (Version %s, %s), order file checker for Eressea - "
+            "freeware!\n\n"),
+          echeck_version, __DATE__);
+}
+
 void printhelp(int argc, char *argv[], int index) {
-  fprintf(ERR,
+  printversion();
+  fprintf(stdout,
           _("-Ppath  search path for the additional files;"
             " locale %s will be appended\n"
             "-Rgame  read files from subdirectory game; default: e2\n"
@@ -4433,7 +4441,6 @@ void printhelp(int argc, char *argv[], int index) {
             "-Q      quiet\n"
             "-C      compact output\n"),
           echeck_locale);
-  exit(1);
 }
 
 int check_options(int argc, char *argv[], char dostop, char command_line) {
@@ -4650,8 +4657,10 @@ int check_options(int argc, char *argv[], char dostop, char command_line) {
 
       case '-':
         if (strcmp(argv[i] + 2, "help") == 0) { /* '--help' */
-          if (dostop) /* bei Optionen via "; ECHECK" nicht mehr  machen */
+          if (dostop) { /* bei Optionen via "; ECHECK" nicht mehr  machen */
             printhelp(argc, argv, i);
+            exit(0);
+          }
           else
             fprintf(ERR,
                     "Option `%s' unbekannt.\n"
@@ -4659,14 +4668,17 @@ int check_options(int argc, char *argv[], char dostop, char command_line) {
                     argv[i], argv[i]);
           if (dostop) /* Nicht stoppen, wenn dies die Parameter  aus der Datei
                          selbst sind! */
-            exit(10);
+            exit(-1);
         }
         break;
 
       case '?':
       case 'h':
-        if (dostop) /* bei Optionen via "; ECHECK" nicht mehr  machen */
+        if (dostop) {
+          /* bei Optionen via "; ECHECK" nicht mehr  machen */
           printhelp(argc, argv, i);
+          exit(0);
+        }
         break;
       case 'R': /* -R rules */
         if (argv[i][2] == 0) {
@@ -4679,10 +4691,8 @@ int check_options(int argc, char *argv[], char dostop, char command_line) {
         }
         break;
       case 'V':
-        fprintf(stdout,
-                _("ECheck (Version %s, %s), order file checker for Eressea - "
-                  "freeware!\n\n"),
-                echeck_version, __DATE__);
+        printversion();
+        exit(0);
         break;
       case 'L':
         if (argv[i][2] == 0) { /* -L loc */
