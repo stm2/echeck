@@ -124,6 +124,15 @@ static void test_make_temp(CuTest *tc) {
   CuAssertIntEquals(tc, 0, warning_count);
 }
 
+static void test_reserve_each(CuTest *tc) {
+  set_order_unit(newunit(1, 0));
+  mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\n@RESERVIERE je 1 Pferd\nNAECHSTER\n");
+  error_count = warning_count = 0;
+  process_order_file(0, 0);
+  CuAssertIntEquals(tc, 0, error_count);
+  CuAssertIntEquals(tc, 0, warning_count);
+}
+
 static void test_destroy(CuTest *tc) {
   set_order_unit(newunit(1, 0));
   mock_input("ERESSEA 1 \"password\"\nEINHEIT 1\nZERSTOERE\nNAECHSTER\n");
@@ -236,7 +245,7 @@ int AddTestSuites(CuSuite *suite, const char *args) {
   char names[256], *name;
   size_t len;
   if (!args || strcmp(args, "all") == 0) {
-    args = "echeck,process,give";
+    args = "reserve,echeck,process,give,claim,entertain"; /* plant,common */
   }
   len = strlen(args);
   if (len >= sizeof(names)) {
@@ -279,6 +288,10 @@ int AddTestSuites(CuSuite *suite, const char *args) {
     } else if (strcmp(name, "entertain") == 0) {
       cs = CuSuiteNew();
       SUITE_ADD_TEST(cs, test_entertain);
+      CuSuiteAddSuite(suite, cs);
+    } else if (strcmp(name, "reserve") == 0) {
+      cs = CuSuiteNew();
+      SUITE_ADD_TEST(cs, test_reserve_each);
       CuSuiteAddSuite(suite, cs);
     } else if (strcmp(name, "claim") == 0) {
       cs = CuSuiteNew();
