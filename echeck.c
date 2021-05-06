@@ -1689,6 +1689,7 @@ unit *newunit(int n, int t) {
 
   if (!u) {
     u = (unit *)calloc(1, sizeof(unit));
+    u->people = 1;
     u->no = n;
     u->line_no = line_no;
     u->order = STRDUP(order_buf);
@@ -2232,7 +2233,7 @@ void orders_for_unit(int i, unit *u) {
     k++;
   }
   e = strchr(k, ']');
-  u->people += atoi(k);
+  u->people = atoi(k);
   j = strchr(k, ',');
   if (!j)
     j = strchr(k, ';');
@@ -3987,7 +3988,7 @@ void checkanorder(char *Orders) {
         break;
       u->money -= i * rec_cost;
       u->reserviert -= i * rec_cost;
-      u->people += i;
+      u->people = i;
       addregion(Rx, Ry, i);
     } else
       log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[MISSINGNUMRECRUITS]));
