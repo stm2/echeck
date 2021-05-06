@@ -10,7 +10,7 @@ PREFIX ?= /usr
 SHAREDIR ?= $(PREFIX)/share/games/echeck
 EXECDIR ?= $(PREFIX)/games
 LOCALEDIR ?= $(PREFIX)/share/locale
-default: echeck
+default: echeck mofiles
 ifeq ($(OS_NAME),darwin)
 LFLAGS += -lintl
 endif	
