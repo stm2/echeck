@@ -10,7 +10,7 @@ PREFIX ?= /usr
 SHAREDIR ?= $(PREFIX)/share/games/echeck
 EXECDIR ?= $(PREFIX)/games
 LOCALEDIR ?= $(PREFIX)/share/locale
-default: echeck mofiles
+default: echeck
 ifeq ($(OS_NAME),darwin)
 LFLAGS += -lintl
 endif	
@@ -50,7 +50,7 @@ locale/%/LC_MESSAGES/echeck.mo: po/echeck.de.po
 	msgfmt -f -c $< -o $@
 
 echeck: main.c echeck.c unicode.c unicode.h whereami.c whereami.h
-	$(CC) $(LFLAGS) $(CFLAGS) $(RELEASE_FLAGS) -o echeck main.c echeck.c unicode.c whereami.c
+	$(CC) $(LFLAGS) $(CFLAGS) $(RELEASE_CFLAGS) -o echeck main.c echeck.c unicode.c whereami.c
 
 tests: echeck.c whereami.c whereami.h unicode.c unicode.h $(TEST_SRC) $(TEST_HDR)
 	$(CC) $(LFLAGS) $(CFLAGS) $(DEBUG_FLAGS) -DTESTING -o tests echeck.c whereami.c unicode.c $(TEST_SRC)

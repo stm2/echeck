@@ -83,7 +83,7 @@
 
 #include <string.h>
 
-static const char *echeck_version = "4.6.1";
+static const char *echeck_version = "4.6.2";
 
 #define DEFAULT_PATH "."
 
@@ -202,6 +202,7 @@ int rec_cost = RECRUIT_COST,
     this_unit, /* wird von getaunit gesetzt */
   Rx, Ry;      /* Koordinaten der aktuellen Region */
 static char *g_path;
+static const char *g_basedir;
 FILE *F;
 
 enum { OUT_NORMAL, OUT_COMPILE, OUT_MAGELLAN };
@@ -875,7 +876,6 @@ void readspell(char *s) {
   t_spell *sp;
   char buffer[128];
 
-  sp = (t_spell *)calloc(1, sizeof(t_spell));
   x = strchr(s, ';');
   if (!x)
     x = strchr(s, ',');
@@ -887,23 +887,26 @@ void readspell(char *s) {
       *x = 0;
     x = NULL;
   }
-  sp->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
-  if (x) {
-    s = (char *) eatwhite(x + 1);
-    if (*s) {
-      sp->kosten = atoi(s);
-      x = strchr(s, ';');
-      if (!x)
-        x = strchr(s, ',');
-      if (x) {
-        s = (char *)(x + 1);
-        if (*s)
-          sp->typ = (char)Pow(atoi(s));
+  sp = (t_spell *)calloc(1, sizeof(t_spell));
+  if (sp) {
+    sp->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
+    if (x) {
+      s = (char *)eatwhite(x + 1);
+      if (*s) {
+        sp->kosten = atoi(s);
+        x = strchr(s, ';');
+        if (!x)
+          x = strchr(s, ',');
+        if (x) {
+          s = (char *)(x + 1);
+          if (*s)
+            sp->typ = (char)Pow(atoi(s));
+        }
       }
     }
+    sp->next = spells;
+    spells = sp;
   }
-  sp->next = spells;
-  spells = sp;
 }
 
 static void readskill(char *s) { /* parsed einen String nach Talenten */
@@ -943,38 +946,40 @@ int readitem(char *s) { /* parsed einen String nach Items */
   char *x = s;
   t_item *it = (t_item *)calloc(1, sizeof(t_item));
 
-  do {
-    x = strchr(s, ';');
-    if (!x)
-      x = strchr(s, ',');
-    if (x)
-      *x = 0;
-    else {
-      x = strchr(s, '\n');
+  if (it) {
+    do {
+      x = strchr(s, ';');
+      if (!x)
+        x = strchr(s, ',');
       if (x)
         *x = 0;
-      x = NULL;
-    }
-    if (atoi(s) > 0) /* Name, 12 -> Luxusgut "Name", EK-Preis *   12 */
-      it->preis = atoi(s);
-    else {
-      t_names *n = (t_names *)calloc(1, sizeof(t_names));
-      if (n) {
-        n->txt = STRDUP(transliterate(buffer, sizeof(buffer), s));
-        n->next = it->name;
+      else {
+        x = strchr(s, '\n');
+        if (x)
+          *x = 0;
+        x = NULL;
       }
-      it->name = n;
+      if (atoi(s) > 0) /* Name, 12 -> Luxusgut "Name", EK-Preis *   12 */
+        it->preis = atoi(s);
+      else {
+        t_names *n = (t_names *)calloc(1, sizeof(t_names));
+        if (n) {
+          n->txt = STRDUP(transliterate(buffer, sizeof(buffer), s));
+          n->next = it->name;
+        }
+        it->name = n;
+      }
+      if (x) {
+        s = (char *)eatwhite(x + 1);
+      }
+    } while (x && *s);
+    if (!it->name) {
+      free(it);
+      return 0;
     }
-    if (x) {
-      s = (char *)eatwhite(x + 1);
-    }
-  } while (x && *s);
-  if (!it->name) {
-    free(it);
-    return 0;
+    it->next = itemdata;
+    itemdata = it;
   }
-  it->next = itemdata;
-  itemdata = it;
   return 1;
 }
 
@@ -984,12 +989,14 @@ void readliste(char *s,
   t_liste *ls;
   char buffer[128];
 
-  ls = (t_liste *)calloc(1, sizeof(t_liste));
   x = strchr(s, '\n');
   if (x)
     *x = 0;
-  ls->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
-  addlist(L, ls);
+  ls = (t_liste *)calloc(1, sizeof(t_liste));
+  if (ls) {
+    ls->name = STRDUP(transliterate(buffer, sizeof(buffer), s));
+    addlist(L, ls);
+  }
 }
 
 int readkeywords(char *s) { /* parsed einen String nach Befehlen */
@@ -1241,7 +1248,7 @@ static char *fgetbuffer(char *buf, int size, FILE *F) {
     } else {
       ++nextbr;
     }
-    bytes = size - 1;
+    bytes = (ptrdiff_t)size - 1;
     if (bytes > nextbr - mock_pos) {
       bytes = nextbr - mock_pos;
     }
@@ -1260,7 +1267,7 @@ void readafile(const char *fn, int typ) {
   FILE *F;
   char *s, *x;
 
-  F = path_fopen(g_path, fn, "rt");
+  F = path_fopen(g_basedir, fn, "rt");
   if (!F)
     return;
   for (line = 1;; line++) {
@@ -1386,8 +1393,6 @@ log_error(
   va_end(va);
 }
 
-#define anerror(s) log_error(filename, line_no, order_buf, this_unit_id(), s)
-
 void
 log_warning(
   int level,
@@ -1480,10 +1485,6 @@ const char *Uid(int i) {
     u = newunit(-1, 0);
   }
   return uid(u);
-}
-
-void warn(char *s, int line, int level) {
-  log_warning(level, filename, line, NULL, 0, s);
 }
 
 void warning(const char *s, int line, char *order, char level) {
@@ -1630,23 +1631,28 @@ t_region *addregion(int x, int y, int pers) {
     if (x == r->x && y == r->y)
       break;
 
-  if (!r) {
-    r = (t_region *)calloc(1, sizeof(t_region));
-    r->x = x;
-    r->y = y;
-    r->personen = pers;
-    r->geld = 0;
-    r->reserviert = 0;
-    r->name = STRDUP("Region");
-    r->line_no = line_no;
-    if (Regionen) {
-      for (R = Regionen; R->next; R = R->next)
-        ;          /* letzte Region der Liste  */
-      R->next = r; /* Region hinten dranklemmen */
-    } else
-      Regionen = r;
-  } else
+  if (r) {
     r->personen += pers;
+  }
+  else {
+    r = (t_region *)calloc(1, sizeof(t_region));
+    if (r) {
+      r->x = x;
+      r->y = y;
+      r->personen = pers;
+      r->geld = 0;
+      r->reserviert = 0;
+      r->name = STRDUP("Region");
+      r->line_no = line_no;
+      if (Regionen) {
+        for (R = Regionen; R->next; R = R->next)
+          ;          /* letzte Region der Liste  */
+        R->next = r; /* Region hinten dranklemmen */
+      }
+      else
+        Regionen = r;
+    }
+  }
   return r;
 }
 
@@ -1670,10 +1676,12 @@ void addteach(unit *teacher, unit *student) {
     }
   }
   t = (teach *)malloc(sizeof(teach));
-  t->next = NULL;
-  t->teacher = teacher;
-  t->student = student;
-  addlist(teachlist, t);
+  if (t) {
+    t->next = NULL;
+    t->teacher = teacher;
+    t->student = student;
+    addlist(teachlist, t);
+  }
 }
 
 unit *newunit(int n, int t) {
@@ -1692,25 +1700,22 @@ unit *newunit(int n, int t) {
       for (c = units; c->next; c = c->next)
         ;          /* letzte unit der Liste */
       c->next = u; /* unit hinten dranklemmen */
-    } else
+    }
+    else
       units = u;
   }
-
   if (u->temp < 0) {
     log_error(filename, line_no, order_buf, this_unit_id(),
-              _("TEMP %s is used in region %d, %d and region %d, %d (line %d)"),
-              itob(u->no), Rx, Ry, u->newx, u->newy, u->start_of_orders_line);
+      _("TEMP %s is used in region %d, %d and region %d, %d (line %d)"),
+      itob(u->no), Rx, Ry, u->newx, u->newy, u->start_of_orders_line);
     u->long_order_line = 0;
   }
-
   if (u->temp < 42)
     u->temp = t;
-
   if (t)
     current_temp_no = n;
   else
     current_temp_no = 0;
-
   return u;
 }
 
@@ -1827,7 +1832,7 @@ int findtoken(const char *token, int type) {
           break;
       }
       if ((at_cmd || bang_cmd) && *str < 65) {
-        anerror(_("Space not allowed here"));
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Space not allowed here"));
         return -2;
       }
     }
@@ -1989,7 +1994,9 @@ char *getbuf(void) {
         log_error(filename, line_no, lbuf, this_unit_id(), _("Line too long"));
       }
     }
-    *cp = 0;
+    if (cp) {
+      *cp = 0;
+    }
   } while (cont || cp == warn_buf);
 
   if (quote) {
@@ -2023,7 +2030,7 @@ void getafaction(char *s) {
 
   i = btoi(s);
   if (!s[0]) {
-    anerror(_("Faction missing"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Faction missing"));
   } else {
     if (!i)
       awarning(_("Faction 0 used"), 1);
@@ -2045,8 +2052,7 @@ int getmoreunits(bool partei) {
     if (partei) {
       i = btoi(s);
       if (i < 1) {
-        sprintf(warn_buf, _("Faction '%s' invalid"), s);
-        anerror(warn_buf);
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Faction '%s' invalid"), s);
       } else
         bcat(i);
     } else {
@@ -2059,8 +2065,7 @@ int getmoreunits(bool partei) {
       i = btoi(s);
 
       if (!i) {
-        sprintf(warn_buf, _("Unit '%s' is not possible here"), s);
-        anerror(warn_buf);
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Unit '%s' is not possible here"), s);
       } else {
         bcat(i);
         if (!does_default) {
@@ -2084,7 +2089,7 @@ int getaunit(int type) {
   s = getstr();
   if (s[0] == 0) {
     if (type == NECESSARY) {
-      anerror(_("Missing unit"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Missing unit"));
       return 0;
     }
     return 1;
@@ -2157,7 +2162,7 @@ void checkemail(void) {
   }
   s = strchr(addr, '@');
   if (!s) {
-    anerror(_("invalid email address"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("invalid email address"));
     return;
   }
   scat(_("; Delivery to"));
@@ -2288,9 +2293,9 @@ void orders_for_temp_unit(unit *u) {
     /*
      * in Regionen steht die aktuelle Region drin
      */
-    sprintf(warn_buf, _("TEMP %s was already used in line %d"), itob(u->no),
-            u->start_of_orders_line);
-    anerror(warn_buf);
+    log_error(filename, line_no, order_buf, this_unit_id(), 
+      _("TEMP %s was already used in line %d"),
+      itob(u->no), u->start_of_orders_line);
     /*
      * return; Trotzdem kein return, damit die Befehle ordnungsgemäß
      * zugeordnet werden!
@@ -2374,7 +2379,7 @@ void checknaming(void) {
 
   switch (i) {
   case -1:
-    anerror(_("Unrecognized object"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized object"));
     break;
 
   case P_ALLIANCE:
@@ -2389,7 +2394,7 @@ void checknaming(void) {
     break;
 
   default:
-    anerror(_("This object cannot be renamed"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("This object cannot be renamed"));
   }
 }
 
@@ -2401,7 +2406,7 @@ void checkdisplay(void) {
 
   switch (i) {
   case -1:
-    anerror(_("Unrecognized object"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized object"));
     break;
 
   case P_REGION:
@@ -2415,7 +2420,7 @@ void checkdisplay(void) {
     break;
 
   default:
-    anerror(_("This object cannot be described"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("This object cannot be described"));
   }
 }
 
@@ -2454,7 +2459,7 @@ void checkenter(void) {
 
   switch (i) {
   case -1:
-    anerror(_("Unrecognized object"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized object"));
     return;
   case P_BUILDING:
   case P_CASTLE:
@@ -2462,13 +2467,13 @@ void checkenter(void) {
     Scat(printparam(i));
     n = getI();
     if (!n) {
-      anerror(cgettext(Errors[OBJECTNUMBERMISSING]));
+      log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[OBJECTNUMBERMISSING]));
       return;
     } else
       bcat(n);
     break;
   default:
-    anerror(_("This object cannot be entered"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("This object cannot be entered"));
     return;
   }
   check_leave();
@@ -2486,7 +2491,7 @@ int getaspell(char *s, char spell_typ, unit *u, int reallycast) {
   int p;
 
   if (*s == '[' || *s == '<') {
-    anerror(_("Do not use [ ] and < >"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Do not use [ ] and < >"));
     return 0;
   }
   if (findparam(s) == P_REGION) {
@@ -2500,11 +2505,11 @@ int getaspell(char *s, char spell_typ, unit *u, int reallycast) {
         p = atoi(s);
         icat(p);
       } else {
-        anerror(_("Error with region coordinates"));
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Error with region coordinates"));
         return 0;
       }
     } else {
-      anerror(_("Error with REGION parameter"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Error with REGION parameter"));
       return 0;
     }
     s = getstr();
@@ -2513,7 +2518,7 @@ int getaspell(char *s, char spell_typ, unit *u, int reallycast) {
     scat(printparam(P_LEVEL));
     s = getstr();
     if (!*s || atoi(s) < 1) {
-      anerror(_("Error with LEVEL parameter"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Error with LEVEL parameter"));
       return 0;
     }
     p = atoi(s);
@@ -2524,11 +2529,10 @@ int getaspell(char *s, char spell_typ, unit *u, int reallycast) {
   if (!sp) {
     if (u) {                 /* sonst ist das der Test von GIB */
       if (show_warnings > 0) /* nicht bei -w0 */
-        anerror(_("Unrecognized spell"));
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized spell"));
       if (*s >= '0' && *s <= '9') {
-        sprintf(warn_buf, _("%s or %s missing"), printparam(P_LEVEL),
-                printparam(P_REGION));
-        anerror(warn_buf);
+        log_error(filename, line_no, order_buf, this_unit_id(), _("%s or %s missing"),
+          printparam(P_LEVEL), printparam(P_REGION));
       }
       qcat(s);
     }
@@ -2536,13 +2540,14 @@ int getaspell(char *s, char spell_typ, unit *u, int reallycast) {
   }
   qcat(sp->name);
   if (!(sp->typ & spell_typ)) {
-    if (sp->typ & SP_ZAUBER) {
-      sprintf(warn_buf, _("%s is not a combat spell"), sp->name);
-    } else {
-      sprintf(warn_buf, _("%s is a combat spell"), sp->name);
+    if (show_warnings > 0) {
+      if (sp->typ & SP_ZAUBER) {
+        log_error(filename, line_no, order_buf, this_unit_id(), _("%s is not a combat spell"), sp->name);
+      }
+      else {
+        log_error(filename, line_no, order_buf, this_unit_id(), _("%s is a combat spell"), sp->name);
+      }
     }
-    if (show_warnings > 0) /* nicht bei -w0 */
-      anerror(warn_buf);
   } else {
     if (u && (sp->typ & SP_BATTLE) && (u->spell & sp->typ)) {
       sprintf(warn_buf, cgettext(Errors[UNITALREADYHAS]), uid(u));
@@ -2578,7 +2583,7 @@ void checkgiving(void) {
   int i, n;
 
   if (from_temp_unit_no) {
-    anerror(_("New units cannot GIVE anything"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("New units cannot GIVE anything"));
     return;
   }
   scat(printkeyword(K_GIVE));
@@ -2599,11 +2604,11 @@ void checkgiving(void) {
           n *= order_unit->people;
         }
         if (n < 1) {
-          anerror(cgettext(Errors[NUMMISSING]));
+          log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[NUMMISSING]));
           n = 1;
         }
       } else {
-        anerror(cgettext(Errors[NUMMISSING]));
+        log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[NUMMISSING]));
         n = 1;
       }
     }
@@ -2622,7 +2627,7 @@ void checkgiving(void) {
     }
 
     if (!(*s)) {
-      anerror(_("Give what?"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Give what?"));
       return;
     }
     i = findparam(s);
@@ -2732,12 +2737,12 @@ void getluxuries(int cmd) {
   if (n < 1) {
     if (findparam(s) == P_ALLES) {
       if (cmd == K_BUY) {
-        anerror(_("BUY and ALL cannot be combined"));
+        log_error(filename, line_no, order_buf, this_unit_id(), _("BUY and ALL cannot be combined"));
         return;
       } else
         scat(printparam(P_ALLES));
     } else {
-      anerror(_("Number of luxury items missing"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Number of luxury items missing"));
     }
     n = 1;
   }
@@ -2747,7 +2752,7 @@ void getluxuries(int cmd) {
   i = finditem(s);
 
   if (ItemPrice(i) < 1) {
-    anerror(_("Not a luxury item"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Not a luxury item"));
   }
   else {
     Scat(ItemName(i, n != 1));
@@ -2762,7 +2767,6 @@ void getluxuries(int cmd) {
 void checkmake(void) {
   int i, j = 0, k = 0;
   char *s;
-  char bf[200];
 
   scat(printkeyword(K_MAKE));
   s = getstr();
@@ -2786,12 +2790,12 @@ void checkmake(void) {
 
   case P_TEMP:
     if (j)
-      anerror(_("Number is not possible here"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Number is not possible here"));
     next_indent = INDENT_NEW_ORDERS;
     scat(" TEMP");
     j = getb();
     if (!j)
-      anerror(cgettext(Errors[NOTEMPNUMBER]));
+      log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[NOTEMPNUMBER]));
     else {
       unit *u;
 
@@ -2823,9 +2827,8 @@ void checkmake(void) {
     Scat(printparam(i));
     k = getdirection();
     if (k < 0) {
-      sprintf(bf, "%s %s <%s>", printkeyword(K_MAKE), printparam(P_ROAD),
-              _("direction"));
-      anerror(bf);
+      log_error(filename, line_no, order_buf, this_unit_id(), "%s %s <%s>",
+        printkeyword(K_MAKE), printparam(P_ROAD), _("direction"));
     } else
       Scat(printdirection(k));
     long_order();
@@ -2891,7 +2894,7 @@ void checkmake(void) {
    * oder einem Schiff ist. Ist aber trotzdem eine Warnung wert.
    */
   if (s[0])
-    anerror(_("This cannot be made"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("This cannot be made"));
   else
     dwarning(Errors[UNITMUSTBEONSHIP], 4);
   long_order();
@@ -2912,14 +2915,13 @@ void checkdirections(int key) {
     if (i <= -1) {
       if (i == -2)
         break; /* Zeile zu ende */
-      anerror(_("Unrecognized direction"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized direction"));
     } else {
       if (key == K_ROUTE && i == D_PAUSE && count == 0)
         awarning(_("ROUTE starts with PAUSE"), 2);
       if (key == K_MOVE && i == D_PAUSE) {
-        sprintf(warn_buf, _("%s and %s cannot be combined"),
+        log_error(filename, line_no, order_buf, this_unit_id(), _("%s and %s cannot be combined"),
                 printkeyword(K_MOVE), printdirection(D_PAUSE));
-        anerror(warn_buf);
         return;
       } else {
         Scat(printdirection(i));
@@ -2962,15 +2964,15 @@ void checkdirections(int key) {
   } while (i >= 0);
 
   if (!count)
-    anerror(_("Unrecognized direction"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized direction"));
   if (key == K_ROUTE && !noroute && (sx != x || sy != y)) {
     sprintf(warn_buf, cgettext(Errors[ROUTENOTCYCLIC]), sx, sy, x, y);
     awarning(warn_buf, 4);
   }
   if (!does_default) {
     if (order_unit->hasmoved) {
-      sprintf(warn_buf, cgettext(Errors[UNITALREADYHASMOVED]), uid(order_unit));
-      anerror(warn_buf);
+      log_error(filename, line_no, order_buf, this_unit_id(), 
+        cgettext(Errors[UNITALREADYHASMOVED]), uid(order_unit));
       return;
     }
     order_unit->hasmoved = 2; /* 2: selber bewegt */
@@ -2986,7 +2988,7 @@ void checkdirections(int key) {
 
 void check_sabotage(void) {
   if (getparam() != P_SHIP) {
-    anerror(_("Only ships can be sabotaged"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Only ships can be sabotaged"));
     return;
   }
   Scat(printparam(P_SHIP));
@@ -3021,9 +3023,8 @@ void checkmail(void) {
     break;
 
   default:
-    sprintf(warn_buf, _("Messages must be sent to a %s, %s or %s"),
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Messages must be sent to a %s, %s or %s"),
             printparam(P_UNIT), printparam(P_FACTION), printparam(P_REGION));
-    anerror(warn_buf);
     break;
   }
   s = getstr();
@@ -3038,14 +3039,14 @@ void claim(void) {
   s = getstr();
   n = atoi(s);
   if (n < 1) {
-    anerror(cgettext(Errors[NUMMISSING]));
+    log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[NUMMISSING]));
     n = 1;
   } else {
     s = getstr();
   }
   icat(n);
   if (!(*s)) {
-    anerror(_("Unrecognized object"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized object"));
     return;
   }
   i = finditem(s);
@@ -3062,7 +3063,7 @@ void reserve(void) {
   scat(printkeyword(K_RESERVE));
 
   if (from_temp_unit_no) {
-    anerror(_("New units cannot use RESERVE, try using GIVE instead"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("New units cannot use RESERVE, try using GIVE instead"));
     return;
   }
 
@@ -3074,11 +3075,11 @@ void reserve(void) {
       n = atoi(s);
       n *= order_unit->people;
       if (n < 1) {
-        anerror(cgettext(Errors[NUMMISSING]));
+        log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[NUMMISSING]));
         n = 1;
       }
     } else {
-      anerror(cgettext(Errors[NUMMISSING]));
+      log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[NUMMISSING]));
       n = 1;
     }
   }
@@ -3088,7 +3089,7 @@ void reserve(void) {
   s = getstr();
 
   if (!(*s)) {
-    anerror(_("RESERVE what?"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("RESERVE what?"));
     return;
   }
   i = finditem(s);
@@ -3138,8 +3139,7 @@ void check_ally(void) {
     Scat(printparam(i));
     break;
   default:
-    sprintf(warn_buf, _("Illegal argument for %s"), printkeyword(K_HELP));
-    anerror(warn_buf);
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Illegal argument for %s"), printkeyword(K_HELP));
     return;
   }
 
@@ -3258,8 +3258,8 @@ void check_money(
           _("Unit TEMP %s was never created with MAKE TEMP"), itob(u->no));
       }
       if (u->people < 0) {
-        sprintf(warn_buf, cgettext(Errors[UNITHASPERSONS]), uid(u), u->people);
-        warn(warn_buf, u->line_no, 3);
+        log_warning(3, filename, u->line_no, NULL, 0, 
+          cgettext(Errors[UNITHASPERSONS]), uid(u), u->people);
       }
 
       if (u->people == 0 &&
@@ -3341,21 +3341,22 @@ void check_money(
         }
       }
       if (u->money < 0) {
-        sprintf(warn_buf,
-                do_move ? _("Unit %s has %d silver before income")
-                        : _("Unit %s has %d silver"),
-                uid(u), u->money);
-        warn(warn_buf, u->line_no, 3);
+        log_warning(3, filename, u->line_no, NULL, u->no,
+          do_move ? _("Unit %s has %d silver before income")
+          : _("Unit %s has %d silver"),
+          uid(u), u->money);
+
         if (u->unterhalt) {
-          if (do_move)
-            sprintf(warn_buf,
-                    _("Unit %s needs %d more silver to maintain a building"),
-                    uid(u), -u->money);
-          else
-            sprintf(warn_buf,
-                    _("Unit %s lacks %d silver to maintain a building"), uid(u),
-                    -u->money);
-          warn(warn_buf, u->line_no, 1);
+          if (do_move) {
+            log_warning(1, filename, u->line_no, NULL, u->no,
+              _("Unit %s needs %d more silver to maintain a building"),
+              uid(u), -u->money);
+          }
+          else {
+            log_warning(1, filename, u->line_no, NULL, u->no,
+              _("Unit %s lacks %d silver to maintain a building"),
+              uid(u), -u->money);
+          }
         }
       }
     }
@@ -3376,9 +3377,8 @@ void check_money(
       continue;
     if (u->hasmoved > 1) {
       if (!noship && u->ship > 0) {
-        sprintf(warn_buf, cgettext(Errors[UNITMOVESSHIP]), uid(u),
-                itob(u->ship));
-        warn(warn_buf, u->line_no, 4);
+        log_warning(4, filename, u->line_no, NULL, u->no,
+          cgettext(Errors[UNITMOVESSHIP]), uid(u), itob(u->ship));
       }
       i = -u->ship;
       if (i > 0) { /* wir sind Kapitän; alle Einheiten auf  dem Schiff auch
@@ -3388,9 +3388,8 @@ void check_money(
         for (t = units; t; t = t->next) {
           if (t->ship == i) {
             if (t->hasmoved > 1) { /* schon bewegt! */
-              sprintf(warn_buf, cgettext(Errors[UNITONSHIPHASMOVED]), uid(t),
-                      itob(i));
-              warning(warn_buf, t->line_no, t->long_order, 2);
+              log_warning(2, filename, u->line_no, NULL, u->no,
+                cgettext(Errors[UNITONSHIPHASMOVED]), uid(t), itob(i));
             }
             t->hasmoved = 1;
             t->newx = x;
@@ -3486,11 +3485,9 @@ void check_living(void) {
       if (u->region == r && u->lives > 0)
         r->geld -= u->people * 10;
     if (r->geld < 0) {
-      sprintf(warn_buf,
-              _("There is not enough silver in %s (%d,%d) for upkeep; %d "
-                "silver is missing."),
-              r->name, r->x, r->y, -(r->geld));
-      warn(warn_buf, r->line_no, 4);
+      log_warning(4, filename, r->line_no, NULL, 0,
+        _("There is not enough silver in %s (%d,%d) for upkeep; %d silver is missing."),
+        r->name, r->x, r->y, -(r->geld));
     }
   }
 }
@@ -3516,33 +3513,33 @@ void check_teachings(void) {
     if (t->teacher) {
       t->teacher->lehrer = t->teacher->people * 10;
       if (t->teacher->lehrer == 0) {
-        sprintf(warn_buf, _("Unit %s has 0 men and is taught by unit %s"),
-                uid1(t->student), uid2(t->teacher));
-        warn(warn_buf, t->teacher->line_no, 4);
+        log_warning(4, filename, t->student->line_no, NULL, t->student->no,
+          _("Unit %s has 0 men and is taught by unit %s"),
+          uid1(t->student), uid2(t->teacher));
       }
       if (t->student->schueler == 0 && t->student->lives > 0) {
-        sprintf(warn_buf, _("Unit %s has 0 men and teaches unit %s"),
-                uid1(t->teacher), uid2(t->student));
-        warn(warn_buf, t->student->line_no, 4);
+        log_warning(4, filename, t->teacher->line_no, NULL, t->teacher->no,
+          _("Unit %s has 0 men and teaches unit %s"),
+          uid1(t->teacher), uid2(t->student));
       }
     }
   }
 
   for (t = teachings; t; t = t->next) {
-    if (t->teacher == NULL ||
-        t->student->lives < 1) { /* lernt ohne  Lehrer bzw. */
+    if (t->teacher == NULL || t->student->lives < 1) {
+      /* lernt ohne  Lehrer bzw. */
       t->student->schueler = 0;  /* keine eigene Einheit */
       continue;
     }
 
     if (!t->student->lernt) {
-      if (t->student->temp) /* unbekannte TEMP-Einheit, wird * eh  schon
-                               angemeckert */
-        continue;
-      sprintf(warn_buf, _("Unit %s is taught by unit %s but doesn't learn"),
-              uid1(t->student), uid2(t->teacher));
-      warn(warn_buf, t->student->line_no, 2);
-      t->student->schueler = 0;
+      /* unbekannte TEMP-Einheit wird eh schon angemeckert */
+      if (!t->student->temp) {
+        log_warning(2, filename, t->student->line_no, NULL, t->student->no,
+          _("Unit %s is taught by unit %s but doesn't learn"),
+          uid1(t->student), uid2(t->teacher));
+        t->student->schueler = 0;
+      }
       continue;
     }
 
@@ -3556,14 +3553,13 @@ void check_teachings(void) {
     if (u->lives < 1)
       continue;
     if (u->lehrer > 0) {
-      sprintf(warn_buf, _("Unit %s can teach %d more students"), uid(u),
-              u->lehrer);
-      warn(warn_buf, u->line_no, 5);
+      log_warning(5, filename, u->line_no, NULL, u->no,
+        _("Unit %s can teach %d more students"), uid(u), u->lehrer);
     }
     if (u->schueler > 0) {
-      sprintf(warn_buf, _("Unit %s Unit could benefit from %d more teachers"),
-              uid(u), (u->schueler + 9) / 10);
-      warn(warn_buf, u->line_no, 5);
+      log_warning(5, filename, u->line_no, NULL, u->no,
+        _("Unit %s Unit could benefit from %d more teachers"),
+        uid(u), (u->schueler + 9) / 10);
     }
   }
 }
@@ -3597,12 +3593,12 @@ void checkanorder(char *Orders) {
     i = getparam();
     if (!(i == P_UNIT || i == P_SHIP || i == P_BUILDING || i == P_CASTLE ||
           i == P_FACTION)) {
-      anerror(cgettext(Errors[ORDERNUMBER]));
+      log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[ORDERNUMBER]));
       break;
     }
     Scat(printparam(i));
     if (getaunit(POSSIBLE) != 1) /* "TEMP xx" oder "0" geht nicht */
-      anerror(_("Wrong number"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Wrong number"));
     break;
 
   case K_BANNER:
@@ -3625,10 +3621,10 @@ void checkanorder(char *Orders) {
         x = atoi(s);
         icat(x);
       } else {
-        anerror(cgettext(Errors[NEEDBOTHCOORDINATES]));
+        log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[NEEDBOTHCOORDINATES]));
       }
     } else {
-      anerror(cgettext(Errors[NEEDBOTHCOORDINATES]));
+      log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[NEEDBOTHCOORDINATES]));
     }
     break;
 
@@ -3652,7 +3648,7 @@ void checkanorder(char *Orders) {
       if (i >= 0) {
         Scat(ItemName(i, 1));
       } else if (!(*s)) {
-        anerror(_("Unrecognized object"));
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized object"));
       } else {
         awarning(_("Unrecognized object"), 1);
       }
@@ -3680,7 +3676,7 @@ void checkanorder(char *Orders) {
   case K_ATTACK:
     scat(printkeyword(K_ATTACK));
     if (getaunit(NECESSARY) == 3) {
-      anerror(_("Cannot attack a newly formed unit"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Cannot attack a newly formed unit"));
     }
     if (!attack_warning) {
       /*
@@ -3690,8 +3686,8 @@ void checkanorder(char *Orders) {
       attack_warning = 1;
     }
     if (getaunit(42) == 42) {
-      strcpy(warn_buf, _("There must be one ATTACK-order per unit"));
-      anerror(warn_buf);
+      log_error(filename, line_no, order_buf, this_unit_id(), 
+           _("There must be one ATTACK-order per unit"));
     }
     break;
 
@@ -3699,7 +3695,7 @@ void checkanorder(char *Orders) {
     scat(printkeyword(K_SIEGE));
     i = getI();
     if (!i)
-      anerror(cgettext(Errors[NUMCASTLEMISSING]));
+      log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[NUMCASTLEMISSING]));
     else
       bcat(i);
     long_order();
@@ -3723,18 +3719,16 @@ void checkanorder(char *Orders) {
 
     i = findparam(s);
     if (x > 0 && i != P_HERBS)
-      anerror(_("Number is not possible here"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Number is not possible here"));
 
     if (i == P_HERBS || i == P_HORSE) {
       /* ZÜCHTE [anzahl] KRÄUTER */
       /* ZÜCHTE PFERDE */
       Scat(printparam(i));
     } else if (s && (*s)) {
-      sprintf(warn_buf, _("Illegal argument for %s"), printkeyword(K_BREED));
-      anerror(warn_buf);
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Illegal argument for %s"), printkeyword(K_BREED));
     } else {
-      sprintf(warn_buf, _("Missing argument for %s"), printkeyword(K_BREED));
-      anerror(warn_buf);
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Missing argument for %s"), printkeyword(K_BREED));
     }
     long_order();
     break;
@@ -3755,7 +3749,7 @@ void checkanorder(char *Orders) {
     if (findparam(s) == P_NOT) {
       Scat(printparam(P_NOT));
     } else if (*s) {
-      anerror(_("Wrong parameter"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Wrong parameter"));
     }
     break;
 
@@ -3791,7 +3785,7 @@ void checkanorder(char *Orders) {
     if (i == P_HERBS) {
       Scat(printparam(P_HERBS)); /* momentan nur FORSCHE KRÄUTER */
     } else {
-      anerror(_("Only herbs can be researched"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Only herbs can be researched"));
     }
     long_order();
     break;
@@ -3816,7 +3810,7 @@ void checkanorder(char *Orders) {
           i = getb();
           icat(i);
         } else
-          anerror(_("Wrong parameter"));
+          log_error(filename, line_no, order_buf, this_unit_id(), _("Wrong parameter"));
       }
       break;
     }
@@ -3859,10 +3853,10 @@ void checkanorder(char *Orders) {
             if (findparam(s) == P_NOT) {
               Scat(printparam(P_NOT));
             } else
-              anerror(_("Wrong fight state"));
+              log_error(filename, line_no, order_buf, this_unit_id(), _("Wrong fight state"));
           }
         } else
-          anerror(_("Wrong fight state"));
+          log_error(filename, line_no, order_buf, this_unit_id(), _("Wrong fight state"));
         Scat(s);
       } else
         Scat(printparam(P_FRONT));
@@ -3895,7 +3889,7 @@ void checkanorder(char *Orders) {
       getafaction(getstr());
       break;
     default:
-      anerror(_("Wrong parameter"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Wrong parameter"));
     }
 
     break;
@@ -3904,7 +3898,7 @@ void checkanorder(char *Orders) {
     scat(printkeyword(K_SPY));
     i = getb();
     if (!i)
-      anerror(_("Missing unit"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Missing unit"));
     else
       bcat(i);
     long_order();
@@ -3913,7 +3907,7 @@ void checkanorder(char *Orders) {
   case K_TEACH:
     scat(printkeyword(K_TEACH));
     if (!getmoreunits(false))
-      anerror(_("Teacher needs students"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Teacher needs students"));
     long_order();
     break;
 
@@ -3921,7 +3915,7 @@ void checkanorder(char *Orders) {
     scat(printkeyword(K_FORGET));
     sk = getskill();
     if (!sk)
-      anerror(_("Unrecognized skill"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized skill"));
     else {
       Scat(sk->name);
     }
@@ -3940,12 +3934,12 @@ void checkanorder(char *Orders) {
       }
     }
     if (!sk) {
-      anerror(_("Unrecognized skill"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized skill"));
     } else {
       Scat(sk->name);
       if (sk->kosten < 0) {
         if (order_unit->people > 1) {
-          anerror(_("Magicians may have only one person"));
+          log_error(filename, line_no, order_buf, this_unit_id(), _("Magicians may have only one person"));
         }
       }
     }
@@ -3996,14 +3990,14 @@ void checkanorder(char *Orders) {
       u->people += i;
       addregion(Rx, Ry, i);
     } else
-      anerror(cgettext(Errors[MISSINGNUMRECRUITS]));
+      log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[MISSINGNUMRECRUITS]));
     break;
 
   case K_QUIT:
     scat(printkeyword(K_QUIT));
     s = getstr();
     if (!s[0])
-      anerror(cgettext(Errors[MISSINGPASSWORD]));
+      log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[MISSINGPASSWORD]));
     else
       checkstring(s, NAMESIZE, POSSIBLE);
     dwarning(Errors[QUITMSG], 0);
@@ -4062,7 +4056,7 @@ void checkanorder(char *Orders) {
         Scat(s);
         long_order();
       } else
-        anerror(cgettext(Errors[FOLLOW]));
+        log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[FOLLOW]));
     }
     break;
 
@@ -4072,7 +4066,7 @@ void checkanorder(char *Orders) {
     i = findreport(s);
     if (i == -1) {
       if (unicode_utf8_strncasecmp((utf8_t *)s, (utf8_t *)printkeyword(K_SHOW), strlen(s)))
-        anerror(_("Unrecognized report option"));
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized report option"));
       else {
         Scat(printkeyword(K_SHOW));
       }
@@ -4082,7 +4076,7 @@ void checkanorder(char *Orders) {
     s = getstr();
     i = findstr(message_levels, s, ML_MAX);
     if (i == -1) {
-      anerror(_("Wrong output level"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Wrong output level"));
       break;
     }
     Scat(message_levels[i]);
@@ -4092,7 +4086,7 @@ void checkanorder(char *Orders) {
     scat(printkeyword(K_OPTION));
     i = getoption();
     if (i < 0) {
-      anerror(_("Unrecognized option"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized option"));
       break;
     }
     Scat(printliste(i, options));
@@ -4126,7 +4120,7 @@ void checkanorder(char *Orders) {
   case K_RIDE:
     scat(printkeyword(K_RIDE));
     if (getaunit(NECESSARY) == 2)
-      anerror(_("Unit 0/Peasants not possible here"));
+      log_error(filename, line_no, order_buf, this_unit_id(), _("Unit 0/Peasants not possible here"));
     else if (!does_default)
       order_unit->drive = this_unit;
     long_order();
@@ -4143,7 +4137,8 @@ void checkanorder(char *Orders) {
         dwarning(Errors[NOCARRIER], 3);
     }
     if (getaunit(42) == 42)
-      anerror(_("There must be one CARRY-order per unit"));
+      log_error(filename, line_no, order_buf, this_unit_id(), 
+          _("There must be one CARRY-order per unit"));
     break;
 
   case K_PIRACY:
@@ -4155,8 +4150,7 @@ void checkanorder(char *Orders) {
     s = getstr();
     i = findstr(magiegebiet, s, 5);
     if (i < 0) {
-      sprintf(warn_buf, _("School '%s' does not exist"), s);
-      anerror(warn_buf);
+      log_error(filename, line_no, order_buf, this_unit_id(), _("School '%s' does not exist"), s);
     } else {
       scat(printkeyword(K_SCHOOL));
       Scat(magiegebiet[i]);
@@ -4225,7 +4219,7 @@ void checkanorder(char *Orders) {
           break;
       }
     }
-    anerror(cgettext(Errors[SORT]));
+    log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[SORT]));
     break;
 
   case K_PLANT: {
@@ -4249,7 +4243,7 @@ void checkanorder(char *Orders) {
       if (i >= 0) {
         Scat(ItemName(i, n != 1));
       } else if (!(*s)) {
-        anerror(_("Unrecognized object"));
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized object"));
       } else {
         awarning(_("Unrecognized object"), 1);
       }
@@ -4274,11 +4268,11 @@ void checkanorder(char *Orders) {
       Scat(s);
     else {
       sprintf(warn_buf, _("Missing argument for %s"), printkeyword(i));
-      anerror(warn_buf);
+      log_error(filename, line_no, order_buf, this_unit_id(), warn_buf);
     }
     break;
   default:
-    anerror(_("Unrecognized order"));
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Unrecognized order"));
   }
   if (does_default != 1) {
     porder();
@@ -4292,7 +4286,7 @@ void readaunit(void) {
 
   i = getb();
   if (i == 0) {
-    anerror(cgettext(Errors[MISSINGUNITNUMBER]));
+    log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[MISSINGUNITNUMBER]));
     get_order();
     return;
   }
@@ -4360,13 +4354,13 @@ int readafaction(void) {
     s = getstr();
     if (s[0] == 0 || strcmp(s, "hier_passwort_eintragen") == 0) {
       if (compile) /* nicht uebertreiben im Compiler-Mode */
-        anerror(_("Incorrect password"));
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Incorrect password"));
       else
         fputs(cgettext(Errors[PASSWORDMSG2]), ERR);
     } else
       qcat(s);
   } else
-    anerror(cgettext(Errors[MISSINGFACTIONNUMBER]));
+    log_error(filename, line_no, order_buf, this_unit_id(), cgettext(Errors[MISSINGFACTIONNUMBER]));
 
   indent = next_indent = INDENT_FACTION;
   porder();
@@ -4417,7 +4411,7 @@ void files_not_found(FILE *F) {
   fputs("\n  **  ", F);
   fprintf(F, "ECheck V%s, %s", echeck_version, __DATE__);
   fputs("   **\n\n", F);
-  fprintf(F, _("cannot read configuration files from %s/%s"), g_path,
+  fprintf(F, _("cannot read configuration files from %s/%s"), g_basedir,
           echeck_locale);
   fputs("\n\n", F);
 }
@@ -4482,14 +4476,14 @@ int check_options(int argc, char *argv[], char dostop, char command_line) {
           if (argv[i][2] == 0) { /* -P path */
             i++;
             if (argv[i]) {
-              g_path = STRDUP(argv[i]);
+              g_basedir = argv[i];
             } else {
               fputs("Leere Pfad-Angabe ungültig\nEmpty path invalid\n", stderr);
               exit(1);
             }
           } else if (*(argv[i] + 2)) {
             /* -Ppath */
-            g_path = STRDUP(argv[i] + 2);
+            g_basedir = argv[i] + 2;
           }
         }
         break;
@@ -4882,8 +4876,7 @@ void process_order_file(int *faction_count, int *unit_count) {
 
     case P_FACTION:
       if (f && !next) {
-        sprintf(warn_buf, _("Missing %s"), printparam(P_NEXT));
-        anerror(warn_buf);
+        log_error(filename, line_no, order_buf, this_unit_id(), _("Missing %s"), printparam(P_NEXT));
       }
       scat(printparam(P_FACTION));
       befehle_ende = 0;
@@ -4993,8 +4986,7 @@ void process_order_file(int *faction_count, int *unit_count) {
       P_NEXT) /* diese Zeile wurde ggf. gelesen  und dann kam */
     next = 1; /* EOF -> kein Check mehr, next=0... */
   if (f && !next) {
-    sprintf(warn_buf, _("Missing %s"), printparam(P_NEXT));
-    anerror(warn_buf);
+    log_error(filename, line_no, order_buf, this_unit_id(), _("Missing %s"), printparam(P_NEXT));
   }
 }
 
@@ -5017,8 +5009,9 @@ void addtoken(tnode *root, const char *str, int id) {
 
     if (root->id < 0)
       root->id = id;
-    while (tk && tk->c != c)
+    while (tk && tk->c != c) {
       tk = tk->nexthash;
+    }
     if (!tk) {
       tk = (tnode *)calloc(1, sizeof(tnode));
       tk->id = -1;
@@ -5092,7 +5085,7 @@ void inittokens(void) {
 int readfiles(void) { /* liest externen Files */
   int i;
 
-  if (!g_path) {
+  if (!g_basedir) {
     return 0;
   }
   /*
@@ -5137,15 +5130,17 @@ static char *findpath(void) {
   }
   i = wai_getExecutablePath(NULL, 0, NULL);
   g_path = malloc(i);
-  wai_getExecutablePath(g_path, i, &i);
+  if (g_path) {
+    wai_getExecutablePath(g_path, i, &i);
 
-  if (i > 0) {
-    g_path[i] = '\0';
-    if (findfiles(g_path)) {
-      return g_path;
+    if (i > 0) {
+      g_path[i] = '\0';
+      if (findfiles(g_path)) {
+        return g_path;
+      }
+      free(g_path);
+      g_path = NULL;
     }
-    free(g_path);
-    g_path = NULL;
   }
   return NULL;
 }
@@ -5160,12 +5155,9 @@ void echeck_init(void) {
    * Path-Handling
    */
   filename = getenv("ECHECKOPTS");
-  g_path = getenv("ECHECKPATH");
-  if (g_path) {
-    g_path = STRDUP(g_path);
-  }
-  else {
-    g_path = findpath();
+  g_basedir = getenv("ECHECKPATH");
+  if (!g_basedir) {
+    g_basedir = findpath();
   }
 }
 
