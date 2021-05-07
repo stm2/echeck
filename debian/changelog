@@ -1,9 +1,9 @@
-echeck (4.6.3-1) stable; urgency=high
+echeck (4.6.3-1) stable; urgency=low
 
   * fix accounting for people in units
   * search for configuration in ~/.echeck
 
- -- Enno Rehling <enno@eressea.de>  Thu, 06 May 2021 23:00:00 +0200
+ -- Enno Rehling <enno@eressea.de>  Thu, 07 May 2021 20:00:00 +0200
 echeck (4.6.2-3) stable; urgency=high
 
   * fix endless loop
