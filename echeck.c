@@ -83,7 +83,7 @@
 
 #include <string.h>
 
-static const char *echeck_version = "4.6.2";
+static const char *echeck_version = "4.6.3";
 
 #define DEFAULT_PATH "."
 
@@ -5121,20 +5121,31 @@ const char *findfiles(const char *dir) {
 }
 
 static const char *findpath(void) {
-  const char *hints[] = {
-    ".",
+  int i;
 #ifndef WIN32
-    "/usr/share/games/echeck", 
+  const char *hints[] = {
+    "/usr/share/games/echeck",
     "/usr/local/share/echeck",
     "/usr/share/echeck",
-#endif
-    NULL};
-  int i;
+    NULL
+  };
+  const char *home = getenv("HOME");
+  if (home) {
+    snprintf(checked_buf, sizeof(checked_buf), "%s/.echeck", home);
+    if (findfiles(checked_buf)) {
+      return g_path = STRDUP(checked_buf);
+    }
+  }
+
   for (i = 0; hints[i]; ++i) {
     if (findfiles(hints[i])) {
       return hints[i];
     }
   }
+#endif
+  /* finally, check the binary's location, because windows installs 
+   * everything in one place under program files.
+   */
   i = wai_getExecutablePath(NULL, 0, NULL);
   g_path = malloc(i);
   if (g_path) {
@@ -5164,7 +5175,14 @@ void echeck_init(void) {
   filename = getenv("ECHECKOPTS");
   g_basedir = getenv("ECHECKPATH");
   if (!g_basedir) {
-    g_basedir = findpath();
+    /* for easy development, check current working directory first. */
+    if (findfiles(".")) {
+      g_basedir = ".";
+    }
+    else {
+      /* check os-specific locations */
+      g_basedir = findpath();
+    }
   }
 }
 
