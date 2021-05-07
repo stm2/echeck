@@ -1687,8 +1687,14 @@ void addteach(unit *teacher, unit *student) {
 unit *newunit(int n, int t) {
   unit *u = find_unit(n, t), *c;
 
+  if (t)
+    current_temp_no = n;
+  else
+    current_temp_no = 0;
+
   if (!u) {
     u = (unit *)calloc(1, sizeof(unit));
+    if (!u) return NULL;
     u->people = t ? 0 : 1;
     u->no = n;
     u->line_no = line_no;
@@ -1713,10 +1719,6 @@ unit *newunit(int n, int t) {
   }
   if (u->temp < 42)
     u->temp = t;
-  if (t)
-    current_temp_no = n;
-  else
-    current_temp_no = 0;
   return u;
 }
 
