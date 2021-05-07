@@ -5015,12 +5015,16 @@ void addtoken(tnode *root, const char *str, int id) {
     }
     if (!tk) {
       tk = (tnode *)calloc(1, sizeof(tnode));
-      tk->id = -1;
-      tk->c = c;
-      tk->nexthash = root->next[lindex];
-      root->next[lindex] = tk;
+      if (tk) {
+        tk->id = -1;
+        tk->c = c;
+        tk->nexthash = root->next[lindex];
+        root->next[lindex] = tk;
+      }
     }
-    addtoken(tk, str + 1, id);
+    if (tk) {
+      addtoken(tk, str + 1, id);
+    }
     while (replace[i].str) {
       if (*str == replace[i].c) {
         char zText[1024];
@@ -5116,17 +5120,19 @@ const char *findfiles(const char *dir) {
   return NULL;
 }
 
-static char *findpath(void) {
-  const char *hints[] = {".",
+static const char *findpath(void) {
+  const char *hints[] = {
+    ".",
 #ifndef WIN32
-                         "/usr/share/games/echeck", "/usr/share/echeck",
-                         "/usr/local/share/echeck",
+    "/usr/share/games/echeck", 
+    "/usr/local/share/echeck",
+    "/usr/share/echeck",
 #endif
-                         NULL};
+    NULL};
   int i;
   for (i = 0; hints[i]; ++i) {
     if (findfiles(hints[i])) {
-      return STRDUP(hints[i]);
+      return hints[i];
     }
   }
   i = wai_getExecutablePath(NULL, 0, NULL);
