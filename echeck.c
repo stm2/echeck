@@ -1689,7 +1689,7 @@ unit *newunit(int n, int t) {
 
   if (!u) {
     u = (unit *)calloc(1, sizeof(unit));
-    u->people = t ? 1 : 0;
+    u->people = t ? 0 : 1;
     u->no = n;
     u->line_no = line_no;
     u->order = STRDUP(order_buf);
