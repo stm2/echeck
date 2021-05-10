@@ -47,7 +47,6 @@
 
 #ifdef HAVE_GETTEXT
 #include <libintl.h>
-#include <locale.h>
 #else
 #define gettext(X) (X)
 #define ngettext(S, P, N) (((N) == 1) ? S : P)
@@ -4444,12 +4443,6 @@ void printhelp(int argc, char *argv[], int index) {
             "-ofile  write checked file into 'file'\n"
             "-Ofile  write errors into 'file'\n"
             "-h      show this little help\n"
-            "-hk     show list of keywords for tokens.txt\n"
-            "-hc     show list of commands for commands.txt\n"
-            "-hp     show list of parameters for parameters.txt\n"
-            "-hd     show list of directions for directions.txt\n"
-            "-hm     show list of messages for messages.txt\n"
-            "-hf     show list of files ECheck tries to read\n"
             "-s      use stderr for warnings, errors, etc. instead of stdout\n"
             "-p      abbreviate some output for piping\n"
             "-l      simulate silverpool\n"
@@ -5213,7 +5206,7 @@ void init_intl(void) {
       pos = strrchr(path, PATH_SEP);
       if (pos) {
         strcpy(pos + 1, reldir);
-        if (0 != fileexists(reldir)) {
+        if (0 != fileexists(path)) {
           free(path);
           path = NULL;
         }
