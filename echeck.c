@@ -46,6 +46,7 @@
 #include "whereami.h"
 
 #ifdef HAVE_GETTEXT
+#include <locale.h>
 #include <libintl.h>
 #else
 #define gettext(X) (X)
@@ -82,7 +83,7 @@
 
 #include <string.h>
 
-static const char *echeck_version = "4.6.3";
+static const char *echeck_version = "4.6.4";
 
 #define DEFAULT_PATH "."
 
@@ -5219,7 +5220,10 @@ void init_intl(void) {
   if (path) {
     bindtextdomain("echeck", path);
     free(path);
-  } else {
+  } else if (fileexists(reldir) == 0) {
+    bindtextdomain("echeck", reldir);
+  }
+  else {
     bindtextdomain("echeck", "/usr/share/locale");
   }
   textdomain("echeck");

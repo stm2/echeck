@@ -57,7 +57,6 @@ tests: echeck.c whereami.c whereami.h unicode.c unicode.h $(TEST_SRC) $(TEST_HDR
 
 clean:
 	@rm -f *.o core *.bak tests echeck echeck.exe echeck.zip 
-	@rm -rf locale
 
 check: tests
 	@./tests -T=all -Lde -Re2 -b
