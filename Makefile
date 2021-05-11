@@ -1,4 +1,12 @@
-OS_NAME := $(shell uname -s | tr A-Z a-z)
+OSNAME := $(shell uname -s | tr A-Z a-z)
+
+ifeq ($(OSNAME),darwin)
+LFLAGS += -lintl
+PREFIX ?= /usr/local
+EXECDIR ?= $(PREFIX)/bin
+SHAREDIR ?= $(PREFIX)/share/echeck
+endif	
+
 MINGW_STRIP = i686-w64-mingw32-strip
 MINGW_CC = i686-w64-mingw32-gcc
 CFLAGS = -Wall -std=c99 -I. -DHAVE_GETTEXT -D_DEFAULT_SOURCE
@@ -10,10 +18,8 @@ PREFIX ?= /usr
 SHAREDIR ?= $(PREFIX)/share/games/echeck
 EXECDIR ?= $(PREFIX)/games
 LOCALEDIR ?= $(PREFIX)/share/locale
+
 default: echeck mofiles
-ifeq ($(OS_NAME),darwin)
-LFLAGS += -lintl
-endif	
 
 all: echeck mofiles
 
@@ -23,16 +29,17 @@ mofiles: pofiles locale/de/LC_MESSAGES/echeck.mo
 
 install: echeck mofiles
 	install -d $(EXECDIR)
-	install -C -t $(EXECDIR) echeck
+	install -C echeck $(EXECDIR) 
 	install -d $(SHAREDIR)/e2/de
 	install -d $(SHAREDIR)/e2/en
 	install -d $(SHAREDIR)/e3/de
 	install -d $(SHAREDIR)/e3/en
-	install -C -m 644 -t $(SHAREDIR)/e2/de e2/de/*.txt
-	install -C -m 644 -t $(SHAREDIR)/e2/en e2/en/*.txt
-	install -C -m 644 -t $(SHAREDIR)/e3/de e3/de/*.txt
-	install -C -m 644 -t $(SHAREDIR)/e3/en e3/en/*.txt
-	install -C -m 644 -t $(LOCALEDIR)/de/LC_MESSAGES locale/de/LC_MESSAGES/echeck.mo
+	install -d $(SHAREDIR)/locale/de/LC_MESSAGES
+	install -C -m 644 e2/de/*.txt $(SHAREDIR)/e2/de 
+	install -C -m 644 e2/en/*.txt $(SHAREDIR)/e2/en 
+	install -C -m 644 e3/de/*.txt $(SHAREDIR)/e3/de 
+	install -C -m 644 e3/en/*.txt $(SHAREDIR)/e3/en 
+	install -C -m 644 locale/de/LC_MESSAGES/*.mo $(SHAREDIR)/locale/de/LC_MESSAGES
 
 tags:
 	@ctags *.c *.h
