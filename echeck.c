@@ -144,8 +144,6 @@ const t_ech_file ECheck_Files[] = {
   {"tokens.txt", -1}};
 
 const int filecount = sizeof(ECheck_Files) / sizeof(ECheck_Files[0]);
-int verbose = 1;
-static int compact = 0;
 
 #define SPACE_REPLACEMENT '~'
 #define SPACE ' '
@@ -4434,21 +4432,22 @@ void printhelp() {
           _("-Ppath  search path for the additional files;"
             " locale %s will be appended\n"
             "-Rgame  read files from subdirectory game; default: e2\n"
+            "-Lloc   select locale loc\n"
             "-       use stdin instead of an input file\n"
             "-b      suppress warnings and errors (brief)\n"
-            "-q      do not expect hints regarding men/silver within [] after "
-            "UNIT\n"
-            "-rnnn   set recruit costs to nnn silver\n"
             "-c      compiler-like output\n"
             "-m      magellan-useable output\n"
             "-e      send checked file to stdout, errors to stderr\n"
             "-E      send checked file to stdout, errors to stdout\n"
+            "-s      use stderr for warnings, errors, etc. instead of stdout\n"
             "-ofile  write checked file into 'file'\n"
             "-Ofile  write errors into 'file'\n"
-            "-h      show this little help\n"
-            "-s      use stderr for warnings, errors, etc. instead of stdout\n"
             "-p      abbreviate some output for piping\n"
+            "-q      do not expect hints regarding men/silver within [] after "
+            "UNIT\n"
+            "-rnnn   set recruit costs to nnn silver\n"
             "-l      simulate silverpool\n"
+            "-x      line counting starts with FACTION\n"
             "-n      do not count lines with NameMe comments (;;)\n"
             "-noxxx  no xxx warnings. xx can be:\n"
             "  ship   unit steers a ship but may lack control\n"
@@ -4458,11 +4457,11 @@ void printhelp() {
             "        1: mainly syntax errors\n"
             "        4: almost all errors\n"
             "        5: teachers / students\n"
-            "-x      line counting starts with FACTION\n"
-            "-Lloc   select locale loc\n"
-            "-vm.l   mainversion.level - no effect\n"
-            "-Q      quiet\n"
-            "-C      compact output"),
+            "-Q      no effect\n"
+            "-C      no effect\n"
+            "-vm.l   no effect\n"
+            "-h      show this little help and exit\n"
+            "-V      print version information and exit"),
           echeck_locale);
   fputc('\n', ERR);
 }
@@ -4509,14 +4508,15 @@ int check_options(int argc, char *argv[], char dostop, char command_line) {
         break;
 
       case 'Q':
-        verbose = 0;
+        /* deprecated, was: non-verbose output */
         break;
 
       case 'C':
-        compact = 1;
+        /* deprecated, was: compact output */
         break;
 
       case 'v':
+        /* deprecated */
         if (argv[i][2] == 0) { /* -V version */
           i++;
         }
@@ -4542,7 +4542,7 @@ int check_options(int argc, char *argv[], char dostop, char command_line) {
           i++;
           if (argv[i])
             rec_cost = atoi(argv[i]);
-          else if (verbose) {
+          else {
             fprintf(stderr,
                     _("Missing recruiting costs, set to %d"), rec_cost);
             fputc('\n', stderr);
@@ -4921,17 +4921,15 @@ void process_order_file(int *faction_count, int *unit_count) {
       if (befehle_ende)
         return;
       if (!compile) {
-        if (verbose) {
-          fprintf(
-            ERR,
-            _("Recruit costs have been set to %d silver, warning level %d"),
-            rec_cost, show_warnings);
-          fputc('\n', ERR);
-          if (silberpool) {
-            fputs(_("Silver pool is active."), ERR);
-          }
-          fputs("\n\n", ERR);
+        fprintf(
+          ERR,
+          _("Recruit costs have been set to %d silver, warning level %d"),
+          rec_cost, show_warnings);
+        fputc('\n', ERR);
+        if (silberpool) {
+          fputs(_("Silver pool is active."), ERR);
         }
+        fputs("\n\n", ERR);
       }
       next = 0;
       break;
@@ -5325,8 +5323,7 @@ int echeck_main(int argc, char *argv[]) {
       filename = argv[i];
       if (!compile) {
         fprintf(ERR, _("Processing file '%s'."), argv[i]);
-        if (!compact)
-          fputc('\n', ERR);
+        fputc('\n', ERR);
       }
       bom = fgetc(F);
       if (bom == 0xef) {
