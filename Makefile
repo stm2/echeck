@@ -48,7 +48,7 @@ po/echeck.pot: echeck.c
 	xgettext --no-location -k_ -kt -d echeck -o $@ -s $^
 
 po/echeck.%.po: po/echeck.pot
-	msgmerge -N -o $@ $@ $< 
+	msgmerge -N -U $@ $< 
 
 locale/%/LC_MESSAGES/echeck.mo: po/echeck.de.po 
 	@rm -rf $@
