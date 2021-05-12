@@ -45,7 +45,7 @@ tags:
 	@ctags *.c *.h
 
 po/echeck.pot: echeck.c
-	xgettext -k_ -kt -d echeck -o $@ -s $^
+	xgettext --no-location -k_ -kt -d echeck -o $@ -s $^
 
 po/echeck.%.po: po/echeck.pot
 	msgmerge -N -o $@ $@ $< 
